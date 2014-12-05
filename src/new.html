@@ -1,0 +1,99 @@
+<html>
+  <head>
+    <title>New Tab</title>
+  </head>
+  <body bgcolor="#303030">
+    <style>
+      a.button {
+        color: #FFFFFF;
+        display: block;
+        background-position: left;
+        background-repeat: no-repeat;
+        width: 125;
+        line-height: 50px;
+        font-family: 'Comic Sans';
+        font-weight: bold;
+        font-size: 13px;
+        text-decoration: none;
+      }
+
+      a.button:hover {
+        text-decoration: underline;
+        -webkit-animation: buttonAnim 0.25s ease 0 1 both;
+      }
+
+      @-webkit-keyframes buttonAnim {
+        100% {-webkit-transform: translate(20px);}
+      }
+
+      pre.buttonText {
+        margin-left: 55px;
+      }
+
+      p.texts {
+        display: inline-block;
+        position: absolute;
+        color: #AAAAAA;
+        font-family: 'Courier New';
+        font-size: 50px;
+      }
+
+      #gmail {background-image: url('chrome-extension://jdhikkidbhfaabghpghiiffgppeblghj/gmail.png'), url('chrome-extension://jdhikkidbhfaabghpghiiffgppeblghj/button.png');}
+      #youtube {background-image: url('chrome-extension://jdhikkidbhfaabghpghiiffgppeblghj/youtube.png'), url('chrome-extension://jdhikkidbhfaabghpghiiffgppeblghj/button.png');}
+      #translate {background-image: url('chrome-extension://jdhikkidbhfaabghpghiiffgppeblghj/translate.png'), url('chrome-extension://jdhikkidbhfaabghpghiiffgppeblghj/button.png');}
+      #reddit {background-image: url('chrome-extension://jdhikkidbhfaabghpghiiffgppeblghj/reddit.png'), url('chrome-extension://jdhikkidbhfaabghpghiiffgppeblghj/button.png');}
+      #lolnexus {background-image: url('chrome-extension://jdhikkidbhfaabghpghiiffgppeblghj/lolnexus.png'), url('chrome-extension://jdhikkidbhfaabghpghiiffgppeblghj/button.png');}
+      #github {background-image: url('chrome-extension://jdhikkidbhfaabghpghiiffgppeblghj/github.png'), url('chrome-extension://jdhikkidbhfaabghpghiiffgppeblghj/button.png');}
+
+      #time {
+        top: 150px;
+        left: 500px;
+        font-size: 100px;
+      }
+
+      #date {
+        top: 300px;
+        left: 400px;
+      }
+
+      #name {
+        top: 50px;
+        left: 530px;
+        font-size: 100px;
+        font-weight: bold;
+      }
+
+      #circle {
+        display: inline-block;
+        position: absolute;
+        top: 5px;
+        left: 260px;
+      }
+    </style>
+      <a href="https://mail.google.com/mail/?authuser=0" id="gmail" class="button">
+        <pre class="buttonText">Gmail</pre></a>
+
+      <a href="https://www.youtube.com/?gl=RO&authuser=0" id="youtube" class="button">
+        <pre class="buttonText">Youtube</pre></a>
+
+      <a href="https://translate.google.com/?hl=en&authuser=0" id="translate" class="button">
+        <pre class="buttonText">Translate</pre></a>
+
+      <a href="https://www.reddit.com" id="reddit" class="button">
+        <pre class="buttonText">Reddit</pre></a>
+
+      <a href="http://www.lolnexus.com/EUNE/search?name=slak44&region=EUNE" id="lolnexus" class="button">
+        <pre class="buttonText">LoLNexus</pre></a>
+
+      <a href="https://github.com/" id="github" class="button">
+        <pre class="buttonText">GitHub</pre></a>
+
+      <p id="time" class="texts">00:00</p>
+      <p id="date" class="texts">01 January 1970</p>
+
+      <p id="name" class="texts">Slak</p>
+
+      <img src="chrome-extension://jdhikkidbhfaabghpghiiffgppeblghj/circle.png" alt="circle" id="circle" width="800" height="800"></img>
+      <script src="chrome-extension://jdhikkidbhfaabghpghiiffgppeblghj/code.js"></script>
+  </body>
+</html>
