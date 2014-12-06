@@ -35,7 +35,8 @@
         position: absolute;
         color: #AAAAAA;
         font-family: 'Courier New';
-        font-size: 50px;
+        font-size: 100px;
+        font-weight: bold;
       }
 
       #gmail {background-image: url('chrome-extension://jdhikkidbhfaabghpghiiffgppeblghj/gmail.png'), url('chrome-extension://jdhikkidbhfaabghpghiiffgppeblghj/button.png');}
@@ -48,19 +49,17 @@
       #time {
         top: 150px;
         left: 500px;
-        font-size: 100px;
       }
 
       #date {
         top: 300px;
         left: 400px;
+        font-size: 50px;
       }
 
       #name {
         top: 50px;
         left: 530px;
-        font-size: 100px;
-        font-weight: bold;
       }
 
       #circle {
@@ -68,7 +67,13 @@
         position: absolute;
         top: 5px;
         left: 260px;
+        -webkit-animation: cRotate 7.5s linear 0 infinite reverse;
       }
+
+      @-webkit-keyframes cRotate {
+        100% {-webkit-transform: rotate(360deg);}
+      }
+
     </style>
       <a href="https://mail.google.com/mail/?authuser=0" id="gmail" class="button">
         <pre class="buttonText">Gmail</pre></a>
