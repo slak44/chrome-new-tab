@@ -1,11 +1,11 @@
 var buttons = document.getElementsByClassName('button');
 setDate();
 setTime();
-setButtonPos(50, 10);
+setButtonPos(10);
 
-function setButtonPos(buttonHeight, buttonOffset) {
+function setButtonPos(buttonOffset) {
   for (var i = 0; i < buttons.length; i++) {
-    buttons[i].style.top = i * (buttonHeight/*height of btn*/ + buttonOffset/*space between btns*/) + "px";
+    buttons[i].style.top = i * (50 + buttonOffset/*space between btns*/) + "px";
   }
 }
 
