@@ -1,5 +1,14 @@
+var buttons = document.getElementsByClassName('button');
 setDate();
 setTime();
+setButtonPos(50, 10);
+
+function setButtonPos(buttonHeight, buttonOffset) {
+  for (var i = 0; i < buttons.length; i++) {
+    buttons[i].style.top = i * (buttonHeight/*height of btn*/ + buttonOffset/*space between btns*/) + "px";
+  }
+}
+
 function setTime() {
   var d = new Date();
   var h = d.getHours();

@@ -7,6 +7,8 @@
       a.button {
         color: #FFFFFF;
         display: block;
+        position: absolute;
+        left: 20px;
         background-position: left;
         background-repeat: no-repeat;
         width: 125;
@@ -15,6 +17,7 @@
         font-weight: bold;
         font-size: 13px;
         text-decoration: none;
+        -webkit-animation: buttonAnimDefault 0.25s ease 0 1 both;
       }
 
       a.button:hover {
@@ -24,6 +27,10 @@
 
       @-webkit-keyframes buttonAnim {
         100% {-webkit-transform: translate(20px);}
+      }
+
+      @-webkit-keyframes buttonAnimDefault {
+        100% {-webkit-transform: translate(-20px);}
       }
 
       pre.buttonText {
