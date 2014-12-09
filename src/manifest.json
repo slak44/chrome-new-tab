@@ -6,6 +6,5 @@
   "web_accessible_resources": ["button.png","gmail.png","youtube.png","translate.png","reddit.png","lolnexus.png","github.png","ball.png","circle.png","code.js"],
   "chrome_url_overrides": {
     "newtab": "new.html"
-}
-
+  }
 }
