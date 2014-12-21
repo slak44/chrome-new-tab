@@ -3,8 +3,12 @@
 
   "name": "A New 'new tab'",
   "version": "1.0",
-  "web_accessible_resources": ["button.png","gmail.png","youtube.png","translate.png","reddit.png","lolnexus.png","github.png","ball.png","circle.png","code.js"],
+  "web_accessible_resources":
+  ["button.png","gmail.png","youtube.png","translate.png","reddit.png","lolnexus.png","github.png","ball.png","circle.png","code.js","jquery-2.1.3.min.js"],
   "chrome_url_overrides": {
     "newtab": "new.html"
-  }
+  },
+  "permissions":
+  ["https://www.reddit.com/user/slak44/about.json?"],
+  "content_security_policy": "script-src 'self' https://www.reddit.com; object-src 'self'"
 }

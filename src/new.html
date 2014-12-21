@@ -1,6 +1,7 @@
 <html>
   <head>
     <title>New Tab</title>
+    <script src="jquery-2.1.3.min.js"></script>
   </head>
   <body bgcolor="#303030">
     <style>
@@ -69,6 +70,18 @@
         left: 530px;
       }
 
+      #redditkarma {
+        top: 385px;
+        left: 480px;
+        display: inline-block;
+        position: absolute;
+        color: #AAAAAA;
+        font-family: 'Courier New';
+        font-size: 30px;
+        font-weight: bold;
+        text-align: center;
+      }
+
       #circle {
         display: inline-block;
         position: absolute;
@@ -105,6 +118,7 @@
       <p id="time" class="texts">00:00</p>
       <p id="date" class="texts">01 January 1970</p>
       <p id="name" class="texts">Slak</p>
+      <pre id="redditkarma"></pre>
 
       <script src="chrome-extension://jdhikkidbhfaabghpghiiffgppeblghj/code.js"></script>
   </body>

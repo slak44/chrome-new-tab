@@ -3,6 +3,15 @@ setDate();
 setTime();
 setButtonPos(10);
 
+$(function(){
+    $.getJSON('https://www.reddit.com/user/slak44/about.json?',
+    function(data){
+      document.getElementById('redditkarma').innerHTML =
+      "Comment karma: " + data.data.comment_karma + "\n" +
+      "Link karma: " + data.data.link_karma;
+    });
+});
+
 function setButtonPos(buttonOffset) {
   for (var i = 0; i < buttons.length; i++) {
     buttons[i].style.top = i * (50 + buttonOffset/*space between btns*/) + "px";
