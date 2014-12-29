@@ -1,16 +1,20 @@
 var buttons = document.getElementsByClassName('button');
 setDate();
 setTime();
+updateRedditKarma();
 setButtonPos(10);
 
-$(function(){
-    $.getJSON('https://www.reddit.com/user/slak44/about.json?',
-    function(data){
-      document.getElementById('redditkarma').innerHTML =
-      "Comment karma: " + data.data.comment_karma + "\n" +
-      "Link karma: " + data.data.link_karma;
+function updateRedditKarma() {
+    $(function(){
+        $.getJSON('https://www.reddit.com/user/slak44/about.json?',
+        function(data){
+          document.getElementById('redditkarma').innerHTML =
+          "Comment karma: " + data.data.comment_karma + "\n" +
+          "Link karma: " + data.data.link_karma;
+        });
     });
-});
+    setTimeout(function(){updateRedditKarma()}, 7500);
+}
 
 function setButtonPos(buttonOffset) {
   for (var i = 0; i < buttons.length; i++) {
