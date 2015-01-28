@@ -1,22 +1,34 @@
-var buttons = document.getElementsByClassName('button');
+document.getElementById("dataPane").style.left = (screen.width/2) - 400;
+document.getElementById("dataPane").style.top = "0px";
 setDate();
 setTime();
 updateRedditKarma();
 setButtonPos(10);
 
+function hideMainPane(boolean) {
+  if (boolean) {
+    document.getElementById("defaultPane").style.left = "0px";
+    document.getElementById("defaultPane").className = "";
+    $("#defaultPane").toggleClass("goLeft");
+  } else {
+    document.getElementById("defaultPane").style.left = "-1600px";
+    document.getElementById("defaultPane").className = "";
+    $("#defaultPane").toggleClass("goRight");
+  }
+}
+
 function updateRedditKarma() {
-    $(function(){
-        $.getJSON('https://www.reddit.com/user/slak44/about.json?',
-        function(data){
-          document.getElementById('redditkarma').innerHTML =
-          "Comment karma: " + data.data.comment_karma + "\n" +
-          "Link karma: " + data.data.link_karma;
-        });
-    });
-    setTimeout(function(){updateRedditKarma()}, 7500);
+  $.getJSON('https://www.reddit.com/user/slak44/about.json?',
+    function(data){
+      document.getElementById('redditkarma').innerHTML =
+      "Comment karma: " + data.data.comment_karma + "\n" +
+      "Link karma: " + data.data.link_karma;
+  });
+  setTimeout(function(){updateRedditKarma()}, 7500);
 }
 
 function setButtonPos(buttonOffset) {
+  var buttons = document.getElementsByClassName('button');
   for (var i = 0; i < buttons.length; i++) {
     buttons[i].style.top = i * (50 + buttonOffset/*space between btns*/) + "px";
   }
@@ -38,7 +50,7 @@ function setDate() {
   var day = d.getDate();
   var month = d.getMonth();
   var year = d.getFullYear();
-  if (month < 10) month = "0" + month;
+  if (month < 10 && month != 0) month = "0" + month;
   if (day < 10) day = "0" + day;
   var date = day + " " + getMonthName(month) + " " + year;
   document.getElementById("date").innerHTML = date;

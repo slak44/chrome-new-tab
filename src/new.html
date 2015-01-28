@@ -2,124 +2,58 @@
   <head>
     <title>New Tab</title>
     <script src="jquery-2.1.3.min.js"></script>
+    <script src="lol.js"></script>
+    <link rel="stylesheet" type="text/css" href="style.css">
   </head>
   <body bgcolor="#303030">
-    <style>
-      a.button {
-        color: #FFFFFF;
-        display: block;
-        position: absolute;
-        left: 20px;
-        background-position: left;
-        background-repeat: no-repeat;
-        width: 125;
-        line-height: 50px;
-        font-family: 'Comic Sans';
-        font-weight: bold;
-        font-size: 13px;
-        text-decoration: none;
-        -webkit-animation: buttonAnimDefault 0.25s ease 0 1 both;
-      }
+      <div id="defaultPane">
+        <a href="https://mail.google.com/mail/?authuser=0" id="gmail" class="button">
+          <pre class="buttonText">Gmail</pre></a>
 
-      a.button:hover {
-        text-decoration: underline;
-        -webkit-animation: buttonAnim 0.25s ease 0 1 both;
-      }
+        <a href="https://www.youtube.com/?gl=RO&authuser=0" id="youtube" class="button">
+          <pre class="buttonText">Youtube</pre></a>
 
-      @-webkit-keyframes buttonAnim {
-        100% {-webkit-transform: translate(20px);}
-      }
+        <a href="https://translate.google.com/?hl=en&authuser=0" id="translate" class="button">
+          <pre class="buttonText">Translate</pre></a>
 
-      @-webkit-keyframes buttonAnimDefault {
-        100% {-webkit-transform: translate(-20px);}
-      }
+        <a href="https://www.reddit.com" id="reddit" class="button">
+          <pre class="buttonText">Reddit</pre></a>
 
-      pre.buttonText {
-        margin-left: 55px;
-      }
+        <a href="http://www.lolnexus.com/EUNE/search?name=slak44&region=EUNE" id="lolnexus" class="button">
+          <pre class="buttonText">LoLNexus</pre></a>
 
-      p.texts {
-        display: inline-block;
-        position: absolute;
-        color: #AAAAAA;
-        font-family: 'Courier New';
-        font-size: 100px;
-        font-weight: bold;
-      }
+        <a href="https://github.com/" id="github" class="button">
+          <pre class="buttonText">GitHub</pre></a>
 
-      #gmail {background-image: url('chrome-extension://jdhikkidbhfaabghpghiiffgppeblghj/gmail.png'), url('chrome-extension://jdhikkidbhfaabghpghiiffgppeblghj/button.png');}
-      #youtube {background-image: url('chrome-extension://jdhikkidbhfaabghpghiiffgppeblghj/youtube.png'), url('chrome-extension://jdhikkidbhfaabghpghiiffgppeblghj/button.png');}
-      #translate {background-image: url('chrome-extension://jdhikkidbhfaabghpghiiffgppeblghj/translate.png'), url('chrome-extension://jdhikkidbhfaabghpghiiffgppeblghj/button.png');}
-      #reddit {background-image: url('chrome-extension://jdhikkidbhfaabghpghiiffgppeblghj/reddit.png'), url('chrome-extension://jdhikkidbhfaabghpghiiffgppeblghj/button.png');}
-      #lolnexus {background-image: url('chrome-extension://jdhikkidbhfaabghpghiiffgppeblghj/lolnexus.png'), url('chrome-extension://jdhikkidbhfaabghpghiiffgppeblghj/button.png');}
-      #github {background-image: url('chrome-extension://jdhikkidbhfaabghpghiiffgppeblghj/github.png'), url('chrome-extension://jdhikkidbhfaabghpghiiffgppeblghj/button.png');}
+        <a href="javascript:;" id="match" class="button">
+          <pre class="buttonText">LoL Data</pre></a>
 
-      #time {
-        top: 150px;
-        left: 500px;
-      }
+        <div id="dataPane">
+          <p id="time" class="texts">00:00</p>
+          <p id="date" class="texts">01 January 1970</p>
+          <p id="name" class="texts">Slak</p>
+          <pre id="redditkarma"></pre>
+          <img src="circle.png" alt="circle" id="circle" width="800" height="800"></img>
+        </div>
+      </div>
 
-      #date {
-        top: 300px;
-        left: 400px;
-        font-size: 50px;
-      }
-
-      #name {
-        top: 50px;
-        left: 530px;
-      }
-
-      #redditkarma {
-        top: 385px;
-        left: 480px;
-        display: inline-block;
-        position: absolute;
-        color: #AAAAAA;
-        font-family: 'Courier New';
-        font-size: 30px;
-        font-weight: bold;
-        text-align: center;
-      }
-
-      #circle {
-        display: inline-block;
-        position: absolute;
-        top: 5px;
-        left: 260px;
-        -webkit-animation: cRotate 7.5s linear 0 infinite reverse;
-      }
-
-      @-webkit-keyframes cRotate {
-        100% {-webkit-transform: rotate(360deg);}
-      }
-
-    </style>
-      <img src="chrome-extension://jdhikkidbhfaabghpghiiffgppeblghj/circle.png" alt="circle" id="circle" width="800" height="800"></img>
-
-      <a href="https://mail.google.com/mail/?authuser=0" id="gmail" class="button">
-        <pre class="buttonText">Gmail</pre></a>
-
-      <a href="https://www.youtube.com/?gl=RO&authuser=0" id="youtube" class="button">
-        <pre class="buttonText">Youtube</pre></a>
-
-      <a href="https://translate.google.com/?hl=en&authuser=0" id="translate" class="button">
-        <pre class="buttonText">Translate</pre></a>
-
-      <a href="https://www.reddit.com" id="reddit" class="button">
-        <pre class="buttonText">Reddit</pre></a>
-
-      <a href="http://www.lolnexus.com/EUNE/search?name=slak44&region=EUNE" id="lolnexus" class="button">
-        <pre class="buttonText">LoLNexus</pre></a>
-
-      <a href="https://github.com/" id="github" class="button">
-        <pre class="buttonText">GitHub</pre></a>
-
-      <p id="time" class="texts">00:00</p>
-      <p id="date" class="texts">01 January 1970</p>
-      <p id="name" class="texts">Slak</p>
-      <pre id="redditkarma"></pre>
-
-      <script src="chrome-extension://jdhikkidbhfaabghpghiiffgppeblghj/code.js"></script>
+      <div id="matchHistoryPane">
+        <a href="javascript:;" id="reverse">
+          <pre class="buttonText">Go Back</pre></a>
+        <pre id="player" class="infoText">Player: Slak44 (pid 27080204)</pre>
+        <pre id="matchMap" class="infoText">Map: MAP_NAME</pre>
+        <pre id="matchEnv" class="infoText">Match type: MATCH_MODE MATCH_TYPE</pre>
+        <pre id="matchQueue" class="infoText">Queue: QUEUE_TYPE</pre>
+        <pre id="matchDuration" class="infoText">Match time: MINUTES SECONDS</pre>
+        <pre id="matchVer" class="infoText">Match version: SEASON.PATCH.INFO1.INFO2</pre>
+        <pre id="matchVictor" class="infoText">Winner: TEAM</pre>
+        <table id="players">
+          <tr id="header">
+            <th id="blue">Blue Team</th>
+            <th id="red">Red Team</th>
+          </tr>
+        </table>
+      </div>
+      <script src="main.js"></script>
   </body>
 </html>

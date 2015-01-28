@@ -1,0 +1,184 @@
+a.button {
+  color: #FFFFFF;
+  display: block;
+  position: absolute;
+  left: 20px;
+  background-position: left;
+  background-repeat: no-repeat;
+  width: 125;
+  line-height: 50px;
+  font-family: 'Comic Sans';
+  font-weight: bold;
+  font-size: 13px;
+  text-decoration: none;
+  -webkit-animation: buttonAnimDefault 0.25s ease 0 1 both;
+}
+
+a.button:hover {
+  text-decoration: underline;
+  -webkit-animation: buttonAnim 0.25s ease 0 1 both;
+}
+
+@-webkit-keyframes buttonAnim {
+  100% {-webkit-transform: translate(20px);}
+}
+
+@-webkit-keyframes buttonAnimDefault {
+  100% {-webkit-transform: translate(-20px);}
+}
+
+pre.buttonText {
+  margin-left: 55px;
+}
+
+p.texts {
+  display: inline-block;
+  position: absolute;
+  color: #AAAAAA;
+  font-family: 'Courier New';
+  font-size: 100px;
+  font-weight: bold;
+  white-space: nowrap;
+}
+
+pre.infoText {
+  display: inline-block;
+  position: absolute;
+  color: #AAAAAA;
+  font-family: 'Courier New';
+  font-weight: bold;
+  font-size: 20px;
+  left: 5px;
+}
+
+#gmail {background-image: url('gmail.png'), url('button.png');}
+#youtube {background-image: url('youtube.png'), url('button.png');}
+#translate {background-image: url('translate.png'), url('button.png');}
+#reddit {background-image: url('reddit.png'), url('button.png');}
+#lolnexus {background-image: url('lolnexus.png'), url('button.png');}
+#github {background-image: url('github.png'), url('button.png');}
+#match {background-image: url('lol.png'), url('button.png');}
+
+#dataPane {
+  display: inline-block;
+  position: absolute;
+}
+
+#time {
+  top: 150px;
+  left: 34%;
+}
+
+#date {
+  top: 300px;
+  left: 22%;
+  font-size: 50px;
+}
+
+#name {
+  top: 50px;
+  left: 38%;
+}
+
+#redditkarma {
+  top: 385px;
+  left: 33%;
+  display: inline-block;
+  position: absolute;
+  color: #AAAAAA;
+  font-family: 'Courier New';
+  font-size: 30px;
+  font-weight: bold;
+  text-align: center;
+}
+
+#circle {
+  -webkit-animation: cRotate 7.5s linear 0 infinite reverse;
+}
+
+@-webkit-keyframes cRotate {
+  100% {-webkit-transform: rotate(360deg);}
+}
+
+#defaultPane {
+  display: inline-block;
+  position: absolute;
+  left: 0px;
+}
+
+#matchHistoryPane {
+  display: inline-block;
+  position: absolute;
+  visibility: hidden;
+  left: 0px;
+}
+
+div.goLeft {
+  -webkit-animation: moveLeft 3s ease 0 1 normal forwards running;
+}
+
+div.goRight {
+  -webkit-animation: moveRight 3s ease 0 1 normal forwards running;
+}
+
+@-webkit-keyframes moveLeft {
+  100% {-webkit-transform: translate(-1600px);}
+}
+
+@-webkit-keyframes moveRight {
+  100% {-webkit-transform: translate(1600px);}
+}
+
+#reverse {
+  color: #FFFFFF;
+  display: block;
+  position: absolute;
+  left: 20px;
+  background-position: left;
+  background-repeat: no-repeat;
+  width: 125;
+  line-height: 50px;
+  font-family: 'Comic Sans';
+  font-weight: bold;
+  font-size: 13px;
+  text-decoration: none;
+  -webkit-animation: buttonAnimDefault 0.25s ease 0 1 both;
+  background-image: url('back.png'), url('button.png');
+}
+
+#reverse:hover {
+  text-decoration: underline;
+  -webkit-animation: buttonAnim 0.25s ease 0 1 both;
+}
+
+#players {
+  display: block;
+  position: absolute;
+  top: 330px;
+  color: #AAAAAA;
+  font-family: 'Courier New';
+  font-size: 20px;
+  font-weight: bold;
+  white-space: nowrap;
+}
+
+#header {
+  display: block;
+  position: absolute;
+}
+
+#red {
+  display: block;
+  position: absolute;
+  text-align: right;
+  top: -25px;
+  right: 5px;
+}
+
+#blue {
+  display: block;
+  position: absolute;
+  text-align: left;
+  top: -25px;
+  left: 5px;
+}
