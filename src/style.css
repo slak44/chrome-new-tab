@@ -11,12 +11,12 @@ a.button {
   font-weight: bold;
   font-size: 13px;
   text-decoration: none;
-  -webkit-animation: buttonAnimDefault 0.25s ease 0 1 both;
+  -webkit-animation: buttonAnimDefault 0.25s ease 0s 1 both;
 }
 
 a.button:hover {
   text-decoration: underline;
-  -webkit-animation: buttonAnim 0.25s ease 0 1 both;
+  -webkit-animation: buttonAnim 0.25s ease 0s 1 both;
 }
 
 @-webkit-keyframes buttonAnim {
@@ -114,11 +114,11 @@ pre.infoText {
 }
 
 div.goLeft {
-  -webkit-animation: moveLeft 3s ease 0 1 normal forwards running;
+  -webkit-animation: moveLeft 3s ease 0s 1 normal forwards running;
 }
 
 div.goRight {
-  -webkit-animation: moveRight 3s ease 0 1 normal forwards running;
+  -webkit-animation: moveRight 3s ease 0s 1 normal forwards running;
 }
 
 @-webkit-keyframes moveLeft {
@@ -142,13 +142,13 @@ div.goRight {
   font-weight: bold;
   font-size: 13px;
   text-decoration: none;
-  -webkit-animation: buttonAnimDefault 0.25s ease 0 1 both;
+  -webkit-animation: buttonAnimDefault 0.25s ease 0s 1 both;
   background-image: url('back.png'), url('button.png');
 }
 
 #reverse:hover {
   text-decoration: underline;
-  -webkit-animation: buttonAnim 0.25s ease 0 1 both;
+  -webkit-animation: buttonAnim 0.25s ease 0s 1 both;
 }
 
 #players {
