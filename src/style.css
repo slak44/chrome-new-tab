@@ -93,7 +93,7 @@ pre.infoText {
 }
 
 #circle {
-  -webkit-animation: cRotate 7.5s linear 0 infinite reverse;
+  -webkit-animation: cRotate 7.5s linear 0s infinite reverse;
 }
 
 @-webkit-keyframes cRotate {
