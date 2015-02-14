@@ -1,0 +1,11 @@
+@-webkit-keyframes cRotate {
+  100% {-webkit-transform: rotate(360deg);}
+}
+
+@-webkit-keyframes buttonAnim {
+  100% {-webkit-transform: translate(20px);}
+}
+
+@-webkit-keyframes buttonAnimDefault {
+  100% {-webkit-transform: translate(-20px);}
+}

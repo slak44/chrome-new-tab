@@ -4,10 +4,13 @@
   "name": "A New 'new tab'",
   "version": "1.0",
   "web_accessible_resources":
-  ["button.png","gmail.png","youtube.png","translate.png","reddit.png","lolnexus.png","github.png","ball.png","circle.png","lol.png","style.css","main.js","lol.js","jquery-2.1.3.min.js"],
+  ["button.png","gmail.png","youtube.png","translate.png","reddit.png","lolnexus.png","github.png","ball.png","circle.png","lol.png",
+    "style.css","keyframes.css",
+    "main.js","lol.js","init.js",
+    "jquery-2.1.3.min.js"],
   "chrome_url_overrides": {
     "newtab": "new.html"
   },
   "permissions":
-  ["https://www.reddit.com/user/slak44/about.json?"]
+  ["https://www.reddit.com/user/slak44/about.json?", "storage"]
 }

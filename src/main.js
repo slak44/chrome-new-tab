@@ -1,9 +1,15 @@
-document.getElementById("dataPane").style.left = (screen.width/2) - 400;
+document.getElementById("dataPane").style.left = ($(window).width()/2) - 400 + "px";
 document.getElementById("dataPane").style.top = "0px";
 setDate();
 setTime();
+setBlockAbsolute();
 updateRedditKarma();
 setButtonPos(10);
+
+function setBlockAbsolute() {
+  var children = document.getElementById("matchHistoryPane").children;
+  for (var i = 0; i < children.length; i++) $(children[i]).toggleClass("blockabsolute");
+}
 
 function hideMainPane(boolean) {
   if (boolean) {
@@ -11,7 +17,7 @@ function hideMainPane(boolean) {
     document.getElementById("defaultPane").className = "";
     $("#defaultPane").toggleClass("goLeft");
   } else {
-    document.getElementById("defaultPane").style.left = "-1600px";
+    document.getElementById("defaultPane").style.left = -$(window).width() + "px";
     document.getElementById("defaultPane").className = "";
     $("#defaultPane").toggleClass("goRight");
   }

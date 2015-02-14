@@ -1,19 +1,83 @@
-//This code isn't endorsed by Riot Games and doesn't reflect the views or opinions of Riot Games or anyone officially involved in producing or managing League of Legends.
-//League of Legends and Riot Games are trademarks or registered trademarks of Riot Games, Inc. League of Legends © Riot Games, Inc.
-var apiKey = , playerId = 27080204;
+/*This code isn't endorsed by Riot Games and doesn't reflect
+the views or opinions of Riot Games or anyone officially involved
+in producing or managing League of Legends. League of Legends and
+Riot Games are trademarks or registered trademarks of
+Riot Games, Inc. League of Legends © Riot Games, Inc. */
 var matchId, match;
-getLastMatchId();
+var settings = {};
+checkSettings();
+
+function storeSettings() {
+  chrome.storage.local.set({"name": settings.name}, undefined);
+  chrome.storage.local.set({"server": settings.server}, undefined);
+  chrome.storage.local.set({"apiKey": settings.apiKey}, undefined);
+  chrome.storage.local.set({"player": settings.player}, undefined);
+  chrome.storage.local.set({"playerId": settings.playerId}, getLastMatchId());
+}
+
+function getAndStoreSettings(onFinish) {
+  chrome.storage.local.get("name", function(data){settings.name = data.name;});
+  chrome.storage.local.get("server", function(data){settings.server = data.server;});
+  chrome.storage.local.get("apiKey", function(data){settings.apiKey = data.apiKey;});
+  chrome.storage.local.get("player", function(data){settings.player = data.player;});
+  chrome.storage.local.get("playerId", function(data){settings.playerId = data.playerId;onFinish();});
+}
+
+function promptSettings(onFinish) {
+  settings.name = prompt("Please input a title (4 letters are recommended):");
+  document.getElementById("name").innerHTML = settings.name;
+  settings.server = prompt("Please input your League of Legends server:");
+  settings.apiKey = prompt("Please input a Riot API key:");
+  settings.player = prompt("Please input your League of Legends summoner name:");
+  getAndStorePlayerId(onFinish);
+}
 
 function getLastMatchId() {
-  $.get('https://eune.api.pvp.net/api/lol/eune/v2.2/matchhistory/'+playerId+'?api_key='+apiKey,
+  $.get('https://eune.api.pvp.net/api/lol/'+settings.server+'/v2.2/matchhistory/'+settings.playerId+'?api_key='+settings.apiKey,
     function(data){
       matchId = data.matches[data.matches.length-1].matchId;
       getLastMatch();
   });
 }
 
+function getAndStorePlayerId(onFinish) {
+  $.get(
+    "https://eune.api.pvp.net/api/lol/"+settings.server+"/v1.4/summoner/by-name/"+settings.player+"?api_key="+settings.apiKey,
+    function(data) {settings.playerId = data[settings.player.toLowerCase()].id;onFinish();}
+    );
+}
+
+function checkSettings() {
+  var storagePromise = new Promise(function(resolve, reject) {
+    getAndStoreSettings(function() {
+      if(settings.name != undefined &&
+        settings.server != undefined &&
+        settings.apiKey != undefined &&
+        settings.player != undefined &&
+        settings.playerId != undefined) resolve("Done fetching settings.");
+      else reject(Error("Failed to load settings."));
+    });
+  });
+
+  storagePromise.then(
+    function(result) {
+      console.log(result);
+      getLastMatchId();
+    },
+    function(err){
+      console.log(err);
+      promptSettings(storeSettings);
+    }
+  );
+}
+
+function clear() {
+  settings = {};
+  chrome.storage.local.clear();
+}
+
 function getLastMatch() {
-  $.get('https://eune.api.pvp.net/api/lol/eune/v2.2/match/'+matchId+'?api_key='+apiKey,
+  $.get('https://eune.api.pvp.net/api/lol/'+settings.server+'/v2.2/match/'+matchId+'?api_key='+settings.apiKey,
     function(data){
       match = data;
       displayMatch();
@@ -35,25 +99,18 @@ function hideLolPane(boolean) {
     document.getElementById("matchHistoryPane").className = "";
     $("#matchHistoryPane").toggleClass("goLeft");
   } else {
-    document.getElementById("matchHistoryPane").style.left = "-1600px";
+    document.getElementById("matchHistoryPane").style.left = -$(window).width() + "px";
     document.getElementById("matchHistoryPane").className = "";
     $("#matchHistoryPane").toggleClass("goRight");
   }
 }
-//TODO also display players with game stats
-//TODO hover on player for data
-//TODO highlighted info in stats
 
-//TODO compressed stats/smaller font&offset?
-//TODO jquery ui?
-//TODO background for whole div?
-//TODO stupid stat counts(total wards per player ex)?
-//TODO player search?
 function displayMatch() {
   var fields = document.getElementsByClassName("infoText");
-  for (var i = 0; i < fields.length; i++) {
+  for (var i = 0; i < fields.length; i++)
     fields[i].style.top = (i * (20/*font size, px*/+10/*offset between texts*/) + 50/*button(id="reverse")*/) + "px";
-  }
+
+  document.getElementById("player").innerHTML = "Player: "+settings.player+" (pid "+settings.playerId+")";
   document.getElementById("matchMap").innerHTML = "Map: "+getMapName(match.mapId);
   document.getElementById("matchEnv").innerHTML =
     "Match type: "+getMatchMode(match.matchMode)+" "+getMatchType(match.matchType);
@@ -62,33 +119,49 @@ function displayMatch() {
   document.getElementById("matchVer").innerHTML = "Match version: "+match.matchVersion;
   document.getElementById("matchVictor").innerHTML = "Winner: "+getWinner();
 
-  document.getElementById("header").style.width = screen.width - 5;
+  var tableWidth = $(window).width() - 5/*Right padding*/ - 450/*Info offset*/;
+  document.getElementById("header").style.width = tableWidth;
   var playerNames = getPlayerNames();
+  var playerScores = getPlayerScores();
+
   for (var i = 0; i < 5; i++) {
     var newRow = document.createElement('tr');
     newRow.style.display = "block";
     newRow.style.position = "absolute";
-    newRow.style.width = screen.width - 5;
+    newRow.style.width = tableWidth;
+
     var pa = document.createElement('td');
+    var paScore = document.createElement('td');
+    var pbScore = document.createElement('td');
     var pb = document.createElement('td');
+
     pa.innerHTML = playerNames[i];
+    paScore.innerHTML = playerScores[i];
+    pbScore.innerHTML = playerScores[i+5];
     pb.innerHTML = playerNames[i+5];
-    setTableCellStyle(pa, "RED", i);
-    setTableCellStyle(pb, "BLUE", i);
+
+    var scoreOffset = 5/*Base padding*/+200/*Size of name*/+5/*Padding from name*/;
+    setTableCellStyle(pa, "RED", i, 5);
+    setTableCellStyle(paScore, "RED", i, scoreOffset);
+    setTableCellStyle(pbScore, "BLUE", i, scoreOffset);
+    setTableCellStyle(pb, "BLUE", i, 5);
+
     newRow.appendChild(pa);
+    newRow.appendChild(paScore);
+    newRow.appendChild(pbScore);
     newRow.appendChild(pb);
     document.getElementById("players").appendChild(newRow);
   }
 }
 
-function setTableCellStyle(tableCell, side, nr) {
+function setTableCellStyle(tableCell/*The HTML object*/, side/*Player color*/, nr/*What row is it on*/, size/*Space from one of the sides*/) {
   var align, color;
   if (side == "RED") {
     align = "right";
     color = "#FFAAAA";
-    tableCell.style.right = "5px";
+    tableCell.style.right = size + "px";
   } else {
-    tableCell.style.left = "5px";
+    tableCell.style.left = size + "px";
     align = "left";
     color = "#AAAAFF"
   }
@@ -96,10 +169,20 @@ function setTableCellStyle(tableCell, side, nr) {
   tableCell.style.position = "absolute";
   tableCell.style.textAlign = align;
   tableCell.style.color = color;
-  tableCell.style.top = (nr * (20/*font size, px*/+2/*offset between texts*/)) + "px";
+  tableCell.style.top = (nr * (20/*Font size, px*/+2/*Offset between texts*/)) + "px";
+  tableCell.style.width = "200px";
 }
 
 /*DATA PROCESSING -->*/
+
+function getPlayerScores() {
+  var scores = [];
+  for (var i = 0; i < match.participants.length; i++) {
+    var playerStats = match.participants[i].stats;
+    scores[scores.length] = playerStats.kills + "/" + playerStats.deaths + "/" + playerStats.assists;
+  }
+  return scores;
+}
 
 function getPlayerNames() {
   var names = [];
