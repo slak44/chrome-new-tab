@@ -1,5 +1,6 @@
 document.getElementById("dataPane").style.left = ($(window).width()/2) - 400 + "px";
 document.getElementById("dataPane").style.top = "0px";
+document.getElementById("name").innerHTML = settings.name;
 setDate();
 setTime();
 setBlockAbsolute();
@@ -24,13 +25,13 @@ function hideMainPane(boolean) {
 }
 
 function updateRedditKarma() {
-  $.getJSON('https://www.reddit.com/user/slak44/about.json?',
+  $.getJSON('https://www.reddit.com/user/'+settings.redditUser+'/about.json?',
     function(data){
       document.getElementById('redditkarma').innerHTML =
       "Comment karma: " + data.data.comment_karma + "\n" +
       "Link karma: " + data.data.link_karma;
   });
-  setTimeout(function(){updateRedditKarma()}, 7500);
+  setTimeout(updateRedditKarma, 7500);
 }
 
 function setButtonPos(buttonOffset) {
@@ -48,7 +49,7 @@ function setTime() {
   if (h < 10) h = "0" + h;
   var time = h + ":" + m;
   document.getElementById("time").innerHTML = time;
-  setTimeout(function(){setTime()}, 5000);
+  setTimeout(setTime, 5000);
 }
 
 function setDate() {

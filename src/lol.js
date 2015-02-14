@@ -9,6 +9,7 @@ checkSettings();
 
 function storeSettings() {
   chrome.storage.local.set({"name": settings.name}, undefined);
+  chrome.storage.local.set({"redditUser": settings.redditUser}, undefined);
   chrome.storage.local.set({"server": settings.server}, undefined);
   chrome.storage.local.set({"apiKey": settings.apiKey}, undefined);
   chrome.storage.local.set({"player": settings.player}, undefined);
@@ -17,6 +18,7 @@ function storeSettings() {
 
 function getAndStoreSettings(onFinish) {
   chrome.storage.local.get("name", function(data){settings.name = data.name;});
+  chrome.storage.local.get("redditUser", function(data){settings.redditUser = data.redditUser;});
   chrome.storage.local.get("server", function(data){settings.server = data.server;});
   chrome.storage.local.get("apiKey", function(data){settings.apiKey = data.apiKey;});
   chrome.storage.local.get("player", function(data){settings.player = data.player;});
@@ -25,7 +27,7 @@ function getAndStoreSettings(onFinish) {
 
 function promptSettings(onFinish) {
   settings.name = prompt("Please input a title (4 letters are recommended):");
-  document.getElementById("name").innerHTML = settings.name;
+  settings.redditUser = prompt("Please input your reddit username:");
   settings.server = prompt("Please input your League of Legends server:");
   settings.apiKey = prompt("Please input a Riot API key:");
   settings.player = prompt("Please input your League of Legends summoner name:");
