@@ -127,7 +127,7 @@ div.goRight {
   font-size: 13px;
   text-decoration: none;
   -webkit-animation: buttonAnimDefault 0.25s ease 0s 1 both;
-  background-image: url('back.png'), url('button.png');
+  background-image: url('assets/back.png'), url('assets/button.png');
 }
 #reverse:hover {
   text-decoration: underline;
