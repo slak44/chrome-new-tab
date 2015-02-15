@@ -1,11 +1,13 @@
-document.getElementById("dataPane").style.left = ($(window).width()/2) - 400 + "px";
-document.getElementById("dataPane").style.top = "0px";
-document.getElementById("name").innerHTML = settings.name;
-setDate();
-setTime();
-setBlockAbsolute();
-updateRedditKarma();
-setButtonPos(10);
+function main() {
+    document.getElementById("dataPane").style.left = ($(window).width()/2) - 400 + "px";
+    document.getElementById("dataPane").style.top = "0px";
+    document.getElementById("name").innerHTML = settings.name;
+    setDate();
+    setTime();
+    setBlockAbsolute();
+    updateRedditKarma();
+    setButtonPos(10);
+}
 
 function setBlockAbsolute() {
   var children = document.getElementById("matchHistoryPane").children;

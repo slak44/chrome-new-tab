@@ -35,6 +35,7 @@ function promptSettings(onFinish) {
 }
 
 function getLastMatchId() {
+  main();
   $.get('https://eune.api.pvp.net/api/lol/'+settings.server+'/v2.2/matchhistory/'+settings.playerId+'?api_key='+settings.apiKey,
     function(data){
       matchId = data.matches[data.matches.length-1].matchId;
