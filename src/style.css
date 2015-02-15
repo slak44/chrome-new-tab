@@ -56,13 +56,13 @@ pre.infoText {
 }
 
 /*Images*/
-#gmail {background-image: url('gmail.png'), url('button.png');}
-#youtube {background-image: url('youtube.png'), url('button.png');}
-#translate {background-image: url('translate.png'), url('button.png');}
-#reddit {background-image: url('reddit.png'), url('button.png');}
-#lolnexus {background-image: url('lolnexus.png'), url('button.png');}
-#github {background-image: url('github.png'), url('button.png');}
-#match {background-image: url('lol.png'), url('button.png');}
+#gmail {background-image: url('assets/gmail.png'), url('assets/button.png');}
+#youtube {background-image: url('assets/youtube.png'), url('assets/button.png');}
+#translate {background-image: url('assets/translate.png'), url('assets/button.png');}
+#reddit {background-image: url('assets/reddit.png'), url('assets/button.png');}
+#lolnexus {background-image: url('assets/lolnexus.png'), url('assets/button.png');}
+#github {background-image: url('assets/github.png'), url('assets/button.png');}
+#match {background-image: url('assets/lol.png'), url('assets/button.png');}
 
 /*Default texts*/
 #time {
