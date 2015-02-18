@@ -85,7 +85,7 @@ function getLastMatch() {
       match = data;
       displayMatch();
       $("#match").click(function() {
-        document.getElementById("matchHistoryPane").style.visibility = "visible";
+        byId("matchHistoryPane").style.visibility = "visible";
         hideLolPane(false);
         hideMainPane(true);
       });
@@ -98,12 +98,12 @@ function getLastMatch() {
 
 function hideLolPane(boolean) {
   if (boolean) {
-    document.getElementById("matchHistoryPane").style.left = "0px";
-    document.getElementById("matchHistoryPane").className = "";
+    byId("matchHistoryPane").style.left = "0px";
+    byId("matchHistoryPane").className = "";
     $("#matchHistoryPane").toggleClass("goLeft");
   } else {
-    document.getElementById("matchHistoryPane").style.left = -$(window).width() + "px";
-    document.getElementById("matchHistoryPane").className = "";
+    byId("matchHistoryPane").style.left = -$(window).width() + "px";
+    byId("matchHistoryPane").className = "";
     $("#matchHistoryPane").toggleClass("goRight");
   }
 }
@@ -113,17 +113,17 @@ function displayMatch() {
   for (var i = 0; i < fields.length; i++)
     fields[i].style.top = (i * (20/*font size, px*/+10/*offset between texts*/) + 50/*button(id="reverse")*/) + "px";
 
-  document.getElementById("player").innerHTML = "Player: "+settings.player+" (pid "+settings.playerId+")";
-  document.getElementById("matchMap").innerHTML = "Map: "+getMapName(match.mapId);
-  document.getElementById("matchEnv").innerHTML =
+  byId("player").innerHTML = "Player: "+settings.player+" (pid "+settings.playerId+")";
+  byId("matchMap").innerHTML = "Map: "+getMapName(match.mapId);
+  byId("matchEnv").innerHTML =
     "Match type: "+getMatchMode(match.matchMode)+" "+getMatchType(match.matchType);
-  document.getElementById("matchQueue").innerHTML = "Match queue: "+getQueueType(match.queueType);
-  document.getElementById("matchDuration").innerHTML = "Match time: "+getHumanTime(match.matchDuration);
-  document.getElementById("matchVer").innerHTML = "Match version: "+match.matchVersion;
-  document.getElementById("matchVictor").innerHTML = "Winner: "+getWinner();
+  byId("matchQueue").innerHTML = "Match queue: "+getQueueType(match.queueType);
+  byId("matchDuration").innerHTML = "Match time: "+getHumanTime(match.matchDuration);
+  byId("matchVer").innerHTML = "Match version: "+match.matchVersion;
+  byId("matchVictor").innerHTML = "Winner: "+getWinner();
 
   var tableWidth = $(window).width() - 5/*Right padding*/ - 450/*Info offset*/;
-  document.getElementById("header").style.width = tableWidth;
+  byId("header").style.width = tableWidth;
   var playerNames = getPlayerNames();
   var playerScores = getPlayerScores();
 
@@ -153,7 +153,7 @@ function displayMatch() {
     newRow.appendChild(paScore);
     newRow.appendChild(pbScore);
     newRow.appendChild(pb);
-    document.getElementById("players").appendChild(newRow);
+    byId("players").appendChild(newRow);
   }
 }
 

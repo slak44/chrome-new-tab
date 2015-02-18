@@ -1,7 +1,7 @@
 function main() {
-  document.getElementById("dataPane").style.left = ($(window).width()/2) - 400 + "px";
-  document.getElementById("dataPane").style.top = "0px";
-  document.getElementById("name").innerHTML = settings.name;
+  byId("dataPane").style.left = ($(window).width()/2) - 400 + "px";
+  byId("dataPane").style.top = "0px";
+  byId("name").innerHTML = settings.name;
   byId("persistentIsOnline").style.right = "0px";
   setBlockAbsolute();
   setButtonPos(10);
@@ -15,18 +15,18 @@ function byId(id) {
 }
 
 function setBlockAbsolute() {
-  var children = document.getElementById("matchHistoryPane").children;
+  var children = byId("matchHistoryPane").children;
   for (var i = 0; i < children.length; i++) $(children[i]).toggleClass("blockabsolute");
 }
 
 function hideMainPane(boolean) {
   if (boolean) {
-    document.getElementById("defaultPane").style.left = "0px";
-    document.getElementById("defaultPane").className = "";
+    byId("defaultPane").style.left = "0px";
+    byId("defaultPane").className = "";
     $("#defaultPane").toggleClass("goLeft");
   } else {
-    document.getElementById("defaultPane").style.left = -$(window).width() + "px";
-    document.getElementById("defaultPane").className = "";
+    byId("defaultPane").style.left = -$(window).width() + "px";
+    byId("defaultPane").className = "";
     $("#defaultPane").toggleClass("goRight");
   }
 }
@@ -34,7 +34,7 @@ function hideMainPane(boolean) {
 function updateRedditKarma() {
   $.getJSON('https://www.reddit.com/user/'+settings.redditUser+'/about.json?',
     function(data){
-      document.getElementById('redditkarma').innerHTML =
+      byId('redditkarma').innerHTML =
       "Comment karma: " + data.data.comment_karma + "\n" +
       "Link karma: " + data.data.link_karma;
       byId("persistentIsOnline").src = "assets/empty30x30.png";
@@ -56,7 +56,7 @@ function setTime() {
   if (m < 10) m = "0" + m;
   if (h < 10) h = "0" + h;
   var time = h + ":" + m;
-  document.getElementById("time").innerHTML = time;
+  byId("time").innerHTML = time;
   setTimeout(setTime, 5000);
 }
 
@@ -67,7 +67,7 @@ function setDate() {
   var year = d.getFullYear();
   if (day < 10) day = "0" + day;
   var date = day + " " + getMonthName(month) + " " + year;
-  document.getElementById("date").innerHTML = date;
+  byId("date").innerHTML = date;
 }
 
 function getMonthName(monthnumeral) {
