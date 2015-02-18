@@ -1,12 +1,17 @@
 function main() {
-    document.getElementById("dataPane").style.left = ($(window).width()/2) - 400 + "px";
-    document.getElementById("dataPane").style.top = "0px";
-    document.getElementById("name").innerHTML = settings.name;
-    setDate();
-    setTime();
-    setBlockAbsolute();
-    updateRedditKarma();
-    setButtonPos(10);
+  document.getElementById("dataPane").style.left = ($(window).width()/2) - 400 + "px";
+  document.getElementById("dataPane").style.top = "0px";
+  document.getElementById("name").innerHTML = settings.name;
+  byId("persistentIsOnline").style.right = "0px";
+  setBlockAbsolute();
+  setButtonPos(10);
+  setDate();
+  setTime();
+  updateRedditKarma();
+}
+
+function byId(id) {
+  return document.getElementById(id);
 }
 
 function setBlockAbsolute() {
@@ -32,7 +37,8 @@ function updateRedditKarma() {
       document.getElementById('redditkarma').innerHTML =
       "Comment karma: " + data.data.comment_karma + "\n" +
       "Link karma: " + data.data.link_karma;
-  });
+      byId("persistentIsOnline").src = "assets/empty30x30.png";
+  }).error(function() {byId("persistentIsOnline").src = "assets/noconnection.png"});
   setTimeout(updateRedditKarma, 7500);
 }
 

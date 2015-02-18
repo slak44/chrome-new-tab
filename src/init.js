@@ -3,9 +3,9 @@ addCSS(['@-webkit-keyframes moveLeft {100% {-webkit-transform: translate('+(-$(w
 
 function addCSS(elements) {
   for (var i = 0; i < elements.length; i++) {
-    var newAnim = document.createElement('style');
-    newAnim.type = 'text/css';
-    newAnim.appendChild(document.createTextNode(elements[i]));
-    document.getElementsByTagName("head")[0].appendChild(newAnim);
+    var newCss = document.createElement('style');
+    newCss.type = 'text/css';
+    newCss.appendChild(document.createTextNode(elements[i]));
+    document.getElementsByTagName("head")[0].appendChild(newCss);
   }
 }
