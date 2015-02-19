@@ -55,15 +55,6 @@ pre.infoText {
   left: 5px;
 }
 
-/*Images*/
-#gmail {background-image: url('assets/gmail.png'), url('assets/button.png');}
-#youtube {background-image: url('assets/youtube.png'), url('assets/button.png');}
-#translate {background-image: url('assets/translate.png'), url('assets/button.png');}
-#reddit {background-image: url('assets/reddit.png'), url('assets/button.png');}
-#lolnexus {background-image: url('assets/lolnexus.png'), url('assets/button.png');}
-#github {background-image: url('assets/github.png'), url('assets/button.png');}
-#match {background-image: url('assets/lol.png'), url('assets/button.png');}
-
 /*Default texts*/
 #time {
   top: 150px;

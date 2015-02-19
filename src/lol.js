@@ -84,7 +84,7 @@ function getLastMatch() {
     function(data){
       match = data;
       displayMatch();
-      $("#match").click(function() {
+      $(byId("LoL Data")).click(function() {
         byId("matchHistoryPane").style.visibility = "visible";
         hideLolPane(false);
         hideMainPane(true);

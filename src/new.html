@@ -8,8 +8,8 @@
       JavaScript:
         Inject stylesheets
         <body> here
-        Manipulate DOM
         LoL tab & settings operations
+        Manipulate DOM
     -->
     <script src="jquery-2.1.3.min.js"></script>
     <link rel="stylesheet" type="text/css" href="keyframes.css">
@@ -20,50 +20,14 @@
       <img src="assets/empty30x30.png" id="persistentIsOnline" class="blockabsolute" width="30" height="30"></img>
       <div id="defaultPane">
         <div id="dataPane" class="blockabsolute">
-          <p id="time" class="blockabsolute globalText texts">00:00</p>
-          <p id="date" class="blockabsolute globalText texts">01 January 1970</p>
-          <p id="name" class="blockabsolute globalText texts">Name</p>
           <pre id="redditkarma" class="blockabsolute globalText"></pre>
           <img src="assets/circle.png" alt="circle" id="circle" width="800" height="800"></img>
         </div>
-        <a href="https://mail.google.com/mail/?authuser=0" id="gmail" class="blockabsolute button">
-          <pre class="globalText buttonText">Gmail</pre></a>
-
-        <a href="https://www.youtube.com/?gl=RO&authuser=0" id="youtube" class="blockabsolute button">
-          <pre class="globalText buttonText">Youtube</pre></a>
-
-        <a href="https://translate.google.com/?hl=en&authuser=0" id="translate" class="blockabsolute button">
-          <pre class="globalText buttonText">Translate</pre></a>
-
-        <a href="https://www.reddit.com" id="reddit" class="blockabsolute button">
-          <pre class="globalText buttonText">Reddit</pre></a>
-
-        <a href="http://www.lolnexus.com/EUNE/search?name=slak44&region=EUNE" id="lolnexus" class="blockabsolute button">
-          <pre class="globalText buttonText">LoLNexus</pre></a>
-
-        <a href="https://github.com/" id="github" class="blockabsolute button">
-          <pre class="globalText buttonText">GitHub</pre></a>
-
-        <a href="javascript:;" id="match" class="blockabsolute button">
-          <pre class="globalText buttonText">LoL Data</pre></a>
       </div>
 
       <div id="matchHistoryPane">
         <a href="javascript:;" id="reverse">
           <pre class="globalText buttonText">Go Back</pre></a>
-        <pre id="player" class="globalText infoText">Player: NAME (pid PID)</pre>
-        <pre id="matchMap" class="globalText infoText">Map: MAP_NAME</pre>
-        <pre id="matchEnv" class="globalText infoText">Match type: MATCH_MODE MATCH_TYPE</pre>
-        <pre id="matchQueue" class="globalText infoText">Queue: QUEUE_TYPE</pre>
-        <pre id="matchDuration" class="globalText infoText">Match time: MINUTES SECONDS</pre>
-        <pre id="matchVer" class="globalText infoText">Match version: SEASON.PATCH.INFO1.INFO2</pre>
-        <pre id="matchVictor" class="globalText infoText">Winner: TEAM</pre>
-        <table id="players">
-          <tr id="header" class="blockabsolute">
-            <th id="blue" class="blockabsolute">Blue Team</th>
-            <th id="red" class="blockabsolute">Red Team</th>
-          </tr>
-        </table>
       </div>
       <script src="main.js"></script>
       <script src="lol.js"></script>
