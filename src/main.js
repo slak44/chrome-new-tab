@@ -24,7 +24,6 @@ function manipulateDOM() {
   addDataP("date", "01 January 1970");
   byId("name").innerHTML = settings.name;
 
-  addTable();
   addTabPre("player", "Player: NAME (pid PID)");
   addTabPre("matchMap", "Map: MAP_NAME");
   addTabPre("matchEnv", "Match type: MATCH_MODE MATCH_TYPE");
@@ -33,23 +32,6 @@ function manipulateDOM() {
   addTabPre("matchVer", "Match version: SEASON.PATCH.INFO1.INFO2");
   addTabPre("matchVictor", "Winner: TEAM");
   setBlockAbsolute();
-}
-
-function addTable() {
-  var table = document.createElement("table");
-  table.id = "players";
-  var hdr = document.createElement("tr");
-  hdr.id = "header";
-  var red = document.createElement("th");
-  red.id = "red";
-  $(red).toggleClass("blockabsolute");
-  var blue = document.createElement("th");
-  blue.id = "blue";
-  $(blue).toggleClass("blockabsolute");
-  hdr.appendChild(blue);
-  hdr.appendChild(red);
-  table.appendChild(hdr);
-  byId("matchHistoryPane").appendChild(table);
 }
 
 function addDataP(id, content) {

@@ -109,29 +109,19 @@ function hideLolPane(boolean) {
 }
 
 function displayMatch() {
-  var fields = document.getElementsByClassName("infoText");
-  for (var i = 0; i < fields.length; i++)
-    fields[i].style.top = (i * (20/*font size, px*/+10/*offset between texts*/) + 50/*button(id="reverse")*/) + "px";
-
-  byId("player").innerHTML = "Player: "+settings.player+" (pid "+settings.playerId+")";
-  byId("matchMap").innerHTML = "Map: "+getMapName(match.mapId);
-  byId("matchEnv").innerHTML =
-    "Match type: "+getMatchMode(match.matchMode)+" "+getMatchType(match.matchType);
-  byId("matchQueue").innerHTML = "Match queue: "+getQueueType(match.queueType);
-  byId("matchDuration").innerHTML = "Match time: "+getHumanTime(match.matchDuration);
-  byId("matchVer").innerHTML = "Match version: "+match.matchVersion;
-  byId("matchVictor").innerHTML = "Winner: "+getWinner();
-
+  setTabFields();
   var tableWidth = $(window).width() - 5/*Right padding*/ - 450/*Info offset*/;
-  byId("header").style.width = tableWidth;
+  createTable(tableWidth);
+  addPlayers(tableWidth);
+}
+
+function addPlayers(width) {
   var playerNames = getPlayerNames();
   var playerScores = getPlayerScores();
-
   for (var i = 0; i < 5; i++) {
     var newRow = document.createElement('tr');
-    newRow.style.display = "block";
-    newRow.style.position = "absolute";
-    newRow.style.width = tableWidth;
+    $(newRow).toggleClass("blockabsolute");
+    newRow.style.width = width;
 
     var pa = document.createElement('td');
     var paScore = document.createElement('td');
@@ -155,6 +145,49 @@ function displayMatch() {
     newRow.appendChild(pb);
     byId("players").appendChild(newRow);
   }
+}
+
+function createTable(width) {
+  var table = document.createElement("table");
+  $(table).toggleClass("blockabsolute");
+  table.id = "players";
+  table.style.top = "88px";
+  table.style.left = "450px";
+  table.style.fontFamily = "Courier New";
+  table.style.fontSize = "20px";
+  table.style.fontWeight = "bold";
+  table.style.whiteSpace = "nowrap";
+
+  var row1 = document.createElement('tr');
+  row1.style.width = width;
+  $(row1).toggleClass("blockabsolute");
+  var red = document.createElement('td');
+  var blue = document.createElement('td');
+  setTableCellStyle(red, "RED", undefined, 5);
+  setTableCellStyle(blue, "BLUE", undefined, 5);
+  red.style.top = "-25px";
+  blue.style.top = "-25px";
+  red.innerHTML = "Red team";
+  blue.innerHTML = "Blue team";
+  row1.appendChild(blue);
+  row1.appendChild(red);
+  table.appendChild(row1);
+  byId("matchHistoryPane").appendChild(table);
+}
+
+function setTabFields() {
+  var fields = document.getElementsByClassName("infoText");
+  for (var i = 0; i < fields.length; i++)
+    fields[i].style.top = (i * (20/*font size, px*/+10/*offset between texts*/) + 50/*button(id="reverse")*/) + "px";
+
+  byId("player").innerHTML = "Player: "+settings.player+" (pid "+settings.playerId+")";
+  byId("matchMap").innerHTML = "Map: "+getMapName(match.mapId);
+  byId("matchEnv").innerHTML =
+    "Match type: "+getMatchMode(match.matchMode)+" "+getMatchType(match.matchType);
+  byId("matchQueue").innerHTML = "Match queue: "+getQueueType(match.queueType);
+  byId("matchDuration").innerHTML = "Match time: "+getHumanTime(match.matchDuration);
+  byId("matchVer").innerHTML = "Match version: "+match.matchVersion;
+  byId("matchVictor").innerHTML = "Winner: "+getWinner();
 }
 
 function setTableCellStyle(tableCell/*The HTML object*/, side/*Player color*/, nr/*What row is it on*/, size/*Space from one of the sides*/) {
