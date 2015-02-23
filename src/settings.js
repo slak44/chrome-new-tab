@@ -24,9 +24,7 @@ function checkSettings() {
       /*Settings not present; prompt for data, get playerId, store data, load the data.*/
       console.log(err);
       promptSettings();
-      getAndStorePlayerId();
-      cacheSettings();
-      getLastMatchId();
+      getAndStorePlayerId(cacheSettings, getLastMatchId);
     }
   );
 }
@@ -54,20 +52,20 @@ function promptSettings() {
   settings.player = prompt("Please input your League of Legends summoner name:");
 }
 
-function getAndStorePlayerId() {
+function getAndStorePlayerId(callback, innerCallback) {
   $.get(
     "https://eune.api.pvp.net/api/lol/"+settings.server+"/v1.4/summoner/by-name/"+settings.player+"?api_key="+settings.apiKey,
-    function(data) {settings.playerId = data[settings.player.toLowerCase()].id;}
+    function(data) {settings.playerId = data[settings.player.toLowerCase()].id; callback(innerCallback);}
     );
 }
 
-function cacheSettings() {
+function cacheSettings(callback) {
   chrome.storage.local.set({"name": settings.name}, undefined);
   chrome.storage.local.set({"redditUser": settings.redditUser}, undefined);
   chrome.storage.local.set({"server": settings.server}, undefined);
   chrome.storage.local.set({"apiKey": settings.apiKey}, undefined);
   chrome.storage.local.set({"player": settings.player}, undefined);
-  chrome.storage.local.set({"playerId": settings.playerId}, undefined);
+  chrome.storage.local.set({"playerId": settings.playerId}, callback());
 }
 
 function getLastMatchId() {
