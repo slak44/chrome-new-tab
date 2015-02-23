@@ -19,9 +19,10 @@ function manipulateDOM() {
   byId("defaultPane").appendChild(createButton("assets/lol.png", "javascript:;", "LoL Data"));
   setButtonPos(10);
 
-  addDataP("name", "Name");
-  addDataP("time", "00:00");
-  addDataP("date", "01 January 1970");
+  addData("name", "Name", "p");
+  addData("time", "00:00", "P");
+  addData("date", "01 January 1970", "p");
+  addData("redditkarma", "", "pre");
   byId("name").innerHTML = settings.name;
 
   addTabPre("player", "Player: NAME (pid PID)");
@@ -35,12 +36,12 @@ function manipulateDOM() {
   byId("matchHistoryPane").appendChild(createButton("assets/back.png", "javascript:;", "Go Back"));
 }
 
-function addDataP(id, content) {
-  var p = document.createElement("p");
-  p.innerHTML = content;
-  p.id = id;
-  $(p).toggleClass("blockabsolute globalText texts");
-  byId("dataPane").appendChild(p);
+function addData(id, content, element) {
+  var e = document.createElement(element);
+  e.innerHTML = content;
+  e.id = id;
+  $(e).toggleClass("blockabsolute globalText");
+  byId("dataPane").appendChild(e);
 }
 
 function addTabPre(id, content) {

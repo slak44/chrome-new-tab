@@ -44,11 +44,6 @@ pre.buttonText {
   margin-left: 55px;
 }
 
-/*Default texts*/
-p.texts {
-  font-size: 100px;
-}
-
 /*LoL tab text*/
 pre.infoText {
   font-size: 20px;
@@ -59,6 +54,7 @@ pre.infoText {
 #time {
   top: 150px;
   left: 34%;
+  font-size: 100px;
 }
 #date {
   top: 300px;
@@ -68,11 +64,11 @@ pre.infoText {
 #name {
   top: 50px;
   left: 38%;
+  font-size: 100px;
 }
 #redditkarma {
   top: 385px;
   left: 33%;
-  color: #AAAAAA;
   font-size: 30px;
   text-align: center;
   white-space: pre;
