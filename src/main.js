@@ -10,13 +10,13 @@ function manipulateDOM() {
   byId("dataPane").style.top = "0px";
   byId("persistentIsOnline").style.right = "0px";
 
-  addButton("assets/gmail.png", "https://mail.google.com/mail/?authuser=0", "Gmail");
-  addButton("assets/youtube.png", "https://www.youtube.com/?gl=RO&authuser=0", "Youtube");
-  addButton("assets/translate.png", "https://translate.google.com/?hl=en&authuser=0", "Translate");
-  addButton("assets/reddit.png", "https://www.reddit.com", "Reddit");
-  addButton("assets/lolnexus.png", "http://www.lolnexus.com/EUNE/search?name=slak44&region=EUNE", "LoLNexus");
-  addButton("assets/github.png", "https://github.com/", "GitHub");
-  addButton("assets/lol.png", "javascript:;", "LoL Data");
+  byId("defaultPane").appendChild(createButton("assets/gmail.png", "https://mail.google.com/mail/?authuser=0", "Gmail"));
+  byId("defaultPane").appendChild(createButton("assets/youtube.png", "https://www.youtube.com/?gl=RO&authuser=0", "Youtube"));
+  byId("defaultPane").appendChild(createButton("assets/translate.png", "https://translate.google.com/?hl=en&authuser=0", "Translate"));
+  byId("defaultPane").appendChild(createButton("assets/reddit.png", "https://www.reddit.com", "Reddit"));
+  byId("defaultPane").appendChild(createButton("assets/lolnexus.png", "http://www.lolnexus.com/EUNE/search?name=slak44&region=EUNE", "LoLNexus"));
+  byId("defaultPane").appendChild(createButton("assets/github.png", "https://github.com/", "GitHub"));
+  byId("defaultPane").appendChild(createButton("assets/lol.png", "javascript:;", "LoL Data"));
   setButtonPos(10);
 
   addDataP("name", "Name");
@@ -32,6 +32,7 @@ function manipulateDOM() {
   addTabPre("matchVer", "Match version: SEASON.PATCH.INFO1.INFO2");
   addTabPre("matchVictor", "Winner: TEAM");
   setBlockAbsolute();
+  byId("matchHistoryPane").appendChild(createButton("assets/back.png", "javascript:;", "Go Back"));
 }
 
 function addDataP(id, content) {
@@ -55,7 +56,7 @@ function setBlockAbsolute() {
   for (var i = 0; i < children.length; i++) $(children[i]).toggleClass("blockabsolute");
 }
 
-function addButton(imagePath, href, preText) {
+function createButton(imagePath, href, preText) {
   var link = document.createElement('a');
   var text = link.appendChild(document.createElement('pre'));
   link.href = href;
@@ -64,7 +65,7 @@ function addButton(imagePath, href, preText) {
   $(text).toggleClass("globalText buttonText");
   text.innerHTML = preText;
   link.style.backgroundImage = "url('"+imagePath+"'), url('assets/button.png')"
-  byId("defaultPane").appendChild(link);
+  return link;
 }
 
 function setButtonPos(buttonOffset) {

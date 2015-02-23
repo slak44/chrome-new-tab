@@ -31,7 +31,7 @@ function getLastMatch() {
         hideLolPane(false);
         hideMainPane(true);
       });
-      $("#reverse").click(function() {
+      $(byId("Go Back")).click(function() {
         hideLolPane(true);
         hideMainPane(false);
       });

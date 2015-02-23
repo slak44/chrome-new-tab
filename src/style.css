@@ -94,7 +94,6 @@ pre.infoText {
 #defaultPane {
   display: block;
   position: absolute;
-  height: 100%;
 }
 
 /*Div movements*/
@@ -103,24 +102,4 @@ div.goLeft {
 }
 div.goRight {
   -webkit-animation: moveRight 3s ease 0s 1 normal forwards running;
-}
-
-/*LoL tab 'Go Back' button*/
-#reverse {
-  color: #FFFFFF;
-  left: 20px;
-  background-position: left;
-  background-repeat: no-repeat;
-  width: 125px;
-  line-height: 50px;
-  font-family: 'Comic Sans';
-  font-weight: bold;
-  font-size: 13px;
-  text-decoration: none;
-  -webkit-animation: buttonAnimDefault 0.25s ease 0s 1 both;
-  background-image: url('assets/back.png'), url('assets/button.png');
-}
-#reverse:hover {
-  text-decoration: underline;
-  -webkit-animation: buttonAnim 0.25s ease 0s 1 both;
 }
