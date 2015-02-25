@@ -7,5 +7,5 @@
     "newtab": "new.html"
   },
   "permissions":
-  ["https://www.reddit.com/user/slak44/about.json?", "http://ddragon.leagueoflegends.com/realms/eune.json", "storage"]
+  ["http://ddragon.leagueoflegends.com/realms/eune.json", "storage"]
 }

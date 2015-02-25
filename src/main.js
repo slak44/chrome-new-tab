@@ -139,11 +139,15 @@ function setTableCellStyle(tableCell/*The HTML object*/, side/*Player color*/, n
     align = "right";
     color = "#FFAAAA";
     tableCell.style.right = size + "px";
+    tableCell.style.backgroundPosition = "right";
   } else {
-    tableCell.style.left = size + "px";
     align = "left";
     color = "#AAAAFF"
+    tableCell.style.left = size + "px";
+    tableCell.style.backgroundPosition = "left";
   }
+  tableCell.style.backgroundRepeat = "no-repeat";
+  tableCell.style.backgroundSize = "20px 20px";
   tableCell.style.display = "block";
   tableCell.style.position = "absolute";
   tableCell.style.textAlign = align;
@@ -177,14 +181,9 @@ function addPlayers(width) {
     setTableCellStyle(pb, "BLUE", i, 5);
 
     pa.style.backgroundImage = "url("+getImageUrl(i)+")";
-    pa.style.backgroundRepeat = "no-repeat";
-    pa.style.backgroundSize = "20px 20px";
     pa.style.paddingRight = "25px";
 
     pb.style.backgroundImage = "url("+getImageUrl(i+5)+")";
-    pb.style.backgroundRepeat = "no-repeat";
-    pb.style.backgroundSize = "20px 20px";
-    pb.style.backgroundPosition = "right";
     pb.style.paddingLeft = "25px";
 
     newRow.appendChild(pa);
