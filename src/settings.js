@@ -1,33 +1,9 @@
-var settings = {};
+var settings = {},
+info = {
+  idMap: {}
+};
 var matchId, match;
 checkSettings();
-
-function checkSettings() {
-  var storagePromise = new Promise(function(resolve, reject) {
-    getAndStoreSettings(function() {
-      if(settings.name != undefined &&
-        settings.server != undefined &&
-        settings.apiKey != undefined &&
-        settings.player != undefined &&
-        settings.playerId != undefined) resolve("Done fetching settings.");
-      else reject(Error("Failed to load settings."));
-    });
-  });
-
-  storagePromise.then(
-    function(result) {
-      /*Settings present; load the data.*/
-      console.log(result);
-      getLastMatchId();
-    },
-    function(err){
-      /*Settings not present; prompt for data, get playerId, store data, load the data.*/
-      console.log(err);
-      promptSettings();
-      getAndStorePlayerId(cacheSettings, getLastMatchId);
-    }
-  );
-}
 
 /*Clear the storage.*/
 function clear() {
@@ -35,13 +11,58 @@ function clear() {
   chrome.storage.local.clear();
 }
 
-function getAndStoreSettings(onFinish) {
-  chrome.storage.local.get("name", function(data){settings.name = data.name;});
-  chrome.storage.local.get("redditUser", function(data){settings.redditUser = data.redditUser;});
-  chrome.storage.local.get("server", function(data){settings.server = data.server;});
-  chrome.storage.local.get("apiKey", function(data){settings.apiKey = data.apiKey;});
-  chrome.storage.local.get("player", function(data){settings.player = data.player;});
-  chrome.storage.local.get("playerId", function(data){settings.playerId = data.playerId;onFinish();});
+function get(url, res) {
+    new Promise(function(resolve, reject) {
+    var req = new XMLHttpRequest();
+    req.open('GET', url);
+    req.onload = function() {
+      if (req.status == 200) resolve(req.response);
+      else reject(Error(req.statusText));
+    };
+    req.send();
+  }).then(res, function(err){console.log(err)});
+}
+
+function checkSettings() {
+  new Promise(function(resolve, reject) {
+    chrome.storage.local.get("name", function(data){settings.name = data.name;});
+    chrome.storage.local.get("redditUser", function(data){settings.redditUser = data.redditUser;});
+    chrome.storage.local.get("server", function(data){settings.server = data.server;});
+    chrome.storage.local.get("apiKey", function(data){settings.apiKey = data.apiKey;});
+    chrome.storage.local.get("player", function(data){settings.player = data.player;});
+    chrome.storage.local.get("playerId", function(data){settings.playerId = data.playerId;
+      if(settings.name != undefined &&
+        settings.server != undefined &&
+        settings.apiKey != undefined &&
+        settings.player != undefined &&
+        settings.playerId != undefined) resolve("Done fetching settings.");
+      else reject("Failed to load settings.");
+    });
+  }).then(
+    function(res) {
+      /*Settings present; load the data.*/
+      console.log(res);
+      getLastMatchId();
+    },
+    function(err) {
+      /*Settings not present; prompt for data, get playerId, store data, load the data.*/
+      console.log(err);
+      promptSettings();
+      get(
+        "https://global.api.pvp.net/api/lol/"+settings.server+"/v1.4/summoner/by-name/"+settings.player+"?api_key="+settings.apiKey,
+        function(data) {
+          settings.playerId = JSON.parse(data)[settings.player.toLowerCase()].id;
+          chrome.storage.local.set({"name": settings.name}, undefined);
+          chrome.storage.local.set({"redditUser": settings.redditUser}, undefined);
+          chrome.storage.local.set({"server": settings.server}, undefined);
+          chrome.storage.local.set({"apiKey": settings.apiKey}, undefined);
+          chrome.storage.local.set({"player": settings.player}, undefined);
+          chrome.storage.local.set({"playerId": settings.playerId}, getLastMatchId);
+        }
+      );
+    }
+
+  );
 }
 
 function promptSettings() {
@@ -52,35 +73,39 @@ function promptSettings() {
   settings.player = prompt("Please input your League of Legends summoner name:");
 }
 
-function getAndStorePlayerId(callback, innerCallback) {
-  $.get(
-    "https://eune.api.pvp.net/api/lol/"+settings.server+"/v1.4/summoner/by-name/"+settings.player+"?api_key="+settings.apiKey,
-    function(data) {settings.playerId = data[settings.player.toLowerCase()].id; callback(innerCallback);}
-    );
-}
-
-function cacheSettings(callback) {
-  chrome.storage.local.set({"name": settings.name}, undefined);
-  chrome.storage.local.set({"redditUser": settings.redditUser}, undefined);
-  chrome.storage.local.set({"server": settings.server}, undefined);
-  chrome.storage.local.set({"apiKey": settings.apiKey}, undefined);
-  chrome.storage.local.set({"player": settings.player}, undefined);
-  chrome.storage.local.set({"playerId": settings.playerId}, callback());
-}
-
+/*Riot API GETs. In order of execution.*/
 function getLastMatchId() {
-  main();
-  $.get('https://eune.api.pvp.net/api/lol/'+settings.server+'/v2.2/matchhistory/'+settings.playerId+'?api_key='+settings.apiKey,
-    function(data){
-      matchId = data.matches[data.matches.length-1].matchId;
+  manipulateDOM();
+  get(
+    'https://global.api.pvp.net/api/lol/'+settings.server+'/v2.2/matchhistory/'+settings.playerId+'?api_key='+settings.apiKey,
+    function(data) {
+      var parsed = JSON.parse(data);
+      matchId = parsed.matches[parsed.matches.length-1].matchId;
       getLastMatch();
-  });
+    }
+  );
 }
-
 function getLastMatch() {
-  $.get('https://eune.api.pvp.net/api/lol/'+settings.server+'/v2.2/match/'+matchId+'?api_key='+settings.apiKey,
-    function(data){
-      match = data;
+  get(
+    'https://global.api.pvp.net/api/lol/'+settings.server+'/v2.2/match/'+matchId+'?api_key='+settings.apiKey,
+    function(data) {
+      match = JSON.parse(data);
+      getDataDragonInfo();
+    }
+  );
+}
+function getDataDragonInfo() {
+  get(
+    "http://ddragon.leagueoflegends.com/realms/"+settings.server+".json",
+    function(data) {info.ddRealm = JSON.parse(data); getAllChampionData();}
+  );
+}
+function getAllChampionData() {
+  get(
+    "https://global.api.pvp.net/api/lol/static-data/"+settings.server+"/v1.2/champion?champData=image&api_key="+settings.apiKey,
+    function(data) {
+      info.champions = JSON.parse(data);
+      for (i in info.champions.data) if (info.champions.data.hasOwnProperty(i)) info.idMap[info.champions.data[i].id] = i;
       displayMatch();
       $(byId("LoL Data")).click(function() {
         byId("matchHistoryPane").style.visibility = "visible";
@@ -91,10 +116,22 @@ function getLastMatch() {
         moveDiv(true, "matchHistoryPane");
         moveDiv(false, "defaultPane");
       });
-  });
+    }
+  );
 }
 
 /*DATA PROCESSING -->*/
+
+function getNameById(id) {
+  for (i in info.idMap) {
+    if (i == id) return info.idMap[i];
+  }
+}
+
+function getImageUrl(participantNr) {
+  return "http://ddragon.leagueoflegends.com/cdn/"+info.ddRealm.dd+"/img/champion/"+
+  info.champions.data[getNameById(match.participants[participantNr].championId)].image.full
+}
 
 function getPlayerScores() {
   var scores = [];

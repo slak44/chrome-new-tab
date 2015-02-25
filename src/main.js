@@ -1,10 +1,3 @@
-function main() {
-  manipulateDOM();
-  setTime();
-  updateRedditKarma();
-}
-
-/*Async stuff is in separate functions.*/
 function manipulateDOM() {
   byId("dataPane").style.left = ($(window).width()/2) - 400 + "px";
   byId("dataPane").style.top = "0px";
@@ -22,9 +15,11 @@ function manipulateDOM() {
   addData("name", "Name", "p");
   addData("time", "00:00", "P");
   addData("date", "01 January 1970", "p");
-  addData("redditkarma", "", "pre");
+  addData("redditkarma", undefined, "pre");
   byId("name").innerHTML = settings.name;
+  updateRedditKarma();
   setDate();
+  setTime();
 
   addTabPre("player", "Player: NAME (pid PID)");
   addTabPre("matchMap", "Map: MAP_NAME");
@@ -104,9 +99,9 @@ Connection indicator relies on this method.
 function updateRedditKarma() {
   $.getJSON('https://www.reddit.com/user/'+settings.redditUser+'/about.json?',
     function(data){
-      byId('redditkarma').innerHTML =
-      "Comment karma: " + data.data.comment_karma + "\n" +
+      redditKarma = "Comment karma: " + data.data.comment_karma + "\n" +
       "Link karma: " + data.data.link_karma;
+      byId('redditkarma').innerHTML = redditKarma;
       byId("persistentIsOnline").src = "assets/empty30x30.png";
   }).error(function() {byId("persistentIsOnline").src = "assets/noconnection.png"});
   setTimeout(updateRedditKarma, 7500);
@@ -133,12 +128,12 @@ function moveDiv(side/*Left=true or right=false*/, id) {
 /*Displays the match history div. Is called if/when the match data is stored.*/
 function displayMatch() {
   setTabFields();
-  var tableWidth = $(window).width() - 5/*Right padding*/ - 450/*Info offset*/;
+  var tableWidth = $(window).width() - 5/*Right padding*/;
   createTable(tableWidth);
   addPlayers(tableWidth);
 }
 /*Sets the style of a 'td'.*/
-function setTableCellStyle(tableCell/*The HTML object*/, side/*Player color*/, nr/*What row is it on*/, size/*Space from one of the sides*/) {
+function setTableCellStyle(tableCell/*The HTML object*/, side/*Player color*/, nr/*Position in participants array*/, size/*Space from one of the sides*/) {
   var align, color;
   if (side == "RED") {
     align = "right";
@@ -175,11 +170,22 @@ function addPlayers(width) {
     pbScore.innerHTML = playerScores[i+5];
     pb.innerHTML = playerNames[i+5];
 
-    var scoreOffset = 5/*Base padding*/+200/*Size of name*/+5/*Padding from name*/;
+    var scoreOffset = 5/*Base padding*/+400/*Size of name*/+5/*Padding from name*/;
     setTableCellStyle(pa, "RED", i, 5);
     setTableCellStyle(paScore, "RED", i, scoreOffset);
     setTableCellStyle(pbScore, "BLUE", i, scoreOffset);
     setTableCellStyle(pb, "BLUE", i, 5);
+
+    pa.style.backgroundImage = "url("+getImageUrl(i)+")";
+    pa.style.backgroundRepeat = "no-repeat";
+    pa.style.backgroundSize = "20px 20px";
+    pa.style.paddingRight = "25px";
+
+    pb.style.backgroundImage = "url("+getImageUrl(i+5)+")";
+    pb.style.backgroundRepeat = "no-repeat";
+    pb.style.backgroundSize = "20px 20px";
+    pb.style.backgroundPosition = "right";
+    pb.style.paddingLeft = "25px";
 
     newRow.appendChild(pa);
     newRow.appendChild(paScore);
@@ -193,8 +199,8 @@ function createTable(width) {
   var table = document.createElement("table");
   $(table).toggleClass("blockabsolute");
   table.id = "players";
-  table.style.top = "88px";
-  table.style.left = "450px";
+  table.style.top = "330px";
+  table.style.left = "0px";
   table.style.fontFamily = "Courier New";
   table.style.fontSize = "20px";
   table.style.fontWeight = "bold";
