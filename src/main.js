@@ -37,6 +37,8 @@ function addData(id, content, element) {
   var e = document.createElement(element);
   e.innerHTML = content;
   e.id = id;
+  e.style.textAlign = "center";
+  e.style.width = "800px";
   $(e).toggleClass("blockabsolute globalText");
   byId("dataPane").appendChild(e);
 }

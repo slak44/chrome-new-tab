@@ -66,7 +66,7 @@ function checkSettings() {
 }
 
 function promptSettings() {
-  settings.name = prompt("Please input a title (4 letters are recommended):");
+  settings.name = prompt("Please input a title:");
   settings.redditUser = prompt("Please input your reddit username:");
   settings.server = prompt("Please input your League of Legends server:");
   settings.apiKey = prompt("Please input a Riot API key:");

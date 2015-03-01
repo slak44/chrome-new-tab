@@ -51,24 +51,20 @@ pre.infoText {
 }
 
 /*Default texts*/
+#name {
+  top: 50px;
+  font-size: 100px;
+}
 #time {
   top: 150px;
-  left: 34%;
   font-size: 100px;
 }
 #date {
   top: 300px;
-  left: 22%;
   font-size: 50px;
-}
-#name {
-  top: 50px;
-  left: 38%;
-  font-size: 100px;
 }
 #redditkarma {
   top: 385px;
-  left: 33%;
   font-size: 30px;
   text-align: center;
   white-space: pre;
