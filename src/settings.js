@@ -27,18 +27,15 @@ function get(url, res) {
 function checkSettings() {
   new Promise(function(resolve, reject) {
     chrome.storage.local.get("storedSettings", function(data){
-      settings = data.storedSettings;console.log(data.storedSettings)
-      if (settings.name != undefined &&
-        settings.server != undefined &&
-        settings.apiKey != undefined &&
-        settings.player != undefined &&
-        settings.playerId != undefined) resolve("Done fetching settings.");
-      else reject("Failed to load settings.");
+      settings = data.storedSettings;
+      if (data.storedSettings == undefined) reject("Failed to load settings.");
+      else resolve("Done fetching settings.");
     });
   }).then(
     function(res) {
       /*Settings present; load the data.*/
       console.log(res);
+      setTimeout(manipulateDOM, 0);
       getLastMatchId();
     },
     function(err) {
@@ -49,6 +46,7 @@ function checkSettings() {
         "https://global.api.pvp.net/api/lol/"+settings.server+"/v1.4/summoner/by-name/"+settings.player+"?api_key="+settings.apiKey,
         function(data) {
           settings.playerId = JSON.parse(data)[settings.player.toLowerCase()].id;
+          setTimeout(manipulateDOM, 0);
           chrome.storage.local.set({"storedSettings": settings}, getLastMatchId);
         }
       );
@@ -58,6 +56,7 @@ function checkSettings() {
 }
 
 function promptSettings() {
+  settings = {};
   settings.name = prompt("Please input a title:");
   settings.redditUser = prompt("Please input your reddit username:");
   settings.server = prompt("Please input your League of Legends server:");
@@ -67,7 +66,6 @@ function promptSettings() {
 
 /*Riot API GETs. In order of execution.*/
 function getLastMatchId() {
-  manipulateDOM();
   get(
     'https://global.api.pvp.net/api/lol/'+settings.server+'/v2.2/matchhistory/'+settings.playerId+'?api_key='+settings.apiKey,
     function(data) {
