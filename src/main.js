@@ -9,7 +9,7 @@ function manipulateDOM() {
   byId("defaultPane").appendChild(createButton("assets/reddit.png", "https://www.reddit.com", "Reddit"));
   byId("defaultPane").appendChild(createButton("assets/lolnexus.png", "http://www.lolnexus.com/EUNE/search?name=slak44&region=EUNE", "LoLNexus"));
   byId("defaultPane").appendChild(createButton("assets/github.png", "https://github.com/", "GitHub"));
-  byId("defaultPane").appendChild(createButton("assets/lol.png", "javascript:;", "LoL Data"));
+  byId("defaultPane").appendChild(createButton("assets/lol.png", undefined, "LoL Data"));
   setButtonPos(10);
 
   addData("name", "Name", "p");
@@ -29,7 +29,7 @@ function manipulateDOM() {
   addTabPre("matchVer", "Match version: SEASON.PATCH.INFO1.INFO2");
   addTabPre("matchVictor", "Winner: TEAM");
   setBlockAbsolute();
-  byId("matchHistoryPane").appendChild(createButton("assets/back.png", "javascript:;", "Go Back"));
+  byId("matchHistoryPane").appendChild(createButton("assets/back.png", undefined, "Go Back"));
 }
 
 /*Directly add to the DOM.*/
@@ -54,7 +54,9 @@ function addTabPre(id, content) {
 function createButton(imagePath, href, preText) {
   var link = document.createElement('a');
   var text = link.appendChild(document.createElement('pre'));
-  link.href = href;
+  //Set a link if there is one, make sure the cursor looks good if there isn't
+  if (href !== undefined) link.href = href;
+  else link.style.cursor = "pointer";
   link.id = preText;
   $(link).toggleClass("blockabsolute button");
   $(text).toggleClass("globalText buttonText");
