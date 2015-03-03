@@ -1,4 +1,5 @@
-var settings = {},
+var
+settings = {},
 info = {
   idMap: {}
 };
@@ -25,13 +26,9 @@ function get(url, res) {
 
 function checkSettings() {
   new Promise(function(resolve, reject) {
-    chrome.storage.local.get("name", function(data){settings.name = data.name;});
-    chrome.storage.local.get("redditUser", function(data){settings.redditUser = data.redditUser;});
-    chrome.storage.local.get("server", function(data){settings.server = data.server;});
-    chrome.storage.local.get("apiKey", function(data){settings.apiKey = data.apiKey;});
-    chrome.storage.local.get("player", function(data){settings.player = data.player;});
-    chrome.storage.local.get("playerId", function(data){settings.playerId = data.playerId;
-      if(settings.name != undefined &&
+    chrome.storage.local.get("storedSettings", function(data){
+      settings = data.storedSettings;console.log(data.storedSettings)
+      if (settings.name != undefined &&
         settings.server != undefined &&
         settings.apiKey != undefined &&
         settings.player != undefined &&
@@ -52,12 +49,7 @@ function checkSettings() {
         "https://global.api.pvp.net/api/lol/"+settings.server+"/v1.4/summoner/by-name/"+settings.player+"?api_key="+settings.apiKey,
         function(data) {
           settings.playerId = JSON.parse(data)[settings.player.toLowerCase()].id;
-          chrome.storage.local.set({"name": settings.name}, undefined);
-          chrome.storage.local.set({"redditUser": settings.redditUser}, undefined);
-          chrome.storage.local.set({"server": settings.server}, undefined);
-          chrome.storage.local.set({"apiKey": settings.apiKey}, undefined);
-          chrome.storage.local.set({"player": settings.player}, undefined);
-          chrome.storage.local.set({"playerId": settings.playerId}, getLastMatchId);
+          chrome.storage.local.set({"storedSettings": settings}, getLastMatchId);
         }
       );
     }

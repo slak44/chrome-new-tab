@@ -15,7 +15,7 @@ function manipulateDOM() {
   addData("name", "Name", "p");
   addData("time", "00:00", "P");
   addData("date", "01 January 1970", "p");
-  addData("redditkarma", undefined, "pre");
+  addData("redditkarma", "", "pre");
   byId("name").innerHTML = settings.name;
   updateRedditKarma();
   setDate();
