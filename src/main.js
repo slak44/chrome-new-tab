@@ -9,8 +9,10 @@ function manipulateDOM() {
   byId("defaultPane").appendChild(createButton("assets/reddit.png", "https://www.reddit.com", "Reddit"));
   byId("defaultPane").appendChild(createButton("assets/lolnexus.png", "http://www.lolnexus.com/EUNE/search?name=slak44&region=EUNE", "LoLNexus"));
   byId("defaultPane").appendChild(createButton("assets/github.png", "https://github.com/", "GitHub"));
+  byId("defaultPane").appendChild(createButton("assets/extensions.png", undefined, "Extensions"));
   byId("defaultPane").appendChild(createButton("assets/lol.png", undefined, "LoL Data"));
   setButtonPos(10);
+  $(byId("Extensions")).click(function() {chrome.tabs.create({url:'chrome://extensions'});});
 
   addData("name", "Name", "p");
   addData("time", "00:00", "P");
