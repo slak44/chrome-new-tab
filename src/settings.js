@@ -153,133 +153,61 @@ function getHumanTime(seconds) {
 
 function getMatchMode(rawMode) {
   switch (rawMode) {
-  case "CLASSIC":
-    return "Classic";
-    break;
-  case "ARAM":
-    return "Aram";
-    break;
-  case "ODIN":
-    return "Dominion";
-    break;
-  case "TUTORIAL":
-    return "Tutorial"
-    break;
-  default:
-    return "Featured gamemode";
+  case "CLASSIC" : return "Classic";
+  case "ARAM"    : return "Aram";
+  case "ODIN"    : return "Dominion";
+  case "TUTORIAL": return "Tutorial"
+  default: return "Other gamemode";
   }
 }
 
 function getMatchType(rawType) {
-  switch (rawType) {
-  case "MATCHED_GAME":
-    return "matched game";
-    break;
-  default:
-    return "custom game";
-  }
+  if (rawType === "MATCHED_GAME") return "matched game";
+  else return "custom game";
 }
 
 function getQueueType(rawQueue) {
   switch (rawQueue) {
-  case "GROUP_FINDER_5x5":
-    return "TeamBuilder";
-    break;
-  case "NORMAL_5x5_BLIND":
-    return "Normal blind";
-    break;
-  case "NORMAL_5x5_DRAFT":
-    return "Normal draft";
-    break;
-  case "NORMAL_3x3":
-    return "Normal 3v3";
-    break;
-  case "ODIN_5x5_BLIND":
-    return "Dominion blind";
-    break;
-  case "ODIN_5x5_DRAFT":
-    return "Dominon draft (ROFL WHO PLAYS THIS)";
-    break;
-  case "RANKED_SOLO_5x5":
-    return "Ranked solo";
-    break;
-  case "RANKED_PREMADE_5x5":
-    return "Ranked duo";
-    break;
-  case "RANKED_TEAM_5x5":
-    return "Ranked team";
-    break;
-  case "RANKED_TEAM_3x3":
-    return "Ranked 3v3 team";
-    break;
-  case "ARAM_5x5":
-    return "ARAM";
-    break;
-  case "CUSTOM":
-    return "Self-created match";
-    break;
-  default:
-    return "Featured gamemode";
+  case "GROUP_FINDER_5x5"  : return "TeamBuilder";
+  case "NORMAL_5x5_BLIND"  : return "Normal blind";
+  case "NORMAL_5x5_DRAFT"  : return "Normal draft";
+  case "NORMAL_3x3"        : return "Normal 3v3";
+  case "ODIN_5x5_BLIND"    : return "Dominion blind";
+  case "ODIN_5x5_DRAFT"    : return "Dominon draft (ROFL WHO PLAYS THIS)";
+  case "RANKED_SOLO_5x5"   : return "Ranked solo";
+  case "RANKED_PREMADE_5x5": return "Ranked duo";
+  case "RANKED_TEAM_5x5"   : return "Ranked team";
+  case "RANKED_TEAM_3x3"   : return "Ranked 3v3 team";
+  case "ARAM_5x5"          : return "ARAM";
+  case "CUSTOM"            : return "Self-created match";
+  default: return "Other gamemode";
   }
 }
 
 function getMapName(mapId) {
   switch (mapId) {
-  case 11:
-    return "Summoner's Rift";
-    break;
-  case 10:
-    return "Twisted Treeline";
-    break;
-  case 12:
-    return "Howling Abyss";
-    break;
-  case 8:
-    return "The Crystal Scar";
-    break;
-  default:
-    return "Other map";
+  case 11: return "Summoner's Rift";
+  case 10: return "Twisted Treeline";
+  case 12: return "Howling Abyss";
+  case 08: return "The Crystal Scar";
+  default: return "Other map";
   }
 }
 
-function getMonthName(monthnumeral) {
-  switch (monthnumeral) {
-  case 0:
-    return "January";
-    break;
-  case 1:
-    return "February";
-    break;
-  case 2:
-    return "March";
-    break;
-  case 3:
-    return "April";
-    break;
-  case 4:
-    return "May";
-    break;
-  case 5:
-    return "June";
-    break;
-  case 6:
-    return "July";
-    break;
-  case 7:
-    return "August";
-    break;
-  case 8:
-    return "September";
-    break;
-  case 9:
-    return "October";
-    break;
-  case 10:
-    return "November";
-    break;
-  case 11:
-    return "December";
-    break;
+function getMonthName(monthNumeral) {
+  switch (monthNumeral) {
+  case 00: return "January";
+  case 01: return "February";
+  case 02: return "March";
+  case 03: return "April";
+  case 04: return "May";
+  case 05: return "June";
+  case 06: return "July";
+  case 07: return "August";
+  case 08: return "September";
+  case 09: return "October";
+  case 10: return "November";
+  case 11: return "December";
   default: return "What did you do with this method?"
   }
 }
