@@ -1,3 +1,4 @@
+'use strict'
 addCSS(['@-webkit-keyframes moveLeft {100% {-webkit-transform: translate('+(-$(window).width())+'px);}',
 '@-webkit-keyframes moveRight {100% {-webkit-transform: translate('+$(window).width()+'px);}']);
 

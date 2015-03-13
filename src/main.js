@@ -1,3 +1,4 @@
+'use strict'
 function manipulateDOM() {
   byId("dataPane").style.left = ($(window).width()/2) - 400 + "px";
   byId("dataPane").style.top = "0px";
@@ -105,9 +106,9 @@ Connection indicator relies on this method.
 function updateRedditKarma() {
   $.getJSON('https://www.reddit.com/user/'+settings.redditUser+'/about.json?',
     function(data){
-      redditKarma = "Comment karma: " + data.data.comment_karma + "\n" +
-      "Link karma: " + data.data.link_karma;
-      byId('redditkarma').innerHTML = redditKarma;
+      byId('redditkarma').innerHTML =
+      "Comment karma: "+data.data.comment_karma+"\n"+
+      "Link karma: "+data.data.link_karma;
       byId("persistentIsOnline").src = "assets/empty30x30.png";
   }).error(function() {byId("persistentIsOnline").src = "assets/noconnection.png"});
   setTimeout(updateRedditKarma, 7500);

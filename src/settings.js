@@ -1,3 +1,4 @@
+'use strict'
 var
 settings = {},
 info = {
@@ -95,7 +96,7 @@ function getAllChampionData() {
     "https://global.api.pvp.net/api/lol/static-data/"+settings.server+"/v1.2/champion?champData=image&api_key="+settings.apiKey,
     function(data) {
       info.champions = JSON.parse(data);
-      for (i in info.champions.data) if (info.champions.data.hasOwnProperty(i)) info.idMap[info.champions.data[i].id] = i;
+      for (var i in info.champions.data) if (info.champions.data.hasOwnProperty(i)) info.idMap[info.champions.data[i].id] = i;
       displayMatch();
       $(byId("LoL Data")).click(function() {
         byId("matchHistoryPane").style.visibility = "visible";
@@ -113,7 +114,7 @@ function getAllChampionData() {
 /*DATA PROCESSING -->*/
 
 function getNameById(id) {
-  for (i in info.idMap) {
+  for (var i in info.idMap) {
     if (i == id) return info.idMap[i];
   }
 }
@@ -196,16 +197,16 @@ function getMapName(mapId) {
 
 function getMonthName(monthNumeral) {
   switch (monthNumeral) {
-  case 00: return "January";
-  case 01: return "February";
-  case 02: return "March";
-  case 03: return "April";
-  case 04: return "May";
-  case 05: return "June";
-  case 06: return "July";
-  case 07: return "August";
-  case 08: return "September";
-  case 09: return "October";
+  case  0: return "January";
+  case  1: return "February";
+  case  2: return "March";
+  case  3: return "April";
+  case  4: return "May";
+  case  5: return "June";
+  case  6: return "July";
+  case  7: return "August";
+  case  8: return "September";
+  case  9: return "October";
   case 10: return "November";
   case 11: return "December";
   default: return "What did you do with this method?"
