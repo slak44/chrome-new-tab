@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 function manipulateDOM() {
   byId("dataPane").style.left = ($(window).width()/2) - 400 + "px";
   byId("dataPane").style.top = "0px";
