@@ -38,8 +38,8 @@ function checkSettings() {
       /*Settings not present; prompt for data, get playerId, store data, load the data.*/
       console.log(err);
       promptSettings();
-      addFunction(settingsConfig, function(callback) {chrome.storage.local.set({"storedSettings": settings}, callback);});
-      addFunction(settingsConfig, executeOnLoad);
+      settingsConfig.push(function(callback) {chrome.storage.local.set({"storedSettings": settings}, callback);});
+      settingsConfig.push(executeOnLoad);
       queue(settingsConfig, window);
       manipulateDOM();
     }

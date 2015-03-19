@@ -4,24 +4,15 @@ function manipulateDOM() {
   byId("dataPane").style.top = "0px";
   byId("persistentIsOnline").style.right = "0px";
 
-  byId("defaultPane").appendChild(createButton("assets/gmail.png", "https://mail.google.com/mail/?authuser=0", "Gmail"));
-  byId("defaultPane").appendChild(createButton("assets/youtube.png", "https://www.youtube.com/?gl=RO&authuser=0", "Youtube"));
-  byId("defaultPane").appendChild(createButton("assets/translate.png", "https://translate.google.com/?hl=en&authuser=0", "Translate"));
-  byId("defaultPane").appendChild(createButton("assets/reddit.png", "https://www.reddit.com", "Reddit"));
-  byId("defaultPane").appendChild(createButton("assets/lolnexus.png", "http://www.lolnexus.com/EUNE/search?name=slak44&region=EUNE", "LoLNexus"));
-  byId("defaultPane").appendChild(createButton("assets/github.png", "https://github.com/", "GitHub"));
-  byId("defaultPane").appendChild(createButton("assets/extensions.png", undefined, "Extensions"));
+  var i = 0;
+  for (var key in mainButtons) if (mainButtons.hasOwnProperty(key)) byId("defaultPane").appendChild(mainButtons[key].aHref);
+  for (var key in mainButtons) {mainButtons[key].aHref.style.top = i * (50/*Button height*/ + 10/*Space between btns*/) + "px";i++;}
+  mainButtons["Extensions"].setOnClick(function() {chrome.tabs.create({url:'chrome://extensions'})});
 
-  byId("defaultPane").appendChild(createButton("assets/lol.png", undefined, "LoL Data"));
-
-  setButtonPos(10);
-  $(byId("Extensions")).click(function() {chrome.tabs.create({url:'chrome://extensions'});});
-
-  addData("name", "Name", "p");
+  addData("name", settings.name, "p");
   addData("time", "00:00", "P");
   addData("date", "01 January 1970", "p");
   addData("redditkarma", "", "pre");
-  byId("name").innerHTML = settings.name;
   updateRedditKarma();
   setDate();
   setTime();
@@ -38,28 +29,6 @@ function addData(id, content, element) {
   byId("dataPane").appendChild(e);
 }
 
-/*Returns the element.*/
-function createButton(imagePath, href, preText) {
-  var link = document.createElement('a');
-  var text = link.appendChild(document.createElement('pre'));
-  //Set a link if there is one, make sure the cursor looks good if there isn't
-  if (href !== undefined) link.href = href;
-  else link.style.cursor = "pointer";
-  link.id = preText;
-  $(link).toggleClass("blockabsolute button");
-  $(text).toggleClass("globalText buttonText");
-  text.innerHTML = preText;
-  link.style.backgroundImage = "url('"+imagePath+"'), url('assets/button.png')"
-  return link;
-}
-
-/*Configures elements.*/
-function setButtonPos(buttonOffset) {
-  var buttons = document.getElementsByClassName('button');
-  for (var i = 0; i < buttons.length; i++) {
-    buttons[i].style.top = i * (50/*Button height*/ + buttonOffset/*Space between btns*/) + "px";
-  }
-}
 function setTime() {
   var d = new Date();
   var h = d.getHours();
@@ -105,10 +74,10 @@ function moveDiv(side/*Left=true or right=false*/, id) {
   if (side) {
     byId(id).style.left = "0px";
     byId(id).className = "";
-    $("#"+id).toggleClass("goLeft");
+    $(byId(id)).toggleClass("goLeft");
   } else {
     byId(id).style.left = -$(window).width() + "px";
     byId(id).className = "";
-    $("#"+id).toggleClass("goRight");
+    $(byId(id)).toggleClass("goRight");
   }
 }

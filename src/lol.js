@@ -2,14 +2,14 @@ var info = {
   idMap: {}
 };
 var matchId, match;
-addFunction(onSettingsLoad, getLastMatchId);
-addFunction(settingsConfig, function(callback) {
+onSettingsLoad.push(getLastMatchId);
+settingsConfig.push(function(callback) {
   settings.server = prompt("Please input your League of Legends server:");
   settings.apiKey = prompt("Please input a Riot API key:");
   settings.player = prompt("Please input your League of Legends summoner name:");
   callback();
 });
-addFunction(settingsConfig, getPlayerIdByName);
+settingsConfig.push(getPlayerIdByName);
 
 /*Called in config.*/
 function getPlayerIdByName(callback) {
@@ -70,6 +70,9 @@ function addTabPre(id, content) {
   var pre = document.createElement("pre");
   pre.innerHTML = content;
   pre.id = id;
+  pre.style.margin = "0px";
+  pre.style.padding = "2.5px";
+  pre.style.padding.left = "5px";
   $(pre).toggleClass("globalText infoText");
   byId("matchHistoryPane").appendChild(pre);
 }
@@ -79,12 +82,11 @@ function setBlockAbsolute() {
 }
 /*Displays the match history div. Is called if/when the match data is stored.*/
 function displayMatch() {
+  byId("matchHistoryPane").appendChild(new Button("assets/back.png", undefined, "Go Back").aHref);
   setTabFields();
   var tableWidth = $(window).width() - 5/*Right padding*/;
   createTable(tableWidth);
   addPlayers(tableWidth);
-  setBlockAbsolute();
-  byId("matchHistoryPane").appendChild(createButton("assets/back.png", undefined, "Go Back"));
 }
 /*Sets the style of a 'td'.*/
 function setTableCellStyle(tableCell/*The HTML object*/, side/*Player color*/, nr/*Position in participants array*/, size/*Space from one of the sides*/) {
@@ -182,21 +184,13 @@ function setTabFields() {
     fields[i].style.top = (i * (20/*font size, px*/+10/*offset between texts*/) + 50/*button(id="reverse")*/) + "px";
 
   addTabPre("player", "Player: "+settings.player+" (pid "+settings.playerId+")");
+  byId("player").style.marginTop = "70px";
   addTabPre("matchMap", "Map: "+getMapName(match.mapId));
   addTabPre("matchEnv", "Match type: "+getMatchMode(match.matchMode)+" "+getMatchType(match.matchType));
   addTabPre("matchQueue", "Queue: "+getQueueType(match.queueType));
   addTabPre("matchDuration", "Duration: "+getHumanTime(match.matchDuration));
   addTabPre("matchVer", "Version: "+match.matchVersion);
   addTabPre("matchVictor", "Winner: "+getWinner());
-
-  //byId("player").innerHTML = "Player: "+settings.player+" (pid "+settings.playerId+")";
-  //byId("matchMap").innerHTML = "Map: "+getMapName(match.mapId);
-//  byId("matchEnv").innerHTML =
-//    "Match type: "+getMatchMode(match.matchMode)+" "+getMatchType(match.matchType);
-//  byId("matchQueue").innerHTML = "Match queue: "+getQueueType(match.queueType);
-//  byId("matchDuration").innerHTML = "Match time: "+getHumanTime(match.matchDuration);
-//  byId("matchVer").innerHTML = "Match version: "+match.matchVersion;
-//  byId("matchVictor").innerHTML = "Winner: "+getWinner();
 }
 
 
