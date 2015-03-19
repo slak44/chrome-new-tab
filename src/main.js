@@ -80,21 +80,3 @@ function updateRedditKarma() {
   }).error(function() {byId("persistentIsOnline").src = "assets/noconnection.png"});
   setTimeout(updateRedditKarma, 7500);
 }
-
-/*Wrapper.*/
-function byId(id) {
-  return document.getElementById(id);
-}
-
-/*Move divs around.*/
-function moveDiv(side/*Left=true or right=false*/, id) {
-  if (side) {
-    byId(id).style.left = "0px";
-    byId(id).className = "";
-    $(byId(id)).toggleClass("goLeft");
-  } else {
-    byId(id).style.left = -$(window).width() + "px";
-    byId(id).className = "";
-    $(byId(id)).toggleClass("goRight");
-  }
-}

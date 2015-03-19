@@ -2,24 +2,6 @@
 var settings = {};
 checkSettings();
 
-/*Clear the storage.*/
-function clearStorage() {
-  settings = {};
-  chrome.storage.local.clear();
-}
-
-function get(url, res) {
-  new Promise(function(resolve, reject) {
-    var req = new XMLHttpRequest();
-    req.open('GET', url);
-    req.onload = function() {
-      if (req.status == 200) resolve(req.response);
-      else reject(Error(req.statusText));
-    };
-    req.send();
-  }).then(res, function(err) {console.log(err)});
-}
-
 function checkSettings() {
   new Promise(function(resolve, reject) {
     chrome.storage.local.get("storedSettings", function(data){
@@ -52,9 +34,3 @@ function checkSettings() {
 function executeOnLoad() {
   for (var i = 0; i < onSettingsLoad.length; i++) onSettingsLoad[i]();
 }
-
-function queue(funcs, scope) {
-  (function next() {
-    if (funcs.length > 0) funcs.shift().apply(scope || {}, [next].concat(Array.prototype.slice.call(arguments, 0)));
-  })();
-};

@@ -1,0 +1,60 @@
+body {
+  margin: 0px;
+  padding: 0px;
+  border: 0px;
+  overflow: hidden;
+  -webkit-user-select: none;
+  cursor: default;
+}
+
+.blockabsolute {
+  display: block;
+  position: absolute;
+}
+
+/*Div movements*/
+div.goLeft {
+  -webkit-animation: moveLeft 3s ease 0s 1 normal forwards running;
+}
+div.goRight {
+  -webkit-animation: moveRight 3s ease 0s 1 normal forwards running;
+}
+
+/*Default buttons*/
+a.button {
+  color: #FFFFFF;
+  left: 20px;
+  background-position: left;
+  background-repeat: no-repeat;
+  width: 125px;
+  line-height: 50px;
+  font-family: 'Comic Sans';
+  font-weight: bold;
+  font-size: 13px;
+  text-decoration: none;
+  -webkit-animation: buttonAnimDefault 0.25s ease 0s 1 both;
+}
+a.button:hover {
+  text-decoration: underline;
+  -webkit-animation: buttonAnim 0.25s ease 0s 1 both;
+}
+
+.globalText {
+  color: #AAAAAA;
+  font-family: 'Courier New';
+  font-weight: bold;
+  white-space: nowrap;
+}
+
+/*Default button text*/
+pre.buttonText {
+  color: #FFFFFF;
+  font-family: monospace;
+  white-space: pre;
+  margin-left: 55px;
+}
+
+/*Circle animation*/
+#circle {
+  -webkit-animation: cRotate 7.5s linear 0s infinite reverse;
+}

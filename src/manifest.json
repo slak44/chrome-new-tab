@@ -6,6 +6,7 @@
   "chrome_url_overrides": {
     "newtab": "new.html"
   },
+  "options_page": "settings.html",
   "permissions":
-  ["http://ddragon.leagueoflegends.com/realms/eune.json", "storage"]
+  ["http://ddragon.leagueoflegends.com/realms/eune.json", "storage", "fileSystem"]
 }

@@ -22,28 +22,3 @@ function addCSS(css) {
   newCss.appendChild(document.createTextNode(css));
   document.getElementsByTagName("head")[0].appendChild(newCss);
 }
-
-/*Button prototype.*/
-function Button(imagePath, href, preText) {
-  var link = document.createElement('a');
-  var text = link.appendChild(document.createElement('pre'));
-  //If there is no href, make sure the cursor looks as if there was
-  if (href !== undefined) link.href = href;
-  else link.style.cursor = "pointer";
-  link.id = preText;
-  $(link).toggleClass("blockabsolute button");
-  $(text).toggleClass("globalText buttonText");
-  text.innerHTML = preText;
-  link.style.backgroundImage = "url('"+imagePath+"'), url('assets/button.png')";
-  this.aHref = link;
-  this.preText = text;
-  this.setImage = function(path) {
-    link.style.backgroundImage = "url('"+path+"'), url('assets/button.png')";
-  }
-  this.setText = function(text) {
-    this.preText.innerHTML = text;
-  }
-  this.setOnClick = function(what) {
-    $(this.aHref).click(what);
-  }
-}
