@@ -35,9 +35,11 @@ function checkSettings() {
       executeOnLoad();
     },
     function(err) {
-      /*Settings not present; prompt for data, get playerId, store data, load the data.*/
+      /*Settings not present; prompt for data, store data, load the data.*/
       console.log(err);
-      promptSettings();
+      settings = {};
+      settings.name = prompt("Please input a title:");
+      settings.redditUser = prompt("Please input your reddit username:");
       settingsConfig.push(function(callback) {chrome.storage.local.set({"storedSettings": settings}, callback);});
       settingsConfig.push(executeOnLoad);
       queue(settingsConfig, window);
@@ -45,12 +47,6 @@ function checkSettings() {
     }
 
   );
-}
-
-function promptSettings() {
-  settings = {};
-  settings.name = prompt("Please input a title:");
-  settings.redditUser = prompt("Please input your reddit username:");
 }
 
 function executeOnLoad() {
@@ -62,21 +58,3 @@ function queue(funcs, scope) {
     if (funcs.length > 0) funcs.shift().apply(scope || {}, [next].concat(Array.prototype.slice.call(arguments, 0)));
   })();
 };
-
-function getMonthName(monthNumeral) {
-  switch (monthNumeral) {
-  case  0: return "January";
-  case  1: return "February";
-  case  2: return "March";
-  case  3: return "April";
-  case  4: return "May";
-  case  5: return "June";
-  case  6: return "July";
-  case  7: return "August";
-  case  8: return "September";
-  case  9: return "October";
-  case 10: return "November";
-  case 11: return "December";
-  default: return "What did you do with this method?"
-  }
-}

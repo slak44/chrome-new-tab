@@ -1,7 +1,9 @@
+'use strict';
 var info = {
   idMap: {}
 };
 var matchId, match;
+
 onSettingsLoad.push(getLastMatchId);
 settingsConfig.push(function(callback) {
   settings.server = prompt("Please input your League of Legends server:");
@@ -73,7 +75,7 @@ function addTabPre(id, content) {
   pre.id = id;
   pre.style.margin = "0px";
   pre.style.padding = "2.5px";
-  pre.style.padding.left = "5px";
+  pre.style.paddingLeft = "5px";
   $(pre).toggleClass("globalText infoText");
   byId("matchHistoryPane").appendChild(pre);
 }
