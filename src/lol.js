@@ -3,10 +3,11 @@ var info = {
 };
 var matchId, match;
 addFunction(onSettingsLoad, getLastMatchId);
-addFunction(settingsConfig, function() {
+addFunction(settingsConfig, function(callback) {
   settings.server = prompt("Please input your League of Legends server:");
   settings.apiKey = prompt("Please input a Riot API key:");
   settings.player = prompt("Please input your League of Legends summoner name:");
+  callback();
 });
 addFunction(settingsConfig, getPlayerIdByName);
 

@@ -9,14 +9,14 @@ function clearStorage() {
 }
 
 function get(url, res) {
-    new Promise(function(resolve, reject) {
-      var req = new XMLHttpRequest();
-      req.open('GET', url);
-      req.onload = function() {
-        if (req.status == 200) resolve(req.response);
-        else reject(Error(req.statusText));
-      };
-      req.send();
+  new Promise(function(resolve, reject) {
+    var req = new XMLHttpRequest();
+    req.open('GET', url);
+    req.onload = function() {
+      if (req.status == 200) resolve(req.response);
+      else reject(Error(req.statusText));
+    };
+    req.send();
   }).then(res, function(err) {console.log(err)});
 }
 
@@ -41,7 +41,7 @@ function checkSettings() {
       addFunction(settingsConfig, function(callback) {chrome.storage.local.set({"storedSettings": settings}, callback);});
       addFunction(settingsConfig, executeOnLoad);
       queue(settingsConfig, window);
-      setTimeout(manipulateDOM, 0);
+      manipulateDOM();
     }
 
   );
@@ -59,7 +59,7 @@ function executeOnLoad() {
 
 function queue(funcs, scope) {
   (function next() {
-    if(funcs.length > 0) funcs.shift().apply(scope || {}, [next].concat(Array.prototype.slice.call(arguments, 0)));
+    if (funcs.length > 0) funcs.shift().apply(scope || {}, [next].concat(Array.prototype.slice.call(arguments, 0)));
   })();
 };
 
