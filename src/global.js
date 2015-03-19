@@ -1,5 +1,5 @@
 /*Button prototype.*/
-function Button(imagePath, href, preText) {
+function Button(imagePath, href, preText, textOnly) {
   var link = document.createElement('a');
   var text = link.appendChild(document.createElement('pre'));
   //If there is no href, make sure the cursor looks as if there was
@@ -9,9 +9,15 @@ function Button(imagePath, href, preText) {
   $(link).toggleClass("blockabsolute button");
   $(text).toggleClass("globalText buttonText");
   text.innerHTML = preText;
-  link.style.backgroundImage = "url('"+imagePath+"'), url('assets/button.png')";
+  if (textOnly) {
+    link.style.backgroundImage = "url('assets/button.png')";
+    text.style.marginLeft = "0px";
+    text.style.textAlign = "center";
+  } else link.style.backgroundImage = "url('"+imagePath+"'), url('assets/button.png')";
+
   this.aHref = link;
   this.preText = text;
+
   this.setImage = function(path) {
     link.style.backgroundImage = "url('"+path+"'), url('assets/button.png')";
   }
