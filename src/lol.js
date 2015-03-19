@@ -10,6 +10,7 @@ settingsConfig.push(function(callback) {
   callback();
 });
 settingsConfig.push(getPlayerIdByName);
+mainButtons["LoL Data"] = new Button("assets/lol.png", undefined, "LoL Data");
 
 /*Called in config.*/
 function getPlayerIdByName(callback) {
