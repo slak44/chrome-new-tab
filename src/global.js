@@ -1,5 +1,6 @@
 'use strict';
 var plugins = [];
+var settings = {};
 
 /*Plugin prototype.*/
 function Plugin(code, title) {
@@ -123,5 +124,25 @@ function loadPlugins(onLoad) {
   }).then(
     function(res) {console.log(res);onLoad();},
     function(err) {console.log(err)}
+  );
+}
+
+function loadSettings(onLoad, onError) {
+  new Promise(function(resolve, reject) {
+    chrome.storage.local.get("storedSettings", function(data){
+      settings = data.storedSettings;
+      if (data.storedSettings == undefined) reject("Failed to load settings.");
+      else resolve("Done fetching settings.");
+    });
+  }).then(
+    function(res) {
+      console.log(res);
+      onLoad();
+    },
+    function(err) {
+      console.log(err);
+      settings = {};
+      onError();
+    }
   );
 }

@@ -15,7 +15,7 @@ addButtons();
 populatePluginList();
 
 buttons.addPlugin.setOnClick(function() {
-  byId("fileInput").addEventListener('change', handlePlugin, false);
+  byId("fileInput").addEventListener('change', addPlugin, false);
   $("#fileInput").click();
 });
 buttons.removePlugin.setOnClick(function() {
@@ -37,7 +37,7 @@ function displayMessage(message) {
   if (!$(pre).hasClass("fade")) $(pre).toggleClass("fade");
 }
 
-function handlePlugin(event) {
+function addPlugin(event) {
   var file = event.target.files;
   var reader = new FileReader();
   reader.onload = (function(fileIn) {
