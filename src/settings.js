@@ -35,20 +35,6 @@ function executeSettingsOnLoad() {
   for (var i = 0; i < onSettingsLoad.length; i++) onSettingsLoad[i]();
 }
 
-function loadPlugins(onLoad) {
-  new Promise(function(resolve, reject) {
-    chrome.storage.local.get("storedPlugins", function(data){
-      plugins = data.storedPlugins;
-      console.log(plugins);
-      if (data.storedPlugins == undefined) reject("No plugins found.");
-      else resolve("Done fetching plugins.");
-    });
-  }).then(
-    function(res) {console.log(res);onLoad();},
-    function(err) {console.log(err)}
-  );
-}
-
 function executePluginsOnLoad() {
   for (var i = 0; i < plugins.length; i++) plugins[i].execute();
 }

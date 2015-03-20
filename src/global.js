@@ -77,11 +77,11 @@ function clearStorage() {
 }
 
 function clearSettings() {
-  chrome.storage.local.set({"storedSettings": undefined}, undefined);
+  chrome.storage.local.set({"storedSettings": ""}, undefined);
 }
 
 function clearPlugins() {
-  chrome.storage.local.set({"storedPlugins": undefined}, undefined);
+  chrome.storage.local.set({"storedPlugins": ""}, undefined);
 }
 
 /*Performs a GET request.*/
@@ -109,4 +109,18 @@ function addCSS(css) {
   newCss.type = 'text/css';
   newCss.appendChild(document.createTextNode(css));
   document.getElementsByTagName("head")[0].appendChild(newCss);
+}
+
+function loadPlugins(onLoad) {
+  new Promise(function(resolve, reject) {
+    chrome.storage.local.get("storedPlugins", function(data){
+      plugins = data.storedPlugins;
+      console.log(plugins);
+      if (data.storedPlugins == undefined) reject("No plugins found.");
+      else resolve("Done fetching plugins.");
+    });
+  }).then(
+    function(res) {console.log(res);onLoad();},
+    function(err) {console.log(err)}
+  );
 }
