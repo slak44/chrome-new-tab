@@ -1,3 +1,24 @@
+'use strict';
+var plugins = [new Plugin("alert(123)", "test.js")];
+
+/*Plugin prototype.*/
+function Plugin(code, title) {
+  this.code = code;
+  this.title = title;
+  this.execute = function() {
+    console.log("Executing plugin: "+title);
+    eval(code);
+  }
+  this.getDisplay = function() {
+    var element = document.createElement("li");
+    var text = document.createElement("pre");
+    $(text).toggleClass("globalText");
+    text.innerHTML = title;
+    element.appendChild(text);
+    return element;
+  }
+}
+
 /*Button prototype.*/
 function Button(imagePath, href, preText, textOnly) {
   var link = document.createElement('a');
