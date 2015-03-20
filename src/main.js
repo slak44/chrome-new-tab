@@ -5,15 +5,18 @@ function manipulateDOM() {
   byId("persistentIsOnline").style.right = "0px";
 
   var i = 0;
-  for (var key in mainButtons) if (mainButtons.hasOwnProperty(key)) byId("defaultPane").appendChild(mainButtons[key].aHref);
-  for (var key in mainButtons) {mainButtons[key].aHref.style.top = i * (50/*Button height*/ + 10/*Space between btns*/) + "px";i++;}
+  for (var key in mainButtons) {
+    if (mainButtons.hasOwnProperty(key)) byId("defaultPane").appendChild(mainButtons[key].aHref);
+    mainButtons[key].aHref.style.top = i * (50/*Button height*/ + 10/*Space between btns*/) + "px";
+    i++;
+  }
   mainButtons["Extensions"].setOnClick(function() {chrome.tabs.create({url:'chrome://extensions'})});
 
   addData("name", settings.name, "p");
-  addData("time", "00:00", "P");
+  addData("time", "00:00", "p");
   addData("date", "01 January 1970", "p");
   addData("redditkarma", "", "pre");
-  updateRedditKarma();
+  setTimeout(updateRedditKarma, 0);
   setDate();
   setTime();
 }

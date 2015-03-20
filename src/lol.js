@@ -54,6 +54,10 @@ function getAllChampionData() {
     function(data) {
       info.champions = JSON.parse(data);
       for (var i in info.champions.data) if (info.champions.data.hasOwnProperty(i)) info.idMap[info.champions.data[i].id] = i;
+      var div = document.createElement("div"); div.id = "matchHistoryPane";
+      div.style.visibility = "hidden";
+      div.style.position = "absolute";
+      document.body.appendChild(div);
       displayMatch();
       $(byId("LoL Data")).click(function() {
         byId("matchHistoryPane").style.visibility = "visible";

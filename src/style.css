@@ -23,16 +23,3 @@ pre.infoText {
   text-align: center;
   white-space: pre;
 }
-
-/*LoL tab*/
-#matchHistoryPane {
-  visibility: hidden;
-  display: block;
-  position: absolute;
-}
-
-/*Default tab*/
-#defaultPane {
-  display: block;
-  position: absolute;
-}
