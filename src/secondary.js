@@ -13,6 +13,7 @@ byId("messageDisplay").style.left = startOfCircle+"px";
 
 addButtons();
 populatePluginList();
+loadSettings(function() {}, function() {});
 
 buttons.addPlugin.setOnClick(function() {
   byId("fileInput").addEventListener('change', addPlugin, false);
