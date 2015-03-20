@@ -114,8 +114,9 @@ function addCSS(css) {
 function loadPlugins(onLoad) {
   new Promise(function(resolve, reject) {
     chrome.storage.local.get("storedPlugins", function(data){
+      for (var i = 0; i < data.storedPlugins.length; i++)
+        data.storedPlugins[i] = new Plugin(data.storedPlugins[i].code, data.storedPlugins[i].title);
       plugins = data.storedPlugins;
-      console.log(plugins);
       if (data.storedPlugins == undefined) reject("No plugins found.");
       else resolve("Done fetching plugins.");
     });

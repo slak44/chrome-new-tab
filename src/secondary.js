@@ -59,6 +59,7 @@ function removePlugin(pluginName) {
     if (plugins[i].title == pluginName) {
       list.removeChild(plugins[i].display);
       plugins.splice(i, plugins[i]);
+      //TODO remove from storage
     }
   }
 }
@@ -73,5 +74,7 @@ function addButtons() {
 }
 
 function populatePluginList() {
-  for (var i = 0; i < plugins.length; i++) list.appendChild(plugins[i].getDisplay());
+  loadPlugins(function() {
+    for (var i = 0; i < plugins.length; i++) list.appendChild(plugins[i].getDisplay());
+  });
 }
