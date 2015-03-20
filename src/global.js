@@ -72,7 +72,16 @@ function moveDiv(side/*Left=true or right=false*/, id) {
 /*Clear the storage.*/
 function clearStorage() {
   settings = {};
+  plugins = [];
   chrome.storage.local.clear();
+}
+
+function clearSettings() {
+  chrome.storage.local.set({"storedSettings": undefined}, undefined);
+}
+
+function clearPlugins() {
+  chrome.storage.local.set({"storedPlugins": undefined}, undefined);
 }
 
 /*Performs a GET request.*/
