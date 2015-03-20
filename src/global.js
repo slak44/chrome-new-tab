@@ -77,11 +77,11 @@ function clearStorage() {
 }
 
 function clearSettings() {
-  chrome.storage.local.set({"storedSettings": ""}, undefined);
+  chrome.storage.local.set({"storedSettings": {}}, undefined);
 }
 
 function clearPlugins() {
-  chrome.storage.local.set({"storedPlugins": ""}, undefined);
+  chrome.storage.local.set({"storedPlugins": []}, undefined);
 }
 
 /*Performs a GET request.*/
