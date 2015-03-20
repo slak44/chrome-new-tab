@@ -32,6 +32,7 @@ a.button {
   -webkit-animation: buttonAnimDefault 0.25s ease 0s 1 both;
 }
 a.button:hover {
+  color: #FFFFFF;
   text-decoration: underline;
   -webkit-animation: buttonAnim 0.25s ease 0s 1 both;
 }
