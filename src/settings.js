@@ -1,5 +1,6 @@
 'use strict';
 var settings = {};
+loadPlugins(executePluginsOnLoad);
 checkSettings();
 
 function checkSettings() {
@@ -14,7 +15,7 @@ function checkSettings() {
       /*Settings present; load the data.*/
       console.log(res);
       setTimeout(manipulateDOM, 0);
-      executeOnLoad();
+      executeSettingsOnLoad();
     },
     function(err) {
       /*Settings not present; prompt for data, store data, load the data.*/
@@ -23,14 +24,31 @@ function checkSettings() {
       settings.name = prompt("Please input a title:");
       settings.redditUser = prompt("Please input your reddit username:");
       settingsConfig.push(function(callback) {chrome.storage.local.set({"storedSettings": settings}, callback);});
-      settingsConfig.push(executeOnLoad);
+      settingsConfig.push(executeSettingsOnLoad);
       queue(settingsConfig, window);
       manipulateDOM();
     }
-
   );
 }
 
-function executeOnLoad() {
+function executeSettingsOnLoad() {
   for (var i = 0; i < onSettingsLoad.length; i++) onSettingsLoad[i]();
+}
+
+function loadPlugins(onLoad) {
+  new Promise(function(resolve, reject) {
+    chrome.storage.local.get("storedPlugins", function(data){
+      plugins = data.storedPlugins;
+      console.log(plugins);
+      if (data.storedPlugins == undefined) reject("No plugins found.");
+      else resolve("Done fetching plugins.");
+    });
+  }).then(
+    function(res) {console.log(res);onLoad();},
+    function(err) {console.log(err)}
+  );
+}
+
+function executePluginsOnLoad() {
+  for (var i = 0; i < plugins.length; i++) plugins[i].execute();
 }
