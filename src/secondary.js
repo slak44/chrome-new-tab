@@ -27,11 +27,15 @@ buttons.saveOptions.setOnClick(function() {
 buttons.savePlugins.setOnClick(function() {
   chrome.storage.local.set(
     {"storedPlugins": plugins},
-    function() {
-
-    }
+    function() {displayMessage("Plugins saved")}
   );
 });
+
+function displayMessage(message) {
+  var pre = byId("messageDisplay");
+  pre.innerHTML = message;
+  if (!$(pre).hasClass("fade")) $(pre).toggleClass("fade");
+}
 
 function handlePlugin(event) {
   var file = event.target.files;

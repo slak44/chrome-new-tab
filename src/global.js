@@ -1,5 +1,5 @@
 'use strict';
-var plugins = [new Plugin("alert(123)", "test.js")];
+var plugins = [];
 
 /*Plugin prototype.*/
 function Plugin(code, title) {
@@ -94,3 +94,10 @@ function queue(funcs, scope) {
     if (funcs.length > 0) funcs.shift().apply(scope || {}, [next].concat(Array.prototype.slice.call(arguments, 0)));
   })();
 };
+
+function addCSS(css) {
+  var newCss = document.createElement('style');
+  newCss.type = 'text/css';
+  newCss.appendChild(document.createTextNode(css));
+  document.getElementsByTagName("head")[0].appendChild(newCss);
+}
