@@ -2,7 +2,6 @@
 var startOfCircle = ($(window).width()-800)/2;
 var buttons = {
   saveOptions:  new Button(undefined, undefined, "Save Options", true),
-  savePlugins:  new Button(undefined, undefined, "Save Plugins", true),
   addPlugin:    new Button(undefined, undefined, "Add Plugin", true),
   removePlugin: new Button(undefined, undefined, "Remove Plugin", true)
 };
@@ -24,12 +23,13 @@ buttons.removePlugin.setOnClick(function() {
 });
 buttons.saveOptions.setOnClick(function() {
 });
-buttons.savePlugins.setOnClick(function() {
+
+function storePlugins() {
   chrome.storage.local.set(
     {"storedPlugins": plugins},
     function() {displayMessage("Plugins saved")}
   );
-});
+}
 
 function displayMessage(message) {
   var pre = byId("messageDisplay");
@@ -48,6 +48,7 @@ function handlePlugin(event) {
       }
       plugins.push(new Plugin(e.target.result, fileIn.name));
       list.appendChild(plugins[plugins.length-1].getDisplay());
+      storePlugins();
     }
   })(file[0]);
   reader.readAsText(file[0]);
@@ -58,8 +59,8 @@ function removePlugin(pluginName) {
   for (var i = 0; i < plugins.length; i++) {
     if (plugins[i].title == pluginName) {
       list.removeChild(plugins[i].display);
-      plugins.splice(i, plugins[i]);
-      //TODO remove from storage
+      plugins = plugins.splice(i, plugins[i]);
+      storePlugins();
     }
   }
 }
