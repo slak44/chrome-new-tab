@@ -15,6 +15,7 @@ function Plugin(code, title) {
     $(text).toggleClass("globalText");
     text.innerHTML = title;
     element.appendChild(text);
+    this.display = element;
     return element;
   }
 }
