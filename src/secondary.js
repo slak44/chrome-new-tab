@@ -9,7 +9,6 @@ var buttons = {
 var list = byId("pluginList");
 list.style.width = (startOfCircle-40/*Padding*/)+"px";
 byId("circle").style.left = startOfCircle+"px";
-byId("messageDisplay").style.left = startOfCircle+"px";
 
 addButtons();
 populatePluginList();
@@ -28,20 +27,14 @@ buttons.saveOptions.setOnClick(function() {
 function storePlugins() {
   chrome.storage.local.set(
     {"storedPlugins": plugins},
-    function() {displayMessage("Plugins saved")}
+    function() {}
   );
 }
 
-function displayMessage(message) {
-  var pre = byId("messageDisplay");
-  pre.innerHTML = message;
-  if (!$(pre).hasClass("fade")) $(pre).toggleClass("fade");
-}
-
 function addPlugin(event) {
-  var file = event.target.files;
+  var file = event.target.files[0];
   var reader = new FileReader();
-  reader.onload = (function(fileIn) {
+  reader.onloadend = (function(fileIn) {
     return function(e) {
       if (fileIn.type !== "application/javascript") {
         alert("Please choose a .js file.");
@@ -51,8 +44,8 @@ function addPlugin(event) {
       list.appendChild(plugins[plugins.length-1].getDisplay());
       storePlugins();
     }
-  })(file[0]);
-  reader.readAsText(file[0]);
+  })(file);
+  reader.readAsText(file);
 }
 
 function removePlugin(pluginName) {
@@ -60,7 +53,7 @@ function removePlugin(pluginName) {
   for (var i = 0; i < plugins.length; i++) {
     if (plugins[i].title == pluginName) {
       list.removeChild(plugins[i].display);
-      plugins = plugins.splice(i, plugins[i]);
+      plugins.splice(i, 1);
       storePlugins();
     }
   }

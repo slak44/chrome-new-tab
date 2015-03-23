@@ -52,10 +52,6 @@ pre.buttonText {
   margin-left: 55px;
 }
 
-.fade {
-  -webkit-animation: fade 1.5s linear 0s 1 normal forwards running;
-}
-
 /*Circle animation*/
 #circle {
   -webkit-animation: cRotate 7.5s linear 0s infinite reverse;
@@ -71,10 +67,4 @@ pre.buttonText {
 
 @-webkit-keyframes buttonAnimDefault {
   100% {-webkit-transform: translate(-20px);}
-}
-
-@-webkit-keyframes fade {
-  0% {opacity: 0;}
-  50% {opacity: 1;}
-  100% {opacity: 0;}
 }

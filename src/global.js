@@ -76,11 +76,9 @@ function clearStorage() {
   plugins = [];
   chrome.storage.local.clear();
 }
-
 function clearSettings() {
   chrome.storage.local.set({"storedSettings": {}}, undefined);
 }
-
 function clearPlugins() {
   chrome.storage.local.set({"storedPlugins": []}, undefined);
 }
