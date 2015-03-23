@@ -2,7 +2,7 @@
   "manifest_version": 2,
 
   "name": "A New 'new tab'",
-  "version": "1.0",
+  "version": "v3.0.0-pre",
   "chrome_url_overrides": {
     "newtab": "new.html"
   },
