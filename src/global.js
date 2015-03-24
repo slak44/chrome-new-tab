@@ -78,11 +78,24 @@ function moveDiv(side/*Left=true or right=false*/, id) {
   }
 }
 
-function addCSS(css) {
+function addCSS(cssString) {
   var newCss = document.createElement('style');
   newCss.type = 'text/css';
-  newCss.appendChild(document.createTextNode(css));
+  newCss.appendChild(document.createTextNode(cssString));
   document.getElementsByTagName("head")[0].appendChild(newCss);
+}
+
+/*
+Adds the given strings(pass strings after parent) as html to the
+specified parent(html object or id as string).
+*/
+function appendHTML(parent) {
+  if (isType(parent, "string"))
+    for (var i = 1; i < arguments.length; i++)
+      byId(parent).insertAdjacentHTML('beforeend', arguments[i]);
+  else
+    for (var i = 1; i < arguments.length; i++)
+      $(parent).insertAdjacentHTML('beforeend', arguments[i]);
 }
 
 /*
@@ -160,3 +173,12 @@ function queue(funcs, scope) {
     if (funcs.length > 0) funcs.shift().apply(scope || {}, [next].concat(Array.prototype.slice.call(arguments, 0)));
   })();
 };
+
+function checkType(thing, type) {
+  if ($.type(thing) !== type) new Error(thing+"'s type doesn't match "+type+".");
+}
+
+function isType(thing, type) {
+  if ($.type(thing) !== type) return false;
+  else return true;
+}

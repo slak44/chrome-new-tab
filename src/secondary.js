@@ -49,7 +49,7 @@ function addPlugin(event) {
 }
 
 function removePlugin(pluginName) {
-  if ($.type(pluginName) != "string") new Error("Plugin name must be a string.");
+  checkType(pluginName, "string");
   for (var i = 0; i < plugins.length; i++) {
     if (plugins[i].title == pluginName) {
       list.removeChild(plugins[i].display);
