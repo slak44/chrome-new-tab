@@ -52,8 +52,7 @@ pre.buttonText {
   margin-left: 55px;
 }
 
-/*Circle animation*/
-#circle {
+.rotate {
   -webkit-animation: cRotate 7.5s linear 0s infinite reverse;
 }
 
