@@ -2,6 +2,10 @@
 var plugins = [];
 var settings = {};
 
+/*
+PROTOTYPES
+*/
+
 /*Plugin prototype.*/
 function Plugin(code, title) {
   this.code = code;
@@ -52,6 +56,10 @@ function Button(imagePath, href, preText, textOnly) {
   }
 }
 
+/*
+DOM UTILS
+*/
+
 /*Wrapper.*/
 function byId(id) {
   return document.getElementById(id);
@@ -70,45 +78,16 @@ function moveDiv(side/*Left=true or right=false*/, id) {
   }
 }
 
-/*Clear the storage.*/
-function clearStorage() {
-  settings = {};
-  plugins = [];
-  chrome.storage.local.clear();
-}
-function clearSettings() {
-  chrome.storage.local.set({"storedSettings": {}}, undefined);
-}
-function clearPlugins() {
-  chrome.storage.local.set({"storedPlugins": []}, undefined);
-}
-
-/*Performs a GET request.*/
-function get(url, res) {
-  new Promise(function(resolve, reject) {
-    var req = new XMLHttpRequest();
-    req.open('GET', url);
-    req.onload = function() {
-      if (req.status == 200) resolve(req.response);
-      else reject(Error(req.statusText));
-    };
-    req.send();
-  }).then(res, function(err) {console.log(err)});
-}
-
-/*Queues async tasks one after another. Each function must have the first parameter a callback, that is called at the end of the async job.*/
-function queue(funcs, scope) {
-  (function next() {
-    if (funcs.length > 0) funcs.shift().apply(scope || {}, [next].concat(Array.prototype.slice.call(arguments, 0)));
-  })();
-};
-
 function addCSS(css) {
   var newCss = document.createElement('style');
   newCss.type = 'text/css';
   newCss.appendChild(document.createTextNode(css));
   document.getElementsByTagName("head")[0].appendChild(newCss);
 }
+
+/*
+STORAGE OPS
+*/
 
 function loadPlugins(onLoad) {
   new Promise(function(resolve, reject) {
@@ -144,3 +123,40 @@ function loadSettings(onLoad, onError) {
     }
   );
 }
+
+/*Clear the storage.*/
+function clearStorage() {
+  settings = {};
+  plugins = [];
+  chrome.storage.local.clear();
+}
+function clearSettings() {
+  chrome.storage.local.set({"storedSettings": {}}, undefined);
+}
+function clearPlugins() {
+  chrome.storage.local.set({"storedPlugins": []}, undefined);
+}
+
+/*
+GENERAL UTILS
+*/
+
+/*Performs a GET request.*/
+function get(url, res) {
+  new Promise(function(resolve, reject) {
+    var req = new XMLHttpRequest();
+    req.open('GET', url);
+    req.onload = function() {
+      if (req.status == 200) resolve(req.response);
+      else reject(Error(req.statusText));
+    };
+    req.send();
+  }).then(res, function(err) {console.log(err)});
+}
+
+/*Queues async tasks one after another. Each function must have the first parameter a callback, that is called at the end of the async job.*/
+function queue(funcs, scope) {
+  (function next() {
+    if (funcs.length > 0) funcs.shift().apply(scope || {}, [next].concat(Array.prototype.slice.call(arguments, 0)));
+  })();
+};
