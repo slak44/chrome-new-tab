@@ -1,18 +1,25 @@
 'use strict';
 var startOfCircle = ($(window).width()-800)/2;
 var buttons = {
-  saveOptions:  new Button(undefined, undefined, "Save Options", true),
   addPlugin:    new Button(undefined, undefined, "Add Plugin", true),
   removePlugin: new Button(undefined, undefined, "Remove Plugin", true)
 };
 
+populatePluginList();
+loadSettings(function() {}, function() {});
+
+chrome.storage.local.get("storedSettingsToLoad", function(data) {
+  var sets = data.storedSettingsToLoad;
+  for (var set in sets)
+    buttons[set] = new Setting(sets[set].key, sets[set].displayText, sets[set].buttonText).getDisplay();
+  addButtons();
+});
+
 var list = byId("pluginList");
 list.style.width = (startOfCircle-40/*Padding*/)+"px";
 byId("circle").style.left = startOfCircle+"px";
-
-addButtons();
-populatePluginList();
-loadSettings(function() {}, function() {});
+byId("titleText").style.cssText += "top: 100px; left:"+startOfCircle+"; width: 800px; text-align: center;";
+if (settings == undefined) byId("titleText").innerHTML = "Configure settings to use new tab";
 
 buttons.addPlugin.setOnClick(function() {
   byId("fileInput").addEventListener('change', addPlugin, false);
@@ -21,15 +28,6 @@ buttons.addPlugin.setOnClick(function() {
 buttons.removePlugin.setOnClick(function() {
   removePlugin(prompt("Enter the name of the plugin to remove:"));
 });
-buttons.saveOptions.setOnClick(function() {
-});
-
-function storePlugins() {
-  chrome.storage.local.set(
-    {"storedPlugins": plugins},
-    function() {}
-  );
-}
 
 function addPlugin(event) {
   var file = event.target.files[0];

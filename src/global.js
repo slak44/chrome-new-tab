@@ -1,6 +1,12 @@
 'use strict';
 var plugins = [];
+var settingObjects = {};
 var settings = {};
+
+addCSS(
+'@-webkit-keyframes moveLeft {100% {-webkit-transform: translate('+(-$(window).width())+'px);}'+
+'@-webkit-keyframes moveRight {100% {-webkit-transform: translate('+$(window).width()+'px);}'
+);
 
 /*
 PROTOTYPES
@@ -10,6 +16,7 @@ PROTOTYPES
 function Plugin(code, title) {
   this.code = code;
   this.title = title;
+
   this.execute = function() {
     console.log("Executing plugin: "+title);
     eval(code);
@@ -54,6 +61,24 @@ function Button(imagePath, href, preText, textOnly) {
   this.setOnClick = function(what) {
     $(this.aHref).click(what);
   }
+}
+
+/*Setting prototype.*/
+function Setting(key, promptMessage, buttonText) {
+  this.key = key;
+  this.displayText = promptMessage;
+  this.buttonText = buttonText;
+
+  this.getDisplay = function() {
+    var b = new Button(undefined, undefined, buttonText, true);
+    b.setOnClick(function() {
+      var value = prompt(promptMessage);
+      settings[key] = value;
+      storeSettings();
+    });
+    return b;
+  }
+  settingObjects[key] = this;
 }
 
 /*
@@ -104,7 +129,7 @@ STORAGE OPS
 
 function loadPlugins(onLoad) {
   new Promise(function(resolve, reject) {
-    chrome.storage.local.get("storedPlugins", function(data){
+    chrome.storage.local.get("storedPlugins", function(data) {
       for (var i = 0; i < data.storedPlugins.length; i++)
         data.storedPlugins[i] = new Plugin(data.storedPlugins[i].code, data.storedPlugins[i].title);
       plugins = data.storedPlugins;
@@ -119,9 +144,9 @@ function loadPlugins(onLoad) {
 
 function loadSettings(onLoad, onError) {
   new Promise(function(resolve, reject) {
-    chrome.storage.local.get("storedSettings", function(data){
+    chrome.storage.local.get("storedSettings", function(data) {
       settings = data.storedSettings;
-      if (data.storedSettings == undefined) reject("Failed to load settings.");
+      if (data.storedSettings == undefined || Object.keys(data.storedSettings).length === 0) reject("Failed to load settings.");
       else resolve("Done fetching settings.");
     });
   }).then(
@@ -135,6 +160,14 @@ function loadSettings(onLoad, onError) {
       onError();
     }
   );
+}
+
+function storeSettings() {
+  chrome.storage.local.set({"storedSettings": settings}, undefined);
+}
+
+function storePlugins() {
+  chrome.storage.local.set({"storedPlugins": plugins}, undefined);
 }
 
 /*Clear the storage.*/

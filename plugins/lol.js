@@ -4,22 +4,26 @@ var info = {
 };
 var matchId, match;
 
+new Setting("server", "Please input your League of Legends server:", "Server");
+new Setting("apiKey", "Please input a Riot API key:", "Api Key");
+new Setting("player", "Please input your League of Legends summoner name:", "Summoner name");
+
 onSettingsLoad.push(getLastMatchId);
-settingsConfig.push(function(callback) {
-  settings.server = prompt("Please input your League of Legends server:");
-  settings.apiKey = prompt("Please input a Riot API key:");
-  settings.player = prompt("Please input your League of Legends summoner name:");
-  callback();
-});
 settingsConfig.push(getPlayerIdByName);
 mainButtons["LoL Data"] = new Button("assets/lol.png", undefined, "LoL Data");
 
 /*Called in config.*/
 function getPlayerIdByName(callback) {
+  if (settings.playerId == undefined)
   get(
     "https://global.api.pvp.net/api/lol/"+settings.server+"/v1.4/summoner/by-name/"+settings.player+"?api_key="+settings.apiKey,
-    function(data) {settings.playerId = JSON.parse(data)[settings.player.toLowerCase()].id;callback();}
+    function(data) {
+      settings.playerId = JSON.parse(data)[settings.player.toLowerCase()].id;
+      storeSettings();
+      callback();
+    }
   );
+  else callback();
 }
 
 /*Riot API GETs. In order of execution.*/

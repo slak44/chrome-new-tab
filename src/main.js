@@ -12,18 +12,18 @@ function executePluginsOnLoad() {
 
 /*Settings not present; prompt for data, store data, load the data.*/
 function settingsAbsent() {
-  settings.name = prompt("Please input a title:");
-  settings.redditUser = prompt("Please input your reddit username:");
-  settingsConfig.push(function(callback) {chrome.storage.local.set({"storedSettings": settings}, callback);});
-  settingsConfig.push(executeSettingsOnLoad);
-  queue(settingsConfig, window);
-  manipulateDOM();
+  chrome.tabs.create({url:'chrome-extension://jdhikkidbhfaabghpghiiffgppeblghj/settings.html'});
+  new Setting("name", "Please input a title:", "Name");
+  new Setting("redditUser", "Please input your reddit username:", "Reddit username");
+  chrome.storage.local.set({"storedSettingsToLoad": settingObjects}, undefined);
+  window.close();
 }
 
 /*Settings present; load the data.*/
 function settingsPresent() {
+  settingsConfig[settingsConfig.length] = executeSettingsOnLoad;
+  queue(settingsConfig, window);
   setTimeout(manipulateDOM, 0);
-  executeSettingsOnLoad();
 }
 
 function manipulateDOM() {

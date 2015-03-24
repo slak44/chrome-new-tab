@@ -10,8 +10,3 @@ var mainButtons = {
   "LoLNexus":   new Button("assets/lolnexus.png", "http://www.lolnexus.com/EUNE/search?name=slak44&region=EUNE", "LoLNexus"),
   "Extensions": new Button("assets/extensions.png", undefined, "Extensions")
 };
-
-addCSS(
-'@-webkit-keyframes moveLeft {100% {-webkit-transform: translate('+(-$(window).width())+'px);}}\n'+
-'@-webkit-keyframes moveRight {100% {-webkit-transform: translate('+$(window).width()+'px);}}'
-);
