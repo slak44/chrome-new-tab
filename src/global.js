@@ -120,7 +120,7 @@ function appendHTML(parent) {
       byId(parent).insertAdjacentHTML('beforeend', arguments[i]);
   else
     for (var i = 1; i < arguments.length; i++)
-      $(parent).insertAdjacentHTML('beforeend', arguments[i]);
+      parent.insertAdjacentHTML('beforeend', arguments[i]);
 }
 
 /*

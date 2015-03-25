@@ -40,8 +40,6 @@ function settingsPresent() {
 
 function manipulateDOM() {
   byId("dataPane").style.left = ($(window).width()/2) - 400 + "px";
-  byId("dataPane").style.top = "0px";
-  byId("persistentIsOnline").style.right = "0px";
 
   var i = 0;
   for (var key in mainButtons) {
@@ -51,23 +49,22 @@ function manipulateDOM() {
   }
   mainButtons["Extensions"].setOnClick(function() {chrome.tabs.create({url:'chrome://extensions'})});
 
-  addData("name", settings.name, "p");
-  addData("time", "00:00", "p");
-  addData("date", "01 January 1970", "p");
-  addData("redditkarma", "", "pre");
+  addData("name", settings.name, "p", "100px", "50px");
+  addData("time", "00:00", "p", "100px", "150px");
+  addData("date", "01 January 1970", "p", "50px", "300px");
+  addData("redditkarma", "", "pre", "30px", "385px");
+  byId("redditkarma").style.whiteSpace = "pre";
   setTimeout(updateRedditKarma, 0);
   setDate();
   setTime();
 }
 
-function addData(id, content, element) {
-  var e = document.createElement(element);
-  e.innerHTML = content;
-  e.id = id;
-  e.style.textAlign = "center";
-  e.style.width = "800px";
-  $(e).toggleClass("blockabsolute globalText");
-  byId("dataPane").appendChild(e);
+function addData(id, content, tag, fontSize, topPos) {
+  var elem =
+  '<'+tag+' id='+id+' class="blockabsolute globalText" '+
+  'style="text-align: center; width: 800px; '+
+  'font-size:'+fontSize+'; top:'+topPos+';">'+content+'</'+tag+'>';
+  appendHTML(byId("dataPane"), elem);
 }
 
 function setTime() {
