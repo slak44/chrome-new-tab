@@ -12,12 +12,11 @@ body {
   position: absolute;
 }
 
-/*Div movements*/
-div.goLeft {
-  -webkit-animation: moveLeft 3s ease 0s 1 normal forwards running;
-}
-div.goRight {
-  -webkit-animation: moveRight 3s ease 0s 1 normal forwards running;
+.globalText {
+  color: #AAAAAA;
+  font-family: 'Courier New';
+  font-weight: bold;
+  white-space: nowrap;
 }
 
 /*Default buttons*/
@@ -37,19 +36,20 @@ a.button:hover {
   -webkit-animation: buttonAnim 0.25s ease 0s 1 both;
 }
 
-.globalText {
-  color: #AAAAAA;
-  font-family: 'Courier New';
-  font-weight: bold;
-  white-space: nowrap;
-}
-
 /*Default button text*/
 pre.buttonText {
   color: #FFFFFF;
   font-family: monospace;
   white-space: pre;
   margin-left: 55px;
+}
+
+/*Div movements*/
+div.goLeft {
+  -webkit-animation: moveLeft 3s ease 0s 1 normal forwards running;
+}
+div.goRight {
+  -webkit-animation: moveRight 3s ease 0s 1 normal forwards running;
 }
 
 .rotate {

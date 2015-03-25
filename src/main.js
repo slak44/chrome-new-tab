@@ -111,7 +111,7 @@ Connection indicator relies on this method.
 */
 function updateRedditKarma() {
   $.getJSON('https://www.reddit.com/user/'+settings.redditUser+'/about.json?',
-    function(data){
+    function(data) {
       byId('redditkarma').innerHTML =
       "Comment karma: "+data.data.comment_karma+"\n"+
       "Link karma: "+data.data.link_karma;
