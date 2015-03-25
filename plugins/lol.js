@@ -65,12 +65,12 @@ function getAllChampionData() {
       displayMatch();
       $(byId("LoL Data")).click(function() {
         byId("matchHistoryPane").style.visibility = "visible";
-        moveDiv(false, "matchHistoryPane");
-        moveDiv(true, "defaultPane");
+        moveDiv("Right", "matchHistoryPane");
+        moveDiv("Left", "defaultPane");
       });
       $(byId("Go Back")).click(function() {
-        moveDiv(true, "matchHistoryPane");
-        moveDiv(false, "defaultPane");
+        moveDiv("Left", "matchHistoryPane");
+        moveDiv("Right", "defaultPane");
       });
     }
   );
@@ -84,6 +84,7 @@ function addTabPre(id, content) {
   pre.style.margin = "0px";
   pre.style.padding = "2.5px";
   pre.style.paddingLeft = "5px";
+  pre.style.fontSize = "20px";
   $(pre).toggleClass("globalText infoText");
   byId("matchHistoryPane").appendChild(pre);
 }
@@ -190,10 +191,6 @@ function createTable(width) {
 }
 /*Sets the match history tab's info fields.*/
 function setTabFields() {
-  var fields = document.getElementsByClassName("infoText");
-  for (var i = 0; i < fields.length; i++)
-    fields[i].style.top = (i * (20/*font size, px*/+10/*offset between texts*/) + 50/*button(id="reverse")*/) + "px";
-
   addTabPre("player", "Player: "+settings.player+" (pid "+settings.playerId+")");
   byId("player").style.marginTop = "70px";
   addTabPre("matchMap", "Map: "+getMapName(match.mapId));
@@ -202,6 +199,10 @@ function setTabFields() {
   addTabPre("matchDuration", "Duration: "+getHumanTime(match.matchDuration));
   addTabPre("matchVer", "Version: "+match.matchVersion);
   addTabPre("matchVictor", "Winner: "+getWinner());
+
+  var fields = document.getElementsByClassName("infoText");
+  for (var i = 0; i < fields.length; i++)
+    fields[i].style.top = (i * (20/*font size, px*/+10/*offset between texts*/) + 50/*button(id="reverse")*/) + "px";
 }
 
 

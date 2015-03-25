@@ -12,7 +12,7 @@ function executePluginsOnLoad() {
 
 /*Settings not present; prompt for data, store data, load the data.*/
 function settingsAbsent() {
-  chrome.tabs.create({url:'chrome-extension://jdhikkidbhfaabghpghiiffgppeblghj/settings.html'});
+  chrome.tabs.create({url: "chrome-extension://"+chrome.runtime.id+"/settings.html"});
   new Setting("name", "Please input a title:", "Name");
   new Setting("redditUser", "Please input your reddit username:", "Reddit username");
   chrome.storage.local.set({"storedSettingsToLoad": settingObjects}, undefined);

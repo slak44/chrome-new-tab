@@ -5,7 +5,7 @@ var settings = {};
 
 addCSS(
 '@-webkit-keyframes moveLeft {100% {-webkit-transform: translate('+(-$(window).width())+'px);}'+
-'@-webkit-keyframes moveRight {100% {-webkit-transform: translate('+$(window).width()+'px);}'
+'@-webkit-keyframes moveRight {100% {-webkit-transform: translate('+($(window).width())+'px);}'
 );
 
 /*
@@ -91,12 +91,12 @@ function byId(id) {
 }
 
 /*Move divs around.*/
-function moveDiv(side/*Left=true or right=false*/, id) {
-  if (side) {
+function moveDiv(side, id) {
+  if (side === "Left") {
     byId(id).style.left = "0px";
     byId(id).className = "";
     $(byId(id)).toggleClass("goLeft");
-  } else {
+  } else if (side === "Right") {
     byId(id).style.left = -$(window).width() + "px";
     byId(id).className = "";
     $(byId(id)).toggleClass("goRight");
