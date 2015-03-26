@@ -4,8 +4,8 @@ var settingObjects = {};
 var settings = {};
 
 addCSS(
-'@-webkit-keyframes moveLeft {100% {-webkit-transform: translate('+(-$(window).width())+'px);}'+
-'@-webkit-keyframes moveRight {100% {-webkit-transform: translate('+($(window).width())+'px);}'
+'@-webkit-keyframes moveLeft {100% {-webkit-transform: translate('+(-$(window).width())+'px);}}\n'+
+'@-webkit-keyframes moveRight {100% {-webkit-transform: translate('+($(window).width())+'px);}}'
 );
 
 /*
@@ -94,12 +94,14 @@ function byId(id) {
 function moveDiv(side, id) {
   if (side === "Left") {
     byId(id).style.left = "0px";
-    byId(id).className = "";
-    $(byId(id)).toggleClass("goLeft");
+    // byId(id).className = "";
+    $(byId(id)).removeClass("goRight");
+    $(byId(id)).addClass("goLeft");
   } else if (side === "Right") {
     byId(id).style.left = -$(window).width() + "px";
-    byId(id).className = "";
-    $(byId(id)).toggleClass("goRight");
+    // byId(id).className = "";
+    $(byId(id)).removeClass("goLeft");
+    $(byId(id)).addClass("goRight");
   }
 }
 

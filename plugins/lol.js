@@ -58,10 +58,7 @@ function getAllChampionData() {
     function(data) {
       info.champions = JSON.parse(data);
       for (var i in info.champions.data) if (info.champions.data.hasOwnProperty(i)) info.idMap[info.champions.data[i].id] = i;
-      var div = document.createElement("div"); div.id = "matchHistoryPane";
-      div.style.visibility = "hidden";
-      div.style.position = "absolute";
-      document.body.appendChild(div);
+      appendHTML(document.body, '<div id="matchHistoryPane" class="blockabsolute" style="visibility: hidden;"></div>');
       displayMatch();
       $(byId("LoL Data")).click(function() {
         byId("matchHistoryPane").style.visibility = "visible";
@@ -78,15 +75,9 @@ function getAllChampionData() {
 
 /*DOM additions.*/
 function addTabPre(id, content) {
-  var pre = document.createElement("pre");
-  pre.innerHTML = content;
-  pre.id = id;
-  pre.style.margin = "0px";
-  pre.style.padding = "2.5px";
-  pre.style.paddingLeft = "5px";
-  pre.style.fontSize = "20px";
-  $(pre).toggleClass("globalText infoText");
-  byId("matchHistoryPane").appendChild(pre);
+  var elem =
+  '<pre id="'+id+'" class="globalText infoText" style="margin: 0px; padding: 2.5px; padding-left: 5px; font-size: 20px;">'+content+'</pre>';
+  appendHTML("matchHistoryPane", elem);
 }
 function setBlockAbsolute() {
   var children = byId("matchHistoryPane").children;
