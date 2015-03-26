@@ -1,6 +1,5 @@
 'use strict';
 var plugins = [];
-var settingObjects = {};
 var settings = {};
 
 addCSS(
@@ -17,19 +16,15 @@ function Plugin(code, title) {
   this.code = code;
   this.title = title;
 
-  this.execute = function() {
-    console.log("Executing plugin: "+title);
-    eval(code);
-  }
-  this.getDisplay = function() {
-    var element = document.createElement("li");
-    var text = document.createElement("pre");
-    $(text).toggleClass("globalText");
-    text.innerHTML = title;
-    element.appendChild(text);
-    this.display = element;
-    return element;
-  }
+  var element = document.createElement("li");
+  var text = document.createElement("pre");
+  $(text).toggleClass("globalText");
+  text.innerHTML = title;
+  element.id = title;
+  element.appendChild(text);
+  console.log(element.outerHTML);
+  this.display = element;
+  this.serializableNode = this.display.outerHTML;
 }
 
 /*Button prototype.*/
@@ -51,6 +46,7 @@ function Button(imagePath, href, preText, textOnly) {
 
   this.aHref = link;
   this.preText = text;
+  this.serializableNode = this.aHref.outerHTML;
 
   this.setImage = function(path) {
     link.style.backgroundImage = "url('"+path+"'), url('assets/button.png')";
@@ -64,21 +60,15 @@ function Button(imagePath, href, preText, textOnly) {
 }
 
 /*Setting prototype.*/
-function Setting(key, promptMessage, buttonText) {
-  this.key = key;
-  this.displayText = promptMessage;
-  this.buttonText = buttonText;
-
-  this.getDisplay = function() {
-    var b = new Button(undefined, undefined, buttonText, true);
-    b.setOnClick(function() {
-      var value = prompt(promptMessage);
-      settings[key] = value;
-      storeSettings();
-    });
-    return b;
-  }
-  settingObjects[key] = this;
+function Setting(promptMessage, buttonText, isVisible) {
+  this.isVisible = (isVisible === undefined)? true: isVisible;
+  this.button = new Button(undefined, undefined, buttonText, true);
+  this.button.setOnClick(function() {
+    settings[this.id].value = prompt(promptMessage);
+    console.log(settings);
+    storeSettings();
+  });
+  settings[buttonText] = this;
 }
 
 /*
@@ -94,12 +84,10 @@ function byId(id) {
 function moveDiv(side, id) {
   if (side === "Left") {
     byId(id).style.left = "0px";
-    // byId(id).className = "";
     $(byId(id)).removeClass("goRight");
     $(byId(id)).addClass("goLeft");
   } else if (side === "Right") {
     byId(id).style.left = -$(window).width() + "px";
-    // byId(id).className = "";
     $(byId(id)).removeClass("goLeft");
     $(byId(id)).addClass("goRight");
   }
@@ -129,18 +117,16 @@ function appendHTML(parent) {
 STORAGE OPS
 */
 
-function loadPlugins(onLoad) {
+function loadPlugins(onLoad, onError) {
   new Promise(function(resolve, reject) {
     chrome.storage.local.get("storedPlugins", function(data) {
-      for (var i = 0; i < data.storedPlugins.length; i++)
-        data.storedPlugins[i] = new Plugin(data.storedPlugins[i].code, data.storedPlugins[i].title);
       plugins = data.storedPlugins;
       if (data.storedPlugins == undefined) reject("No plugins found.");
       else resolve("Done fetching plugins.");
     });
   }).then(
     function(res) {console.log(res);onLoad();},
-    function(err) {console.log(err)}
+    function(err) {console.log(err);onError();}
   );
 }
 
@@ -148,8 +134,22 @@ function loadSettings(onLoad, onError) {
   new Promise(function(resolve, reject) {
     chrome.storage.local.get("storedSettings", function(data) {
       settings = data.storedSettings;
-      if (data.storedSettings == undefined || Object.keys(data.storedSettings).length === 0) reject("Failed to load settings.");
-      else resolve("Done fetching settings.");
+      //Make sure there's something there
+      if (settings === undefined || settings === null) {
+        reject("Failed to load settings.");
+        return;
+      }
+      //Make sure the values aren't empty
+      //If a visible value is empty, it fails immediately
+      if (Object.keys(settings).length !== 0)
+        for (var key in Object.keys(settings)) {
+          if (Object.keys(settings)[key].isVisible == true &&
+                Object.keys(settings)[key] === undefined) {
+            reject("Failed to load settings.");
+            return;
+          }
+        }
+      resolve("Done fetching settings.");
     });
   }).then(
     function(res) {

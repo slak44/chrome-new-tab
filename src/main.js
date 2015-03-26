@@ -1,5 +1,5 @@
 'use strict';
-var onSettingsLoad = [];
+var identity = "Main page"
 var settingsConfig = [];
 var mainButtons = {
   "Gmail":      new Button("assets/gmail.png", "https://mail.google.com/mail/?authuser=0", "Gmail"),
@@ -14,33 +14,26 @@ var mainButtons = {
 loadPlugins(executePluginsOnLoad);
 loadSettings(settingsPresent, settingsAbsent);
 
-function executeSettingsOnLoad() {
-  for (var i = 0; i < onSettingsLoad.length; i++) onSettingsLoad[i]();
-}
-
 function executePluginsOnLoad() {
-  for (var i = 0; i < plugins.length; i++) plugins[i].execute();
+  for (var i = 0; i < plugins.length; i++) {
+    console.log("Executing plugin: "+plugins[i].title);
+    eval(plugins[i].code);
+  }
 }
 
-/*Settings not present; prompt for data, store data, load the data.*/
+/*Settings not present; go to settings tab to configure.*/
 function settingsAbsent() {
   chrome.tabs.create({url: "chrome-extension://"+chrome.runtime.id+"/settings.html"});
-  new Setting("name", "Please input a title:", "Name");
-  new Setting("redditUser", "Please input your reddit username:", "Reddit username");
-  chrome.storage.local.set({"storedSettingsToLoad": settingObjects}, undefined);
   window.close();
 }
 
-/*Settings present; load the data.*/
+/*Settings present; edit the dom and queue the plugin functions.*/
 function settingsPresent() {
-  settingsConfig[settingsConfig.length] = executeSettingsOnLoad;
-  queue(settingsConfig, window);
   setTimeout(manipulateDOM, 0);
+  queue(settingsConfig, window);
 }
 
 function manipulateDOM() {
-  byId("dataPane").style.left = ($(window).width()/2) - 400 + "px";
-
   var i = 0;
   for (var key in mainButtons) {
     if (mainButtons.hasOwnProperty(key)) byId("defaultPane").appendChild(mainButtons[key].aHref);
@@ -49,7 +42,8 @@ function manipulateDOM() {
   }
   mainButtons["Extensions"].setOnClick(function() {chrome.tabs.create({url:'chrome://extensions'})});
 
-  addData("name", settings.name, "p", "100px", "50px");
+  byId("dataPane").style.left = ($(window).width()/2) - 400 + "px";
+  addData("name", settings["Title"].value, "p", "100px", "50px");
   addData("time", "00:00", "p", "100px", "150px");
   addData("date", "01 January 1970", "p", "50px", "300px");
   addData("redditkarma", "", "pre", "30px", "385px");
@@ -110,7 +104,7 @@ Updates the on-screen karma every 7.5s by requesting reddit data.
 Connection indicator relies on this method.
 */
 function updateRedditKarma() {
-  $.getJSON('https://www.reddit.com/user/'+settings.redditUser+'/about.json?',
+  $.getJSON('https://www.reddit.com/user/'+settings["Reddit username"].value+'/about.json?',
     function(data) {
       byId('redditkarma').innerHTML =
       "Comment karma: "+data.data.comment_karma+"\n"+

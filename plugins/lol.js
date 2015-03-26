@@ -4,21 +4,24 @@ var info = {
 };
 var matchId, match;
 
-new Setting("server", "Please input your League of Legends server:", "Server");
-new Setting("apiKey", "Please input a Riot API key:", "Api Key");
-new Setting("player", "Please input your League of Legends summoner name:", "Summoner name");
-
-onSettingsLoad.push(getLastMatchId);
-settingsConfig.push(getPlayerIdByName);
-mainButtons["LoL Data"] = new Button("assets/lol.png", undefined, "LoL Data");
+if (identity === "Options page") {
+  new Setting("Please input your League of Legends server:", "Server");
+  new Setting("Please input a Riot API key:", "Api Key");
+  new Setting("Please input your League of Legends summoner name:", "Summoner name");
+  new Setting("", "playerId", false);
+} else if (identity === "Main page") {
+  settingsConfig.push(getPlayerIdByName);
+  settingsConfig.push(getLastMatchId);
+  mainButtons["LoL Data"] = new Button("assets/lol.png", undefined, "LoL Data");
+}
 
 /*Called in config.*/
 function getPlayerIdByName(callback) {
-  if (settings.playerId == undefined)
+  if (settings.playerId.value === undefined)
   get(
-    "https://global.api.pvp.net/api/lol/"+settings.server+"/v1.4/summoner/by-name/"+settings.player+"?api_key="+settings.apiKey,
+    "https://global.api.pvp.net/api/lol/"+settings["Server"].value+"/v1.4/summoner/by-name/"+settings["Summoner name"].value+"?api_key="+settings["Api Key"].value,
     function(data) {
-      settings.playerId = JSON.parse(data)[settings.player.toLowerCase()].id;
+      settings.playerId.value = JSON.parse(data)[settings["Summoner name"].value.toLowerCase()].id;
       storeSettings();
       callback();
     }
@@ -27,34 +30,34 @@ function getPlayerIdByName(callback) {
 }
 
 /*Riot API GETs. In order of execution.*/
-function getLastMatchId() {
+function getLastMatchId(callback) {
   get(
-    'https://global.api.pvp.net/api/lol/'+settings.server+'/v2.2/matchhistory/'+settings.playerId+'?api_key='+settings.apiKey,
+    'https://global.api.pvp.net/api/lol/'+settings["Server"].value+'/v2.2/matchhistory/'+settings.playerId.value+'?api_key='+settings["Api Key"].value,
     function(data) {
       var parsed = JSON.parse(data);
       matchId = parsed.matches[parsed.matches.length-1].matchId;
-      getLastMatch();
+      getLastMatch(callback);
     }
   );
 }
-function getLastMatch() {
+function getLastMatch(callback) {
   get(
-    'https://global.api.pvp.net/api/lol/'+settings.server+'/v2.2/match/'+matchId+'?api_key='+settings.apiKey,
+    'https://global.api.pvp.net/api/lol/'+settings["Server"].value+'/v2.2/match/'+matchId+'?api_key='+settings["Api Key"].value,
     function(data) {
       match = JSON.parse(data);
-      getDataDragonInfo();
+      getDataDragonInfo(callback);
     }
   );
 }
-function getDataDragonInfo() {
+function getDataDragonInfo(callback) {
   get(
-    "http://ddragon.leagueoflegends.com/realms/"+settings.server+".json",
-    function(data) {info.ddRealm = JSON.parse(data); getAllChampionData();}
+    "http://ddragon.leagueoflegends.com/realms/"+settings["Server"].value+".json",
+    function(data) {info.ddRealm = JSON.parse(data); getAllChampionData(callback);}
   );
 }
-function getAllChampionData() {
+function getAllChampionData(callback) {
   get(
-    "https://global.api.pvp.net/api/lol/static-data/"+settings.server+"/v1.2/champion?champData=image&api_key="+settings.apiKey,
+    "https://global.api.pvp.net/api/lol/static-data/"+settings["Server"].value+"/v1.2/champion?champData=image&api_key="+settings["Api Key"].value,
     function(data) {
       info.champions = JSON.parse(data);
       for (var i in info.champions.data) if (info.champions.data.hasOwnProperty(i)) info.idMap[info.champions.data[i].id] = i;
@@ -69,6 +72,7 @@ function getAllChampionData() {
         moveDiv("Left", "matchHistoryPane");
         moveDiv("Right", "defaultPane");
       });
+      callback();
     }
   );
 }
@@ -182,7 +186,7 @@ function createTable(width) {
 }
 /*Sets the match history tab's info fields.*/
 function setTabFields() {
-  addTabPre("player", "Player: "+settings.player+" (pid "+settings.playerId+")");
+  addTabPre("player", "Player: "+settings["Summoner name"].value+" (pid "+settings.playerId.value+")");
   byId("player").style.marginTop = "70px";
   addTabPre("matchMap", "Map: "+getMapName(match.mapId));
   addTabPre("matchEnv", "Match type: "+getMatchMode(match.matchMode)+" "+getMatchType(match.matchType));
