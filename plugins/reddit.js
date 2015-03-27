@@ -2,10 +2,6 @@
 if (identity === "Options page") {
   new Setting("Please input your reddit username:", "Reddit username");
 } else if (identity === "Main page") {
-  settingsConfig.push(addDisplay);
-}
-
-function addDisplay() {
   addData("redditkarma", "", "pre", "30px", "385px");
   byId("redditkarma").style.whiteSpace = "pre";
   setTimeout(updateRedditKarma, 0);
@@ -13,7 +9,7 @@ function addDisplay() {
 }
 
 /*
-Updates the on-screen karma every 7.5s by requesting reddit data.
+Updates the on-screen karma every 2.5s by requesting reddit data.
 Connection indicator relies on this method(and reddit's servers..).
 */
 function updateRedditKarma() {

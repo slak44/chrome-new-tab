@@ -22,7 +22,6 @@ function Plugin(code, title) {
   text.innerHTML = title;
   element.id = title;
   element.appendChild(text);
-  console.log(element.outerHTML);
   this.display = element;
   this.serializableNode = this.display.outerHTML;
 }
@@ -65,7 +64,6 @@ function Setting(promptMessage, buttonText, isVisible) {
   this.button = new Button(undefined, undefined, buttonText, true);
   this.button.setOnClick(function() {
     settings[this.id].value = prompt(promptMessage);
-    console.log(settings);
     storeSettings();
   });
   settings[buttonText] = this;

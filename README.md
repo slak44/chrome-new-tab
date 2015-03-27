@@ -1,8 +1,10 @@
 ChromeNewTab
 ============
 
-A chrome extension that replaces the new tab.
-
+A chrome extension that replaces the new tab.  
+## Plugins
+Plugins are `eval`'d both in the options page, and in the main page. Use the `identity` variable to detect where it is executed, and run code based on that.  
+To execute code after the DOM has been changed, add functions to the `settingsConfig` array, whose contents are executed after `manipulateDOM`.
 ## Riot API
 This API is used in the [/plugins/lol.js](https://github.com/slak44/ChromeNewTab/blob/master/plugins/lol.js) file.
 ### Statement
