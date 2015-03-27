@@ -5,9 +5,9 @@ var info = {
 var matchId, match;
 
 if (identity === "Options page") {
-  new Setting("Please input your League of Legends server:", "Server");
-  new Setting("Please input a Riot API key:", "Api Key");
-  new Setting("Please input your League of Legends summoner name:", "Summoner name");
+  new Setting("Please input your League of Legends server:", "lol.js", "Server");
+  new Setting("Please input a Riot API key:", "lol.js", "Api Key");
+  new Setting("Please input your League of Legends summoner name:", "lol.js", "Summoner name");
   new Setting("", "playerId", false);
 } else if (identity === "Main page") {
   settingsConfig.push(getPlayerIdByName);

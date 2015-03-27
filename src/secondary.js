@@ -2,8 +2,8 @@
 var identity = "Options page";
 var startOfCircle = ($(window).width()-800)/2;
 var buttons = {
-  addPlugin:    new Button(undefined, undefined, "Add Plugin", true),
-  removePlugin: new Button(undefined, undefined, "Remove Plugin", true)
+  "Add Plugin":    new Button(undefined, undefined, "Add Plugin", true),
+  "Remove Plugin": new Button(undefined, undefined, "Remove Plugin", true)
 };
 
 var list = byId("pluginList");
@@ -18,14 +18,6 @@ loadSettings(
     byId("titleText").innerHTML = "Configure settings to use new tab";
   }
 );
-
-buttons.addPlugin.setOnClick(function() {
-  byId("fileInput").addEventListener('change', addPlugin, false);
-  $("#fileInput").click();
-});
-buttons.removePlugin.setOnClick(function() {
-  removePlugin(prompt("Enter the name of the plugin to remove:"));
-});
 
 function addPlugin(event) {
   var file = event.target.files[0];
@@ -52,7 +44,8 @@ function removePlugin(pluginName) {
   checkType(pluginName, "string");
   for (var i = 0; i < plugins.length; i++) {
     if (plugins[i].title == pluginName) {
-      //Remove it from the display, from the array, and from plugin storage
+      //Remove its settings, remove it from the display, from the array, and from plugin storage
+      for (var a in plugins) if (settings[b].src === a.title) delete settings[b];
       list.removeChild(byId(plugins[i].title)); //title === child's id
       plugins.splice(i, 1);
       storePlugins();
@@ -61,20 +54,28 @@ function removePlugin(pluginName) {
 }
 
 function addButtons() {
-  for (var b in settings) {
-    if (settings[b].__proto__ != Setting.prototype) settings[b].isVisible = false;
-    if (settings[b].isVisible) buttons[b] = settings[b].button;
-  }
+  for (var b in settings) if (settings[b].isVisible) buttons[b] = settings[b].button;
   var i = 0;
   for (var key in buttons) {
-    document.body.appendChild(buttons[key].aHref);
-    buttons[key].aHref.style.top = i * (50/*Button height*/ + 10/*Space between btns*/) + "px";
+    appendHTML(document.body, buttons[key].serializableNode);
+    byId(key).style.top = i * (50/*Button height*/ + 10/*Space between btns*/) + "px";
+    if (key in settings) $(byId(key)).click(function() {
+      settings[this.id].value = prompt(settings[this.id].promptMessage);
+      storeSettings();
+    });
     i++;
   }
+  $(byId("Add Plugin")).click(function() {
+    byId("fileInput").addEventListener('change', addPlugin, false);
+    $("#fileInput").click();
+  });
+  $(byId("Remove Plugin")).click(function() {
+    removePlugin(prompt("Enter the name of the plugin to remove:"));
+  });
 }
 
 function settingsLoaded() {
-  new Setting("Please input a title:", "Title");
+  new Setting("Please input a title:", "local", "Title");
   loadPlugins(function() {
     for (var i = 0; i < plugins.length; i++) {
       appendHTML(list, plugins[i].serializableNode);

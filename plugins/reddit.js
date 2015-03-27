@@ -1,6 +1,6 @@
 'use strict';
 if (identity === "Options page") {
-  new Setting("Please input your reddit username:", "Reddit username");
+  new Setting("Please input your reddit username:", "reddit.js", "Reddit username");
 } else if (identity === "Main page") {
   addData("redditkarma", "", "pre", "30px", "385px");
   byId("redditkarma").style.whiteSpace = "pre";

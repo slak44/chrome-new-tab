@@ -46,27 +46,22 @@ function Button(imagePath, href, preText, textOnly) {
   this.aHref = link;
   this.preText = text;
   this.serializableNode = this.aHref.outerHTML;
-
-  this.setImage = function(path) {
-    link.style.backgroundImage = "url('"+path+"'), url('assets/button.png')";
-  }
-  this.setText = function(text) {
-    this.preText.innerHTML = text;
-  }
   this.setOnClick = function(what) {
     $(this.aHref).click(what);
   }
 }
 
 /*Setting prototype.*/
-function Setting(promptMessage, buttonText, isVisible) {
+function Setting(promptMessage, src, buttonText, isVisible) {
   this.isVisible = (isVisible === undefined)? true: isVisible;
   this.button = new Button(undefined, undefined, buttonText, true);
-  this.button.setOnClick(function() {
+  this.promptMessage = promptMessage;
+  $(this.button).click(function() {
     settings[this.id].value = prompt(promptMessage);
     storeSettings();
   });
-  settings[buttonText] = this;
+  try {if (settings[buttonText].value === undefined) settings[buttonText] = this;}
+  catch (err) {settings[buttonText] = this;}
 }
 
 /*
