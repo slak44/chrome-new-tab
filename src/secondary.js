@@ -52,7 +52,7 @@ function removePlugin(pluginName) {
   checkType(pluginName, "string");
   for (var i = 0; i < plugins.length; i++) {
     if (plugins[i].title == pluginName) {
-      //Remove it from the display, from the array, and from storage
+      //Remove it from the display, from the array, and from plugin storage
       list.removeChild(byId(plugins[i].title)); //title === child's id
       plugins.splice(i, 1);
       storePlugins();
@@ -61,7 +61,10 @@ function removePlugin(pluginName) {
 }
 
 function addButtons() {
-  for (var b in settings) if (settings[b].isVisible) buttons[b] = settings[b].button;
+  for (var b in settings) {
+    if (settings[b].__proto__ != Setting.prototype) settings[b].isVisible = false;
+    if (settings[b].isVisible) buttons[b] = settings[b].button;
+  }
   var i = 0;
   for (var key in buttons) {
     document.body.appendChild(buttons[key].aHref);
