@@ -56,6 +56,7 @@ function Setting(promptMessage, src, buttonText, isVisible) {
   this.isVisible = (isVisible === undefined)? true: isVisible;
   this.button = new Button(undefined, undefined, buttonText, true);
   this.promptMessage = promptMessage;
+  this.src = src;
   $(this.button).click(function() {
     settings[this.id].value = prompt(promptMessage);
     storeSettings();

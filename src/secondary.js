@@ -45,10 +45,11 @@ function removePlugin(pluginName) {
   for (var i = 0; i < plugins.length; i++) {
     if (plugins[i].title == pluginName) {
       //Remove its settings, remove it from the display, from the array, and from plugin storage
-      for (var a in plugins) if (settings[b].src === a.title) delete settings[b];
+      for (var a in settings) if (settings[a].src === plugins[i].title) delete settings[a];
       list.removeChild(byId(plugins[i].title)); //title === child's id
       plugins.splice(i, 1);
       storePlugins();
+      storeSettings();
     }
   }
 }
