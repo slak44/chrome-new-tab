@@ -29,7 +29,7 @@ function settingsAbsent() {
 
 /*Settings present; edit the dom and queue the plugin functions.*/
 function settingsPresent() {
-  setTimeout(manipulateDOM, 0);
+  manipulateDOM();
   queue(settingsConfig, window);
 }
 
@@ -46,9 +46,6 @@ function manipulateDOM() {
   addData("name", settings["Title"].value, "p", "100px", "50px");
   addData("time", "00:00", "p", "100px", "150px");
   addData("date", "01 January 1970", "p", "50px", "300px");
-  addData("redditkarma", "", "pre", "30px", "385px");
-  byId("redditkarma").style.whiteSpace = "pre";
-  setTimeout(updateRedditKarma, 0);
   setDate();
   setTime();
 }
@@ -97,19 +94,4 @@ function getMonthName(monthNumeral) {
   case 11: return "December";
   default: return "What did you do with this method?"
   }
-}
-
-/*
-Updates the on-screen karma every 7.5s by requesting reddit data.
-Connection indicator relies on this method.
-*/
-function updateRedditKarma() {
-  $.getJSON('https://www.reddit.com/user/'+settings["Reddit username"].value+'/about.json?',
-    function(data) {
-      byId('redditkarma').innerHTML =
-      "Comment karma: "+data.data.comment_karma+"\n"+
-      "Link karma: "+data.data.link_karma;
-      byId("persistentIsOnline").src = "assets/empty30x30.png";
-  }).error(function() {byId("persistentIsOnline").src = "assets/noconnection.png"});
-  setTimeout(updateRedditKarma, 7500);
 }

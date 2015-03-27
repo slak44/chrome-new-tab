@@ -72,7 +72,6 @@ function addButtons() {
 
 function settingsLoaded() {
   new Setting("Please input a title:", "Title");
-  new Setting("Please input your reddit username:", "Reddit username");
   loadPlugins(function() {
     for (var i = 0; i < plugins.length; i++) {
       appendHTML(list, plugins[i].serializableNode);
