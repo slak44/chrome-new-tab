@@ -25,5 +25,5 @@ function updateRedditKarma() {
       if (byId("persistentIsOnline").src != "assets/empty30x30.png")
         byId("persistentIsOnline").src = "assets/empty30x30.png";
   }).error(function() {byId("persistentIsOnline").src = "assets/noconnection.png"});
-  setTimeout(updateRedditKarma, 7500);
+  setTimeout(updateRedditKarma, 2500);
 }
