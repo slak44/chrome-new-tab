@@ -27,13 +27,13 @@ function Plugin(code, title) {
 }
 
 /*Button prototype.*/
-function Button(imagePath, href, preText, textOnly) {
+function Button(imagePath, href, preText, textOnly, id) {
   var link = document.createElement('a');
   var text = link.appendChild(document.createElement('pre'));
   //If there is no href, make sure the cursor looks as if there was
   if (href !== undefined) link.href = href;
   else link.style.cursor = "pointer";
-  link.id = preText;
+  link.id = (id === undefined)? preText : id;
   $(link).toggleClass("blockabsolute button");
   $(text).toggleClass("globalText buttonText");
   text.innerHTML = preText;
@@ -53,7 +53,7 @@ function Button(imagePath, href, preText, textOnly) {
 
 /*Setting prototype.*/
 function Setting(promptMessage, src, buttonText, isVisible) {
-  this.isVisible = (isVisible === undefined)? true: isVisible;
+  this.isVisible = (isVisible === undefined)? true : isVisible;
   this.button = new Button(undefined, undefined, buttonText, true);
   this.promptMessage = promptMessage;
   this.src = src;
@@ -63,6 +63,7 @@ function Setting(promptMessage, src, buttonText, isVisible) {
   });
   try {if (settings[buttonText].value === undefined) settings[buttonText] = this;}
   catch (err) {settings[buttonText] = this;}
+  storeSettings();
 }
 
 /*
