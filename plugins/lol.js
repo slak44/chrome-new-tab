@@ -258,6 +258,9 @@ function getMatchType(rawType) {
 }
 
 function getQueueType(rawQueue) {
+  if (rawQueue.lastIndexOf("BOT", 0) === 0) return "Co-op vs AI";
+  if (rawQueue.lastIndexOf("NIGHTMARE", 0) === 0) return "Doom bots";
+  if (rawQueue.lastIndexOf("FIRST", 0) === 0) return "Snowdown Showdown";
   switch (rawQueue) {
   case "GROUP_FINDER_5x5"  : return "TeamBuilder";
   case "NORMAL_5x5_BLIND"  : return "Normal blind";
@@ -271,6 +274,13 @@ function getQueueType(rawQueue) {
   case "RANKED_TEAM_3x3"   : return "Ranked 3v3 team";
   case "ARAM_5x5"          : return "ARAM";
   case "CUSTOM"            : return "Self-created match";
+  case "ASCENSION_5x5"     : return "Ascension";
+  case "SR_6x6"            :
+  case "HEXAKILL"          : return "Hexakill";
+  case "ONEFORALL_5x5"     : return "One for all";
+  case "COUNTER_PICK"      : return "Nemesis draft";
+  case "KING_PORO_5x5"     : return "Poro king";
+  case "URF_5x5"           : return "Ultra Rapid Fire";
   default: return "Other gamemode";
   }
 }
