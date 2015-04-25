@@ -10,7 +10,7 @@ if (identity === 'Main page') {
 function createCalc() {
   appendHTML(document.body,
     '<div id="replPane" class="blockabsolute">\
-    <textarea id="tArea" style="width: ' +
+    <textarea spellcheck=false id="tArea" style=" width: ' +
     ($(window).width() - 210) + 'px; height: ' +
     ($(window).height() - 110) + 'px; margin: 10px; margin-top: 100px; margin-left: 200px;"></textarea>\
     </div>');
@@ -21,12 +21,28 @@ function createCalc() {
   byId('replPane').appendChild(new Button(undefined, undefined, 'Eval', true).aHref);
   byId('replPane').children[2].style.bottom = '10px';
   $(byId('replPane').children[2]).click(function () {
-    byId('out').innerHTML = eval(byId('tArea').value);
-    ans = Number(byId('out').innerHTML);
-    if (ans.toString() === NaN.toString()) ans = byId('out').innerHTML;
+    console.log = (function () {
+      var oldLog = console.log;
+      return function () {
+        byId('console').innerHTML = '';
+        for (let i = 0; i < arguments.length; i++) byId('console').innerHTML += arguments[i] + ' ';
+      }
+    })();
+    console.error = (function () {
+      var oldErr = console.error;
+      return function () {
+        byId('console').innerHTML = '';
+        for (let i = 0; i < arguments.length; i++) byId('console').innerHTML += arguments[i] + ' ';
+      }
+    })();
+    ans = eval(byId('tArea').value);
+    byId('out').innerHTML = ans;
   });
+  var w = ($(window).width() - 210 - 10) / 2;
   appendHTML(byId('replPane'),
-    '<textarea id="out" class="blockabsolute" style="left: 200px; top: 5px; right: 10px; height: 90px;" disabled></textarea>');
+    '<textarea id="out" class="blockabsolute" style="left: 200px; top: 5px; right: 10px; height: 90px; width: '+w+'px;" disabled></textarea>');
+  appendHTML(byId('replPane'),
+    '<textarea id="console" class="blockabsolute" style="left: '+(200+w+10)+'px; top: 5px; right: 10px; height: 90px; width: '+w+'px;" disabled></textarea>');
 }
 
 function show() {
