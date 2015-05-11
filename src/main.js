@@ -39,7 +39,7 @@ function manipulateDOM() {
     mainButtons[key].aHref.style.top = i * (75/*Button height*/ + 10/*Space between btns*/) + "px";
     i++;
   }
-  mainButtons["Extensions"].addEventListener('click', function (e) {
+  mainButtons["Extensions"].aHref.addEventListener('click', function (e) {
     chrome.tabs.create({url: 'chrome://extensions'});
     window.close();
   });
