@@ -3,8 +3,8 @@ body {
   padding: 0px;
   border: 0px;
   overflow: hidden;
-  -webkit-user-select: none;
   cursor: default;
+  -webkit-user-select: none;
 }
 
 .blockabsolute {
@@ -13,6 +13,7 @@ body {
 }
 
 .centered {
+  position: absolute;
   margin: auto;
   top: 0px;
   left: 0px;
@@ -20,11 +21,40 @@ body {
   right: 0px;
 }
 
-.globalText {
+.global-text {
   color: #AAAAAA;
   font-family: 'Courier New';
   font-weight: bold;
   white-space: nowrap;
+}
+
+p.dpane-text {
+  text-align: center;
+  font-size: 100px;
+  width: 100%;
+  margin: 0px;
+  position: absolute;
+}
+
+#title {
+  top: 150px;
+}
+
+#time {
+  top: 250px;
+}
+
+#date {
+  font-size: 50px;
+  top: 350px;
+}
+
+#data-pane {
+  width: 800px;
+}
+
+#default-pane {
+  width: 100%;
 }
 
 /*Default buttons*/
@@ -61,6 +91,8 @@ div.goRight {
 }
 
 .rotate {
+  position: absolute;
+  top: 0px;
   -webkit-animation: cRotate 7.5s linear 0s infinite reverse;
 }
 

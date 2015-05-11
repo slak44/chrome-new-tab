@@ -36,25 +36,15 @@ function settingsPresent() {
 function manipulateDOM() {
   var i = 0;
   for (var key in mainButtons) {
-    if (mainButtons.hasOwnProperty(key)) byId("defaultPane").appendChild(mainButtons[key].aHref);
+    if (mainButtons.hasOwnProperty(key)) byId("default-pane").appendChild(mainButtons[key].aHref);
     mainButtons[key].aHref.style.top = i * (50/*Button height*/ + 10/*Space between btns*/) + "px";
     i++;
   }
   mainButtons["Extensions"].setOnClick(function() {chrome.tabs.create({url:'chrome://extensions'})});
 
-  addData("name", settings["Title"].value, "p", "100px", "50px");
-  addData("time", "00:00", "p", "100px", "150px");
-  addData("date", "01 January 1970", "p", "50px", "300px");
+  byId('title').innerHTML = settings["Title"].value;
   setDate();
   setTime();
-}
-
-function addData(id, content, tag, fontSize, topPos) {
-  var elem =
-  '<'+tag+' id='+id+' class="blockabsolute globalText" '+
-  'style="text-align: center; width: 800px; '+
-  'font-size:'+fontSize+'; top:'+topPos+';">'+content+'</'+tag+'>';
-  appendHTML(byId("dataPane"), elem);
 }
 
 function setTime() {
