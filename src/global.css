@@ -7,11 +7,6 @@ body {
   -webkit-user-select: none;
 }
 
-.blockabsolute {
-  display: block;
-  position: absolute;
-}
-
 .rotate {
   position: absolute;
   top: 0px;
@@ -32,14 +27,6 @@ body {
   font-family: 'Courier New';
   font-weight: bold;
   white-space: nowrap;
-}
-
-p.dpane-text {
-  text-align: center;
-  font-size: 100px;
-  width: 100%;
-  margin: 0px;
-  position: absolute;
 }
 
 #title {
@@ -63,29 +50,45 @@ p.dpane-text {
   width: 100%;
 }
 
-/*Default buttons*/
+p.dpane-text {
+  text-align: center;
+  font-size: 100px;
+  width: 100%;
+  margin: 0px;
+  position: absolute;
+}
+
 a.button {
-  left: 20px;
-  background-position: left;
-  background-repeat: no-repeat;
-  width: 125px;
+  position: absolute;
+  margin-top: 5px;
+  margin-left: 25px;
+  width: 200px;
+  height: 75px;
+  border-radius: 10px;
+  background-color: #BE9D76;
   line-height: 50px;
   font-size: 13px;
   text-decoration: none;
   -webkit-animation: buttonAnimDefault 0.25s ease 0s 1 both;
 }
 a.button:hover {
+  cursor: pointer;
   color: #FFFFFF;
-  text-decoration: underline;
   -webkit-animation: buttonAnim 0.25s ease 0s 1 both;
 }
 
-/*Default button text*/
-pre.buttonText {
+pre.button-text {
+  vertical-align: middle;
+  display: inline-block;
   color: #FFFFFF;
-  font-family: monospace;
+  font-family: Segoe UI;
   white-space: pre;
-  margin-left: 55px;
+}
+
+img.button-img {
+  vertical-align: middle;
+  background-position: left;
+  background-repeat: no-repeat;
 }
 
 div.focused {

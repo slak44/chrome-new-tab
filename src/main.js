@@ -36,11 +36,13 @@ function settingsPresent() {
 function manipulateDOM() {
   var i = 0;
   for (var key in mainButtons) {
-    if (mainButtons.hasOwnProperty(key)) byId("default-pane").appendChild(mainButtons[key].aHref);
-    mainButtons[key].aHref.style.top = i * (50/*Button height*/ + 10/*Space between btns*/) + "px";
+    mainButtons[key].aHref.style.top = i * (75/*Button height*/ + 10/*Space between btns*/) + "px";
     i++;
   }
-  mainButtons["Extensions"].setOnClick(function() {chrome.tabs.create({url: 'chrome://extensions'})});
+  mainButtons["Extensions"].addEventListener('click', function (e) {
+    chrome.tabs.create({url: 'chrome://extensions'});
+    window.close();
+  });
   byId('title').innerHTML = settings["Title"].value;
   byId("date").innerHTML = new Date().toLocaleString('intl', {year:'numeric', month: 'long', day:'2-digit'});
   setTime();

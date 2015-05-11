@@ -22,28 +22,14 @@ function Plugin(code, title) {
 }
 
 /*Button prototype.*/
-function Button(imagePath, href, preText, textOnly, id) {
-  var link = document.createElement('a');
-  var text = link.appendChild(document.createElement('pre'));
-  //If there is no href, make sure the cursor looks as if there was
-  if (href !== undefined) link.href = href;
-  else link.style.cursor = "pointer";
-  link.id = (id === undefined)? preText : id;
-  $(link).toggleClass("blockabsolute button");
-  $(text).toggleClass("globalText buttonText");
-  text.innerHTML = preText;
-  if (textOnly) {
-    link.style.backgroundImage = "url('assets/button.png')";
-    text.style.marginLeft = "0px";
-    text.style.textAlign = "center";
-  } else link.style.backgroundImage = "url('"+imagePath+"'), url('assets/button.png')";
-
-  this.aHref = link;
-  this.preText = text;
-  this.serializableNode = this.aHref.outerHTML;
-  this.setOnClick = function(what) {
-    $(this.aHref).click(what);
-  }
+function Button(imagePath, href, text, parent) {
+  if (parent === undefined) parent = byId('default-pane');
+  parent.insertAdjacentHTML('beforeend',
+  '<a href="'+href+'" class="button">\
+    <img src="'+imagePath+'" class="button-img"></img>\
+    <pre class="button-text">'+text+'</pre>\
+  </a>');
+  this.aHref = parent.children[parent.children.length - 1];
 }
 
 /*Setting prototype.*/
