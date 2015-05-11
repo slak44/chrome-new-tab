@@ -1,5 +1,5 @@
 'use strict';
-var identity = "Main page"
+var identity = "Main page";
 var settingsConfig = [];
 var mainButtons = {
   "Gmail":      new Button("assets/gmail.png", "https://mail.google.com/mail/?authuser=0", "Gmail"),
@@ -42,7 +42,6 @@ function manipulateDOM() {
   }
   mainButtons["Extensions"].setOnClick(function() {chrome.tabs.create({url:'chrome://extensions'})});
 
-  byId("dataPane").style.left = ($(window).width()/2) - 400 + "px";
   addData("name", settings["Title"].value, "p", "100px", "50px");
   addData("time", "00:00", "p", "100px", "150px");
   addData("date", "01 January 1970", "p", "50px", "300px");

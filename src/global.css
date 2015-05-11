@@ -12,6 +12,14 @@ body {
   position: absolute;
 }
 
+.centered {
+  margin: auto;
+  top: 0px;
+  left: 0px;
+  bottom: 0px;
+  right: 0px;
+}
+
 .globalText {
   color: #AAAAAA;
   font-family: 'Courier New';
