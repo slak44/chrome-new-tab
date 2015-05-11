@@ -2,11 +2,6 @@
 var plugins = [];
 var settings = {};
 
-addCSS(
-'@-webkit-keyframes moveLeft {100% {-webkit-transform: translate('+(-$(window).width())+'px);}}\n'+
-'@-webkit-keyframes moveRight {100% {-webkit-transform: translate('+($(window).width())+'px);}}'
-);
-
 /*
 PROTOTYPES
 */
@@ -75,37 +70,8 @@ function byId(id) {
   return document.getElementById(id);
 }
 
-/*Move divs around.*/
-function moveDiv(side, id) {
-  if (side === "Left") {
-    byId(id).style.left = "0px";
-    $(byId(id)).removeClass("goRight");
-    $(byId(id)).addClass("goLeft");
-  } else if (side === "Right") {
-    byId(id).style.left = -$(window).width() + "px";
-    $(byId(id)).removeClass("goLeft");
-    $(byId(id)).addClass("goRight");
-  }
-}
-
-function addCSS(cssString) {
-  var newCss = document.createElement('style');
-  newCss.type = 'text/css';
-  newCss.appendChild(document.createTextNode(cssString));
-  document.getElementsByTagName("head")[0].appendChild(newCss);
-}
-
-/*
-Adds the given strings(pass strings after parent) as html to the
-specified parent(html object or id as string).
-*/
-function appendHTML(parent) {
-  if (isType(parent, "string"))
-    for (var i = 1; i < arguments.length; i++)
-      byId(parent).insertAdjacentHTML('beforeend', arguments[i]);
-  else
-    for (var i = 1; i < arguments.length; i++)
-      parent.insertAdjacentHTML('beforeend', arguments[i]);
+function showDiv(id) {
+  $('#' + id).toggleClass('unfocused').toggleClass('focused');
 }
 
 /*
@@ -203,12 +169,3 @@ function queue(funcs, scope) {
     if (funcs.length > 0) funcs.shift().apply(scope || {}, [next].concat(Array.prototype.slice.call(arguments, 0)));
   })();
 };
-
-function checkType(thing, type) {
-  if ($.type(thing) !== type) new Error(thing+"'s type doesn't match "+type+".");
-}
-
-function isType(thing, type) {
-  if ($.type(thing) !== type) return false;
-  else return true;
-}

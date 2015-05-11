@@ -12,6 +12,12 @@ body {
   position: absolute;
 }
 
+.rotate {
+  position: absolute;
+  top: 0px;
+  -webkit-animation: cRotate 7.5s linear 0s infinite reverse;
+}
+
 .centered {
   position: absolute;
   margin: auto;
@@ -82,18 +88,21 @@ pre.buttonText {
   margin-left: 55px;
 }
 
-/*Div movements*/
-div.goLeft {
-  -webkit-animation: moveLeft 3s ease 0s 1 normal forwards running;
+div.focused {
+  -webkit-animation: show 0.5s linear 0s 1 normal forwards running;
 }
-div.goRight {
-  -webkit-animation: moveRight 3s ease 0s 1 normal forwards running;
+div.unfocused {
+  -webkit-animation: hide 0.5s linear 0s 1 normal forwards running;
 }
 
-.rotate {
-  position: absolute;
-  top: 0px;
-  -webkit-animation: cRotate 7.5s linear 0s infinite reverse;
+@-webkit-keyframes show {
+  0% {opacity: 0;}
+  100% {opacity: 1;}
+}
+
+@-webkit-keyframes hide {
+  0% {opacity: 1;}
+  100% {opacity: 0;}
 }
 
 @-webkit-keyframes cRotate {
