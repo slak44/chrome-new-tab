@@ -23,7 +23,7 @@ function executePluginsOnLoad() {
 
 /*Settings not present; go to settings tab to configure.*/
 function settingsAbsent() {
-  chrome.tabs.create({url: "chrome-extension://"+chrome.runtime.id+"/settings.html"});
+  chrome.tabs.create({url: "chrome-extension://" + chrome.runtime.id + "/settings.html"});
   window.close();
 }
 
@@ -40,47 +40,12 @@ function manipulateDOM() {
     mainButtons[key].aHref.style.top = i * (50/*Button height*/ + 10/*Space between btns*/) + "px";
     i++;
   }
-  mainButtons["Extensions"].setOnClick(function() {chrome.tabs.create({url:'chrome://extensions'})});
-
+  mainButtons["Extensions"].setOnClick(function() {chrome.tabs.create({url: 'chrome://extensions'})});
   byId('title').innerHTML = settings["Title"].value;
-  setDate();
+  byId("date").innerHTML = new Date().toLocaleString('intl', {year:'numeric', month: 'long', day:'2-digit'});
   setTime();
-}
-
-function setTime() {
-  var d = new Date();
-  var h = d.getHours();
-  var m = d.getMinutes();
-  if (m < 10) m = "0" + m;
-  if (h < 10) h = "0" + h;
-  var time = h + ":" + m;
-  byId("time").innerHTML = time;
-  setTimeout(setTime, 5000);
-}
-function setDate() {
-  var d = new Date();
-  var day = d.getDate();
-  var month = d.getMonth();
-  var year = d.getFullYear();
-  if (day < 10) day = "0" + day;
-  var date = day + " " + getMonthName(month) + " " + year;
-  byId("date").innerHTML = date;
-}
-
-function getMonthName(monthNumeral) {
-  switch (monthNumeral) {
-  case  0: return "January";
-  case  1: return "February";
-  case  2: return "March";
-  case  3: return "April";
-  case  4: return "May";
-  case  5: return "June";
-  case  6: return "July";
-  case  7: return "August";
-  case  8: return "September";
-  case  9: return "October";
-  case 10: return "November";
-  case 11: return "December";
-  default: return "What did you do with this method?"
+  function setTime() {
+    byId("time").innerHTML = new Date().toLocaleTimeString().slice(0, -3);
+    setTimeout(setTime, 1000);
   }
 }
