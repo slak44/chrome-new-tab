@@ -91,6 +91,9 @@ a.button:hover {
   color: #FFFFFF;
   -webkit-animation: buttonAnim 0.25s ease 0s 1 both;
 }
+a.button:hover > pre.button-text {
+  text-decoration: underline;
+}
 
 pre.button-text {
   vertical-align: middle;
