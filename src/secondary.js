@@ -6,7 +6,7 @@ var buttons = [
   new Button(undefined, undefined, "Remove Plugin")
 ];
 
-loadSettings(
+storage.loadSettings(
   settingsLoaded,
   function () {
     byId("titleText").innerHTML = "Configure settings to use new tab";
@@ -16,7 +16,7 @@ loadSettings(
       type: 'string',
       isVisible: true
     });
-    storeSettings();
+    storage.storeSettings();
     settingsLoaded();
   }
 );
@@ -35,7 +35,7 @@ loadSettings(
 //       //Add it to the display, to the array, and to the storage
 //       plugins.push(new Plugin(e.target.result, fileIn.name));
 //       appendHTML(list, plugins[plugins.length-1].serializableNode);
-//       storePlugins();
+//       storage.storePlugins();
 //       byId("titleText").innerHTML = "Refresh the page to see the plugin's settings";
 //     }
 //   })(file);
@@ -49,8 +49,8 @@ loadSettings(
 //       for (var a in settings) if (settings[a].src === plugins[i].title) delete settings[a];
 //       list.removeChild(byId(plugins[i].title)); //title === child's id
 //       plugins.splice(i, 1);
-//       storePlugins();
-//       storeSettings();
+//       storage.storePlugins();
+//       storage.storeSettings();
 //     }
 //   }
 // }
@@ -63,7 +63,7 @@ loadSettings(
   //   byId(key).style.top = i * (50/*Button height*/ + 10/*Space between btns*/) + "px";
   //   if (key in settings) $(byId(key)).click(function() {
   //     settings[this.id].value = prompt(settings[this.id].promptMessage);
-  //     storeSettings();
+  //     storage.storeSettings();
   //   });
   //   i++;
   // }
@@ -78,7 +78,7 @@ loadSettings(
 
 function settingsLoaded() {
   // new Setting("Please input a title:", "local", "Title");
-  loadPlugins(function() {
+  storage.storage.loadPlugins(function() {
     // for (var i = 0; i < plugins.length; i++) {
     //   appendHTML(list, plugins[i].serializableNode);
     //   console.log("Adding plugin settings: "+plugins[i].title);

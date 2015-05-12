@@ -11,8 +11,8 @@ var mainButtons = [
   new Button('assets/extensions.png', undefined, 'Extensions')
 ];
 
-loadPlugins(executePluginsOnLoad, function() {});
-loadSettings(settingsPresent, settingsAbsent);
+storage.loadPlugins(executePluginsOnLoad, function() {});
+storage.loadSettings(settingsPresent, settingsAbsent);
 
 function executePluginsOnLoad() {
   // for (var i = 0; i < plugins.length; i++) {
