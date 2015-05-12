@@ -1,6 +1,6 @@
 'use strict';
-var plugins = [];
-var settings = [];
+var plugins = {};
+var settings = {};
 
 var storage = new function () {
   /*
@@ -18,7 +18,7 @@ var storage = new function () {
     new Promise(function (resolve, reject) {
       chrome.storage.local.get("storedPlugins", function (data) {
         plugins = data.storedPlugins;
-        if (plugins === undefined || plugins === null || plugins === []) reject("No plugins found.");
+        if (plugins === undefined || plugins === null || plugins === {}) reject("No plugins found.");
         else resolve("Done fetching plugins.");
       });
     }).then(
@@ -31,7 +31,7 @@ var storage = new function () {
         onError();
       }
     );
-  };
+  }
   
   /*
     Setting format:
@@ -44,7 +44,7 @@ var storage = new function () {
       }
     name: title of setting.
     desc: description of setting.
-    type: what kind ofinput is necessary. (number, string, checkbox, radiobox, etc)
+    type: what kind of input is necessary. (number, string, checkbox, radiobox, etc)
     value: undefined until set.
     isVisible: if false, it means the setting is just storage.
   */
@@ -53,13 +53,13 @@ var storage = new function () {
       chrome.storage.local.get("storedSettings", function (data) {
         settings = data.storedSettings;
         // Make sure there's something there
-        if (settings === undefined || settings === null || settings === []) {
+        if (settings === undefined || settings === null || settings === {}) {
           reject("Settings are empty.");
           return;
         }
         // If a visible value is empty, it fails immediately
-        for (var i = 0; i < settings.length; i++)
-          if (settings[i].isVisible && settings[i].value === undefined) reject("Visible setting value missing.");
+        for (var e in settings)
+          if (settings[e].isVisible && settings[e].value === undefined) reject("Visible setting value missing.");
         resolve("Done fetching settings.");
       });
     }).then(
@@ -69,11 +69,41 @@ var storage = new function () {
       },
       function(err) {
         console.log(err);
-        settings = [];
         onError();
       }
     );
-  };
+  }
+  
+  this.addSetting = function (name, desc, type, isVisible, value) {
+    settings[name] = {
+      'name': name,
+      'desc': desc,
+      'type': type,
+      'value': value,
+      'isVisible': isVisible
+    }
+    this.storeSettings();
+  }
+  
+  this.addPlugin = function (name, desc, code) {
+    plugins[name] = {
+      'name': name,
+      'desc': desc,
+      'code': code
+    }
+    this.storePlugins();
+  }
+  
+  this.removePlugin = function (name) {
+    delete plugins[name];
+    this.storePlugins();
+  }
+  
+  this.removeSetting = function (name) {
+    delete settings[name];
+    this.storeSettings();
+  }
+  
   this.storeSettings = function () {
     chrome.storage.local.set({"storedSettings": settings}, undefined);
   }
@@ -86,17 +116,17 @@ var storage = new function () {
     Wipes all storage, both in-memory and persistent.
   */
   this.clearStorage = function () {
-    settings = [];
-    plugins = [];
+    settings = {};
+    plugins = {};
     chrome.storage.local.clear();
   }
   
   this.clearSettings = function () {
-    chrome.storage.local.set({"storedSettings": []}, undefined);
+    chrome.storage.local.set({"storedSettings": {}}, undefined);
   }
   
   this.clearPlugins = function () {
-    chrome.storage.local.set({"storedPlugins": []}, undefined);
+    chrome.storage.local.set({"storedPlugins": {}}, undefined);
   }
 };
 
@@ -104,10 +134,10 @@ function Button(imagePath, href, text, parent) {
   if (parent === undefined || parent === null ||
       parent.insertAdjacentHTML === undefined) parent = byId('default-pane');
   parent.insertAdjacentHTML('beforeend',
-  '<a href="'+href+'" class="button">\
-    <img src="'+imagePath+'" class="button-img"></img>\
-    <pre class="button-text">'+text+'</pre>\
-  </a>');
+  '<a href="'+href+'" class="button">' +
+    ((imagePath)? '<img src="'+imagePath+'" class="button-img"></img>': '') +
+    '<pre class="button-text">'+text+'</pre>' +
+  '</a>');
   this.aHref = parent.children[parent.children.length - 1];
   this.name = text;
 }

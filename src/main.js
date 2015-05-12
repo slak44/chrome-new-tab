@@ -15,10 +15,10 @@ storage.loadPlugins(executePluginsOnLoad, function() {});
 storage.loadSettings(settingsPresent, settingsAbsent);
 
 function executePluginsOnLoad() {
-  // for (var i = 0; i < plugins.length; i++) {
-  //   console.log('Executing plugin: '+plugins[i].title);
-  //   eval(plugins[i].code);
-  // }
+  for (var p in plugins) {
+    console.log('Executing plugin: ' + plugins[p].name);
+    eval(plugins[p].code);
+  }
 }
 
 /*Settings not present; go to settings tab to configure.*/
@@ -38,7 +38,7 @@ function manipulateDOM() {
     if (mainButtons[i].name === 'Extensions')
       mainButtons[i].aHref.addEventListener('click', function (e) {window.location.replace('chrome://extensions')});
   }
-  byId('title').innerHTML = settings['Title'].value;
+  byId('title').innerHTML = settings['Main page title'].value;
   byId('date').innerHTML = new Date().toLocaleString('intl', {year:'numeric', month: 'long', day:'2-digit'});
   setTime();
   function setTime() {
