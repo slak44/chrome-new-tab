@@ -50,6 +50,14 @@ body {
   width: 100%;
 }
 
+#file-input {
+  display: none;
+}
+
+#title-text {
+  text-align: center;
+}
+
 p.dpane-text {
   text-align: center;
   font-size: 100px;
