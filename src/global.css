@@ -75,13 +75,11 @@ h1 > small {
   width: 50px;
   height: 25px;
 }
-
-#settings-text {
-  margin: 5px;
-}
-
 #settings-link:hover > #settings-text {
   text-decoration: underline;
+}
+#settings-text {
+  margin: 5px;
 }
 
 p.dpane-text {
