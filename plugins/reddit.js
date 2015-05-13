@@ -1,25 +1,34 @@
 'use strict';
-if (identity === "Options page") {
-  new Setting("Please input your reddit username:", "reddit.js", "Reddit username");
-} else if (identity === "Main page") {
-  addData("redditkarma", "", "pre", "30px", "385px");
-  byId("redditkarma").style.whiteSpace = "pre";
+if (identity === 'Options page') {
+  storage.addSetting({
+    name: 'Reddit username',
+    desc: 'Used to get karma information.',
+    type: 'string',
+    isVisible: true
+  }, {update: false, definition: true});
+  storage.addSetting({
+    name: 'Reddit request time',
+    desc: 'How frequent karma updates are.',
+    type: 'number',
+    isVisible: true
+  }, {update: false, definition: true});
+} else if (identity === 'Main page') {
+  pluginCss.innerHTML +=
+  '#reddit-karma {\
+    font-size: 30px;\
+    top: 410px;\
+    white-space: pre;\
+   }';
+  byId('data-pane').insertAdjacentHTML('beforeend', '<p id="reddit-karma" class="dpane-text global-text"></p>');
   setTimeout(updateRedditKarma, 0);
-  appendHTML(document.body, '<img src="assets/empty30x30.png" id="persistentIsOnline" class="blockabsolute" width="30" height="30" style="right: 0px;"></img>')
 }
 
-/*
-Updates the on-screen karma every 2.5s by requesting reddit data.
-Connection indicator relies on this method(and reddit's servers..).
-*/
 function updateRedditKarma() {
-  $.getJSON('https://www.reddit.com/user/'+settings["Reddit username"].value+'/about.json?',
-    function(data) {
-      byId('redditkarma').innerHTML =
-      "Comment karma: "+data.data.comment_karma+"\n"+
-      "Link karma: "+data.data.link_karma;
-      if (byId("persistentIsOnline").src != "assets/empty30x30.png")
-        byId("persistentIsOnline").src = "assets/empty30x30.png";
-  }).error(function() {byId("persistentIsOnline").src = "assets/noconnection.png"});
-  setTimeout(updateRedditKarma, 2500);
+  get('https://www.reddit.com/user/' + settings['Reddit username'].value + '/about.json?', function (data) {
+    data = JSON.parse(data);
+    byId('reddit-karma').innerHTML =
+      'Comment karma: ' + data.data.comment_karma + '\n' +
+      'Link karma: ' + data.data.link_karma;
+  });
+  setTimeout(updateRedditKarma, settings['Reddit request time'].value);
 }
