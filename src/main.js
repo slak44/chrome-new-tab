@@ -26,8 +26,7 @@ function onSettings() {
   function setData() {
     for (var i = 0; i < mainButtons.length; i++) {
       mainButtons[i].aHref.style.top = i * (75/*Button height*/ + 10/*Space between btns*/) + 'px';
-      if (mainButtons[i].name === 'Extensions')
-        mainButtons[i].aHref.addEventListener('click', function (e) {window.location.replace('chrome://extensions')});
+        mainButtons[i].aHref.addEventListener('click', function (e) {chrome.tabs.create({url: 'chrome://extensions'}); window.close()});
     }
     byId('title').innerHTML = settings['Main page title'].value;
     byId('date').innerHTML = new Date().toLocaleString('intl', {year: 'numeric', month: 'long', day: '2-digit'});
