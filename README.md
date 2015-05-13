@@ -12,9 +12,9 @@ This extension isn't endorsed by Riot Games and doesn't reflect the views or opi
 ### API Key
 In order to use the LoL functionality, a valid Riot API key must be provided in the settings page.
 ### League data
-The button will not work if the GET request returned with 503(server at capacity, wait) or 429(rate limit reached, too many requests; wait). Effectively any other response than 200(obviously) will cause the button to not function.
+The button will not work if the GET request returned with 503(server at capacity; wait) or 429(rate limit reached, too many requests; wait). Effectively any other response than 200(obviously) will cause the button to not function.
 ## reddit API
 This API is used in the [/plugins/reddit.js](https://github.com/slak44/ChromeNewTab/tree/master/plugins/reddit.js) file.  
-The page will perform GET requests every 2.5s for the user data associated with the given username.
+The page will perform GET requests for the user data associated with the given username.
 ## License
 [CC-BY-NC-SA 4.0](http://creativecommons.org/licenses/by-nc-sa/4.0/legalcode)
