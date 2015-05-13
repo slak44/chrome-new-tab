@@ -149,7 +149,7 @@ function byId(id) {
   return document.getElementById(id);
 }
 
-function showDiv(id) {
+function toggleDiv(id) {
   $('#' + id).toggleClass('unfocused').toggleClass('focused');
 }
 
