@@ -1,88 +1,107 @@
 'use strict';
-var identity = "Options page";
-var startOfCircle = ($(window).width()-800)/2;
-var buttons = {
-  "Add Plugin":    new Button(undefined, undefined, "Add Plugin", true),
-  "Remove Plugin": new Button(undefined, undefined, "Remove Plugin", true)
-};
+var identity = 'Options page';
+var buttons = [
+  new Button(undefined, undefined, 'Add Plugin'),
+  new Button(undefined, undefined, 'Remove Plugin'),
+  new Button(undefined, undefined, 'Update Plugin'),
+  new Button(undefined, undefined, 'Save settings')
+];
 
-var list = byId("pluginList");
-list.style.width = (startOfCircle-40/*Padding*/)+"px";
-byId("circle").style.left = startOfCircle+"px";
-byId("titleText").style.cssText += "top: 100px; left:"+startOfCircle+"; width: 800px; text-align: center;";
-
-loadSettings(
-  settingsLoaded,
-  function() {
-    settingsLoaded();
-    byId("titleText").innerHTML = "Configure settings to use new tab";
+buttons[0].aHref.addEventListener('click', function (e) {
+  e.preventDefault();
+  byId('file-input').addEventListener('change', addPlugin, false);
+  byId('file-input').click();
+});
+buttons[1].aHref.addEventListener('click', function (e) {
+  e.preventDefault();
+  storage.removePlugin(prompt('Plugin to remove:'));
+});
+buttons[2].aHref.addEventListener('click', function (e) {
+  e.preventDefault();
+  byId('file-input').addEventListener('change', function (e) {addPlugin(e, true)}, false);
+  byId('file-input').click();
+})
+buttons[3].aHref.addEventListener('click', function (e) {
+  e.preventDefault();
+  var keys = Object.keys(settings);
+  for (var i = 0; i < keys.length; i++) {
+    if (!settings[keys[i]].isVisible) continue;
+    var input = byId(keys[i]);
+    if (input === undefined || input === null) continue;
+    settings[keys[i]].value = input.value;
   }
-);
+  storage.storeSettings();
+  storage.storePlugins();
+});
 
-function addPlugin(event) {
+for (var i = 0; i < buttons.length; i++) buttons[i].aHref.style.left = i * (200/*Button width*/ + 10/*Space between btns*/ + 30/*Anim size*/) + 'px';
+requestSettings();
+
+function requestSettings() {
+  storage.loadSettings(
+    settingsLoaded,
+    function () {
+      storage.addSetting({
+        name: 'Main page title',
+        desc: 'Title displayed in the center of the main page.',
+        type: 'string',
+        isVisible: true
+      }, {});
+      settingsLoaded();
+    }
+  );
+}
+
+function settingsLoaded() {
+  storage.loadPlugins(function () {
+    for (var p in plugins) if (plugins.hasOwnProperty(p)) {
+      console.log('Adding plugin settings: ' + plugins[p].name);
+      eval(plugins[p].code);
+    }
+    showSettings();
+  }, showSettings);
+}
+
+function showSettings() {
+  var sp = byId('settings-pane');
+  for (var i in settings) {
+     if (!settings[i].isVisible) continue;
+     var input;
+     switch (settings[i].type) {
+       case 'checkbox': input = '<input id="'+settings[i].name+'" type="checkbox" value="'+settings[i].value+'">'; break;
+       case 'number':   input = '<input id="'+settings[i].name+'" type="number"   value="'+settings[i].value+'">'; break;
+       default:         input = '<input id="'+settings[i].name+'" type="text"     value="'+settings[i].value+'">';
+     }
+     sp.insertAdjacentHTML('beforeend',
+     '<h1 class="global-text">' + settings[i].name +
+     '<small>  ' + settings[i].desc + '</small>' +
+     '</h1>' + input
+     );
+  }
+}
+
+function addPlugin(event, allowUpdate) {
   var file = event.target.files[0];
   var reader = new FileReader();
-  //Closure for file
-  reader.onloadend = (function(fileIn) {
-    return function(e) {
+  reader.onloadend = (function (fileIn) {
+    return function (e) {
       if (fileIn.type !== "application/javascript") {
         alert("Please choose a .js file.");
         return;
       }
-      if (plugins === undefined) plugins = [];
-      //Add it to the display, to the array, and to the storage
-      plugins.push(new Plugin(e.target.result, fileIn.name));
-      appendHTML(list, plugins[plugins.length-1].serializableNode);
-      storePlugins();
-      byId("titleText").innerHTML = "Refresh the page to see the plugin's settings";
+      if (allowUpdate) {
+        var name = prompt('Plugin name:');
+        storage.addPlugin({
+            name: name,
+            desc: plugins[name].desc,
+            code: e.target.result
+          }, {update: allowUpdate});
+      } else storage.addPlugin({
+          name: prompt('Plugin name:'),
+          desc: prompt('Plugin description:'),
+          code: e.target.result
+        }, {update: false});
     }
   })(file);
   reader.readAsText(file);
-}
-
-function removePlugin(pluginName) {
-  checkType(pluginName, "string");
-  for (var i = 0; i < plugins.length; i++) {
-    if (plugins[i].title == pluginName) {
-      //Remove its settings, remove it from the display, from the array, and from plugin storage
-      for (var a in settings) if (settings[a].src === plugins[i].title) delete settings[a];
-      list.removeChild(byId(plugins[i].title)); //title === child's id
-      plugins.splice(i, 1);
-      storePlugins();
-      storeSettings();
-    }
-  }
-}
-
-function addButtons() {
-  for (var b in settings) if (settings[b].isVisible) buttons[b] = settings[b].button;
-  var i = 0;
-  for (var key in buttons) {
-    appendHTML(document.body, buttons[key].serializableNode);
-    byId(key).style.top = i * (50/*Button height*/ + 10/*Space between btns*/) + "px";
-    if (key in settings) $(byId(key)).click(function() {
-      settings[this.id].value = prompt(settings[this.id].promptMessage);
-      storeSettings();
-    });
-    i++;
-  }
-  $(byId("Add Plugin")).click(function() {
-    byId("fileInput").addEventListener('change', addPlugin, false);
-    $("#fileInput").click();
-  });
-  $(byId("Remove Plugin")).click(function() {
-    removePlugin(prompt("Enter the name of the plugin to remove:"));
-  });
-}
-
-function settingsLoaded() {
-  new Setting("Please input a title:", "local", "Title");
-  loadPlugins(function() {
-    for (var i = 0; i < plugins.length; i++) {
-      appendHTML(list, plugins[i].serializableNode);
-      console.log("Adding plugin settings: "+plugins[i].title);
-      eval(plugins[i].code);
-    }
-    addButtons();
-  }, addButtons);
 }

@@ -6,11 +6,17 @@
     <script src="global.js"></script>
   </head>
   <body bgcolor="#303030">
-      <div id="defaultPane" class="blockabsolute" style="width: 100%;">
-        <div id="dataPane" class="blockabsolute centered" style="width: 800px;">
-          <img src="assets/circle.png" alt="circle" class="rotate" width="800" height="800"></img>
-        </div>
+    <div id="default-pane" class="focused">
+      <div id="data-pane" class="centered">
+        <p id="title" class="dpane-text global-text">Title</p>
+        <p id="time" class="dpane-text global-text">00:00</p>
+        <p id="date" class="dpane-text global-text">01 January 1970</p>
+        <img src="assets/circle.png" class="rotate" width="800" height="800"></img>
       </div>
-      <script src="main.js"></script>
+    </div>
+    <a id="settings-link" href="/settings.html">
+      <pre id="settings-text" class="button-text">Settings</pre>
+    </a>
+    <script src="main.js"></script>
   </body>
 </html>

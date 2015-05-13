@@ -1,57 +1,53 @@
 'use strict';
-var ans;
-
 if (identity === 'Main page') {
-  settingsConfig.push(createCalc);
-  mainButtons['REPL'] = new Button('assets/empty30x30.png', undefined, 'REPL');
-  mainButtons['REPL'].setOnClick(show);
-}
-
-function createCalc() {
-  appendHTML(document.body,
-    '<div id="replPane" class="blockabsolute">\
-    <textarea spellcheck=false id="tArea" style=" width: ' +
-    ($(window).width() - 210) + 'px; height: ' +
-    ($(window).height() - 110) + 'px; margin: 10px; margin-top: 100px; margin-left: 200px;"></textarea>\
-    </div>');
-  byId('replPane').style.display = 'none';
-  byId('replPane').appendChild(new Button('assets/back.png', undefined, 'Go Back').aHref);
-  byId('replPane').children[1].style.top = '0px';
-  $(byId('replPane').children[1]).click(hide);
-  byId('replPane').appendChild(new Button(undefined, undefined, 'Eval', true).aHref);
-  byId('replPane').children[2].style.bottom = '10px';
-  $(byId('replPane').children[2]).click(function () {
-    console.log = (function () {
-      var oldLog = console.log;
-      return function () {
-        byId('console').innerHTML = '';
-        for (let i = 0; i < arguments.length; i++) byId('console').innerHTML += arguments[i] + ' ';
-      }
-    })();
-    console.error = (function () {
-      var oldErr = console.error;
-      return function () {
-        byId('console').innerHTML = '';
-        for (let i = 0; i < arguments.length; i++) byId('console').innerHTML += arguments[i] + ' ';
-      }
-    })();
-    ans = eval(byId('tArea').value);
-    byId('out').innerHTML = ans;
+  var ans;
+  pluginCss.innerHTML +=
+  '.repl-text {\
+    background-color: #FFFFFF;\
+    bottom: 5px;\
+    margin: auto;\
+    width: 300px;\
+    height: 500px;\
+    -webkit-user-select: all;\
+    cursor: text;\
+  }\
+  #repl-pane {\
+    display: none;\
+  }\
+  #repl-flex {\
+    position: absolute;\
+    top: 100px;\
+    width: 100%;\
+    margin: 5px;\
+    display: flex;\
+  }';
+  document.body.insertAdjacentHTML('beforeend',
+  '<div id="repl-pane" class="unfocused">\
+    <div id="repl-flex">\
+      <div id="repl-input" class="repl-text" contenteditable="true"></div>\
+      <div id="repl-output" class="repl-text"></div>\
+      <div id="repl-console" class="repl-text"></div>\
+    </div>\
+  </div>');
+  var back = new Button('assets/back.png', undefined, 'Go Back', byId('repl-pane'));
+  var evalB = new Button(undefined, undefined, 'Eval', byId('repl-pane'));
+  evalB.aHref.style.bottom = '0px';
+  mainButtons.push(new Button(undefined, undefined, 'REPL'));
+  function toggle(e) {
+    e.preventDefault();
+    byId('repl-pane').style.display = 'block';
+    toggleDiv('repl-pane');
+    toggleDiv('default-pane');
+  }
+  mainButtons[mainButtons.length - 1].aHref.addEventListener('click', toggle);
+  back.aHref.addEventListener('click', function (e) {toggle(e); byId('repl-pane').style.display = 'none'});
+  evalB.aHref.addEventListener('click', function (e) {
+    e.preventDefault();
+    ans = eval(byId('repl-input').innerHTML.replace(/console\.(log|error)/g, 'replLog')); // Replace calls to 'console'
+    byId('repl-output').innerHTML = ans;
   });
-  var w = ($(window).width() - 210 - 10) / 2;
-  appendHTML(byId('replPane'),
-    '<textarea id="out" class="blockabsolute" style="left: 200px; top: 5px; right: 10px; height: 90px; width: '+w+'px;" disabled></textarea>');
-  appendHTML(byId('replPane'),
-    '<textarea id="console" class="blockabsolute" style="left: '+(200+w+10)+'px; top: 5px; right: 10px; height: 90px; width: '+w+'px;" disabled></textarea>');
-}
-
-function show() {
-  byId('replPane').style.display = 'block';
-  moveDiv('Left', 'defaultPane');
-  moveDiv('Right', 'replPane');
-}
-
-function hide() {
-  moveDiv('Right', 'defaultPane');
-  moveDiv('Left', 'replPane');
+  window.replLog = function () {
+    byId('repl-console').innerHTML = '';
+    for (let i = 0; i < arguments.length; i++) byId('repl-console').innerHTML += arguments[i] + '\n';
+  }
 }
