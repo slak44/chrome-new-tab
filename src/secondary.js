@@ -3,6 +3,7 @@ var identity = 'Options page';
 var buttons = [
   new Button(undefined, undefined, 'Add Plugin'),
   new Button(undefined, undefined, 'Remove Plugin'),
+  new Button(undefined, undefined, 'Update Plugin'),
   new Button(undefined, undefined, 'Save settings')
 ];
 
@@ -16,6 +17,11 @@ buttons[1].aHref.addEventListener('click', function (e) {
   storage.removePlugin(prompt('Plugin to remove:'));
 });
 buttons[2].aHref.addEventListener('click', function (e) {
+  e.preventDefault();
+  byId('file-input').addEventListener('change', function (e) {addPlugin(e, true)}, false);
+  byId('file-input').click();
+})
+buttons[3].aHref.addEventListener('click', function (e) {
   e.preventDefault();
   var keys = Object.keys(settings);
   for (var i = 0; i < keys.length; i++) {
@@ -74,7 +80,7 @@ function showSettings() {
   }
 }
 
-function addPlugin(event) {
+function addPlugin(event, allowUpdate) {
   var file = event.target.files[0];
   var reader = new FileReader();
   reader.onloadend = (function (fileIn) {
@@ -83,7 +89,18 @@ function addPlugin(event) {
         alert("Please choose a .js file.");
         return;
       }
-      storage.addPlugin(prompt('Plugin name:'), prompt('Plugin description:'), e.target.result);
+      if (allowUpdate) {
+        var name = prompt('Plugin name:');
+        storage.addPlugin({
+            name: name,
+            desc: plugins[name].desc,
+            code: e.target.result
+          }, {update: allowUpdate});
+      } else storage.addPlugin({
+          name: prompt('Plugin name:'),
+          desc: prompt('Plugin description:'),
+          code: e.target.result
+        }, {update: false});
     }
   })(file);
   reader.readAsText(file);
