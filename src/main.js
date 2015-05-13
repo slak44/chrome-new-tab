@@ -1,6 +1,7 @@
 'use strict';
+document.getElementsByTagName('head')[0].insertAdjacentHTML('beforeend', '<style id="plugin-css"></style>');
+var pluginCss = byId('plugin-css');
 var identity = 'Main page';
-var settingsConfig = [];
 var mainButtons = [
   new Button('assets/gmail.png', 'https://mail.google.com/mail/?authuser=0', 'Gmail'),
   new Button('assets/youtube.png', 'https://www.youtube.com/?gl=RO&authuser=0', 'Youtube'),
@@ -11,8 +12,8 @@ var mainButtons = [
   new Button('assets/extensions.png', undefined, 'Extensions')
 ];
 
-storage.loadSettings(settingsPresent, settingsAbsent);
-storage.loadPlugins(executePluginsOnLoad, function() {});
+storage.loadSettings(onSettings, function () {window.location.replace('/settings.html')});
+storage.loadPlugins(executePluginsOnLoad, function () {});
 
 function executePluginsOnLoad() {
   for (var p in plugins) {
@@ -21,18 +22,7 @@ function executePluginsOnLoad() {
   }
 }
 
-/*Settings not present; go to settings tab to configure.*/
-function settingsAbsent() {
-  window.location.replace('chrome-extension://' + chrome.runtime.id + '/settings.html')
-}
-
-/*Settings present; edit the dom and queue the plugin functions.*/
-function settingsPresent() {
-  manipulateDOM();
-  queue(settingsConfig, this);
-}
-
-function manipulateDOM() {
+function onSettings() {
   for (var i = 0; i < mainButtons.length; i++) {
     mainButtons[i].aHref.style.top = i * (75/*Button height*/ + 10/*Space between btns*/) + 'px';
     if (mainButtons[i].name === 'Extensions')

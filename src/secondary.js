@@ -25,6 +25,7 @@ buttons[2].aHref.addEventListener('click', function (e) {
     settings[keys[i]].value = input.value;
   }
   storage.storeSettings();
+  storage.storePlugins();
 });
 
 for (var i = 0; i < buttons.length; i++) buttons[i].aHref.style.left = i * (200/*Button width*/ + 10/*Space between btns*/ + 30/*Anim size*/) + 'px';
@@ -34,7 +35,12 @@ function requestSettings() {
   storage.loadSettings(
     settingsLoaded,
     function () {
-      storage.addSetting('Main page title', 'Title displayed in the center of the main page.', 'string', true);
+      storage.addSetting({
+        name: 'Main page title',
+        desc: 'Title displayed in the center of the main page.',
+        type: 'string',
+        isVisible: true
+      }, {});
       settingsLoaded();
     }
   );
@@ -42,7 +48,7 @@ function requestSettings() {
 
 function settingsLoaded() {
   storage.loadPlugins(function () {
-    for (var p in plugins) {
+    for (var p in plugins) if (plugins.hasOwnProperty(p)) {
       console.log('Adding plugin settings: ' + plugins[p].name);
       eval(plugins[p].code);
     }
@@ -77,7 +83,6 @@ function addPlugin(event) {
         alert("Please choose a .js file.");
         return;
       }
-      console.log(e.target.result);
       storage.addPlugin(prompt('Plugin name:'), prompt('Plugin description:'), e.target.result);
     }
   })(file);
