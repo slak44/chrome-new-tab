@@ -75,6 +75,9 @@ var storage = new function () {
   }
   
   this.addSetting = function (name, desc, type, isVisible, value) {
+    if (settings[name] !== undefined ||
+        settings[name] !== null ||
+        settings[name].name === name) throw new Error('Setting already defined.');
     settings[name] = {
       'name': name,
       'desc': desc,

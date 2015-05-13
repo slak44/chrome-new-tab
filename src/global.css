@@ -65,6 +65,25 @@ h1 > small {
   display: none;
 }
 
+#settings-link {
+  position: absolute;
+  margin: 0px 5px 5px 0px;
+  bottom: 0px;
+  right: 0px;
+  background-color: #BE9D76;
+  border-radius: 10px;
+  width: 50px;
+  height: 25px;
+}
+
+#settings-text {
+  margin: 5px;
+}
+
+#settings-link:hover > #settings-text {
+  text-decoration: underline;
+}
+
 p.dpane-text {
   text-align: center;
   font-size: 100px;
@@ -113,6 +132,7 @@ img.button-img {
 div.focused {
   -webkit-animation: show 0.5s linear 0s 1 normal forwards running;
 }
+
 div.unfocused {
   -webkit-animation: hide 0.5s linear 0s 1 normal forwards running;
 }

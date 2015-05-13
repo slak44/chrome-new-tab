@@ -13,7 +13,7 @@ buttons[0].aHref.addEventListener('click', function (e) {
 });
 buttons[1].aHref.addEventListener('click', function (e) {
   e.preventDefault();
-  
+  storage.removePlugin(prompt('Plugin to remove:'));
 });
 buttons[2].aHref.addEventListener('click', function (e) {
   e.preventDefault();
@@ -28,17 +28,20 @@ buttons[2].aHref.addEventListener('click', function (e) {
 });
 
 for (var i = 0; i < buttons.length; i++) buttons[i].aHref.style.left = i * (200/*Button width*/ + 10/*Space between btns*/ + 30/*Anim size*/) + 'px';
+requestSettings();
 
-storage.loadSettings(
-  settingsLoaded,
-  function () {
-    storage.addSetting('Main page title', 'Title displayed in the center of the main page.', 'string', true);
-    settingsLoaded();
-  }
-);
+function requestSettings() {
+  storage.loadSettings(
+    settingsLoaded,
+    function () {
+      storage.addSetting('Main page title', 'Title displayed in the center of the main page.', 'string', true);
+      settingsLoaded();
+    }
+  );
+}
 
 function settingsLoaded() {
-  storage.loadPlugins(function() {
+  storage.loadPlugins(function () {
     for (var p in plugins) {
       console.log('Adding plugin settings: ' + plugins[p].name);
       eval(plugins[p].code);
@@ -74,6 +77,7 @@ function addPlugin(event) {
         alert("Please choose a .js file.");
         return;
       }
+      console.log(e.target.result);
       storage.addPlugin(prompt('Plugin name:'), prompt('Plugin description:'), e.target.result);
     }
   })(file);
