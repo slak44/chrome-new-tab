@@ -75,31 +75,25 @@ var storage = new function () {
   }
   
   this.addSetting = function (setting, options) {
-    if (settings === undefined) settings = {};
+    options = (options)? options : {};
+    settings = (settings)? settings : {};
     if (setting === undefined || setting === null || typeof setting !== 'object' || setting === {}) throw new Error('Invalid argument.');
     if (settings[setting.name] !== undefined) {
-      // If definition is true and the setting is undefined, it means it's the initial call for that setting, so ignore all calls except the first.
-      if (!options.definition && settings[setting.name].name === undefined) return;
+      if (options.definition) return;
       if (!options.update && setting.name === settings[setting.name].name) throw new Error('Already exists, use update.');
     }
     settings[setting.name] = setting;
     this.storeSettings();
   }
   
-  this.addPlugin = function (name, desc, code) {
-    if (plugins === undefined) plugins = {};
-    if (plugins[name] !== undefined &&
-        plugins[name] !== null &&
-        plugins[name].name === name) throw new Error('Plugin already defined.');
-    this.updatePlugin(name, desc, code);
-  }
-  
-  this.updatePlugin = function (name, desc, code) {
-    plugins[name] = {
-      'name': name,
-      'desc': desc,
-      'code': code
+  this.addPlugin = function (plugin, options) {
+    options = (options)? options : {};
+    plugins = (plugins)? plugins: {};
+    if (plugin === undefined || plugin === null || typeof plugin !== 'object' || plugin === {}) throw new Error('Invalid argument.');
+    if (plugins[plugin.name] !== undefined) {
+      if (!options.update && plugins[plugin.name].name === name) throw new Error('Already exists, use update.');
     }
+    plugins[plugin.name] = plugin;
     this.storePlugins();
   }
   
