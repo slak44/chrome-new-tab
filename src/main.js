@@ -21,15 +21,19 @@ function onSettings() {
       console.log('Executing plugin: ' + plugins[p].name);
       eval(plugins[p].code);
     }
-  }, function () {console.log('No plugins executed.')});
-  for (var i = 0; i < mainButtons.length; i++) {
-    mainButtons[i].aHref.style.top = i * (75/*Button height*/ + 10/*Space between btns*/) + 'px';
-    if (mainButtons[i].name === 'Extensions') mainButtons[i].aHref.addEventListener('click', function (e) {chrome.tabs.create({url: 'chrome://extensions'}); window.close()});
-  }
+    positionButtons();
+  }, function () {console.log('No plugins executed.'); positionButtons();});
   byId('title').innerHTML = settings['Main page title'].value;
   byId('date').innerHTML = new Date().toLocaleString('intl', {year: 'numeric', month: 'long', day: '2-digit'});
   (function setTime() {
     byId('time').innerHTML = new Date().toLocaleTimeString().slice(0, -3);
     setTimeout(setTime, 1000);
   }).call();
+}
+
+function positionButtons() {
+  for (var i = 0; i < mainButtons.length; i++) {
+    mainButtons[i].aHref.style.top = i * (75/*Button height*/ + 10/*Space between btns*/) + 'px';
+    if (mainButtons[i].name === 'Extensions') mainButtons[i].aHref.addEventListener('click', function (e) {chrome.tabs.create({url: 'chrome://extensions'}); window.close()});
+  }
 }
