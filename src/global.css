@@ -7,6 +7,10 @@ body {
   -webkit-user-select: none;
 }
 
+img {
+  pointer-events: none;
+}
+
 h1 > small {
   font-size: 12px;
   color: #888888;
