@@ -24,9 +24,9 @@ function onSettings() {
     positionButtons();
   }, function () {console.log('No plugins executed.'); positionButtons();});
   byId('title').innerHTML = settings['Main page title'].value;
-  byId('date').innerHTML = new Date().toLocaleString('intl', {year: 'numeric', month: 'long', day: '2-digit'});
+  byId('date').innerHTML = new Date().toLocaleDateString('en-GB', {month: 'long', day: '2-digit', year: 'numeric'});
   (function setTime() {
-    byId('time').innerHTML = new Date().toLocaleTimeString().slice(0, -3);
+    byId('time').innerHTML = new Date().toLocaleTimeString('intl', {hour: '2-digit', minute: '2-digit', hour12: false});
     setTimeout(setTime, 1000);
   }).call();
 }
