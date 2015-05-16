@@ -7,6 +7,10 @@ body {
   -webkit-user-select: none;
 }
 
+a {
+  -webkit-user-drag: none;
+}
+
 img {
   pointer-events: none;
 }
