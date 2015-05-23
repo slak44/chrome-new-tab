@@ -8,7 +8,7 @@ var mainButtons = [
   new Button('assets/translate.png', 'https://translate.google.com/?hl=en&authuser=0', 'Translate'),
   new Button('assets/reddit.png', 'https://www.reddit.com', 'Reddit'),
   new Button('assets/github.png', 'https://github.com/', 'GitHub'),
-  new Button('assets/lolnexus.png', 'http://www.lolnexus.com/EUNE/search?name=slak44&region=EUNE', 'LoLNexus'),
+  new Button('assets/twitch.png', 'http://www.twitch.tv', 'Twitch'),
   new Button('assets/extensions.png', undefined, 'Extensions')
 ];
 
