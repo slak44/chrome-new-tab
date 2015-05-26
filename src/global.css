@@ -82,6 +82,7 @@ h1 > small {
   border-radius: 10px;
   width: 50px;
   height: 25px;
+  text-decoration: none;
 }
 #settings-link:hover > #settings-text {
   text-decoration: underline;
