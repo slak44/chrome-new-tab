@@ -106,7 +106,7 @@ a.button {
   height: 75px;
   border-radius: 10px;
   background-color: #BE9D76;
-  line-height: 50px;
+  line-height: 75px; /* Equal to height. */
   font-size: 13px;
   text-decoration: none;
   -webkit-animation: buttonAnimDefault 0.25s ease 0s 1 both;
@@ -122,14 +122,15 @@ a.button:hover > pre.button-text {
 
 pre.button-text {
   vertical-align: middle;
-  display: inline-block;
+  display: inline;
   color: #FFFFFF;
   font-family: Segoe UI;
   white-space: pre;
-  margin-left: 5px;
+  margin: auto 5px auto;
 }
 
 img.button-img {
+  display: inline;
   vertical-align: middle;
   background-position: left;
   background-repeat: no-repeat;
