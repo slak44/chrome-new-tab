@@ -65,8 +65,9 @@ h1 > small {
 
 #settings-pane {
   position: absolute;
-  top: 100px;
-  width: 100%;
+  top: 0px;
+  margin-left: 250px;
+  overflow-y: scroll;
 }
 
 #file-input {
