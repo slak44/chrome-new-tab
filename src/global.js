@@ -135,10 +135,10 @@ var storage = new function () {
   }
 };
 
-function Button(imagePath, href, text, parent) {
+function Button(imagePath, href, text, parent, insertionMode) {
   if (parent === undefined || parent === null ||
       parent.insertAdjacentHTML === undefined) parent = byId('default-pane');
-  parent.insertAdjacentHTML('beforeend',
+  parent.insertAdjacentHTML((insertionMode)? insertionMode : 'beforeend',
   '<a href="'+href+'" class="button">' +
     ((imagePath)? '<img src="'+imagePath+'" class="button-img"></img>': '') +
     '<pre class="button-text">'+text+'</pre>' +
