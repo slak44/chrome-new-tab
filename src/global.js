@@ -166,13 +166,3 @@ function get(url, res) {
     req.send();
   }).then(res, function(err) {console.log(err)});
 }
-
-/*
-  Queues async tasks one after another.
-  Each function must have the first parameter a callback, that is called at the end of the async job.
-*/
-function queue(funcs, scope) {
-  (function next() {
-    if (funcs.length > 0) funcs.shift().apply(scope || {}, [next].concat(Array.prototype.slice.call(arguments, 0)));
-  })();
-};
