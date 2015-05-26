@@ -31,7 +31,7 @@ if (identity === 'Main page') {
   </div>');
   var back = new Button('assets/back.png', undefined, 'Go Back', byId('repl-pane'));
   var evalB = new Button(undefined, undefined, 'Eval', byId('repl-pane'));
-  evalB.aHref.style.bottom = '0px';
+  evalB.anchor.style.bottom = '0px';
   mainButtons.push(new Button(undefined, undefined, 'REPL'));
   function toggle(e) {
     e.preventDefault();
@@ -39,9 +39,9 @@ if (identity === 'Main page') {
     toggleDiv('repl-pane');
     toggleDiv('default-pane');
   }
-  mainButtons[mainButtons.length - 1].aHref.addEventListener('click', toggle);
-  back.aHref.addEventListener('click', function (e) {toggle(e); byId('repl-pane').style.display = 'none'});
-  evalB.aHref.addEventListener('click', function (e) {
+  mainButtons[mainButtons.length - 1].anchor.addEventListener('click', toggle);
+  back.anchor.addEventListener('click', function (e) {toggle(e); byId('repl-pane').style.display = 'none'});
+  evalB.anchor.addEventListener('click', function (e) {
     e.preventDefault();
     ans = eval(byId('repl-input').innerHTML.replace(/console\.(log|error)/g, 'replLog')); // Replace calls to 'console'
     byId('repl-output').innerHTML = ans;

@@ -7,21 +7,21 @@ var buttons = [
   new Button(undefined, undefined, 'Save settings')
 ];
 
-buttons[0].aHref.addEventListener('click', function (e) {
+buttons[0].anchor.addEventListener('click', function (e) {
   e.preventDefault();
   byId('file-input').addEventListener('change', addPlugin, false);
   byId('file-input').click();
 });
-buttons[1].aHref.addEventListener('click', function (e) {
+buttons[1].anchor.addEventListener('click', function (e) {
   e.preventDefault();
   storage.removePlugin(prompt('Plugin to remove:'));
 });
-buttons[2].aHref.addEventListener('click', function (e) {
+buttons[2].anchor.addEventListener('click', function (e) {
   e.preventDefault();
   byId('file-input').addEventListener('change', function (e) {addPlugin(e, true)}, false);
   byId('file-input').click();
 })
-buttons[3].aHref.addEventListener('click', function (e) {
+buttons[3].anchor.addEventListener('click', function (e) {
   e.preventDefault();
   var keys = Object.keys(settings);
   for (var i = 0; i < keys.length; i++) {
@@ -34,7 +34,7 @@ buttons[3].aHref.addEventListener('click', function (e) {
   storage.storePlugins();
 });
 
-for (var i = 0; i < buttons.length; i++) buttons[i].aHref.style.left = i * (200/*Button width*/ + 10/*Space between btns*/ + 30/*Anim size*/) + 'px';
+for (var i = 0; i < buttons.length; i++) buttons[i].anchor.style.left = i * (200/*Button width*/ + 10/*Space between btns*/ + 30/*Anim size*/) + 'px';
 requestSettings();
 
 function requestSettings() {
