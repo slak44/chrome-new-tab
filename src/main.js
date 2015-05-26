@@ -24,8 +24,7 @@ function onSettings() {
   }, function () {console.log('No plugins executed.')});
   byId('title').innerHTML = settings['Main page title'].value;
   byId('date').innerHTML = new Date().toLocaleDateString('en-GB', {month: 'long', day: '2-digit', year: 'numeric'});
-  (function setTime() {
+  setInterval(function () {
     byId('time').innerHTML = new Date().toLocaleTimeString('intl', {hour: '2-digit', minute: '2-digit', hour12: false});
-    setTimeout(setTime, 1000);
-  }).call();
+  }, 1000);
 }
