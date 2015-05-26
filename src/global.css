@@ -99,7 +99,7 @@ p.dpane-text {
 }
 
 a.button {
-  position: absolute;
+  display: block;
   margin-top: 5px;
   margin-left: 25px;
   width: 200px;
