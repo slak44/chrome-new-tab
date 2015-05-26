@@ -143,8 +143,10 @@ function Button(imagePath, href, text, parent) {
     ((imagePath)? '<img src="'+imagePath+'" class="button-img"></img>': '') +
     '<pre class="button-text">'+text+'</pre>' +
   '</a>');
-  this.aHref = parent.children[parent.children.length - 1];
+  this.anchor = parent.children[parent.children.length - 1];
   this.name = text;
+  if (href !== undefined && href.indexOf('chrome://') === 0)
+    this.anchor.addEventListener('click', function (e) {chrome.tabs.create({url: href}); window.close()});
 }
 
 function byId(id) {

@@ -9,7 +9,7 @@ var mainButtons = [
   new Button('assets/reddit.png', 'https://www.reddit.com', 'Reddit'),
   new Button('assets/github.png', 'https://github.com/', 'GitHub'),
   new Button('assets/twitch.png', 'http://www.twitch.tv', 'Twitch'),
-  new Button('assets/extensions.png', undefined, 'Extensions')
+  new Button('assets/extensions.png', 'chrome://extensions', 'Extensions')
 ];
 
 storage.loadSettings(onSettings, function () {window.location.replace('/settings.html')});
@@ -21,19 +21,11 @@ function onSettings() {
       console.log('Executing plugin: ' + plugins[p].name);
       eval(plugins[p].code);
     }
-    positionButtons();
-  }, function () {console.log('No plugins executed.'); positionButtons();});
+  }, function () {console.log('No plugins executed.')});
   byId('title').innerHTML = settings['Main page title'].value;
   byId('date').innerHTML = new Date().toLocaleDateString('en-GB', {month: 'long', day: '2-digit', year: 'numeric'});
   (function setTime() {
     byId('time').innerHTML = new Date().toLocaleTimeString('intl', {hour: '2-digit', minute: '2-digit', hour12: false});
     setTimeout(setTime, 1000);
   }).call();
-}
-
-function positionButtons() {
-  for (var i = 0; i < mainButtons.length; i++) {
-    mainButtons[i].aHref.style.top = i * (75/*Button height*/ + 10/*Space between btns*/) + 'px';
-    if (mainButtons[i].name === 'Extensions') mainButtons[i].aHref.addEventListener('click', function (e) {chrome.tabs.create({url: 'chrome://extensions'}); window.close()});
-  }
 }
