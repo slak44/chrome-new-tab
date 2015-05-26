@@ -31,15 +31,15 @@ if (identity === 'Main page') {
   </div>');
   var back = new Button('assets/back.png', undefined, 'Go Back', byId('repl-pane'));
   var evalB = new Button(undefined, undefined, 'Eval', byId('repl-pane'));
+  var repl = new Button(undefined, undefined, 'REPL');
   evalB.anchor.style.bottom = '0px';
-  mainButtons.push(new Button(undefined, undefined, 'REPL'));
   function toggle(e) {
     e.preventDefault();
     byId('repl-pane').style.display = 'block';
     toggleDiv('repl-pane');
     toggleDiv('default-pane');
   }
-  mainButtons[mainButtons.length - 1].anchor.addEventListener('click', toggle);
+  repl.anchor.addEventListener('click', toggle);
   back.anchor.addEventListener('click', function (e) {toggle(e); byId('repl-pane').style.display = 'none'});
   evalB.anchor.addEventListener('click', function (e) {
     e.preventDefault();
