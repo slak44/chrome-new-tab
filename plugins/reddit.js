@@ -24,11 +24,18 @@ if (identity === 'Options page') {
 }
 
 function updateRedditKarma() {
-  get('https://www.reddit.com/user/' + settings['Reddit username'].value + '/about.json?', function (data) {
-    data = JSON.parse(data);
-    byId('reddit-karma').innerHTML =
-      'Comment karma: ' + data.data.comment_karma + '\n' +
-      'Link karma: ' + data.data.link_karma;
-  });
-  setTimeout(updateRedditKarma, settings['Reddit request time'].value);
+  var req = new XMLHttpRequest();
+  req.open('GET', 'https://www.reddit.com/user/' + settings['Reddit username'].value + '/about.json?');
+  req.onload = function () {
+    if (req.status === 200) {
+      var data = JSON.parse(req.response);
+      byId('reddit-karma').innerHTML =
+        'Comment karma: ' + data.data.comment_karma + '\n' +
+        'Link karma: ' + data.data.link_karma;
+    } else throw new Error('Failed request.');
+  }
+  req.onloadend = function () {
+    setTimeout(updateRedditKarma, settings['Reddit request time'].value);
+  }
+  req.send();
 }
