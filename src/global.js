@@ -154,5 +154,12 @@ function byId(id) {
 }
 
 function toggleDiv(id) {
-  $('#' + id).toggleClass('unfocused').toggleClass('focused');
+  // if 'focused' in element.classList
+  if (Array.prototype.indexOf.apply(byId(id).classList, ['focused']) > -1) {
+    byId(id).classList.remove('focused');
+    byId(id).classList.add('unfocused');
+  } else {
+    byId(id).classList.remove('unfocused');
+    byId(id).classList.add('focused');
+  }
 }
