@@ -12,7 +12,7 @@ if (identity === 'Main page') {
     cursor: text;\
   }\
   #repl-pane {\
-    display: none;\
+    opacity: 0;\
   }\
   #repl-flex {\
     position: absolute;\
@@ -22,8 +22,8 @@ if (identity === 'Main page') {
     display: flex;\
   }';
   document.body.insertAdjacentHTML('beforeend',
-  '<div id="repl-pane" class="unfocused">\
-    <div id="repl-flex">\
+  '<div id="repl-pane" class="centered">\
+    <div id="repl-flex" class="centered">\
       <div id="repl-input" class="repl-text" contenteditable="true"></div>\
       <div id="repl-output" class="repl-text"></div>\
       <div id="repl-console" class="repl-text"></div>\
@@ -32,15 +32,13 @@ if (identity === 'Main page') {
   var back = new Button('assets/back.png', undefined, 'Go Back', byId('repl-pane'));
   var evalB = new Button(undefined, undefined, 'Eval', byId('repl-pane'));
   var repl = new Button(undefined, undefined, 'REPL');
-  evalB.anchor.style.bottom = '0px';
   function toggle(e) {
     e.preventDefault();
-    byId('repl-pane').style.display = 'block';
     toggleDiv('repl-pane');
     toggleDiv('default-pane');
   }
   repl.anchor.addEventListener('click', toggle);
-  back.anchor.addEventListener('click', function (e) {toggle(e); byId('repl-pane').style.display = 'none'});
+  back.anchor.addEventListener('click', toggle);
   evalB.anchor.addEventListener('click', function (e) {
     e.preventDefault();
     ans = eval(byId('repl-input').innerHTML.replace(/console\.(log|error)/g, 'replLog')); // Replace calls to 'console'
