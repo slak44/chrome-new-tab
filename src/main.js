@@ -27,7 +27,7 @@ function onSettings() {
     for (var p in plugins) {
       console.log('Executing plugin: ' + plugins[p].name);
       try {eval(plugins[p].code)}
-      catch(e) {console.error('Executing failed:' + e.message)}
+      catch(e) {console.error('Executing failed: ' + e.message)}
     }
   }, function () {console.log('No plugins executed.')});
 }

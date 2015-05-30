@@ -54,9 +54,10 @@ function requestSettings() {
 
 function settingsLoaded() {
   storage.loadPlugins(function () {
-    for (var p in plugins) if (plugins.hasOwnProperty(p)) {
-      console.log('Adding plugin settings: ' + plugins[p].name);
-      eval(plugins[p].code);
+    for (var p in plugins) {
+      console.log('Executing plugin: ' + plugins[p].name);
+      try {eval(plugins[p].code)}
+      catch(e) {console.error('Executing failed: ' + e.message)}
     }
     showSettings();
   }, showSettings);
