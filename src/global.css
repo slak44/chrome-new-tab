@@ -75,6 +75,7 @@ h1 > small {
 }
 
 #settings-link {
+  z-index: 10000;
   position: absolute;
   margin: 0px 5px 5px 0px;
   bottom: 0px;
