@@ -15,10 +15,7 @@ if (identity === 'Main page') {
     opacity: 0;\
   }\
   #repl-flex {\
-    position: absolute;\
     top: 100px;\
-    width: 100%;\
-    margin: 5px;\
     display: flex;\
   }';
   document.body.insertAdjacentHTML('beforeend',
