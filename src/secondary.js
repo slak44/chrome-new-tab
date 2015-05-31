@@ -33,24 +33,18 @@ buttons[3].anchor.addEventListener('click', function (e) {
   storage.storeSettings();
   storage.storePlugins();
 });
-
-for (var i = 0; i < buttons.length; i++) buttons[i].anchor.style.left = i * (200/*Button width*/ + 10/*Space between btns*/ + 30/*Anim size*/) + 'px';
-requestSettings();
-
-function requestSettings() {
-  storage.loadSettings(
-    settingsLoaded,
-    function () {
-      storage.addSetting({
-        name: 'Main page title',
-        desc: 'Title displayed in the center of the main page.',
-        type: 'string',
-        isVisible: true
-      }, {});
-      settingsLoaded();
-    }
-  );
-}
+storage.loadSettings(
+  settingsLoaded,
+  function () {
+    storage.addSetting({
+      name: 'Main page title',
+      desc: 'Title displayed in the center of the main page.',
+      type: 'string',
+      isVisible: true
+    }, {});
+    settingsLoaded();
+  }
+);
 
 function settingsLoaded() {
   storage.loadPlugins(function () {
@@ -59,11 +53,11 @@ function settingsLoaded() {
       try {eval(plugins[p].code)}
       catch(e) {console.error('Executing failed: ' + e.message)}
     }
-    showSettings();
-  }, showSettings);
+    addSettings();
+  }, addSettings);
 }
 
-function showSettings() {
+function addSettings() {
   var sp = byId('settings-pane');
   for (var i in settings) {
      if (!settings[i].isVisible) continue;
