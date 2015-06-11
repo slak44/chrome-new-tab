@@ -1,27 +1,28 @@
 'use strict';
 var identity = 'Options page';
-var buttons = [
-  new Button(undefined, undefined, 'Add Plugin'),
-  new Button(undefined, undefined, 'Remove Plugin'),
-  new Button(undefined, undefined, 'Update Plugin'),
-  new Button(undefined, undefined, 'Save settings')
-];
+var addPlugin = new Button(undefined, undefined, 'Add Plugin');
+var removePlugin = new Button(undefined, undefined, 'Remove Plugin');
+var updatePlugin = new Button(undefined, undefined, 'Update Plugin');
+var save = new Button(undefined, undefined, 'Save');
+addButtonSeparator(byId('default-pane'));
+var pluginSettings = new Button(undefined, undefined, 'Plugin Settings');
+var buttonList = new Button(undefined, undefined, 'Button List');
 
-buttons[0].anchor.addEventListener('click', function (e) {
+addPlugin.anchor.addEventListener('click', function (e) {
   e.preventDefault();
   byId('file-input').addEventListener('change', addPlugin, false);
   byId('file-input').click();
 });
-buttons[1].anchor.addEventListener('click', function (e) {
+removePlugin.anchor.addEventListener('click', function (e) {
   e.preventDefault();
-  storage.removePlugin(prompt('Plugin to remove:'));
+  storage.remove('plugins', prompt('Plugin to remove:'));
 });
-buttons[2].anchor.addEventListener('click', function (e) {
+updatePlugin.anchor.addEventListener('click', function (e) {
   e.preventDefault();
   byId('file-input').addEventListener('change', function (e) {addPlugin(e, true)}, false);
   byId('file-input').click();
 })
-buttons[3].anchor.addEventListener('click', function (e) {
+save.anchor.addEventListener('click', function (e) {
   e.preventDefault();
   var keys = Object.keys(settings);
   for (var i = 0; i < keys.length; i++) {
@@ -30,9 +31,19 @@ buttons[3].anchor.addEventListener('click', function (e) {
     if (input === undefined || input === null) continue;
     settings[keys[i]].value = input.value;
   }
-  storage.storeSettings();
-  storage.storePlugins();
+  storage.store('settings');
+  storage.store('plugins');
 });
+function showPane(id) {
+  return function (e) {
+    e.preventDefault();
+    toggleDiv(byClass('focused')[0], true);
+    toggleDiv(id);
+  }
+}
+pluginSettings.anchor.addEventListener('click', showPane('settings-pane'));
+buttonList.anchor.addEventListener('click', showPane('buttons-pane'));
+
 storage.loadSettings(
   settingsLoaded,
   function () {

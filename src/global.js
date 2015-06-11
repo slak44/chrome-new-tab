@@ -1,6 +1,7 @@
 'use strict';
 var plugins = {};
 var settings = {};
+var buttons = {};
 
 var storage = new function () {
   /*
@@ -50,17 +51,53 @@ var storage = new function () {
   */
   this.loadSettings = function (onLoad, onError) {
     new Promise(function (resolve, reject) {
-      chrome.storage.local.get("storedSettings", function (data) {
+      chrome.storage.local.get('storedSettings', function (data) {
         settings = data.storedSettings;
         // Make sure there's something there
         if (settings === undefined || settings === null || settings === {}) {
-          reject("Settings are empty.");
+          reject('Settings are empty.');
           return;
         }
         // If a visible value is empty, it fails immediately
         for (var e in settings)
-          if (settings[e].isVisible && settings[e].value === undefined) reject("Visible setting value missing.");
-        resolve("Done fetching settings.");
+          if (settings[e].isVisible && settings[e].value === undefined) reject('Visible setting value missing.');
+        resolve('Done fetching settings.');
+      });
+    }).then(
+      function(res) {
+        console.log(res);
+        onLoad();
+      },
+      function(err) {
+        console.log(err);
+        onError();
+      }
+    );
+  }
+  
+  /*
+    Button format:
+      {
+        imagePath: 'path',
+        href: 'ref',
+        text: 'text'
+        parent: HTMLElement
+      }
+      imagePath: path to image.
+      href: where does it point to.
+      text: displyed text.
+      parent: to whom it must be added.
+  */
+  this.loadButtons = function (onLoad, onError) {
+    new Promise(function (resolve, reject) {
+      chrome.storage.local.get('storedButtons', function (data) {
+        buttons = data.storedButtons;
+        // Make sure there's something there
+        if (buttons === undefined || buttons === null || buttons === {}) {
+          reject('No buttons found.');
+          return;
+        }
+        resolve('Done loading buttons.');
       });
     }).then(
       function(res) {
@@ -83,7 +120,7 @@ var storage = new function () {
       if (!options.update && setting.name === settings[setting.name].name) throw new Error('Already exists, use update.');
     }
     settings[setting.name] = setting;
-    this.storeSettings();
+    this.store('settings');
   }
   
   this.addPlugin = function (plugin, options) {
@@ -94,25 +131,16 @@ var storage = new function () {
       if (!options.update && plugins[plugin.name].name === name) throw new Error('Already exists, use update.');
     }
     plugins[plugin.name] = plugin;
-    this.storePlugins();
+    this.store('plugins');
   }
   
-  this.removePlugin = function (name) {
-    delete plugins[name];
-    this.storePlugins();
+  this.remove = function (what, name) {
+    delete window[what][name];
+    this.store(what);
   }
   
-  this.removeSetting = function (name) {
-    delete settings[name];
-    this.storeSettings();
-  }
-  
-  this.storeSettings = function () {
-    chrome.storage.local.set({"storedSettings": settings}, undefined);
-  }
-
-  this.storePlugins = function () {
-    chrome.storage.local.set({"storedPlugins": plugins}, undefined);
+  this.store = function (what) {
+    //TODO
   }
 
   /*
@@ -121,17 +149,14 @@ var storage = new function () {
   this.clearStorage = function () {
     settings = {};
     plugins = {};
+    buttons = {};
     chrome.storage.local.clear();
   }
   
-  this.clearSettings = function () {
-    settings = {};
-    chrome.storage.local.set({"storedSettings": {}}, undefined);
-  }
-  
-  this.clearPlugins = function () {
-    plugins = {};
-    chrome.storage.local.set({"storedPlugins": {}}, undefined);
+  this.clear = function (what) {
+    window[what] = {};
+    var storageStr = 'stored' + what.charAt(0).toUpperCase() + what.substr(1);
+    chrome.storage.local.set({storageStr: {}}, undefined);
   }
 };
 
@@ -149,17 +174,26 @@ function Button(imagePath, href, text, parent) {
     this.anchor.addEventListener('click', function (e) {chrome.tabs.create({url: href}); window.close()});
 }
 
+function addButtonSeparator(parent) {
+  parent.insertAdjacentHTML('beforeend', '<span class="button-separator"></span>');
+}
+
 function byId(id) {
   return document.getElementById(id);
 }
 
-function toggleDiv(id) {
+function byClass(className) {
+  return document.getElementsByClassName(className);
+}
+
+function toggleDiv(id, isElement) {
+  if (!isElement) id = byId(id);
   // if 'focused' in element.classList
-  if (Array.prototype.indexOf.apply(byId(id).classList, ['focused']) > -1) {
-    byId(id).classList.remove('focused');
-    byId(id).classList.add('unfocused');
+  if (Array.prototype.indexOf.apply(id.classList, ['focused']) > -1) {
+    id.classList.remove('focused');
+    id.classList.add('unfocused');
   } else {
-    byId(id).classList.remove('unfocused');
-    byId(id).classList.add('focused');
+    id.classList.remove('unfocused');
+    id.classList.add('focused');
   }
 }
