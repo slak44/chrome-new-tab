@@ -130,7 +130,7 @@ var storage = new function () {
   }
   
   this.store = function (what) {
-    //TODO
+    eval('chrome.storage.local.set({stored' + capitalize(what) + ': ' + what + '}, undefined)');
   }
 
   /*
@@ -145,8 +145,7 @@ var storage = new function () {
   
   this.clear = function (what) {
     window[what] = {};
-    var storageStr = 'stored' + what.charAt(0).toUpperCase() + what.substr(1);
-    chrome.storage.local.set({storageStr: {}}, undefined);
+    eval('chrome.storage.local.set({stored' + capitalize(what) + ': {}}, undefined)');
   }
 };
 
@@ -174,6 +173,10 @@ function byId(id) {
 
 function byClass(className) {
   return document.getElementsByClassName(className);
+}
+
+function capitalize(string) {
+  return string.charAt(0).toUpperCase() + string.substr(1);
 }
 
 function toggleDiv(id, isElement) {
