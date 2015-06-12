@@ -5,6 +5,8 @@ var buttons = {};
 
 var storage = new function () {
   /*
+    Existing storage objects. Usable as 'what' parameters.
+    
     Plugin format:
       {
         name: 'displayName',
@@ -14,27 +16,7 @@ var storage = new function () {
     name: what it is.
     desc: what it does.
     code: executable js to be eval'd.
-  */
-  this.loadPlugins = function (onLoad, onError) {
-    new Promise(function (resolve, reject) {
-      chrome.storage.local.get("storedPlugins", function (data) {
-        plugins = data.storedPlugins;
-        if (plugins === undefined || plugins === null || plugins === {}) reject("No plugins found.");
-        else resolve("Done fetching plugins.");
-      });
-    }).then(
-      function (res) {
-        console.log(res);
-        onLoad();
-      },
-      function (err) {
-        console.log(err);
-        onError();
-      }
-    );
-  }
-  
-  /*
+    
     Setting format:
       {
         name: 'displayName',
@@ -48,34 +30,7 @@ var storage = new function () {
     type: what kind of input is necessary. (number, string, checkbox, radiobox, etc)
     value: undefined until set.
     isVisible: if false, it means the setting is just storage.
-  */
-  this.loadSettings = function (onLoad, onError) {
-    new Promise(function (resolve, reject) {
-      chrome.storage.local.get('storedSettings', function (data) {
-        settings = data.storedSettings;
-        // Make sure there's something there
-        if (settings === undefined || settings === null || settings === {}) {
-          reject('Settings are empty.');
-          return;
-        }
-        // If a visible value is empty, it fails immediately
-        for (var e in settings)
-          if (settings[e].isVisible && settings[e].value === undefined) reject('Visible setting value missing.');
-        resolve('Done fetching settings.');
-      });
-    }).then(
-      function(res) {
-        console.log(res);
-        onLoad();
-      },
-      function(err) {
-        console.log(err);
-        onError();
-      }
-    );
-  }
-  
-  /*
+    
     Button format:
       {
         imagePath: 'path',
@@ -88,50 +43,35 @@ var storage = new function () {
       text: displyed text.
       parent: to whom it must be added.
   */
-  this.loadButtons = function (onLoad, onError) {
-    new Promise(function (resolve, reject) {
-      chrome.storage.local.get('storedButtons', function (data) {
-        buttons = data.storedButtons;
+  this.stored = ['settings', 'plugins', 'buttons'];
+
+  this.load = function (what, onLoad, onError) {
+    try {
+      chrome.storage.local.get('stored' + capitalize(what), function (data) {
+        window[what] = data['stored' + capitalize(what)];
         // Make sure there's something there
-        if (buttons === undefined || buttons === null || buttons === {}) {
-          reject('No buttons found.');
-          return;
+        if (window[what] === undefined || window[what] === null || window[what] === {}) {
+          console.log('No ' + what + ' found.');
+          throw new Error('No ' + what + ' found.');
         }
-        resolve('Done loading buttons.');
-      });
-    }).then(
-      function(res) {
-        console.log(res);
+        console.log('Done loading ' + what + '.');
         onLoad();
-      },
-      function(err) {
-        console.log(err);
-        onError();
-      }
-    );
+      });
+    } catch (e) {
+      onError(e);
+    }
   }
   
-  this.addSetting = function (setting, options) {
+  this.add = function (what, toAdd, options) {
     options = (options)? options : {};
-    settings = (settings)? settings : {};
-    if (setting === undefined || setting === null || typeof setting !== 'object' || setting === {}) throw new Error('Invalid argument.');
-    if (settings[setting.name] !== undefined) {
+    window[what] = (window[what])? window[what] : {};
+    if (toAdd === undefined || toAdd === null || typeof toAdd !== 'object' || toAdd === {}) throw new Error('Invalid argument.');
+    if (window[what][toAdd.name] !== undefined) {
       if (options.definition) return;
-      if (!options.update && setting.name === settings[setting.name].name) throw new Error('Already exists, use update.');
+      if (!options.update && toAdd.name === window[what][toAdd.name].name) throw new Error('Already exists, use update.');
     }
-    settings[setting.name] = setting;
-    this.store('settings');
-  }
-  
-  this.addPlugin = function (plugin, options) {
-    options = (options)? options : {};
-    plugins = (plugins)? plugins: {};
-    if (plugin === undefined || plugin === null || typeof plugin !== 'object' || plugin === {}) throw new Error('Invalid argument.');
-    if (plugins[plugin.name] !== undefined) {
-      if (!options.update && plugins[plugin.name].name === name) throw new Error('Already exists, use update.');
-    }
-    plugins[plugin.name] = plugin;
-    this.store('plugins');
+    window[what][toAdd.name] = toAdd;
+    this.store(what);
   }
   
   this.remove = function (what, name) {
@@ -140,23 +80,20 @@ var storage = new function () {
   }
   
   this.store = function (what) {
-    //TODO
+    eval('chrome.storage.local.set({stored' + capitalize(what) + ': ' + what + '}, undefined)');
   }
 
   /*
     Wipes all storage, both in-memory and persistent.
   */
   this.clearStorage = function () {
-    settings = {};
-    plugins = {};
-    buttons = {};
+    for (var i = 0; i < storage.stored.length; i++) eval(storage.stored[i] + ' = {}');
     chrome.storage.local.clear();
   }
   
   this.clear = function (what) {
     window[what] = {};
-    var storageStr = 'stored' + what.charAt(0).toUpperCase() + what.substr(1);
-    chrome.storage.local.set({storageStr: {}}, undefined);
+    eval('chrome.storage.local.set({stored' + capitalize(what) + ': {}}, undefined)');
   }
 };
 
@@ -184,6 +121,10 @@ function byId(id) {
 
 function byClass(className) {
   return document.getElementsByClassName(className);
+}
+
+function capitalize(string) {
+  return string.charAt(0).toUpperCase() + string.substr(1);
 }
 
 function toggleDiv(id, isElement) {
