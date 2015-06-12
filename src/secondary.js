@@ -68,19 +68,13 @@ function settingsLoaded() {
 }
 
 function addSettings() {
-  var sp = byId('settings-pane');
   for (var i in settings) {
      if (!settings[i].isVisible) continue;
-     var input;
-     switch (settings[i].type) {
-       case 'checkbox': input = '<input id="'+settings[i].name+'" type="checkbox" value="'+settings[i].value+'">'; break;
-       case 'number':   input = '<input id="'+settings[i].name+'" type="number"   value="'+settings[i].value+'">'; break;
-       default:         input = '<input id="'+settings[i].name+'" type="text"     value="'+settings[i].value+'">';
-     }
-     sp.insertAdjacentHTML('beforeend',
+     byId('settings-pane').insertAdjacentHTML('beforeend',
      '<h1 class="global-text">' + settings[i].name +
      '<small>  ' + settings[i].desc + '</small>' +
-     '</h1>' + input
+     '</h1>' +
+     '<input id="' + settings[i].name + '" type="' + settings[i].type + '" value="' + settings[i].value + '">'
      );
   }
 }
