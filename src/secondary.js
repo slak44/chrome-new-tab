@@ -8,20 +8,10 @@ addButtonSeparator(byId('default-pane'));
 var pluginSettings = new Button(undefined, undefined, 'Plugin Settings');
 var buttonList = new Button(undefined, undefined, 'Button List');
 
-addPlugin.anchor.addEventListener('click', function (e) {
-  e.preventDefault();
-  byId('file-input').addEventListener('change', addPlugin, false);
-  byId('file-input').click();
-});
 removePlugin.anchor.addEventListener('click', function (e) {
   e.preventDefault();
   storage.remove('plugins', prompt('Plugin to remove:'));
 });
-updatePlugin.anchor.addEventListener('click', function (e) {
-  e.preventDefault();
-  byId('file-input').addEventListener('change', function (e) {addPlugin(e, true)}, false);
-  byId('file-input').click();
-})
 save.anchor.addEventListener('click', function (e) {
   e.preventDefault();
   var keys = Object.keys(settings);
@@ -43,6 +33,15 @@ function showPane(id) {
 }
 pluginSettings.anchor.addEventListener('click', showPane('settings-pane'));
 buttonList.anchor.addEventListener('click', showPane('buttons-pane'));
+function plugin(update) {
+  return function (e) {
+    e.preventDefault();
+    byId('file-input').addEventListener('change', function (e) {addPlugins(e, update)}, false);
+    byId('file-input').click();
+  }
+}
+addPlugin.anchor.addEventListener('click', plugin(false));
+updatePlugin.anchor.addEventListener('click', plugin(true));
 
 storage.loadSettings(
   settingsLoaded,
@@ -86,7 +85,7 @@ function addSettings() {
   }
 }
 
-function addPlugin(event, allowUpdate) {
+function addPlugins(event, allowUpdate) {
   var file = event.target.files[0];
   var reader = new FileReader();
   reader.onloadend = (function (fileIn) {
