@@ -21,8 +21,17 @@ save.anchor.addEventListener('click', function (e) {
     if (input === undefined || input === null) continue;
     settings[keys[i]].value = input.value;
   }
+  var buttonIds = Object.keys(buttons);
+  for (var i = 0; i < buttonIds.length; i++) {
+    buttons[buttonIds[i]] = {
+      text: byId(buttonIds[i] + 'Text').value,
+      href: byId(buttonIds[i] + 'Link').value,
+      imagePath: byId(buttonIds[i] + 'Image').value
+    }
+  }
   storage.store('settings');
   storage.store('plugins');
+  storage.store('buttons')
 });
 function showPane(id) {
   return function (e) {
@@ -43,9 +52,49 @@ function plugin(update) {
 addPlugin.anchor.addEventListener('click', plugin(false));
 updatePlugin.anchor.addEventListener('click', plugin(true));
 
+setTimeout(function () {
+  var addButton = new Button(undefined, undefined, 'Add new button', byId('buttons-pane'));
+  addButton.anchor.addEventListener('click', function (e) {
+    e.preventDefault();
+    var id = prompt('Input a unique identifier for the button:');
+    if (id === null) return;
+    if (buttons[id] !== undefined || buttons[id] !== null) {
+      alert('Identifier already exists.');
+      return;
+    }
+    buttons[id] = {
+      text: '',
+      href: '',
+      imagePath: ''
+    };
+    addButtonConfig(id);
+  });
+  var removeButton = new Button(undefined, undefined, 'Remove existing button', byId('buttons-pane'));
+  removeButton.anchor.addEventListener('click', function (e) {
+    e.preventDefault();
+    delete buttons[prompt('Imput the button identifier:')];
+    storage.store('buttons');
+    location.reload(true);
+  });
+  function addButtonConfig(buttonId) {
+    byId('buttons-pane').insertAdjacentHTML('beforeend',
+    '<h1 class="global-text">Button '+buttonId+'</h1>' +
+    '<h2 class="global-text">Text</h2>' +
+    '<input id="'+buttonId+'Text" type="string" value="'+buttons[buttonId].text+'"></input>' +
+    '<h2 class="global-text">Link</h2>' +
+    '<input id="'+buttonId+'Link" type="string" value="'+buttons[buttonId].href+'"></input>' +
+    '<h2 class="global-text">Image</h2>' +
+    '<input id="'+buttonId+'Image" type="string" value="'+buttons[buttonId].imagePath+'"></input>');
+  }
+  storage.load('buttons',
+  function () {
+    for (var i in buttons) addButtonConfig(i);
+  }, function () {buttons = {}});
+}, 0);
+
 storage.load('settings', 
   settingsLoaded,
-  function (e) {
+  function () {
     storage.add('settings', {
       name: 'Main page title',
       desc: 'Title displayed in the center of the main page.',

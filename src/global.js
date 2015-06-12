@@ -35,31 +35,26 @@ var storage = new function () {
       {
         imagePath: 'path',
         href: 'ref',
-        text: 'text'
-        parent: HTMLElement
+        text: 'text',
       }
       imagePath: path to image.
       href: where does it point to.
       text: displyed text.
-      parent: to whom it must be added.
   */
   this.stored = ['settings', 'plugins', 'buttons'];
 
   this.load = function (what, onLoad, onError) {
-    try {
-      chrome.storage.local.get('stored' + capitalize(what), function (data) {
-        window[what] = data['stored' + capitalize(what)];
-        // Make sure there's something there
-        if (window[what] === undefined || window[what] === null || window[what] === {}) {
-          console.log('No ' + what + ' found.');
-          throw new Error('No ' + what + ' found.');
-        }
-        console.log('Done loading ' + what + '.');
-        onLoad();
-      });
-    } catch (e) {
-      onError(e);
-    }
+    chrome.storage.local.get('stored' + capitalize(what), function (data) {
+      window[what] = data['stored' + capitalize(what)];
+      // Make sure there's something there
+      if (window[what] === undefined || window[what] === null || window[what] === {}) {
+        console.log('No ' + what + ' found.');
+        onError();
+        return;
+      }
+      console.log('Done loading ' + what + '.');
+      onLoad();
+    });
   }
   
   this.add = function (what, toAdd, options) {
