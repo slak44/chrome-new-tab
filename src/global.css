@@ -142,6 +142,7 @@ div.setting-tab {
   position: absolute;
   top: 0px;
   margin-left: 250px;
+  height: 100%;
   overflow-y: scroll;
 }
 
