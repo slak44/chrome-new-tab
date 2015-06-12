@@ -18,16 +18,18 @@ setTimeout(function setTime() {
   setTimeout(setTime, 1000);
 }, 0);
 
-storage.loadSettings(onSettings, function () {window.location.replace('/settings.html')});
+storage.load('settings', onSettings, function () {window.location.replace('/settings.html')});
 
 function onSettings() {
+  // If a visible value is empty, it fails immediately
+  for (var e in settings) if (settings[e].isVisible && settings[e].value === undefined) window.location.replace('/settings.html');
   byId('title').innerHTML = settings['Main page title'].value;
-  storage.loadPlugins(
+  storage.load('plugins',
   function () {
     for (var p in plugins) {
       console.log('Executing plugin: ' + plugins[p].name);
       try {eval(plugins[p].code)}
       catch(e) {console.error('Executing failed: ' + e.message)}
     }
-  }, function () {console.log('No plugins executed.')});
+  }, function (e) {console.log('No plugins executed.')});
 }

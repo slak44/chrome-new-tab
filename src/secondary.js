@@ -43,9 +43,9 @@ function plugin(update) {
 addPlugin.anchor.addEventListener('click', plugin(false));
 updatePlugin.anchor.addEventListener('click', plugin(true));
 
-storage.loadSettings(
+storage.load('settings', 
   settingsLoaded,
-  function () {
+  function (e) {
     storage.add('settings', {
       name: 'Main page title',
       desc: 'Title displayed in the center of the main page.',
@@ -57,7 +57,7 @@ storage.loadSettings(
 );
 
 function settingsLoaded() {
-  storage.loadPlugins(function () {
+  storage.load('plugins', function () {
     for (var p in plugins) {
       console.log('Executing plugin: ' + plugins[p].name);
       try {eval(plugins[p].code)}
@@ -96,12 +96,12 @@ function addPlugins(event, allowUpdate) {
       }
       if (allowUpdate) {
         var name = prompt('Plugin name:');
-        storage.add('plugin', {
+        storage.add('plugins', {
             name: name,
             desc: plugins[name].desc,
             code: e.target.result
           }, {update: allowUpdate});
-      } else storage.add('plugin', {
+      } else storage.add('plugins', {
           name: prompt('Plugin name:'),
           desc: prompt('Plugin description:'),
           code: e.target.result
