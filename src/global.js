@@ -1,9 +1,12 @@
 'use strict';
 var plugins = {};
 var settings = {};
+var buttons = {};
 
 var storage = new function () {
   /*
+    Existing storage objects. Usable as 'what' parameters.
+    
     Plugin format:
       {
         name: 'displayName',
@@ -13,27 +16,7 @@ var storage = new function () {
     name: what it is.
     desc: what it does.
     code: executable js to be eval'd.
-  */
-  this.loadPlugins = function (onLoad, onError) {
-    new Promise(function (resolve, reject) {
-      chrome.storage.local.get("storedPlugins", function (data) {
-        plugins = data.storedPlugins;
-        if (plugins === undefined || plugins === null || plugins === {}) reject("No plugins found.");
-        else resolve("Done fetching plugins.");
-      });
-    }).then(
-      function (res) {
-        console.log(res);
-        onLoad();
-      },
-      function (err) {
-        console.log(err);
-        onError();
-      }
-    );
-  }
-  
-  /*
+    
     Setting format:
       {
         name: 'displayName',
@@ -47,91 +30,67 @@ var storage = new function () {
     type: what kind of input is necessary. (number, string, checkbox, radiobox, etc)
     value: undefined until set.
     isVisible: if false, it means the setting is just storage.
-  */
-  this.loadSettings = function (onLoad, onError) {
-    new Promise(function (resolve, reject) {
-      chrome.storage.local.get("storedSettings", function (data) {
-        settings = data.storedSettings;
-        // Make sure there's something there
-        if (settings === undefined || settings === null || settings === {}) {
-          reject("Settings are empty.");
-          return;
-        }
-        // If a visible value is empty, it fails immediately
-        for (var e in settings)
-          if (settings[e].isVisible && settings[e].value === undefined) reject("Visible setting value missing.");
-        resolve("Done fetching settings.");
-      });
-    }).then(
-      function(res) {
-        console.log(res);
-        onLoad();
-      },
-      function(err) {
-        console.log(err);
-        onError();
+    
+    Button format:
+      {
+        imagePath: 'path',
+        href: 'ref',
+        text: 'text',
+        position: 0
       }
-    );
-  }
-  
-  this.addSetting = function (setting, options) {
-    options = (options)? options : {};
-    settings = (settings)? settings : {};
-    if (setting === undefined || setting === null || typeof setting !== 'object' || setting === {}) throw new Error('Invalid argument.');
-    if (settings[setting.name] !== undefined) {
-      if (options.definition) return;
-      if (!options.update && setting.name === settings[setting.name].name) throw new Error('Already exists, use update.');
-    }
-    settings[setting.name] = setting;
-    this.storeSettings();
-  }
-  
-  this.addPlugin = function (plugin, options) {
-    options = (options)? options : {};
-    plugins = (plugins)? plugins: {};
-    if (plugin === undefined || plugin === null || typeof plugin !== 'object' || plugin === {}) throw new Error('Invalid argument.');
-    if (plugins[plugin.name] !== undefined) {
-      if (!options.update && plugins[plugin.name].name === name) throw new Error('Already exists, use update.');
-    }
-    plugins[plugin.name] = plugin;
-    this.storePlugins();
-  }
-  
-  this.removePlugin = function (name) {
-    delete plugins[name];
-    this.storePlugins();
-  }
-  
-  this.removeSetting = function (name) {
-    delete settings[name];
-    this.storeSettings();
-  }
-  
-  this.storeSettings = function () {
-    chrome.storage.local.set({"storedSettings": settings}, undefined);
-  }
+      imagePath: path to image.
+      href: where does it point to.
+      text: displyed text.
+      position: used to determine order of buttons.
+  */
+  this.stored = ['settings', 'plugins', 'buttons'];
 
-  this.storePlugins = function () {
-    chrome.storage.local.set({"storedPlugins": plugins}, undefined);
+  this.load = function (what, onLoad, onError) {
+    chrome.storage.local.get('stored' + capitalize(what), function (data) {
+      window[what] = data['stored' + capitalize(what)];
+      // Make sure there's something there
+      if (window[what] === undefined || window[what] === null || window[what] === {}) {
+        console.log('No ' + what + ' found.');
+        onError();
+        return;
+      }
+      console.log('Done loading ' + what + '.');
+      onLoad();
+    });
+  }
+  
+  this.add = function (what, toAdd, options) {
+    options = (options)? options : {};
+    window[what] = (window[what])? window[what] : {};
+    if (toAdd === undefined || toAdd === null || typeof toAdd !== 'object' || toAdd === {}) throw new Error('Invalid argument.');
+    if (window[what][toAdd.name] !== undefined) {
+      if (options.definition) return;
+      if (!options.update && toAdd.name === window[what][toAdd.name].name) throw new Error('Already exists, use update.');
+    }
+    window[what][toAdd.name] = toAdd;
+    this.store(what);
+  }
+  
+  this.remove = function (what, name) {
+    delete window[what][name];
+    this.store(what);
+  }
+  
+  this.store = function (what) {
+    eval('chrome.storage.local.set({stored' + capitalize(what) + ': ' + what + '}, undefined)');
   }
 
   /*
     Wipes all storage, both in-memory and persistent.
   */
   this.clearStorage = function () {
-    settings = {};
-    plugins = {};
+    for (var i = 0; i < storage.stored.length; i++) eval(storage.stored[i] + ' = {}');
     chrome.storage.local.clear();
   }
   
-  this.clearSettings = function () {
-    settings = {};
-    chrome.storage.local.set({"storedSettings": {}}, undefined);
-  }
-  
-  this.clearPlugins = function () {
-    plugins = {};
-    chrome.storage.local.set({"storedPlugins": {}}, undefined);
+  this.clear = function (what) {
+    window[what] = {};
+    eval('chrome.storage.local.set({stored' + capitalize(what) + ': {}}, undefined)');
   }
 };
 
@@ -149,17 +108,30 @@ function Button(imagePath, href, text, parent) {
     this.anchor.addEventListener('click', function (e) {chrome.tabs.create({url: href}); window.close()});
 }
 
+function addButtonSeparator(parent) {
+  parent.insertAdjacentHTML('beforeend', '<span class="button-separator"></span>');
+}
+
 function byId(id) {
   return document.getElementById(id);
 }
 
-function toggleDiv(id) {
+function byClass(className) {
+  return document.getElementsByClassName(className);
+}
+
+function capitalize(string) {
+  return string.charAt(0).toUpperCase() + string.substr(1);
+}
+
+function toggleDiv(id, isElement) {
+  if (!isElement) id = byId(id);
   // if 'focused' in element.classList
-  if (Array.prototype.indexOf.apply(byId(id).classList, ['focused']) > -1) {
-    byId(id).classList.remove('focused');
-    byId(id).classList.add('unfocused');
+  if (Array.prototype.indexOf.apply(id.classList, ['focused']) > -1) {
+    id.classList.remove('focused');
+    id.classList.add('unfocused');
   } else {
-    byId(id).classList.remove('unfocused');
-    byId(id).classList.add('focused');
+    id.classList.remove('unfocused');
+    id.classList.add('focused');
   }
 }

@@ -63,13 +63,6 @@ h1 > small {
   z-index: 99999;
 }
 
-#settings-pane {
-  position: absolute;
-  top: 0px;
-  margin-left: 250px;
-  overflow-y: scroll;
-}
-
 #file-input {
   display: none;
 }
@@ -142,6 +135,24 @@ img.button-img {
   vertical-align: middle;
   background-position: left;
   background-repeat: no-repeat;
+}
+
+div.setting-tab {
+  opacity: 0;
+  position: absolute;
+  top: 0px;
+  margin-left: 250px;
+  height: 100%;
+  overflow-y: scroll;
+}
+
+span.button-separator {
+  width: 200px;
+  height: 5px;
+  background-color: white;
+  display: inline-block;
+  margin: 5px 5px 0px 5px;
+  border-radius: 10px;
 }
 
 div.focused {

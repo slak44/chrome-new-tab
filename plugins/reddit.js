@@ -1,12 +1,12 @@
 'use strict';
 if (identity === 'Options page') {
-  storage.addSetting({
+  storage.add('settings', {
     name: 'Reddit username',
     desc: 'Used to get karma information.',
     type: 'string',
     isVisible: true
   }, {update: false, definition: true});
-  storage.addSetting({
+  storage.add('settings', {
     name: 'Reddit request time',
     desc: 'How frequent karma updates are.',
     type: 'number',
