@@ -113,8 +113,7 @@ var storage = new function () {
   
   this.add = function (what, toAdd, options) {
     options = (options)? options : {};
-    plugins = (plugins && what === 'plugins')? plugins : {};
-    settings = (settings && what === 'settings')? settings : {};
+    window[what] = (window[what])? window[what] : {};
     if (toAdd === undefined || toAdd === null || typeof toAdd !== 'object' || toAdd === {}) throw new Error('Invalid argument.');
     if (window[what][toAdd.name] !== undefined) {
       if (options.definition) return;
