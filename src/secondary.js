@@ -47,7 +47,7 @@ buttonList.anchor.addEventListener('click', showPane('buttons-pane'));
 storage.loadSettings(
   settingsLoaded,
   function () {
-    storage.addSetting({
+    storage.add('settings', {
       name: 'Main page title',
       desc: 'Title displayed in the center of the main page.',
       type: 'string',
@@ -97,12 +97,12 @@ function addPlugin(event, allowUpdate) {
       }
       if (allowUpdate) {
         var name = prompt('Plugin name:');
-        storage.addPlugin({
+        storage.add('plugin', {
             name: name,
             desc: plugins[name].desc,
             code: e.target.result
           }, {update: allowUpdate});
-      } else storage.addPlugin({
+      } else storage.add('plugin', {
           name: prompt('Plugin name:'),
           desc: prompt('Plugin description:'),
           code: e.target.result

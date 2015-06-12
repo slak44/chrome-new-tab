@@ -111,27 +111,17 @@ var storage = new function () {
     );
   }
   
-  this.addSetting = function (setting, options) {
+  this.add = function (what, toAdd, options) {
     options = (options)? options : {};
-    settings = (settings)? settings : {};
-    if (setting === undefined || setting === null || typeof setting !== 'object' || setting === {}) throw new Error('Invalid argument.');
-    if (settings[setting.name] !== undefined) {
+    plugins = (plugins && what === 'plugins')? plugins : {};
+    settings = (settings && what === 'settings')? settings : {};
+    if (toAdd === undefined || toAdd === null || typeof toAdd !== 'object' || toAdd === {}) throw new Error('Invalid argument.');
+    if (window[what][toAdd.name] !== undefined) {
       if (options.definition) return;
-      if (!options.update && setting.name === settings[setting.name].name) throw new Error('Already exists, use update.');
+      if (!options.update && toAdd.name === window[what][toAdd.name].name) throw new Error('Already exists, use update.');
     }
-    settings[setting.name] = setting;
-    this.store('settings');
-  }
-  
-  this.addPlugin = function (plugin, options) {
-    options = (options)? options : {};
-    plugins = (plugins)? plugins: {};
-    if (plugin === undefined || plugin === null || typeof plugin !== 'object' || plugin === {}) throw new Error('Invalid argument.');
-    if (plugins[plugin.name] !== undefined) {
-      if (!options.update && plugins[plugin.name].name === name) throw new Error('Already exists, use update.');
-    }
-    plugins[plugin.name] = plugin;
-    this.store('plugins');
+    window[what][toAdd.name] = toAdd;
+    this.store(what);
   }
   
   this.remove = function (what, name) {
