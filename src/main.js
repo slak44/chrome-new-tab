@@ -6,7 +6,13 @@ var identity = 'Main page';
 setTimeout(function () {
   storage.load('buttons',
   function () {
-    for (var i in buttons) new Button(buttons[i].imagePath, buttons[i].href, buttons[i].text);
+    var orderedButtons = [];
+    for (var i in buttons) orderedButtons.push(buttons[i]);
+    orderedButtons.sort(function (a, b) {
+      if (Number(a.position) < Number(b.position)) return -1;
+      else return 1;
+    });
+    for (var i = 0; i < orderedButtons.length; i++) new Button(orderedButtons[i].imagePath, orderedButtons[i].href, orderedButtons[i].text);
   }, function () {
     new Button(undefined, '/settings.html', 'Configure buttons here');
   });

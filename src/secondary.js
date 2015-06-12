@@ -26,7 +26,8 @@ save.anchor.addEventListener('click', function (e) {
     buttons[buttonIds[i]] = {
       text: byId(buttonIds[i] + 'Text').value,
       href: byId(buttonIds[i] + 'Link').value,
-      imagePath: byId(buttonIds[i] + 'Image').value
+      imagePath: byId(buttonIds[i] + 'Image').value,
+      position: byId(buttonIds[i] + 'Position').value
     }
   }
   storage.store('settings');
@@ -58,7 +59,7 @@ setTimeout(function () {
     e.preventDefault();
     var id = prompt('Input a unique identifier for the button:');
     if (id === null) return;
-    if (buttons[id] !== undefined || buttons[id] !== null) {
+    if (buttons[id] !== undefined && buttons[id] !== null) {
       alert('Identifier already exists.');
       return;
     }
@@ -84,7 +85,9 @@ setTimeout(function () {
     '<h2 class="global-text">Link</h2>' +
     '<input id="'+buttonId+'Link" type="string" value="'+buttons[buttonId].href+'"></input>' +
     '<h2 class="global-text">Image</h2>' +
-    '<input id="'+buttonId+'Image" type="string" value="'+buttons[buttonId].imagePath+'"></input>');
+    '<input id="'+buttonId+'Image" type="string" value="'+buttons[buttonId].imagePath+'"></input>' +
+    '<h2 class="global-text">Position</h2>' +
+    '<input id="'+buttonId+'Position" type="number" value="'+buttons[buttonId].position+'"></input>');
   }
   storage.load('buttons',
   function () {

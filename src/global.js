@@ -36,10 +36,12 @@ var storage = new function () {
         imagePath: 'path',
         href: 'ref',
         text: 'text',
+        position: 0
       }
       imagePath: path to image.
       href: where does it point to.
       text: displyed text.
+      position: used to determine order of buttons.
   */
   this.stored = ['settings', 'plugins', 'buttons'];
 
