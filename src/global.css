@@ -20,6 +20,12 @@ h1 > small {
   color: #888888;
 }
 
+h2 > input {
+  width: calc(100% - 100px);
+  left: 100px;
+  position: absolute;
+}
+
 .rotate {
   position: absolute;
   top: 0px;
@@ -141,6 +147,8 @@ div.setting-tab {
   opacity: 0;
   position: absolute;
   top: 0px;
+  left: 0px;
+  right: 0px;
   margin-left: 250px;
   height: 100%;
   overflow-y: scroll;

@@ -80,14 +80,10 @@ setTimeout(function () {
   function addButtonConfig(buttonId) {
     byId('buttons-pane').insertAdjacentHTML('beforeend',
     '<h1 class="global-text">Button '+buttonId+'</h1>' +
-    '<h2 class="global-text">Text</h2>' +
-    '<input id="'+buttonId+'Text" type="string" value="'+buttons[buttonId].text+'"></input>' +
-    '<h2 class="global-text">Link</h2>' +
-    '<input id="'+buttonId+'Link" type="string" value="'+buttons[buttonId].href+'"></input>' +
-    '<h2 class="global-text">Image</h2>' +
-    '<input id="'+buttonId+'Image" type="string" value="'+buttons[buttonId].imagePath+'"></input>' +
-    '<h2 class="global-text">Position</h2>' +
-    '<input id="'+buttonId+'Position" type="number" value="'+buttons[buttonId].position+'"></input>');
+    '<h2 class="global-text">Text<input id="'+buttonId+'Text" type="string" value="'+buttons[buttonId].text+'"></input></h2>' +
+    '<h2 class="global-text">Link<input id="'+buttonId+'Link" type="string" value="'+buttons[buttonId].href+'"></input></h2>' +
+    '<h2 class="global-text">Image<input id="'+buttonId+'Image" type="string" value="'+buttons[buttonId].imagePath+'"></input></h2>' +
+    '<h2 class="global-text">Position<input id="'+buttonId+'Position" type="number" value="'+buttons[buttonId].position+'"></input></h2>');
   }
   storage.load('buttons',
   function () {
