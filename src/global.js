@@ -71,7 +71,7 @@ var storage = new function () {
   this.add = function (what, toAdd, options) {
     options = (options)? options : {};
     window[what] = (window[what])? window[what] : {};
-    if (toAdd === undefined || toAdd === null || typeof toAdd !== 'object' || toAdd === {}) throw new Error('Invalid argument.');
+    if (toAdd === undefined || toAdd === null || typeof toAdd !== 'object' || toAdd === {}) throw new Error('Invalid argument: ' + toAdd);
     if (window[what][toAdd.name] !== undefined) {
       if (options.definition) return;
       if (!options.update && toAdd.name === window[what][toAdd.name].name) throw new Error('Already exists, use update.');
