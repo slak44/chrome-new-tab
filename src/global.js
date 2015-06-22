@@ -11,11 +11,20 @@ var storage = new function () {
       {
         name: 'displayName',
         desc: 'message',
-        code: 'code'
+        author: 'name',
+        version: 'ver',
+        init: function () {},
+        main: function () {},
+        secondary: function () {}
       }
     name: what it is.
     desc: what it does.
-    code: executable js to be eval'd.
+    author: self-explanatory.
+    version: self-explanatory.
+    These will be stored as strings:
+    init: executed when the plugin is added.
+    main: executed in the main page.
+    secondary: executed in the options page.
     
     Setting format:
       {
