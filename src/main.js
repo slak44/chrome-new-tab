@@ -14,7 +14,7 @@ setTimeout(function () {
     });
     for (var i = 0; i < orderedButtons.length; i++) new Button(orderedButtons[i].imagePath, orderedButtons[i].href, orderedButtons[i].text);
   }, function () {
-    new Button(undefined, '/settings.html', 'Configure buttons here');
+    new Button(undefined, '/secondary.html', 'Configure buttons here');
   });
   byId('date').innerHTML = new Date().toLocaleDateString('en-GB', {month: 'long', day: '2-digit', year: 'numeric'});
 }, 0);
@@ -23,11 +23,11 @@ setTimeout(function setTime() {
   setTimeout(setTime, 1000);
 }, 0);
 
-storage.load('settings', onSettings, function () {window.location.replace('/settings.html')});
+storage.load('settings', onSettings, function () {window.location.replace('/secondary.html')});
 
 function onSettings() {
   // If a visible value is empty, it fails immediately
-  for (var e in settings) if (settings[e].isVisible && settings[e].value === undefined) window.location.replace('/settings.html');
+  for (var e in settings) if (settings[e].isVisible && settings[e].value === undefined) window.location.replace('/secondary.html');
   byId('title').innerHTML = settings['Main page title'].value;
   storage.load('plugins',
   function () {
