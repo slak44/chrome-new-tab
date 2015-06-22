@@ -1,5 +1,4 @@
 'use strict';
-var identity = 'Options page';
 var addPlugin = new Button(undefined, undefined, 'Add Plugin');
 var removePlugin = new Button(undefined, undefined, 'Remove Plugin');
 var updatePlugin = new Button(undefined, undefined, 'Update Plugin');
@@ -88,7 +87,9 @@ setTimeout(function () {
   storage.load('buttons',
   function () {
     for (var i in buttons) addButtonConfig(i);
-  }, function () {buttons = {}});
+  }, function () {
+    buttons = {};
+  });
 }, 0);
 
 storage.load('settings', 
@@ -108,8 +109,8 @@ function settingsLoaded() {
   storage.load('plugins', function () {
     for (var p in plugins) {
       console.log('Executing plugin: ' + plugins[p].name);
-      try {eval(plugins[p].code)}
-      catch(e) {console.error('Executing failed: ' + e.message)}
+      try {if (plugins[p].secondary) eval('(' + plugins[p].secondary + ').apply(this, [])')}
+      catch(e) {console.error('Execution failed: ' + e.message)}
     }
     addSettings();
   }, addSettings);
@@ -136,18 +137,13 @@ function addPlugins(event, allowUpdate) {
         alert("Please choose a .js file.");
         return;
       }
-      if (allowUpdate) {
-        var name = prompt('Plugin name:');
-        storage.add('plugins', {
-            name: name,
-            desc: plugins[name].desc,
-            code: e.target.result
-          }, {update: allowUpdate});
-      } else storage.add('plugins', {
-          name: prompt('Plugin name:'),
-          desc: prompt('Plugin description:'),
-          code: e.target.result
-        }, {update: false});
+      var plugin = eval(e.target.result);
+      if (plugin.init) plugin.init();
+      // Serialize functions, if they exist
+      if (typeof plugin.init === 'function') plugin.init = plugin.init.toString();
+      if (typeof plugin.main === 'function') plugin.main = plugin.main.toString();
+      if (typeof plugin.secondary === 'function') plugin.secondary = plugin.secondary.toString();
+      storage.add('plugins', plugin, {update: allowUpdate});
     }
   })(file);
   reader.readAsText(file);

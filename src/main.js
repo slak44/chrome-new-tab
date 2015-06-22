@@ -1,6 +1,4 @@
 'use strict';
-var identity = 'Main page';
-
 setTimeout(function setTime() {
   byId('time').innerHTML = new Date().toLocaleTimeString('intl', {hour: '2-digit', minute: '2-digit', hour12: false});
   setTimeout(setTime, 1000);
@@ -41,8 +39,8 @@ function loadPlugins() {
   function () {
     for (var p in plugins) {
       console.log('Executing plugin: ' + plugins[p].name);
-      try {eval(plugins[p].code)}
-      catch(e) {console.error('Executing failed: ' + e.message)}
+      try {if (plugins[p].main) eval('(' + plugins[p].main + ').apply(this, [])')}
+      catch(e) {console.error('Execution failed: ' + e.message)}
     }
   }, function () {console.log('No plugins executed.')});
 }
