@@ -1,6 +1,4 @@
 'use strict';
-document.getElementsByTagName('head')[0].insertAdjacentHTML('beforeend', '<style id="plugin-css"></style>');
-var pluginCss = byId('plugin-css');
 var identity = 'Main page';
 
 setTimeout(function setTime() {
@@ -34,6 +32,8 @@ function loadSettings(cb) {
 }
 
 function loadPlugins() {
+  document.getElementsByTagName('head')[0].insertAdjacentHTML('beforeend', '<style id="plugin-css"></style>');
+  window.pluginCss = byId('plugin-css');
   // If a visible value is empty, it fails immediately
   for (var e in settings) if (settings[e].isVisible && settings[e].value === undefined) window.location.replace('/secondary.html');
   byId('title').innerHTML = settings['Main page title'].value;
