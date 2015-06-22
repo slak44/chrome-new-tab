@@ -1,5 +1,5 @@
 'use strict';
-if (identity === 'Main page') {
+function run() {
   var ans;
   pluginCss.innerHTML +=
   '.repl-text {\
@@ -43,6 +43,14 @@ if (identity === 'Main page') {
   });
   window.replLog = function () {
     byId('repl-console').innerHTML = '';
-    for (let i = 0; i < arguments.length; i++) byId('repl-console').innerHTML += arguments[i] + '\n';
+    for (var i = 0; i < arguments.length; i++) byId('repl-console').innerHTML += arguments[i] + '\n';
   }
 }
+var plugin = {
+  name: 'REPL',
+  desc: 'Read-Eval-Print-Loop',
+  author: 'Slak44',
+  version: '1.0',
+  main: run
+};
+plugin;
