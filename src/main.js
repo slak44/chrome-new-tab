@@ -7,6 +7,10 @@ setTimeout(function setTime() {
 async.parallel([loadButtons, loadSettings],
   loadPlugins);
 
+document.onkeydown = function (e) {
+  if (e.altKey) for (var b in buttons) if (buttons[b].hotkey.charCodeAt() === e.keyCode) window.location.replace(buttons[b].href);
+};
+
 function loadButtons(cb) {
   storage.load('buttons',
   function () {
