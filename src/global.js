@@ -45,12 +45,14 @@ var storage = new function () {
         imagePath: 'path',
         href: 'ref',
         text: 'text',
-        position: 0
+        position: 0,
+        hotkey: 'K'
       }
-      imagePath: path to image.
-      href: where does it point to.
-      text: displyed text.
-      position: used to determine order of buttons.
+    imagePath: path to image.
+    href: where does it point to.
+    text: displyed text.
+    position: used to determine order of buttons.
+    hotkey: using alt+key triggers the button.
   */
   this.stored = ['settings', 'plugins', 'buttons'];
 
