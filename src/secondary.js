@@ -26,7 +26,8 @@ save.anchor.addEventListener('click', function (e) {
       text: byId(buttonIds[i] + 'Text').value,
       href: byId(buttonIds[i] + 'Link').value,
       imagePath: byId(buttonIds[i] + 'Image').value,
-      position: byId(buttonIds[i] + 'Position').value
+      position: byId(buttonIds[i] + 'Position').value,
+      hotkey: byId(buttonIds[i] + 'Hotkey').value.toUpperCase()
     }
   }
   storage.store('settings');
@@ -82,7 +83,8 @@ setTimeout(function () {
     '<h2 class="global-text">Text<input id="'+buttonId+'Text" type="string" value="'+buttons[buttonId].text+'"></input></h2>' +
     '<h2 class="global-text">Link<input id="'+buttonId+'Link" type="string" value="'+buttons[buttonId].href+'"></input></h2>' +
     '<h2 class="global-text">Image<input id="'+buttonId+'Image" type="string" value="'+buttons[buttonId].imagePath+'"></input></h2>' +
-    '<h2 class="global-text">Position<input id="'+buttonId+'Position" type="number" value="'+buttons[buttonId].position+'"></input></h2>');
+    '<h2 class="global-text">Position<input id="'+buttonId+'Position" type="number" value="'+buttons[buttonId].position+'"></input></h2>' +
+    '<h2 class="global-text">Hotkey<input id="'+buttonId+'Hotkey" type="string" maxlength="1" value="'+buttons[buttonId].hotkey+'"></input></h2>');
   }
   storage.load('buttons',
   function () {
