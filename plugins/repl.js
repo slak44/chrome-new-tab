@@ -45,12 +45,32 @@ function run() {
     byId('repl-console').innerHTML = '';
     for (var i = 0; i < arguments.length; i++) byId('repl-console').innerHTML += arguments[i] + '\n';
   }
+  // Load currency conversion script & get currency rates
+  var money = new XMLHttpRequest();
+  money.onload = function () {
+    eval.apply(window, [this.responseText]);
+    // Syntactic sugar. Usage: convert('123 USD EUR')
+    window.convert = function (data) {
+      data = data.split(' ');
+      return Math.trunc(
+        fx.convert(Number(data[0]), {from: data[1].toUpperCase(), to: data[2].toUpperCase()})
+        * 100) / 100; // Reduce to 2 decimals
+    }
+    // Get current exchange rates
+    fx.base = 'EUR';
+    var rates = new XMLHttpRequest();
+    rates.onload = function () {fx.rates = JSON.parse(this.responseText).rates}
+    rates.open('GET', 'https://api.fixer.io/latest');
+    rates.send();
+  }
+  money.open('GET', 'https://raw.githubusercontent.com/openexchangerates/money.js/master/money.min.js');
+  money.send();
 }
 var plugin = {
   name: 'REPL',
   desc: 'Read-Eval-Print-Loop',
   author: 'Slak44',
-  version: '1.0',
+  version: '1.1',
   main: run
 };
 plugin;
