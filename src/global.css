@@ -21,7 +21,7 @@ h1 > small {
 }
 
 h2 > input {
-  width: calc(100% - 100px);
+  width: calc(100% - 200px);
   left: 100px;
   position: absolute;
 }
