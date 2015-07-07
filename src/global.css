@@ -26,6 +26,12 @@ h2 > input {
   position: absolute;
 }
 
+h2 > input[type="checkbox"] {
+  width: auto;
+  left: 10px;
+  position: relative;
+}
+
 .rotate {
   position: absolute;
   top: 0px;
