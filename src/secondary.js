@@ -51,16 +51,9 @@ function plugin(update) {
 addPlugin.anchor.addEventListener('click', plugin(false));
 updatePlugin.anchor.addEventListener('click', plugin(true));
 
-setTimeout(function () {
-  function addButtonConfig(buttonId) {
-    byId('buttons-pane').insertAdjacentHTML('beforeend',
-    '<h2 class="global-text">Text<input id="buttonText" type="string" value="'+buttons[buttonId].text+'"></input></h2>' +
-    '<h2 class="global-text">Link<input id="buttonLink" type="string" value="'+buttons[buttonId].href+'"></input></h2>' +
-    '<h2 class="global-text">Image<input id="buttonImage" type="string" value="'+buttons[buttonId].imagePath+'"></input></h2>' +
-    '<h2 class="global-text">Position<input id="buttonPosition" type="number" value="'+buttons[buttonId].position+'"></input></h2>' +
-    '<h2 class="global-text">Hotkey<input id="buttonHotkey" type="string" maxlength="1" value="'+buttons[buttonId].hotkey+'"></input></h2>' +
-    '<h2 class="global-text">Open in a new tab<input id="buttonOpenInNew" type="checkbox" value="'+buttons[buttonId].openInNew+'"></input></h2>');
-  }
+async.parallel([loadButtons, loadSettings, configureButtonPane]);
+
+function configureButtonPane() {
   var addButton = new Button(undefined, undefined, 'Add new button', byId('buttons-pane'));
   addButton.anchor.addEventListener('click', function (e) {
     e.preventDefault();
@@ -86,6 +79,9 @@ setTimeout(function () {
     delete buttons[getSelectedButtonId()];
     storage.store('buttons');
   });
+}
+
+function loadButtons() {
   storage.load('buttons',
   function (error) {
     if (error || Object.keys(buttons).length === 0) {
@@ -104,43 +100,51 @@ setTimeout(function () {
     for (var id in buttons) select.insertAdjacentHTML('beforeend', '<option>' + id + '</option>');
     addButtonConfig(getSelectedButtonId());
   });
-}, 0);
+}
 
-storage.load('settings', 
-  function (error) {
-    if (error) {
-      storage.add('settings', {
-        name: 'Main page title',
-        desc: 'Title displayed in the center of the main page.',
-        type: 'string',
-        isVisible: true
-      }, {});
+function loadSettings() {
+  storage.load('settings', 
+    function (error) {
+      if (error) {
+        storage.add('settings', {
+          name: 'Main page title',
+          desc: 'Title displayed in the center of the main page.',
+          type: 'string',
+          isVisible: true
+        }, {});
+      }
+      for (var i in settings) {
+         if (!settings[i].isVisible) continue;
+         byId('settings-pane').insertAdjacentHTML('beforeend',
+         '<h1 class="global-text">' + settings[i].name +
+         '<small>  ' + settings[i].desc + '</small>' +
+         '</h1>' +
+         '<input id="' + settings[i].name + '" type="' + settings[i].type + '" value="' + settings[i].value + '">'
+         );
+      }
+      loadPlugins();
     }
-    settingsLoaded();
-  }
-);
+  );
+}
 
-function settingsLoaded() {
+function loadPlugins() {
   storage.load('plugins', function (error) {
     if (!error) for (var p in plugins) {
       console.log('Executing plugin: ' + plugins[p].name);
       try {if (plugins[p].secondary) eval('(' + plugins[p].secondary + ').apply(this, [])')}
       catch(e) {console.error('Execution failed: ' + e.message)}
     }
-    addSettings();
   });
 }
 
-function addSettings() {
-  for (var i in settings) {
-     if (!settings[i].isVisible) continue;
-     byId('settings-pane').insertAdjacentHTML('beforeend',
-     '<h1 class="global-text">' + settings[i].name +
-     '<small>  ' + settings[i].desc + '</small>' +
-     '</h1>' +
-     '<input id="' + settings[i].name + '" type="' + settings[i].type + '" value="' + settings[i].value + '">'
-     );
-  }
+function addButtonConfig(buttonId) {
+  byId('buttons-pane').insertAdjacentHTML('beforeend',
+  '<h2 class="global-text">Text<input id="buttonText" type="string" value="'+buttons[buttonId].text+'"></input></h2>' +
+  '<h2 class="global-text">Link<input id="buttonLink" type="string" value="'+buttons[buttonId].href+'"></input></h2>' +
+  '<h2 class="global-text">Image<input id="buttonImage" type="string" value="'+buttons[buttonId].imagePath+'"></input></h2>' +
+  '<h2 class="global-text">Position<input id="buttonPosition" type="number" value="'+buttons[buttonId].position+'"></input></h2>' +
+  '<h2 class="global-text">Hotkey<input id="buttonHotkey" type="string" maxlength="1" value="'+buttons[buttonId].hotkey+'"></input></h2>' +
+  '<h2 class="global-text">Open in a new tab<input id="buttonOpenInNew" type="checkbox" value="'+buttons[buttonId].openInNew+'"></input></h2>');
 }
 
 function getSelectedButtonId() {
