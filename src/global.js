@@ -58,17 +58,16 @@ var storage = new function () {
   */
   this.stored = ['settings', 'plugins', 'buttons'];
 
-  this.load = function (what, onLoad, onError) {
+  this.load = function (what, onLoadEnd) {
     chrome.storage.local.get('stored' + capitalize(what), function (data) {
       window[what] = data['stored' + capitalize(what)];
       // Make sure there's something there
       if (window[what] === undefined || window[what] === null || window[what] === {}) {
-        console.log('No ' + what + ' found.');
-        onError();
+        onLoadEnd(new Error('No ' + what + ' found.'));
         return;
       }
       console.log('Done loading ' + what + '.');
-      onLoad();
+      onLoadEnd();
     });
   }
   
