@@ -15,7 +15,7 @@ function loadButtons(cb) {
   storage.load('buttons',
   function (error) {
     if (error) {
-      new Button({text: 'Configure buttons here', href: '/secondary.html'});
+      createButton({text: 'Configure buttons here', href: '/secondary.html'});
     } else {
       var orderedButtons = [];
       for (var i in buttons) orderedButtons.push(buttons[i]);
@@ -24,7 +24,7 @@ function loadButtons(cb) {
         else return 1;
       });
       for (var i = 0; i < orderedButtons.length; i++) 
-        new Button({
+        createButton({
             imagePath: orderedButtons[i].imagePath,
             href: orderedButtons[i].href,
             text: orderedButtons[i].text,

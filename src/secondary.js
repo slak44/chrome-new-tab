@@ -1,17 +1,17 @@
 'use strict';
-var addPlugin = new Button({text: 'Add Plugin'});
-var removePlugin = new Button({text: 'Remove Plugin'});
-var updatePlugin = new Button({text: 'Update Plugin'});
-var save = new Button({text: 'Save'});
+var addPlugin = createButton({text: 'Add Plugin'});
+var removePlugin = createButton({text: 'Remove Plugin'});
+var updatePlugin = createButton({text: 'Update Plugin'});
+var save = createButton({text: 'Save'});
 addButtonSeparator(byId('default-pane'));
-var pluginSettings = new Button({text: 'Plugin Settings'});
-var buttonList = new Button({text: 'Button List'});
+var pluginSettings = createButton({text: 'Plugin Settings'});
+var buttonList = createButton({text: 'Button List'});
 
-removePlugin.anchor.addEventListener('click', function (e) {
+removePlugin.addEventListener('click', function (e) {
   e.preventDefault();
   storage.remove('plugins', prompt('Plugin to remove:'));
 });
-save.anchor.addEventListener('click', function (e) {
+save.addEventListener('click', function (e) {
   e.preventDefault();
   var keys = Object.keys(settings);
   for (var i = 0; i < keys.length; i++) {
@@ -39,8 +39,8 @@ function showPane(id) {
     toggleDiv(id);
   }
 }
-pluginSettings.anchor.addEventListener('click', showPane('settings-pane'));
-buttonList.anchor.addEventListener('click', showPane('buttons-pane'));
+pluginSettings.addEventListener('click', showPane('settings-pane'));
+buttonList.addEventListener('click', showPane('buttons-pane'));
 function plugin(update) {
   return function (e) {
     e.preventDefault();
@@ -48,14 +48,14 @@ function plugin(update) {
     byId('file-input').click();
   }
 }
-addPlugin.anchor.addEventListener('click', plugin(false));
-updatePlugin.anchor.addEventListener('click', plugin(true));
+addPlugin.addEventListener('click', plugin(false));
+updatePlugin.addEventListener('click', plugin(true));
 
 async.parallel([loadButtons, loadSettings, configureButtonPane]);
 
 function configureButtonPane() {
-  var addButton = new Button({text: 'Add new button', parent: byId('buttons-pane')});
-  addButton.anchor.addEventListener('click', function (e) {
+  var addButton = createButton({text: 'Add new button', parent: byId('buttons-pane')});
+  addButton.addEventListener('click', function (e) {
     e.preventDefault();
     var id = prompt('Input a unique identifier for the button:');
     if (id === null) return;
@@ -72,8 +72,8 @@ function configureButtonPane() {
     byId('buttons-list').insertAdjacentHTML('beforeend', '<option>' + id + '</option>');
     if (Object.keys(buttons).length === 1) addButtonConfig(id);
   });
-  var removeButton = new Button({text: 'Remove this button', parent: byId('buttons-pane')});
-  removeButton.anchor.addEventListener('click', function (e) {
+  var removeButton = createButton({text: 'Remove this button', parent: byId('buttons-pane')});
+  removeButton.addEventListener('click', function (e) {
     e.preventDefault();
     if (!confirm('Are you sure you want to delete this button?')) return;
     delete buttons[getSelectedButtonId()];

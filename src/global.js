@@ -106,7 +106,7 @@ var storage = new function () {
   }
 };
 
-function Button(options) {
+function createButton(options) {
   if (options.parent === undefined || options.parent === null ||
       options.parent.insertAdjacentHTML === undefined) options.parent = byId('default-pane');
   options.parent.insertAdjacentHTML('beforeend',
@@ -114,10 +114,10 @@ function Button(options) {
     ((options.imagePath)? '<img src="'+options.imagePath+'" class="button-img"></img>': '') +
     '<pre class="button-text">'+options.text+'</pre>' +
   '</a>');
-  this.anchor = options.parent.children[options.parent.children.length - 1];
-  this.name = options.text;
+  var anchor = options.parent.children[options.parent.children.length - 1];
   if (options.href !== undefined && (options.href.indexOf('chrome://') === 0 || options.openInNew))
-    this.anchor.addEventListener('click', function (e) {chrome.tabs.create({url: options.href}); window.close()});
+    anchor.addEventListener('click', function (e) {chrome.tabs.create({url: options.href}); window.close()});
+  return anchor;
 }
 
 function addButtonSeparator(parent) {

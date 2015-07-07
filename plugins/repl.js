@@ -26,17 +26,17 @@ function run() {
       <div id="repl-console" class="repl-text"></div>\
     </div>\
   </div>');
-  var back = new Button({imagePath: 'assets/back.png', text: 'Go Back', parent: byId('repl-pane')});
-  var evalB = new Button({text: 'Eval', parent: byId('repl-pane')});
-  var repl = new Button({text: 'REPL'});
+  var back = createButton({imagePath: 'assets/back.png', text: 'Go Back', parent: byId('repl-pane')});
+  var evalB = createButton({text: 'Eval', parent: byId('repl-pane')});
+  var repl = createButton({text: 'REPL'});
   function toggle(e) {
     e.preventDefault();
     toggleDiv('repl-pane');
     toggleDiv('default-pane');
   }
-  repl.anchor.addEventListener('click', toggle);
-  back.anchor.addEventListener('click', toggle);
-  evalB.anchor.addEventListener('click', function (e) {
+  repl.addEventListener('click', toggle);
+  back.addEventListener('click', toggle);
+  evalB.addEventListener('click', function (e) {
     e.preventDefault();
     ans = eval(byId('repl-input').innerHTML.replace(/console\.(log|error)/g, 'replLog')); // Replace calls to 'console'
     byId('repl-output').innerHTML = ans;
