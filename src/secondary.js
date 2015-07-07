@@ -73,7 +73,7 @@ setTimeout(function () {
   var removeButton = new Button(undefined, undefined, 'Remove existing button', byId('buttons-pane'));
   removeButton.anchor.addEventListener('click', function (e) {
     e.preventDefault();
-    delete buttons[prompt('Imput the button identifier:')];
+    delete buttons[prompt('Input the button identifier:')];
     storage.store('buttons');
     location.reload(true);
   });
