@@ -87,8 +87,11 @@ setTimeout(function () {
     storage.store('buttons');
   });
   storage.load('buttons',
-  function () {
-    if (Object.keys(buttons).length === 0) return;
+  function (error) {
+    if (error || Object.keys(buttons).length === 0) {
+      buttons = {};
+      return;
+    }
     var select = byId('buttons-list');
     select.addEventListener('change', function (e) {
       var index = getSelectedButtonId();
@@ -100,33 +103,32 @@ setTimeout(function () {
     });
     for (var id in buttons) select.insertAdjacentHTML('beforeend', '<option>' + id + '</option>');
     addButtonConfig(getSelectedButtonId());
-  }, function () {
-    buttons = {};
   });
 }, 0);
 
 storage.load('settings', 
-  settingsLoaded,
-  function () {
-    storage.add('settings', {
-      name: 'Main page title',
-      desc: 'Title displayed in the center of the main page.',
-      type: 'string',
-      isVisible: true
-    }, {});
+  function (error) {
+    if (error) {
+      storage.add('settings', {
+        name: 'Main page title',
+        desc: 'Title displayed in the center of the main page.',
+        type: 'string',
+        isVisible: true
+      }, {});
+    }
     settingsLoaded();
   }
 );
 
 function settingsLoaded() {
-  storage.load('plugins', function () {
-    for (var p in plugins) {
+  storage.load('plugins', function (error) {
+    if (!error) for (var p in plugins) {
       console.log('Executing plugin: ' + plugins[p].name);
       try {if (plugins[p].secondary) eval('(' + plugins[p].secondary + ').apply(this, [])')}
       catch(e) {console.error('Execution failed: ' + e.message)}
     }
     addSettings();
-  }, addSettings);
+  });
 }
 
 function addSettings() {

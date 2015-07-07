@@ -13,24 +13,33 @@ document.onkeydown = function (e) {
 
 function loadButtons(cb) {
   storage.load('buttons',
-  function () {
-    var orderedButtons = [];
-    for (var i in buttons) orderedButtons.push(buttons[i]);
-    orderedButtons.sort(function (a, b) {
-      if (Number(a.position) < Number(b.position)) return -1;
-      else return 1;
-    });
-    for (var i = 0; i < orderedButtons.length; i++) new Button(orderedButtons[i].imagePath, orderedButtons[i].href, orderedButtons[i].text, undefined, orderedButtons[i].openInNew);
-    cb();
-  }, function () {
-    new Button(undefined, '/secondary.html', 'Configure buttons here');
+  function (error) {
+    if (error) {
+      new Button(undefined, '/secondary.html', 'Configure buttons here');
+    } else {
+      var orderedButtons = [];
+      for (var i in buttons) orderedButtons.push(buttons[i]);
+      orderedButtons.sort(function (a, b) {
+        if (Number(a.position) < Number(b.position)) return -1;
+        else return 1;
+      });
+      for (var i = 0; i < orderedButtons.length; i++) new Button
+          (orderedButtons[i].imagePath,
+          orderedButtons[i].href,
+          orderedButtons[i].text,
+          undefined, // Default parent
+          orderedButtons[i].openInNew);
+    }
     cb();
   });
   byId('date').innerHTML = new Date().toLocaleDateString('en-GB', {month: 'long', day: '2-digit', year: 'numeric'});
 }
 
 function loadSettings(cb) {
-  storage.load('settings', cb, function () {window.location.replace('/secondary.html')});
+  storage.load('settings', function (error) {
+    if (error) window.location.replace('/secondary.html');
+    cb();
+  });
 }
 
 function loadPlugins() {
@@ -40,11 +49,12 @@ function loadPlugins() {
   for (var e in settings) if (settings[e].isVisible && settings[e].value === undefined) window.location.replace('/secondary.html');
   byId('title').innerHTML = settings['Main page title'].value;
   storage.load('plugins',
-  function () {
+  function (error) {
     for (var p in plugins) {
       console.log('Executing plugin: ' + plugins[p].name);
       try {if (plugins[p].main) eval('(' + plugins[p].main + ').apply(this, [])')}
       catch(e) {console.error('Execution failed: ' + e.message)}
     }
-  }, function () {console.log('No plugins executed.')});
+    if (error) console.log('No plugins executed.');
+  });
 }
