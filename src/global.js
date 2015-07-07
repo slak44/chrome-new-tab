@@ -46,13 +46,15 @@ var storage = new function () {
         href: 'ref',
         text: 'text',
         position: 0,
-        hotkey: 'K'
+        hotkey: 'K',
+        openInNew: false
       }
     imagePath: path to image.
     href: where does it point to.
     text: displyed text.
     position: used to determine order of buttons.
     hotkey: using alt+key triggers the button.
+    openInNew: if true, opens the link in a new tab that replaces this one.
   */
   this.stored = ['settings', 'plugins', 'buttons'];
 
@@ -105,7 +107,7 @@ var storage = new function () {
   }
 };
 
-function Button(imagePath, href, text, parent) {
+function Button(imagePath, href, text, parent, openInNew) {
   if (parent === undefined || parent === null ||
       parent.insertAdjacentHTML === undefined) parent = byId('default-pane');
   parent.insertAdjacentHTML('beforeend',
@@ -115,7 +117,7 @@ function Button(imagePath, href, text, parent) {
   '</a>');
   this.anchor = parent.children[parent.children.length - 1];
   this.name = text;
-  if (href !== undefined && href.indexOf('chrome://') === 0)
+  if (href !== undefined && (href.indexOf('chrome://') === 0 || openInNew))
     this.anchor.addEventListener('click', function (e) {chrome.tabs.create({url: href}); window.close()});
 }
 
