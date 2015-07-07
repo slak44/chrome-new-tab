@@ -25,7 +25,8 @@ save.anchor.addEventListener('click', function (e) {
     href: byId('buttonLink').value,
     imagePath: byId('buttonImage').value,
     position: byId('buttonPosition').value,
-    hotkey: byId('buttonHotkey').value.toUpperCase()
+    hotkey: byId('buttonHotkey').value.toUpperCase(),
+    openInNew: !!byId('buttonOpenInNew').value
   };
   storage.store('settings');
   storage.store('plugins');
@@ -57,7 +58,8 @@ setTimeout(function () {
     '<h2 class="global-text">Link<input id="buttonLink" type="string" value="'+buttons[buttonId].href+'"></input></h2>' +
     '<h2 class="global-text">Image<input id="buttonImage" type="string" value="'+buttons[buttonId].imagePath+'"></input></h2>' +
     '<h2 class="global-text">Position<input id="buttonPosition" type="number" value="'+buttons[buttonId].position+'"></input></h2>' +
-    '<h2 class="global-text">Hotkey<input id="buttonHotkey" type="string" maxlength="1" value="'+buttons[buttonId].hotkey+'"></input></h2>');
+    '<h2 class="global-text">Hotkey<input id="buttonHotkey" type="string" maxlength="1" value="'+buttons[buttonId].hotkey+'"></input></h2>' +
+    '<h2 class="global-text">Open in a new tab<input id="buttonOpenInNew" type="checkbox" value="'+buttons[buttonId].openInNew+'"></input></h2>');
   }
   var addButton = new Button(undefined, undefined, 'Add new button', byId('buttons-pane'));
   addButton.anchor.addEventListener('click', function (e) {

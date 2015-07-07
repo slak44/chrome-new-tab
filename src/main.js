@@ -20,7 +20,7 @@ function loadButtons(cb) {
       if (Number(a.position) < Number(b.position)) return -1;
       else return 1;
     });
-    for (var i = 0; i < orderedButtons.length; i++) new Button(orderedButtons[i].imagePath, orderedButtons[i].href, orderedButtons[i].text);
+    for (var i = 0; i < orderedButtons.length; i++) new Button(orderedButtons[i].imagePath, orderedButtons[i].href, orderedButtons[i].text, undefined, orderedButtons[i].openInNew);
     cb();
   }, function () {
     new Button(undefined, '/secondary.html', 'Configure buttons here');
