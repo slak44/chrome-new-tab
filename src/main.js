@@ -15,7 +15,7 @@ function loadButtons(cb) {
   storage.load('buttons',
   function (error) {
     if (error) {
-      new Button(undefined, '/secondary.html', 'Configure buttons here');
+      new Button({text: 'Configure buttons here', href: '/secondary.html'});
     } else {
       var orderedButtons = [];
       for (var i in buttons) orderedButtons.push(buttons[i]);
@@ -23,12 +23,13 @@ function loadButtons(cb) {
         if (Number(a.position) < Number(b.position)) return -1;
         else return 1;
       });
-      for (var i = 0; i < orderedButtons.length; i++) new Button
-          (orderedButtons[i].imagePath,
-          orderedButtons[i].href,
-          orderedButtons[i].text,
-          undefined, // Default parent
-          orderedButtons[i].openInNew);
+      for (var i = 0; i < orderedButtons.length; i++) 
+        new Button({
+            imagePath: orderedButtons[i].imagePath,
+            href: orderedButtons[i].href,
+            text: orderedButtons[i].text,
+            openInNew: orderedButtons[i].openInNew
+          });
     }
     cb();
   });

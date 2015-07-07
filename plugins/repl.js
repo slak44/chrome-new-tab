@@ -26,9 +26,9 @@ function run() {
       <div id="repl-console" class="repl-text"></div>\
     </div>\
   </div>');
-  var back = new Button('assets/back.png', undefined, 'Go Back', byId('repl-pane'));
-  var evalB = new Button(undefined, undefined, 'Eval', byId('repl-pane'));
-  var repl = new Button(undefined, undefined, 'REPL');
+  var back = new Button({imagePath: 'assets/back.png', text: 'Go Back', parent: byId('repl-pane')});
+  var evalB = new Button({text: 'Eval', parent: byId('repl-pane')});
+  var repl = new Button({text: 'REPL'});
   function toggle(e) {
     e.preventDefault();
     toggleDiv('repl-pane');

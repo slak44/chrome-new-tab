@@ -106,18 +106,18 @@ var storage = new function () {
   }
 };
 
-function Button(imagePath, href, text, parent, openInNew) {
-  if (parent === undefined || parent === null ||
-      parent.insertAdjacentHTML === undefined) parent = byId('default-pane');
-  parent.insertAdjacentHTML('beforeend',
-  '<a href="'+((href)? href : '')+'" class="button">' +
-    ((imagePath)? '<img src="'+imagePath+'" class="button-img"></img>': '') +
-    '<pre class="button-text">'+text+'</pre>' +
+function Button(options) {
+  if (options.parent === undefined || options.parent === null ||
+      options.parent.insertAdjacentHTML === undefined) options.parent = byId('default-pane');
+  options.parent.insertAdjacentHTML('beforeend',
+  '<a href="'+((options.href)? options.href : '')+'" class="button">' +
+    ((options.imagePath)? '<img src="'+options.imagePath+'" class="button-img"></img>': '') +
+    '<pre class="button-text">'+options.text+'</pre>' +
   '</a>');
-  this.anchor = parent.children[parent.children.length - 1];
-  this.name = text;
-  if (href !== undefined && (href.indexOf('chrome://') === 0 || openInNew))
-    this.anchor.addEventListener('click', function (e) {chrome.tabs.create({url: href}); window.close()});
+  this.anchor = options.parent.children[options.parent.children.length - 1];
+  this.name = options.text;
+  if (options.href !== undefined && (options.href.indexOf('chrome://') === 0 || options.openInNew))
+    this.anchor.addEventListener('click', function (e) {chrome.tabs.create({url: options.href}); window.close()});
 }
 
 function addButtonSeparator(parent) {
