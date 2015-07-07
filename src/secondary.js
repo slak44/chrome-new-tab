@@ -73,7 +73,8 @@ setTimeout(function () {
     buttons[id] = {
       text: '',
       href: '',
-      imagePath: ''
+      imagePath: '',
+      hotkey: ''
     };
     byId('buttons-list').insertAdjacentHTML('beforeend', '<option>' + id + '</option>');
     if (Object.keys(buttons).length === 1) addButtonConfig(id);
