@@ -20,19 +20,16 @@ save.anchor.addEventListener('click', function (e) {
     if (input === undefined || input === null) continue;
     settings[keys[i]].value = input.value;
   }
-  var buttonIds = Object.keys(buttons);
-  for (var i = 0; i < buttonIds.length; i++) {
-    buttons[buttonIds[i]] = {
-      text: byId(buttonIds[i] + 'Text').value,
-      href: byId(buttonIds[i] + 'Link').value,
-      imagePath: byId(buttonIds[i] + 'Image').value,
-      position: byId(buttonIds[i] + 'Position').value,
-      hotkey: byId(buttonIds[i] + 'Hotkey').value.toUpperCase()
-    }
-  }
+  buttons[getSelectedButtonId()] = {
+    text: byId('buttonText').value,
+    href: byId('buttonLink').value,
+    imagePath: byId('buttonImage').value,
+    position: byId('buttonPosition').value,
+    hotkey: byId('buttonHotkey').value.toUpperCase()
+  };
   storage.store('settings');
   storage.store('plugins');
-  storage.store('buttons')
+  storage.store('buttons');
 });
 function showPane(id) {
   return function (e) {
@@ -54,6 +51,14 @@ addPlugin.anchor.addEventListener('click', plugin(false));
 updatePlugin.anchor.addEventListener('click', plugin(true));
 
 setTimeout(function () {
+  function addButtonConfig(buttonId) {
+    byId('buttons-pane').insertAdjacentHTML('beforeend',
+    '<h2 class="global-text">Text<input id="buttonText" type="string" value="'+buttons[buttonId].text+'"></input></h2>' +
+    '<h2 class="global-text">Link<input id="buttonLink" type="string" value="'+buttons[buttonId].href+'"></input></h2>' +
+    '<h2 class="global-text">Image<input id="buttonImage" type="string" value="'+buttons[buttonId].imagePath+'"></input></h2>' +
+    '<h2 class="global-text">Position<input id="buttonPosition" type="number" value="'+buttons[buttonId].position+'"></input></h2>' +
+    '<h2 class="global-text">Hotkey<input id="buttonHotkey" type="string" maxlength="1" value="'+buttons[buttonId].hotkey+'"></input></h2>');
+  }
   var addButton = new Button(undefined, undefined, 'Add new button', byId('buttons-pane'));
   addButton.anchor.addEventListener('click', function (e) {
     e.preventDefault();
@@ -68,27 +73,30 @@ setTimeout(function () {
       href: '',
       imagePath: ''
     };
-    addButtonConfig(id);
+    byId('buttons-list').insertAdjacentHTML('beforeend', '<option>' + id + '</option>');
+    if (Object.keys(buttons).length === 1) addButtonConfig(id);
   });
-  var removeButton = new Button(undefined, undefined, 'Remove existing button', byId('buttons-pane'));
+  var removeButton = new Button(undefined, undefined, 'Remove this button', byId('buttons-pane'));
   removeButton.anchor.addEventListener('click', function (e) {
     e.preventDefault();
-    delete buttons[prompt('Input the button identifier:')];
+    if (!confirm('Are you sure you want to delete this button?')) return;
+    delete buttons[getSelectedButtonId()];
     storage.store('buttons');
-    location.reload(true);
   });
-  function addButtonConfig(buttonId) {
-    byId('buttons-pane').insertAdjacentHTML('beforeend',
-    '<h1 class="global-text">Button '+buttonId+'</h1>' +
-    '<h2 class="global-text">Text<input id="'+buttonId+'Text" type="string" value="'+buttons[buttonId].text+'"></input></h2>' +
-    '<h2 class="global-text">Link<input id="'+buttonId+'Link" type="string" value="'+buttons[buttonId].href+'"></input></h2>' +
-    '<h2 class="global-text">Image<input id="'+buttonId+'Image" type="string" value="'+buttons[buttonId].imagePath+'"></input></h2>' +
-    '<h2 class="global-text">Position<input id="'+buttonId+'Position" type="number" value="'+buttons[buttonId].position+'"></input></h2>' +
-    '<h2 class="global-text">Hotkey<input id="'+buttonId+'Hotkey" type="string" maxlength="1" value="'+buttons[buttonId].hotkey+'"></input></h2>');
-  }
   storage.load('buttons',
   function () {
-    for (var i in buttons) addButtonConfig(i);
+    if (Object.keys(buttons).length === 0) return;
+    var select = byId('buttons-list');
+    select.addEventListener('change', function (e) {
+      var index = getSelectedButtonId();
+      byId('buttonText').value = buttons[index].text;
+      byId('buttonLink').value = buttons[index].href;
+      byId('buttonImage').value = buttons[index].imagePath;
+      byId('buttonPosition').value = buttons[index].position;
+      byId('buttonHotkey').value = buttons[index].hotkey;
+    });
+    for (var id in buttons) select.insertAdjacentHTML('beforeend', '<option>' + id + '</option>');
+    addButtonConfig(getSelectedButtonId());
   }, function () {
     buttons = {};
   });
@@ -128,6 +136,11 @@ function addSettings() {
      '<input id="' + settings[i].name + '" type="' + settings[i].type + '" value="' + settings[i].value + '">'
      );
   }
+}
+
+function getSelectedButtonId() {
+  var select = byId('buttons-list');
+  return select.options[select.selectedIndex].text;
 }
 
 function addPlugins(event, allowUpdate) {
