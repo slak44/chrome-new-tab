@@ -92,6 +92,7 @@ function loadButtons() {
       byId('buttonImage').value = buttons[index].imagePath;
       byId('buttonPosition').value = buttons[index].position;
       byId('buttonHotkey').value = buttons[index].hotkey;
+      byId('buttonOpenInNew').value = buttons[index].openInNew;
     });
     for (var id in buttons) select.insertAdjacentHTML('beforeend', '<option>' + id + '</option>');
     addButtonConfig(getSelectedButtonId());
