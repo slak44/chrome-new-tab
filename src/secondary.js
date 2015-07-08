@@ -1,5 +1,6 @@
 'use strict';
 var save = createButton({text: 'Save'});
+var jsonData = createButton({text: 'Backup and restore'});
 addButtonSeparator(byId('default-pane'));
 var addPlugin = createButton({text: 'Add Plugin'});
 var removePlugin = createButton({text: 'Remove Plugin'});
@@ -7,10 +8,6 @@ addButtonSeparator(byId('default-pane'));
 var pluginSettings = createButton({text: 'Plugin Settings'});
 var buttonList = createButton({text: 'Button List'});
 
-removePlugin.addEventListener('click', function (e) {
-  e.preventDefault();
-  storage.remove('plugins', prompt('Plugin to remove:'));
-});
 save.addEventListener('click', function (e) {
   e.preventDefault();
   var keys = Object.keys(settings);
@@ -28,6 +25,13 @@ save.addEventListener('click', function (e) {
     hotkey: byId('buttonHotkey').value.toUpperCase(),
     openInNew: !!byId('buttonOpenInNew').value
   };
+  if (byId('json-in').value !== '') {
+    var data = JSON.parse(byId('json-in').value);
+    if (data.settingsData !== undefined && data.buttonsData !== undefined) {
+      settings = data.settingsData;
+      buttons = data.buttonsData;
+    }
+  }
   storage.store('settings');
   storage.store('plugins');
   storage.store('buttons');
@@ -41,15 +45,26 @@ function showPane(id) {
 }
 pluginSettings.addEventListener('click', showPane('settings-pane'));
 buttonList.addEventListener('click', showPane('buttons-pane'));
+jsonData.addEventListener('click', showPane('json-pane'));
 addPlugin.addEventListener('click', function (e) {
   e.preventDefault();
   byId('file-input').addEventListener('change', function (e) {addPlugins(e, true)}, false);
   byId('file-input').click();
 });
+removePlugin.addEventListener('click', function (e) {
+  e.preventDefault();
+  storage.remove('plugins', prompt('Plugin to remove:'));
+});
 
-async.parallel([loadButtons, loadSettings, configureButtonPane]);
+async.parallel([loadButtons, loadSettings, configureButtonPane], function (err) {
+  if (err) throw err;
+  byId('json-out').innerHTML = JSON.stringify({
+    settingsData: settings,
+    buttonsData: buttons
+  });
+});
 
-function configureButtonPane() {
+function configureButtonPane(cb) {
   var addButton = createButton({text: 'Add new button', parent: byId('buttons-pane')});
   addButton.addEventListener('click', function (e) {
     e.preventDefault();
@@ -75,9 +90,10 @@ function configureButtonPane() {
     delete buttons[getSelectedButtonId()];
     storage.store('buttons');
   });
+  cb();
 }
 
-function loadButtons() {
+function loadButtons(cb) {
   storage.load('buttons',
   function (error) {
     if (error || Object.keys(buttons).length === 0) {
@@ -96,10 +112,11 @@ function loadButtons() {
     });
     for (var id in buttons) select.insertAdjacentHTML('beforeend', '<option>' + id + '</option>');
     addButtonConfig(getSelectedButtonId());
+    cb();
   });
 }
 
-function loadSettings() {
+function loadSettings(cb) {
   storage.load('settings', 
     function (error) {
       if (error) {
@@ -119,18 +136,19 @@ function loadSettings() {
          '<input id="' + settings[i].name + '" type="' + settings[i].type + '" value="' + settings[i].value + '">'
          );
       }
-      loadPlugins();
+      loadPlugins(cb);
     }
   );
 }
 
-function loadPlugins() {
+function loadPlugins(cb) {
   storage.load('plugins', function (error) {
     if (!error) for (var p in plugins) {
       console.log('Executing plugin: ' + plugins[p].name);
       try {if (plugins[p].secondary) eval('(' + plugins[p].secondary + ').apply(this, [])')}
       catch(e) {console.error('Execution failed: ' + e.message)}
     }
+    cb();
   });
 }
 

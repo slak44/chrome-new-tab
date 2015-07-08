@@ -98,6 +98,22 @@ h2 > input[type="checkbox"] {
   margin: 5px;
 }
 
+#json-out {
+  background-color: #FFFFFF;
+  -webkit-user-select: all;
+  color: #000000;
+  font-weight: normal;
+  font-family: auto;
+  font-size: 10px;
+  width: calc(100% - 100px);
+  height: 25px;
+  overflow: hidden;
+}
+
+#json-in {
+  width: calc(100% - 100px);
+}
+
 h1.setting-header {
   font-size: 50px;
   margin: 5px;
