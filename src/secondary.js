@@ -1,8 +1,8 @@
 'use strict';
+var save = createButton({text: 'Save'});
+addButtonSeparator(byId('default-pane'));
 var addPlugin = createButton({text: 'Add Plugin'});
 var removePlugin = createButton({text: 'Remove Plugin'});
-var updatePlugin = createButton({text: 'Update Plugin'});
-var save = createButton({text: 'Save'});
 addButtonSeparator(byId('default-pane'));
 var pluginSettings = createButton({text: 'Plugin Settings'});
 var buttonList = createButton({text: 'Button List'});
@@ -41,15 +41,11 @@ function showPane(id) {
 }
 pluginSettings.addEventListener('click', showPane('settings-pane'));
 buttonList.addEventListener('click', showPane('buttons-pane'));
-function plugin(update) {
-  return function (e) {
-    e.preventDefault();
-    byId('file-input').addEventListener('change', function (e) {addPlugins(e, update)}, false);
-    byId('file-input').click();
-  }
-}
-addPlugin.addEventListener('click', plugin(false));
-updatePlugin.addEventListener('click', plugin(true));
+addPlugin.addEventListener('click', function (e) {
+  e.preventDefault();
+  byId('file-input').addEventListener('change', function (e) {addPlugins(e, true)}, false);
+  byId('file-input').click();
+});
 
 async.parallel([loadButtons, loadSettings, configureButtonPane]);
 
