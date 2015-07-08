@@ -10,13 +10,13 @@ var plugin = {
       desc: 'Used to get karma information.',
       type: 'string',
       isVisible: true
-    }, {update: false, definition: true});
+    });
     storage.add('settings', {
       name: 'Reddit request time',
       desc: 'How frequent karma updates are.',
       type: 'number',
       isVisible: true
-    }, {update: false, definition: true});
+    });
   },
   main: function () {
     function updateRedditKarma() {

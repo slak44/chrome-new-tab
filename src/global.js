@@ -71,14 +71,9 @@ var storage = new function () {
     });
   }
   
-  this.add = function (what, toAdd, options) {
-    options = (options)? options : {};
+  this.add = function (what, toAdd) {
     window[what] = (window[what])? window[what] : {};
-    if (toAdd === undefined || toAdd === null || typeof toAdd !== 'object' || toAdd === {}) throw new Error('Invalid argument: ' + toAdd);
-    if (window[what][toAdd.name] !== undefined) {
-      if (options.definition) return;
-      if (!options.update && toAdd.name === window[what][toAdd.name].name) throw new Error('Already exists, use update.');
-    }
+    if (toAdd === undefined || toAdd === null || typeof toAdd !== 'object') throw new Error('Invalid argument: ' + toAdd);
     window[what][toAdd.name] = toAdd;
     this.store(what);
   }
