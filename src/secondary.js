@@ -23,7 +23,7 @@ save.addEventListener('click', function (e) {
     imagePath: byId('buttonImage').value,
     position: byId('buttonPosition').value,
     hotkey: byId('buttonHotkey').value.toUpperCase(),
-    openInNew: !!byId('buttonOpenInNew').value
+    openInNew: !!byId('buttonOpenInNew').checked
   };
   if (byId('json-in').value !== '') {
     var data = JSON.parse(byId('json-in').value);
@@ -108,7 +108,7 @@ function loadButtons(cb) {
       byId('buttonImage').value = buttons[index].imagePath;
       byId('buttonPosition').value = buttons[index].position;
       byId('buttonHotkey').value = buttons[index].hotkey;
-      byId('buttonOpenInNew').value = buttons[index].openInNew;
+      byId('buttonOpenInNew').checked = buttons[index].openInNew;
     });
     for (var id in buttons) select.insertAdjacentHTML('beforeend', '<option>' + id + '</option>');
     addButtonConfig(getSelectedButtonId());
@@ -159,7 +159,7 @@ function addButtonConfig(buttonId) {
   '<h2 class="global-text">Image<input id="buttonImage" type="string" value="'+buttons[buttonId].imagePath+'"></input></h2>' +
   '<h2 class="global-text">Position<input id="buttonPosition" type="number" value="'+buttons[buttonId].position+'"></input></h2>' +
   '<h2 class="global-text">Hotkey<input id="buttonHotkey" type="string" maxlength="1" value="'+buttons[buttonId].hotkey+'"></input></h2>' +
-  '<h2 class="global-text">Open in a new tab<input id="buttonOpenInNew" type="checkbox" value="'+buttons[buttonId].openInNew+'"></input></h2>');
+  '<h2 class="global-text">Open in a new tab<input id="buttonOpenInNew" type="checkbox" checked="'+buttons[buttonId].openInNew+'"></input></h2>');
 }
 
 function getSelectedButtonId() {
