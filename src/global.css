@@ -54,21 +54,16 @@ h2 > input[type="checkbox"] {
   white-space: nowrap;
 }
 
-#title {
-  top: 150px;
-}
-
-#time {
-  top: 250px;
-}
-
 #date {
   font-size: 50px;
-  top: 350px;
 }
 
 #data-pane {
   width: 800px;
+}
+
+#data-pane > div {
+	margin-top: 200px;
 }
 
 #default-pane {
@@ -124,7 +119,6 @@ p.dpane-text {
   font-size: 100px;
   width: 100%;
   margin: 0px;
-  position: absolute;
 }
 
 a.button {
