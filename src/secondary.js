@@ -41,14 +41,14 @@ function showPane(id) {
     e.preventDefault();
     toggleDiv(byClass('focused')[0], true);
     toggleDiv(id);
-  }
+  };
 }
 pluginSettings.addEventListener('click', showPane('settings-pane'));
 buttonList.addEventListener('click', showPane('buttons-pane'));
 jsonData.addEventListener('click', showPane('json-pane'));
 addPlugin.addEventListener('click', function (e) {
   e.preventDefault();
-  byId('file-input').addEventListener('change', function (e) {addPlugins(e, true)}, false);
+  byId('file-input').addEventListener('change', function (e) {addPlugins(e, true);}, false);
   byId('file-input').click();
 });
 removePlugin.addEventListener('click', function (e) {
@@ -145,8 +145,9 @@ function loadPlugins(cb) {
   storage.load('plugins', function (error) {
     if (!error) for (var p in plugins) {
       console.log('Executing plugin: ' + plugins[p].name);
-      try {if (plugins[p].secondary) eval('(' + plugins[p].secondary + ').apply(this, [])')}
-      catch(e) {console.error('Execution failed: ' + e.message)}
+      /*jshint -W061*/
+      try {if (plugins[p].secondary) eval('(' + plugins[p].secondary + ').apply(this, [])');}
+      catch(e) {console.error('Execution failed: ' + e.message);}
     }
     cb();
   });
@@ -176,6 +177,7 @@ function addPlugins(event, allowUpdate) {
         alert("Please choose a .js file.");
         return;
       }
+      /*jshint -W061*/
       var plugin = eval(e.target.result);
       if (plugin.init) plugin.init();
       // Serialize functions, if they exist
@@ -183,7 +185,7 @@ function addPlugins(event, allowUpdate) {
       if (typeof plugin.main === 'function') plugin.main = plugin.main.toString();
       if (typeof plugin.secondary === 'function') plugin.secondary = plugin.secondary.toString();
       storage.add('plugins', plugin, {update: allowUpdate});
-    }
+    };
   })(file);
   reader.readAsText(file);
 }

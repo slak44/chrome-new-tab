@@ -29,10 +29,10 @@ var plugin = {
             'Comment karma: ' + data.data.comment_karma + '\n' +
             'Link karma: ' + data.data.link_karma;
         } else throw new Error('Failed request.');
-      }
+      };
       req.onloadend = function () {
         setTimeout(updateRedditKarma, settings['Reddit request time'].value);
-      }
+      };
       req.send();
     }
     pluginCss.innerHTML +=
