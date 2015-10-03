@@ -23,6 +23,7 @@ function loadButtons(cb) {
         if (Number(a.position) < Number(b.position)) return -1;
         else return 1;
       });
+      /*jshint -W004*/
       for (var i = 0; i < orderedButtons.length; i++) 
         createButton({
             imagePath: orderedButtons[i].imagePath,
@@ -53,8 +54,9 @@ function loadPlugins() {
   function (error) {
     for (var p in plugins) {
       console.log('Executing plugin: ' + plugins[p].name);
-      try {if (plugins[p].main) eval('(' + plugins[p].main + ').apply(this, [])')}
-      catch(e) {console.error('Execution failed: ' + e.message)}
+      /*jshint -W061*/
+      try {if (plugins[p].main) eval('(' + plugins[p].main + ').apply(this, [])');}
+      catch(e) {console.error('Execution failed: ' + e.message);}
     }
     if (error) console.log('No plugins executed.');
   });
