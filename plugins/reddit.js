@@ -26,8 +26,7 @@ var plugin = {
         if (req.status === 200) {
           var data = JSON.parse(req.response);
           byId('reddit-karma').innerHTML =
-            'Comment karma: ' + data.data.comment_karma + '\n' +
-            'Link karma: ' + data.data.link_karma;
+            'Comment karma: ' + data.data.comment_karma + '; Link karma: ' + data.data.link_karma;
         } else throw new Error('Failed request.');
       };
       req.onloadend = function () {
@@ -35,13 +34,7 @@ var plugin = {
       };
       req.send();
     }
-    pluginCss.innerHTML +=
-    '#reddit-karma {\
-      font-size: 30px;\
-      top: 410px;\
-      white-space: pre;\
-     }';
-    byId('data-pane').insertAdjacentHTML('beforeend', '<p id="reddit-karma" class="dpane-text global-text"></p>');
+    byClass('bottom-text')[0].insertAdjacentHTML('beforeend', '<span id="reddit-karma"></span>');
     setTimeout(updateRedditKarma, 0);
   }
 };
