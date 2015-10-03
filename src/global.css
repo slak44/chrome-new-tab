@@ -185,6 +185,14 @@ span.button-separator {
   border-radius: 10px;
 }
 
+div.bottom-text {
+  position: fixed;
+  bottom: 0px;
+  left: 0px;
+  margin: 5px;
+  font-size: 18px;
+}
+
 div.focused {
   -webkit-animation: show 0.5s linear 0s 1 normal forwards running;
 }
