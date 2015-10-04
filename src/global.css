@@ -78,9 +78,9 @@ h2 > input[type="checkbox"] {
 #settings-link {
   z-index: 10000;
   position: absolute;
-  bottom: 0px;
-  right: 0px;
-  width: 50px;
+  bottom: 5px;
+  right: 5px;
+  width: 55px;
   height: 25px;
   line-height: 25px;
   animation: none;
