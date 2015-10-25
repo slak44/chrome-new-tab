@@ -8,22 +8,21 @@
     <script src="global.js"></script>
     <script src="async.js"></script>
   </head>
-  <body>
+  <body class="orange lighten-5">
     <div id="default-pane" class="centered focused">
 			<div class="row">
 				<div class="col s3">
 					<ul id="buttons" class="collection">
 					</ul>
 				</div>
+				<div class="col s5 right right-align">
+					<ul id="data-collection" class="collection">
+						<li id="title" class="collection-item bold"><h1>Title</h1></li>
+						<li id="time" class="collection-item"><h5>00:00</h5></li>
+						<li id="date" class="collection-item"><h5>01 January 1970</h5></li>
+					</ul>
+				</div>
 			</div>
-      <div id="data-pane" class="centered">
-        <div>
-          <p id="title" class="dpane-text global-text">Title</p>
-          <p id="time" class="dpane-text global-text">00:00</p>
-          <p id="date" class="dpane-text global-text">01 January 1970</p>
-        </div>
-        <img src="assets/circle.png" class="rotate" width="800" height="800"></img>
-      </div>
     </div>
     <div class="bottom-text global-text"></div>
     <a id="settings-link" class="button" href="/secondary.html">
