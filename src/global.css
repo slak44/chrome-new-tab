@@ -55,6 +55,10 @@ h2 > input[type="checkbox"] {
   white-space: nowrap;
 }
 
+#buttons > li {
+	width: 100%;
+}
+
 .button-text {
 	font-size: large;
 	margin-left: 16px;
