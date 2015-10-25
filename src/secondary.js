@@ -1,12 +1,12 @@
 'use strict';
-var save = createButton({text: 'Save'});
-var jsonData = createButton({text: 'Backup and restore'});
+var save = createButton({text: 'Save', parent: byId('default-pane')});
+var jsonData = createButton({text: 'Backup and restore', parent: byId('default-pane')});
 addButtonSeparator(byId('default-pane'));
-var addPlugin = createButton({text: 'Add Plugin'});
-var removePlugin = createButton({text: 'Remove Plugin'});
+var addPlugin = createButton({text: 'Add Plugin', parent: byId('default-pane')});
+var removePlugin = createButton({text: 'Remove Plugin', parent: byId('default-pane')});
 addButtonSeparator(byId('default-pane'));
-var pluginSettings = createButton({text: 'Plugin Settings'});
-var buttonList = createButton({text: 'Button List'});
+var pluginSettings = createButton({text: 'Plugin Settings', parent: byId('default-pane')});
+var buttonList = createButton({text: 'Button List', parent: byId('default-pane')});
 
 save.addEventListener('click', function (e) {
   e.preventDefault();
