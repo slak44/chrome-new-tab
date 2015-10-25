@@ -71,23 +71,6 @@ h2 > input[type="checkbox"] {
 
 .button-image-wrapper > i.material-icons {
 	font-size: 50px;
-	/*color: #f57c00;*/
-}
-
-#title {
-	/*font-size: 50px;*/
-}
-
-/*#date {
-  font-size: 50px;
-}*/
-
-#data-pane {
-  width: 800px;
-}
-
-#data-pane > div {
-	margin-top: 200px;
 }
 
 #default-pane {
@@ -103,10 +86,7 @@ h2 > input[type="checkbox"] {
   position: absolute;
   bottom: 5px;
   right: 5px;
-  width: 55px;
-  height: 25px;
-  line-height: 25px;
-  animation: none;
+	color: black;
 }
 
 #json-out {
