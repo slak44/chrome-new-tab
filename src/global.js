@@ -3,7 +3,7 @@ var plugins = {};
 var settings = {};
 var buttons = {};
 
-var storage = new function () {
+var storage = new (function () {
   /*
     Existing storage objects. Usable as 'what' parameters.
     
@@ -69,23 +69,23 @@ var storage = new function () {
       console.log('Done loading ' + what + '.');
       onLoadEnd();
     });
-  }
+  };
   
   this.add = function (what, toAdd) {
     window[what] = (window[what])? window[what] : {};
     if (toAdd === undefined || toAdd === null || typeof toAdd !== 'object') throw new Error('Invalid argument: ' + toAdd);
     window[what][toAdd.name] = toAdd;
     this.store(what);
-  }
+  };
   
   this.remove = function (what, name) {
     delete window[what][name];
     this.store(what);
-  }
+  };
   
   this.store = function (what) {
     eval('chrome.storage.local.set({stored' + capitalize(what) + ': ' + what + '}, undefined)');
-  }
+  };
 
   /*
     Wipes all storage, both in-memory and persistent.
@@ -93,25 +93,31 @@ var storage = new function () {
   this.clearStorage = function () {
     for (var i = 0; i < storage.stored.length; i++) eval(storage.stored[i] + ' = {}');
     chrome.storage.local.clear();
-  }
+  };
   
   this.clear = function (what) {
     window[what] = {};
     eval('chrome.storage.local.set({stored' + capitalize(what) + ': {}}, undefined)');
-  }
-};
+  };
+})();
 
 function createButton(options) {
   if (options.parent === undefined || options.parent === null ||
-      options.parent.insertAdjacentHTML === undefined) options.parent = byId('default-pane');
-  options.parent.insertAdjacentHTML('beforeend',
-  '<a href="'+((options.href)? options.href : '')+'" class="button">' +
-    ((options.imagePath)? '<img src="'+options.imagePath+'" class="button-img"></img>': '') +
-    '<pre class="button-text">'+options.text+'</pre>' +
-  '</a>');
+      options.parent.insertAdjacentHTML === undefined) options.parent = byId('buttons');
+	var image = options.imagePath ? '<img src="' + options.imagePath + '"/>' : '<i class="material-icons">send</i>';
+	options.parent.insertAdjacentHTML('beforeend',
+	'<li class="collection-item">' +
+		'<a href="'+(options.href || '')+'" class="button-link">' +
+			'<div class="valign-wrapper">' +
+				'<div class="button-image-wrapper">'+image+'</div>' +
+				'<div class="valign thin button-text">'+options.text+'</div>' +
+			'</div>' +
+		'</a>' +
+	'</li>'
+	);
   var anchor = options.parent.children[options.parent.children.length - 1];
   if (options.href !== undefined && (options.href.indexOf('chrome://') === 0 || options.openInNew))
-    anchor.addEventListener('click', function (e) {chrome.tabs.create({url: options.href}); window.close()});
+    anchor.addEventListener('click', function (e) {chrome.tabs.create({url: options.href}); window.close();});
   return anchor;
 }
 
