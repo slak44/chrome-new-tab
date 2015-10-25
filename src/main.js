@@ -1,6 +1,6 @@
 'use strict';
 setTimeout(function setTime() {
-  byId('time').innerHTML = new Date().toLocaleTimeString('intl', {hour: '2-digit', minute: '2-digit', hour12: false});
+  byId('time').children[0].innerHTML = new Date().toLocaleTimeString('intl', {hour: '2-digit', minute: '2-digit', hour12: false});
   setTimeout(setTime, 1000);
 }, 0);
 
@@ -34,7 +34,7 @@ function loadButtons(cb) {
     }
     cb();
   });
-  byId('date').innerHTML = new Date().toLocaleDateString('en-GB', {month: 'long', day: '2-digit', year: 'numeric'});
+  byId('date').children[0].innerHTML = new Date().toLocaleDateString('en-GB', {month: 'long', day: '2-digit', year: 'numeric'});
 }
 
 function loadSettings(cb) {
@@ -49,7 +49,7 @@ function loadPlugins() {
   window.pluginCss = byId('plugin-css');
   // If a visible value is empty, it fails immediately
   for (var e in settings) if (settings[e].isVisible && settings[e].value === undefined) window.location.replace('/secondary.html');
-  byId('title').innerHTML = settings['Main page title'].value;
+  byId('title').children[0].innerHTML = settings['Main page title'].value;
   storage.load('plugins',
   function (error) {
     for (var p in plugins) {

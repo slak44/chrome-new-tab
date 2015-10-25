@@ -71,11 +71,16 @@ h2 > input[type="checkbox"] {
 
 .button-image-wrapper > i.material-icons {
 	font-size: 50px;
+	/*color: #f57c00;*/
 }
 
-#date {
-  font-size: 50px;
+#title {
+	/*font-size: 50px;*/
 }
+
+/*#date {
+  font-size: 50px;
+}*/
 
 #data-pane {
   width: 800px;
