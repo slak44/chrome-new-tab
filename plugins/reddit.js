@@ -25,7 +25,8 @@ var plugin = {
       req.onload = function () {
         if (req.status === 200) {
           var data = JSON.parse(req.response);
-          byId('reddit-karma').innerHTML = data.data.comment_karma + ' comment karma<br>' + data.data.link_karma + ' link karma';
+          byId('reddit-karma').innerHTML =
+						'<span class="color accent-4">' + data.data.comment_karma + '</span> comment karma<br><span class="color accent-4">' + data.data.link_karma + '</span> link karma';
         } else throw new Error('Failed request.');
       };
       req.onloadend = function () {
