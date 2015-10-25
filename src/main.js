@@ -1,6 +1,6 @@
 'use strict';
 setTimeout(function setTime() {
-  byId('time').children[0].innerHTML = new Date().toLocaleTimeString('intl', {hour: '2-digit', minute: '2-digit', hour12: false});
+  byId('time').innerHTML = new Date().toLocaleTimeString('intl', {hour: '2-digit', minute: '2-digit', hour12: false});
   setTimeout(setTime, 1000);
 }, 0);
 
@@ -34,7 +34,7 @@ function loadButtons(cb) {
     }
     cb();
   });
-  byId('date').children[0].innerHTML = new Date().toLocaleDateString('en-GB', {month: 'long', day: '2-digit', year: 'numeric'});
+  byId('date').innerHTML = new Date().toLocaleDateString('en-GB', {month: 'long', day: '2-digit', year: 'numeric'});
 }
 
 function loadSettings(cb) {
