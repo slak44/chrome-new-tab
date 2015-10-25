@@ -106,7 +106,7 @@ function createButton(options) {
       options.parent.insertAdjacentHTML === undefined) options.parent = byId('buttons');
 	var image = options.imagePath ? '<img src="' + options.imagePath + '"/>' : '<i class="material-icons">send</i>';
 	options.parent.insertAdjacentHTML('beforeend',
-	'<li class="collection-item">' +
+	'<li class="waves-effect waves-light collection-item">' +
 		'<a href="'+(options.href || '')+'" class="button-link">' +
 			'<div class="valign-wrapper">' +
 				'<div class="button-image-wrapper">'+image+'</div>' +
