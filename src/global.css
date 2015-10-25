@@ -55,6 +55,24 @@ h2 > input[type="checkbox"] {
   white-space: nowrap;
 }
 
+.button-text {
+	font-size: large;
+	margin-left: 16px;
+}
+
+.button-link {
+	color: black;
+}
+
+.button-image-wrapper {
+	width: 50px;
+	height: 50px;
+}
+
+.button-image-wrapper > i.material-icons {
+	font-size: 50px;
+}
+
 #date {
   font-size: 50px;
 }
