@@ -2,6 +2,28 @@
 var plugins = {};
 var settings = {};
 var buttons = {};
+var colorScheme = {
+	// Orange is default
+	name: 'orange',
+
+	lighten5: '#fff3e0',
+	lighten4: '#ffe0b2',
+	lighten3: '#ffcc80',
+	lighten2: '#ffb74d',
+	lighten1: '#ffa726',
+	
+	main: 		'#ff9800',
+	
+	darken1: 	'#fb8c00',
+	darken2: 	'#f57c00',
+	darken3: 	'#ef6c00',
+	darken4: 	'#e65100',
+	
+	accent1: 	'#ffd180',
+	accent2: 	'#ffab40',
+	accent3: 	'#ff9100',
+	accent4: 	'#ff6d00',
+}; // TODO: get from storage, add settings
 
 var storage = new (function () {
   /*
@@ -100,6 +122,20 @@ var storage = new (function () {
     eval('chrome.storage.local.set({stored' + capitalize(what) + ': {}}, undefined)');
   };
 })();
+
+function activateScheme(colorScheme) {
+  var css = '.bgcolor {background-color: ' + colorScheme.main + ' !important;}';
+	for (var i = 1; i <= 4; i++) css += '\n.bgcolor.darken-' + i +' {background-color: ' + colorScheme['darken' + i] + ' !important;}';
+	for (var i = 1; i <= 5; i++) css += '\n.bgcolor.lighten-' + i +' {background-color: ' + colorScheme['lighten' + i] + ' !important;}';
+	for (var i = 1; i <= 4; i++) css += '\n.bgcolor.accent-' + i +' {background-color: ' + colorScheme['accent' + i] + ' !important;}';
+	
+	css += '.color {color: ' + colorScheme.main + ' !important;}';
+	for (var i = 1; i <= 4; i++) css += '\n.color.darken-' + i +' {color: ' + colorScheme['darken' + i] + ' !important;}';
+	for (var i = 1; i <= 5; i++) css += '\n.color.lighten-' + i +' {color: ' + colorScheme['lighten' + i] + ' !important;}';
+	for (var i = 1; i <= 4; i++) css += '\n.color.accent-' + i +' {color: ' + colorScheme['accent' + i] + ' !important;}';
+	byId('dynamic-colors').innerHTML = css;
+}
+setTimeout(activateScheme, 0, colorScheme);
 
 function createButton(options) {
   if (options.parent === undefined || options.parent === null ||
