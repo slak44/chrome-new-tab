@@ -1,38 +1,56 @@
 <html>
   <head>
     <title>New Tab Settings</title>
-    <link rel="stylesheet" href="global.css">
+		<style id="dynamic-colors"></style>
+		<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="global.css">
+    <link rel="stylesheet" type="text/css" href="materialize/css/materialize.css">
+		<script src="jquery-2.1.4.min.js"></script>
+		<script src="materialize/js/materialize.js"></script>
+		<script src="async.js"></script>
     <script src="global.js"></script>
-    <script src="async.js"></script>
   </head>
-  <body bgcolor="#303030">
+  <body class="bgcolor lighten-5">
     <input id="file-input" type="file"></input>
-    <div id="default-pane">
-    </div>
-    <div id="settings-pane" class="focused setting-tab">
-      <h1 class="setting-header global-text">Plugin Settings</h1>
-    </div>
-    <div id="buttons-pane" class="setting-tab">
-      <h1 class="setting-header global-text">Button List</h1>
-      <h1 class="global-text">Select button to edit:
-        <select id="buttons-list"></select>
-      </h1>
-    </div>
-    <div id="json-pane" class="setting-tab">
-      <h1 class="setting-header global-text">Data backup and restore</h1>
-      <h1 class="global-text">All settings and buttons data:
-        <p></p>
-        <small class="global-text">Click on it, Ctrl-A, Ctrl-C to copy</small>
-        <p></p>
-        <div id="json-out"></div>
-      </h1>
-      <h1 class="global-text">Input object here to overwrite current data:
-        <p></p>
-        <small class="global-text">If the object is valid, it will be evaluated on save</small>
-        <p></p>
-        <input id="json-in" type="string"></input>
-      </h1>
-    </div>
+		<div class="row">
+			<div class="col s3">
+				<ul id="buttons" class="collection">
+				</ul>
+			</div>
+			<div class="col s12 right right-align">
+				<ul class="tabs">
+					<li id="plugin-settings" class="tab col s2"><a href="#settings-tab" class="color">Plugin Settings</a></li>
+					<li id="button-list" class="tab col s2"><a href="#buttons-tab" class="color">Button List</a></li>
+					<li id="backup-and-restore" class="tab col s2"><a href="#json-tab" class="color">Backup and restore</a></li>
+					<div class="bgcolor indicator"></div>
+				</ul>
+				<a id="floating-save-button" class="bgcolor waves-effect waves-light btn-floating btn-large floating-save-button" href="#"><i class="material-icons">save</i></a>
+				<div id="settings-tab" class="focused setting-tab">
+				</div>
+				<div id="buttons-tab" class="setting-tab">
+					<div id="buttons-list-controls" class="row center-align">
+						<a class="col s3 bgcolor lighten-2 waves-effect waves-light dropdown-button btn" data-activates="buttons-list" href="#">Select button</a>
+						<a id="remove-buttons" class="col s1 right waves-effect waves-light btn-flat" href="#">Remove</a>
+						<a id="add-buttons" class="col s1 right waves-effect waves-light btn-flat" href="#">Add</a>
+					</div>
+					<ul id="buttons-list" class="color dropdown-content"></ul>
+				</div>
+				<div id="json-tab" class="setting-tab">
+					<h4>All settings and buttons data:
+						<p></p>
+						<small>Click on it, Ctrl-A, Ctrl-C to copy</small>
+						<p></p>
+						<div id="json-out"></div>
+					</h4>
+					<h4>Input object here to overwrite current data:
+						<p></p>
+						<small>If the object is valid, it will be evaluated on save</small>
+						<p></p>
+						<input id="json-in" type="text"></input>
+					</h4>
+				</div>
+			</div>
+		</div>
     <script src="secondary.js"></script>
   </body>
 </html>

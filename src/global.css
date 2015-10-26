@@ -72,6 +72,12 @@ h2 > input[type="checkbox"] {
 	font-size: 50px;
 }
 
+#floating-save-button {
+	position: absolute !important;
+	bottom: 25px;
+	right: 25px;
+}
+
 #buttons > li {
 	width: 100%;
 }
@@ -108,20 +114,25 @@ h2 > input[type="checkbox"] {
   width: calc(100% - 100px);
 }
 
+#buttons-list-controls {
+	margin-top: 10px;
+}
+
+div.indicator.bgcolor + div.indicator {
+	display: none;
+}
+
+ul.color.dropdown-content > li > a {
+	color: inherit;
+}
+
 h1.setting-header {
   font-size: 50px;
   margin: 5px;
 }
 
 div.setting-tab {
-  opacity: 0;
-  position: absolute;
-  top: 0px;
-  left: 0px;
-  right: 0px;
-  margin-left: 250px;
-  height: 100%;
-  overflow-y: scroll;
+	width: 100%;
 }
 
 span.button-separator {

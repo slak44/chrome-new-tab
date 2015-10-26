@@ -1,41 +1,42 @@
 'use strict';
-var save = createButton({text: 'Save', parent: byId('default-pane')});
-var jsonData = createButton({text: 'Backup and restore', parent: byId('default-pane')});
-addButtonSeparator(byId('default-pane'));
-var addPlugin = createButton({text: 'Add Plugin', parent: byId('default-pane')});
-var removePlugin = createButton({text: 'Remove Plugin', parent: byId('default-pane')});
-addButtonSeparator(byId('default-pane'));
-var pluginSettings = createButton({text: 'Plugin Settings', parent: byId('default-pane')});
-var buttonList = createButton({text: 'Button List', parent: byId('default-pane')});
+var addPlugin = createButton({text: 'Add Plugin'});
+var removePlugin = createButton({text: 'Remove Plugin'});
 
-save.addEventListener('click', function (e) {
-  e.preventDefault();
-  var keys = Object.keys(settings);
-  for (var i = 0; i < keys.length; i++) {
-    if (!settings[keys[i]].isVisible) continue;
-    var input = byId(keys[i]);
-    if (input === undefined || input === null) continue;
-    settings[keys[i]].value = input.value;
-  }
-  buttons[getSelectedButtonId()] = {
-    text: byId('buttonText').value,
-    href: byId('buttonLink').value,
-    imagePath: byId('buttonImage').value,
-    position: byId('buttonPosition').value,
-    hotkey: byId('buttonHotkey').value.toUpperCase(),
-    openInNew: !!byId('buttonOpenInNew').checked
-  };
-  if (byId('json-in').value !== '') {
-    var data = JSON.parse(byId('json-in').value);
-    if (data.settingsData !== undefined && data.buttonsData !== undefined) {
-      settings = data.settingsData;
-      buttons = data.buttonsData;
-    }
-  }
-  storage.store('settings');
-  storage.store('plugins');
-  storage.store('buttons');
+byId('floating-save-button').addEventListener('click', function (evt) {
+  if (hasClass(byId('settings-tab'), 'focused')) {
+		var keys = Object.keys(settings);
+		for (var i = 0; i < keys.length; i++) {
+			if (!settings[keys[i]].isVisible) continue;
+			var input = byId(keys[i]);
+			if (input === undefined || input === null) continue;
+			settings[keys[i]].value = input.value;
+		}
+		storage.store('settings');
+	} else if (hasClass(byId('buttons-tab'), 'focused')) {
+		var id = byId('buttonText').getAttribute('data-button-id');
+		if (id === '') return;
+		buttons[id] = {
+			text: byId('buttonText').value,
+			href: byId('buttonLink').value,
+			imagePath: byId('buttonImage').value,
+			position: byId('buttonPosition').value,
+			hotkey: byId('buttonHotkey').value.toUpperCase(),
+			openInNew: !!byId('buttonOpenInNew').checked
+		};
+		storage.store('buttons');
+	} else if (hasClass(byId('json-tab'), 'focused')) {
+	  if (byId('json-in').value !== '') {
+	    var data = JSON.parse(byId('json-in').value);
+	    if (data.settingsData !== undefined && data.buttonsData !== undefined) {
+	      settings = data.settingsData;
+	      buttons = data.buttonsData;
+	    }
+	  }
+		storage.store('settings');
+		storage.store('buttons');
+	}
 });
+
 function showPane(id) {
   return function (e) {
     e.preventDefault();
@@ -43,9 +44,9 @@ function showPane(id) {
     toggleDiv(id);
   };
 }
-pluginSettings.addEventListener('click', showPane('settings-pane'));
-buttonList.addEventListener('click', showPane('buttons-pane'));
-jsonData.addEventListener('click', showPane('json-pane'));
+byId('plugin-settings').addEventListener('click', showPane('settings-tab'));
+byId('button-list').addEventListener('click', showPane('buttons-tab'));
+byId('backup-and-restore').addEventListener('click', showPane('json-tab'));
 addPlugin.addEventListener('click', function (e) {
   e.preventDefault();
   byId('file-input').addEventListener('change', function (e) {addPlugins(e, true);}, false);
@@ -65,8 +66,7 @@ async.parallel([loadButtons, loadSettings, configureButtonPane], function (err) 
 });
 
 function configureButtonPane(cb) {
-  var addButton = createButton({text: 'Add new button', parent: byId('buttons-pane')});
-  addButton.addEventListener('click', function (e) {
+  byId('add-buttons').addEventListener('click', function (e) {
     e.preventDefault();
     var id = prompt('Input a unique identifier for the button:');
     if (id === null) return;
@@ -78,16 +78,22 @@ function configureButtonPane(cb) {
       text: '',
       href: '',
       imagePath: '',
-      hotkey: ''
+      hotkey: '',
+			order: '',
+			checked: false
     };
-    byId('buttons-list').insertAdjacentHTML('beforeend', '<option>' + id + '</option>');
+		setCurrentButton(buttons[id], id);
+    byId('buttons-list').insertAdjacentHTML('beforeend', '<li id="' + id + '"><a href="#!">' + id + '</a></li>');
     if (Object.keys(buttons).length === 1) addButtonConfig(id);
   });
-  var removeButton = createButton({text: 'Remove this button', parent: byId('buttons-pane')});
-  removeButton.addEventListener('click', function (e) {
+	
+  byId('remove-buttons').addEventListener('click', function (e) {
     e.preventDefault();
     if (!confirm('Are you sure you want to delete this button?')) return;
-    delete buttons[getSelectedButtonId()];
+		var id = byId('buttonText').getAttribute('data-button-id');
+    delete buttons[id];
+		byId(id).parentNode.removeChild(byId(id));
+		setCurrentButton(getFirstButton());
     storage.store('buttons');
   });
   cb();
@@ -100,20 +106,41 @@ function loadButtons(cb) {
       buttons = {};
       return;
     }
-    var select = byId('buttons-list');
-    select.addEventListener('change', function (e) {
-      var index = getSelectedButtonId();
-      byId('buttonText').value = buttons[index].text;
-      byId('buttonLink').value = buttons[index].href;
-      byId('buttonImage').value = buttons[index].imagePath;
-      byId('buttonPosition').value = buttons[index].position;
-      byId('buttonHotkey').value = buttons[index].hotkey;
-      byId('buttonOpenInNew').checked = buttons[index].openInNew;
-    });
-    for (var id in buttons) select.insertAdjacentHTML('beforeend', '<option>' + id + '</option>');
-    addButtonConfig(getSelectedButtonId());
+		addButtonConfig(Object.keys(buttons)[0]);
+    var dropdown = byId('buttons-list');
+    for (var id in buttons) {
+			dropdown.insertAdjacentHTML('beforeend', '<li id="' + id + '"><a href="#!">' + id + '</a></li>');
+			byId(id).addEventListener('click', (function (id) {
+				return function (evt) {
+					setCurrentButton(buttons[id], id);
+				};
+			})(id));
+		}
     cb();
   });
+}
+
+function setCurrentButton(buttonData, id) {
+	byId('buttonText').setAttribute('data-button-id', id);
+	byId('buttonText').value = buttonData.text;
+	byId('buttonLink').value = buttonData.href;
+	byId('buttonImage').value = buttonData.imagePath;
+	byId('buttonPosition').value = buttonData.position;
+	byId('buttonHotkey').value = buttonData.hotkey;
+	byId('buttonOpenInNew').checked = buttonData.openInNew;
+}
+
+function getFirstButton() {
+	if (buttons === undefined || Object.keys(buttons).length === 0) return {
+		id: '',
+		text: '',
+		href: '',
+		imagePath: '',
+		hotkey: '',
+		order: '',
+		checked: false
+	};
+	else return buttons[Object.keys(buttons)[0]];
 }
 
 function loadSettings(cb) {
@@ -123,18 +150,18 @@ function loadSettings(cb) {
         storage.add('settings', {
           name: 'Main page title',
           desc: 'Title displayed in the center of the main page.',
-          type: 'string',
+          type: 'text',
           isVisible: true
         }, {});
       }
       for (var i in settings) {
-         if (!settings[i].isVisible) continue;
-         byId('settings-pane').insertAdjacentHTML('beforeend',
-         '<h1 class="global-text">' + settings[i].name +
-         '<small>  ' + settings[i].desc + '</small>' +
-         '</h1>' +
-         '<input id="' + settings[i].name + '" type="' + settings[i].type + '" value="' + settings[i].value + '">'
-         );
+        if (!settings[i].isVisible) continue;
+				byId('settings-tab').insertAdjacentHTML('beforeend',
+				'<div class="input-field">'+
+          '<input id="' + settings[i].name + '" placeholder="' + settings[i].desc + '" type="' + settings[i].type + '" value="' + settings[i].value + '" class="">' +
+          '<label for="' + settings[i].name + '" class="active">' + settings[i].name + '</label>' +
+        '</div>'
+				);
       }
       loadPlugins(cb);
     }
@@ -154,18 +181,32 @@ function loadPlugins(cb) {
 }
 
 function addButtonConfig(buttonId) {
-  byId('buttons-pane').insertAdjacentHTML('beforeend',
-  '<h2 class="global-text">Text<input id="buttonText" type="string" value="'+buttons[buttonId].text+'"></input></h2>' +
-  '<h2 class="global-text">Link<input id="buttonLink" type="string" value="'+buttons[buttonId].href+'"></input></h2>' +
-  '<h2 class="global-text">Image<input id="buttonImage" type="string" value="'+buttons[buttonId].imagePath+'"></input></h2>' +
-  '<h2 class="global-text">Position<input id="buttonPosition" type="number" value="'+buttons[buttonId].position+'"></input></h2>' +
-  '<h2 class="global-text">Hotkey<input id="buttonHotkey" type="string" maxlength="1" value="'+buttons[buttonId].hotkey+'"></input></h2>' +
-  '<h2 class="global-text">Open in a new tab<input id="buttonOpenInNew" type="checkbox" checked="'+buttons[buttonId].openInNew+'"></input></h2>');
-}
-
-function getSelectedButtonId() {
-  var select = byId('buttons-list');
-  return select.options[select.selectedIndex].text;
+  byId('buttons-tab').insertAdjacentHTML('beforeend',
+	'<div class="input-field">'+
+		'<input id="buttonText" type="text" class="" data-button-id="' + buttonId + '" value="' + buttons[buttonId].text + '">' +
+		'<label for="buttonText" class="active">Text</label>' +
+	'</div>' +
+	'<div class="input-field">'+
+		'<input id="buttonLink" type="url" class="validate" value="' + buttons[buttonId].href + '">' +
+		'<label for="buttonLink" class="active">Link</label>' +
+	'</div>' +
+	'<div class="input-field">'+
+		'<input id="buttonImage" type="url" class="validate" value="' + buttons[buttonId].imagePath + '">' +
+		'<label for="buttonImage" class="active">Image</label>' +
+	'</div>' +
+	'<div class="input-field">'+
+		'<input id="buttonPosition" type="number" class="" value="' + buttons[buttonId].position + '">' +
+		'<label for="buttonPosition" class="active">Order</label>' +
+	'</div>' +
+	'<div class="input-field">'+
+		'<input id="buttonHotkey" type="text" maxlength="1" class="" value="' + buttons[buttonId].hotkey + '">' +
+		'<label for="buttonHotkey" class="active">Hotkey</label>' +
+	'</div>' +
+	'<div class="input-field left align-left">'+
+		'<input id="buttonOpenInNew" type="checkbox" class="" checked="' + buttons[buttonId].hotkey + '">' +
+		'<label for="buttonOpenInNew" class="active">Replace current tab</label>' +
+	'</div>'
+	);
 }
 
 function addPlugins(event, allowUpdate) {
