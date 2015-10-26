@@ -77,22 +77,6 @@ img {
 	color: black;
 }
 
-#json-out {
-  background-color: #FFFFFF;
-  -webkit-user-select: all;
-  color: #000000;
-  font-weight: normal;
-  font-family: auto;
-  font-size: 10px;
-  width: calc(100% - 100px);
-  height: 25px;
-  overflow: hidden;
-}
-
-#json-in {
-  width: calc(100% - 100px);
-}
-
 #buttons-list-controls {
 	margin-top: 10px;
 }
