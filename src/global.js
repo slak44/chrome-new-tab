@@ -133,6 +133,34 @@ function activateScheme(colorScheme) {
 	for (var i = 1; i <= 4; i++) css += '\n.color.darken-' + i +' {color: ' + colorScheme['darken' + i] + ' !important;}';
 	for (var i = 1; i <= 5; i++) css += '\n.color.lighten-' + i +' {color: ' + colorScheme['lighten' + i] + ' !important;}';
 	for (var i = 1; i <= 4; i++) css += '\n.color.accent-' + i +' {color: ' + colorScheme['accent' + i] + ' !important;}';
+	
+	css += '\ninput[type=text]:focus:not([readonly]),' +
+	'input[type=password]:focus:not([readonly]),' +
+	'input[type=email]:focus:not([readonly]),' +
+	'input[type=url]:focus:not([readonly]),' +
+	'input[type=time]:focus:not([readonly]),' +
+	'input[type=date]:focus:not([readonly]),' +
+	'input[type=datetime-local]:focus:not([readonly]),' +
+	'input[type=tel]:focus:not([readonly]),' +
+	'input[type=number]:focus:not([readonly]),' +
+	'input[type=search]:focus:not([readonly]),' +
+	'textarea.materialize-textarea:focus:not([readonly]) {' +
+	'	border-bottom-color: ' + colorScheme.main + ' !important;' +
+	'	box-shadow: 0 1px 0 0 ' + colorScheme.main + ' !important;' +
+	'}';
+	css += '\ninput[type=text]:focus:not([readonly]) + label,' +	
+	'input[type=password]:focus:not([readonly]) + label,' +	
+	'input[type=email]:focus:not([readonly]) + label,' +	
+	'input[type=url]:focus:not([readonly]) + label,' +	
+	'input[type=time]:focus:not([readonly]) + label,' +	
+	'input[type=date]:focus:not([readonly]) + label,' +	
+	'input[type=datetime-local]:focus:not([readonly]) + label,' +	
+	'input[type=tel]:focus:not([readonly]) + label,' +	
+	'input[type=number]:focus:not([readonly]) + label,' +	
+	'input[type=search]:focus:not([readonly]) + label,' +	
+	'textarea.materialize-textarea:focus:not([readonly]) + label {' +
+	'color: ' + colorScheme.main + ' !important;}';
+	css += '\n[type="checkbox"]:checked + label:before {border-bottom-color: ' + colorScheme.main + ' !important; border-right-color: ' + colorScheme.main + ' !important;}';
 	byId('dynamic-colors').innerHTML = css;
 }
 setTimeout(activateScheme, 0, colorScheme);
@@ -173,13 +201,18 @@ function capitalize(string) {
   return string.charAt(0).toUpperCase() + string.substr(1);
 }
 
+function hasClass(element, className) {
+  if (Array.prototype.indexOf.apply(element.classList, [className]) > -1) return true;
+	else return false;
+}
+
 function toggleDiv(id, isElement) {
   if (!isElement) id = byId(id);
-  // if 'focused' in element.classList
-  if (Array.prototype.indexOf.apply(id.classList, ['focused']) > -1) {
-    id.classList.remove('focused');
+  if (hasClass(id, 'focused')) {
+		id.classList.remove('focused');
     id.classList.add('unfocused');
   } else {
+		id.style.display = 'block';
     id.classList.remove('unfocused');
     id.classList.add('focused');
   }
