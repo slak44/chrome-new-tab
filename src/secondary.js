@@ -1,7 +1,4 @@
 'use strict';
-var addPlugin = createButton({text: 'Add Plugin'});
-var removePlugin = createButton({text: 'Remove Plugin'});
-
 byId('floating-save-button').addEventListener('click', function (evt) {
   if (hasClass(byId('settings-tab'), 'focused')) {
 		var keys = Object.keys(settings);
@@ -57,13 +54,11 @@ byId('copy-data').addEventListener('click', function (event) {
   var status = document.execCommand('copy');
 	console.log(status);
 });
-addPlugin.addEventListener('click', function (e) {
-  e.preventDefault();
+byId('add-plugin').addEventListener('click', function (e) {
   byId('file-input').addEventListener('change', function (e) {addPlugins(e, true);}, false);
   byId('file-input').click();
 });
-removePlugin.addEventListener('click', function (e) {
-  e.preventDefault();
+byId('remove-plugin').addEventListener('click', function (e) {
   storage.remove('plugins', prompt('Plugin to remove:'));
 });
 
