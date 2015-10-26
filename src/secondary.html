@@ -13,10 +13,6 @@
   <body class="bgcolor lighten-5">
     <input id="file-input" type="file"></input>
 		<div class="row">
-			<div class="col s3">
-				<ul id="buttons" class="collection">
-				</ul>
-			</div>
 			<div class="col s12">
 				<ul class="tabs">
 					<li id="plugin-settings" class="tab col s2"><a href="#settings-tab" class="color">Plugin Settings</a></li>
@@ -26,6 +22,10 @@
 				</ul>
 				<a id="floating-save-button" class="bgcolor waves-effect waves-light btn-floating btn-large floating-save-button" href="#"><i class="material-icons">save</i></a>
 				<div id="settings-tab" class="focused setting-tab">
+					<div class="row">
+						<a id="add-plugin" class="col s5 bgcolor lighten-2 waves-effect waves-light btn" href="#"><i class="material-icons right">add</i>Add plugin</a>
+						<a id="remove-plugin" class="col s5 right bgcolor lighten-2 waves-effect waves-light btn" href="#"><i class="material-icons right">remove</i>Remove plugin</a>
+					</div>
 				</div>
 				<div id="buttons-tab" class="setting-tab">
 					<div id="buttons-list-controls" class="row center-align">
