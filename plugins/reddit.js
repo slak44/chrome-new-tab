@@ -8,7 +8,7 @@ var plugin = {
     storage.add('settings', {
       name: 'Reddit username',
       desc: 'Used to get karma information.',
-      type: 'string',
+      type: 'text',
       isVisible: true
     });
     storage.add('settings', {
