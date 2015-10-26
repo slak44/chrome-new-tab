@@ -60,6 +60,15 @@ img {
   display: none;
 }
 
+#temp-data {
+	position: absolute;
+	top: -100px;
+}
+
+#copy-data {
+	margin-top: 10px;
+}
+
 #settings-link {
   z-index: 10000;
   position: absolute;

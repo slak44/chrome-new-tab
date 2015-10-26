@@ -25,8 +25,8 @@ byId('floating-save-button').addEventListener('click', function (evt) {
 		};
 		storage.store('buttons');
 	} else if (hasClass(byId('json-tab'), 'focused')) {
-	  if (byId('json-in').value !== '') {
-	    var data = JSON.parse(byId('json-in').value);
+	  if (byId('insert-data').value !== '') {
+	    var data = JSON.parse(byId('insert-data').value);
 	    if (data.settingsData !== undefined && data.buttonsData !== undefined) {
 	      settings = data.settingsData;
 	      buttons = data.buttonsData;
@@ -47,6 +47,16 @@ function showTab(id) {
 byId('plugin-settings').addEventListener('click', showTab('settings-tab'));
 byId('button-list').addEventListener('click', showTab('buttons-tab'));
 byId('backup-and-restore').addEventListener('click', showTab('json-tab'));
+
+byId('copy-data').addEventListener('click', function (event) {
+	byId('temp-data').value = JSON.stringify({
+    settingsData: settings,
+    buttonsData: buttons
+  });
+	byId('temp-data').select();
+  var status = document.execCommand('copy');
+	console.log(status);
+});
 addPlugin.addEventListener('click', function (e) {
   e.preventDefault();
   byId('file-input').addEventListener('change', function (e) {addPlugins(e, true);}, false);
@@ -59,10 +69,6 @@ removePlugin.addEventListener('click', function (e) {
 
 async.parallel([loadButtons, loadSettings, configureButtonPane], function (err) {
   if (err) throw err;
-  byId('json-out').innerHTML = JSON.stringify({
-    settingsData: settings,
-    buttonsData: buttons
-  });
 });
 
 function configureButtonPane(cb) {
