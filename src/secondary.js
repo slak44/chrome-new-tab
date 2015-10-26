@@ -37,16 +37,16 @@ byId('floating-save-button').addEventListener('click', function (evt) {
 	}
 });
 
-function showPane(id) {
+function showTab(id) {
   return function (e) {
     e.preventDefault();
     toggleDiv(byClass('focused')[0], true);
     toggleDiv(id);
   };
 }
-byId('plugin-settings').addEventListener('click', showPane('settings-tab'));
-byId('button-list').addEventListener('click', showPane('buttons-tab'));
-byId('backup-and-restore').addEventListener('click', showPane('json-tab'));
+byId('plugin-settings').addEventListener('click', showTab('settings-tab'));
+byId('button-list').addEventListener('click', showTab('buttons-tab'));
+byId('backup-and-restore').addEventListener('click', showTab('json-tab'));
 addPlugin.addEventListener('click', function (e) {
   e.preventDefault();
   byId('file-input').addEventListener('change', function (e) {addPlugins(e, true);}, false);
