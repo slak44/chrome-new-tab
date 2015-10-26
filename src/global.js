@@ -2,28 +2,7 @@
 var plugins = {};
 var settings = {};
 var buttons = {};
-var colorScheme = {
-	// Orange is default
-	name: 'orange',
-
-	lighten5: '#fff3e0',
-	lighten4: '#ffe0b2',
-	lighten3: '#ffcc80',
-	lighten2: '#ffb74d',
-	lighten1: '#ffa726',
-	
-	main: 		'#ff9800',
-	
-	darken1: 	'#fb8c00',
-	darken2: 	'#f57c00',
-	darken3: 	'#ef6c00',
-	darken4: 	'#e65100',
-	
-	accent1: 	'#ffd180',
-	accent2: 	'#ffab40',
-	accent3: 	'#ff9100',
-	accent4: 	'#ff6d00',
-}; // TODO: get from storage, add settings
+var colorScheme = [];
 
 var storage = new (function () {
   /*
@@ -77,14 +56,34 @@ var storage = new (function () {
     position: used to determine order of buttons.
     hotkey: using alt+key triggers the button.
     openInNew: if true, opens the link in a new tab that replaces this one.
+		
+		Color Scheme format:
+		{
+			// Orange is default
+			lighten5: '#fff3e0',
+			lighten4: '#ffe0b2',
+			lighten3: '#ffcc80',
+			lighten2: '#ffb74d',
+			lighten1: '#ffa726',
+			main: 		'#ff9800',
+			darken1: 	'#fb8c00',
+			darken2: 	'#f57c00',
+			darken3: 	'#ef6c00',
+			darken4: 	'#e65100',
+			accent1: 	'#ffd180',
+			accent2: 	'#ffab40',
+			accent3: 	'#ff9100',
+			accent4: 	'#ff6d00',
+			isDark: false
+		}
   */
-  this.stored = ['settings', 'plugins', 'buttons'];
+  this.stored = ['settings', 'plugins', 'buttons', 'colorScheme'];
 
   this.load = function (what, onLoadEnd) {
     chrome.storage.local.get('stored' + capitalize(what), function (data) {
       window[what] = data['stored' + capitalize(what)];
       // Make sure there's something there
-      if (window[what] === undefined || window[what] === null || window[what] === {}) {
+      if (window[what] === undefined || window[what] === null || window[what] === {} || window[what] === []) {
         onLoadEnd(new Error('No ' + what + ' found.'));
         return;
       }
@@ -123,47 +122,38 @@ var storage = new (function () {
   };
 })();
 
-function activateScheme(colorScheme) {
-  var css = '.bgcolor {background-color: ' + colorScheme.main + ' !important;}';
-	for (var i = 1; i <= 4; i++) css += '\n.bgcolor.darken-' + i +' {background-color: ' + colorScheme['darken' + i] + ' !important;}';
-	for (var i = 1; i <= 5; i++) css += '\n.bgcolor.lighten-' + i +' {background-color: ' + colorScheme['lighten' + i] + ' !important;}';
-	for (var i = 1; i <= 4; i++) css += '\n.bgcolor.accent-' + i +' {background-color: ' + colorScheme['accent' + i] + ' !important;}';
+function activateScheme(scheme) {
+  var css = '.bgcolor {background-color: ' + scheme.main + ' !important;}';
+	for (var i = 1; i <= 4; i++) css += '\n.bgcolor.darken-' + i +' {background-color: ' + scheme['darken' + i] + ' !important;}';
+	for (var i = 1; i <= 5; i++) css += '\n.bgcolor.lighten-' + i +' {background-color: ' + scheme['lighten' + i] + ' !important;}';
+	for (var i = 1; i <= 4; i++) css += '\n.bgcolor.accent-' + i +' {background-color: ' + scheme['accent' + i] + ' !important;}';
 	
-	css += '.color {color: ' + colorScheme.main + ' !important;}';
-	for (var i = 1; i <= 4; i++) css += '\n.color.darken-' + i +' {color: ' + colorScheme['darken' + i] + ' !important;}';
-	for (var i = 1; i <= 5; i++) css += '\n.color.lighten-' + i +' {color: ' + colorScheme['lighten' + i] + ' !important;}';
-	for (var i = 1; i <= 4; i++) css += '\n.color.accent-' + i +' {color: ' + colorScheme['accent' + i] + ' !important;}';
+	css += '.color {color: ' + scheme.main + ' !important;}';
+	for (var i = 1; i <= 4; i++) css += '\n.color.darken-' + i +' {color: ' + scheme['darken' + i] + ' !important;}';
+	for (var i = 1; i <= 5; i++) css += '\n.color.lighten-' + i +' {color: ' + scheme['lighten' + i] + ' !important;}';
+	for (var i = 1; i <= 4; i++) css += '\n.color.accent-' + i +' {color: ' + scheme['accent' + i] + ' !important;}';
 	
-	css += '\ninput[type=text]:focus:not([readonly]),' +
-	'input[type=password]:focus:not([readonly]),' +
-	'input[type=email]:focus:not([readonly]),' +
-	'input[type=url]:focus:not([readonly]),' +
-	'input[type=time]:focus:not([readonly]),' +
-	'input[type=date]:focus:not([readonly]),' +
-	'input[type=datetime-local]:focus:not([readonly]),' +
-	'input[type=tel]:focus:not([readonly]),' +
-	'input[type=number]:focus:not([readonly]),' +
-	'input[type=search]:focus:not([readonly]),' +
-	'textarea.materialize-textarea:focus:not([readonly]) {' +
-	'	border-bottom-color: ' + colorScheme.main + ' !important;' +
-	'	box-shadow: 0 1px 0 0 ' + colorScheme.main + ' !important;' +
+	css += '\n.collection-item.active {background-color: ' + scheme.darken4 + ' !important;}';
+	
+	css += '\ninput[type=text]:focus:not([readonly]), input[type=password]:focus:not([readonly]), input[type=email]:focus:not([readonly]), input[type=url]:focus:not([readonly]),' +
+	'input[type=time]:focus:not([readonly]), input[type=date]:focus:not([readonly]), input[type=datetime-local]:focus:not([readonly]), input[type=tel]:focus:not([readonly]),' +
+	'input[type=number]:focus:not([readonly]), input[type=search]:focus:not([readonly]), textarea.materialize-textarea:focus:not([readonly]) {' +
+	'	border-bottom-color: ' + scheme.main + ' !important;' +
+	'	box-shadow: 0 1px 0 0 ' + scheme.main + ' !important;' +
 	'}';
-	css += '\ninput[type=text]:focus:not([readonly]) + label,' +	
-	'input[type=password]:focus:not([readonly]) + label,' +	
-	'input[type=email]:focus:not([readonly]) + label,' +	
-	'input[type=url]:focus:not([readonly]) + label,' +	
-	'input[type=time]:focus:not([readonly]) + label,' +	
-	'input[type=date]:focus:not([readonly]) + label,' +	
-	'input[type=datetime-local]:focus:not([readonly]) + label,' +	
-	'input[type=tel]:focus:not([readonly]) + label,' +	
-	'input[type=number]:focus:not([readonly]) + label,' +	
-	'input[type=search]:focus:not([readonly]) + label,' +	
-	'textarea.materialize-textarea:focus:not([readonly]) + label {' +
-	'color: ' + colorScheme.main + ' !important;}';
-	css += '\n[type="checkbox"]:checked + label:before {border-bottom-color: ' + colorScheme.main + ' !important; border-right-color: ' + colorScheme.main + ' !important;}';
+	css += '\ninput[type=text]:focus:not([readonly]) + label, input[type=password]:focus:not([readonly]) + label, input[type=email]:focus:not([readonly]) + label,' +
+	'input[type=url]:focus:not([readonly]) + label, input[type=time]:focus:not([readonly]) + label, input[type=date]:focus:not([readonly]) + label,' +
+	'input[type=datetime-local]:focus:not([readonly]) + label, input[type=tel]:focus:not([readonly]) + label, input[type=number]:focus:not([readonly]) + label,' +
+	'input[type=search]:focus:not([readonly]) + label, textarea.materialize-textarea:focus:not([readonly]) + label {' +
+	'color: ' + scheme.main + ' !important;}';
+	css += '\n[type="checkbox"]:checked + label:before {border-bottom-color: ' + scheme.main + ' !important; border-right-color: ' + scheme.main + ' !important;}';
+	
+	if (scheme.isDark) {
+		css += 'div {background-color: black;}';
+	}
+	
 	byId('dynamic-colors').innerHTML = css;
 }
-setTimeout(activateScheme, 0, colorScheme);
 
 function createButton(options) {
   if (options.parent === undefined || options.parent === null ||
@@ -183,10 +173,6 @@ function createButton(options) {
   if (options.href !== undefined && (options.href.indexOf('chrome://') === 0 || options.openInNew))
     anchor.addEventListener('click', function (e) {chrome.tabs.create({url: options.href}); window.close();});
   return anchor;
-}
-
-function addButtonSeparator(parent) {
-  parent.insertAdjacentHTML('beforeend', '<span class="button-separator"></span>');
 }
 
 function byId(id) {
@@ -216,4 +202,36 @@ function toggleDiv(id, isElement) {
     id.classList.remove('unfocused');
     id.classList.add('focused');
   }
+}
+
+function loadSchemes(cb) {
+	storage.load('colorScheme', function (err) {
+		if (err) {
+			colorScheme = [{
+				// Orange is default
+				lighten5: '#fff3e0',
+				lighten4: '#ffe0b2',
+				lighten3: '#ffcc80',
+				lighten2: '#ffb74d',
+				lighten1: '#ffa726',
+				
+				main: 		'#ff9800',
+				
+				darken1: 	'#fb8c00',
+				darken2: 	'#f57c00',
+				darken3: 	'#ef6c00',
+				darken4: 	'#e65100',
+				
+				accent1: 	'#ffd180',
+				accent2: 	'#ffab40',
+				accent3: 	'#ff9100',
+				accent4: 	'#ff6d00',
+				
+				isDark: false,
+				name: 'Light Orange'
+			}];
+			storage.store('colorScheme');
+		}
+		cb();
+	});
 }
