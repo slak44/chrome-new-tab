@@ -1,4 +1,5 @@
 'use strict';
+setTimeout(loadSchemes, 0, function () {activateScheme(colorScheme[0]);});
 setTimeout(function setTime() {
   byId('time').innerHTML = new Date().toLocaleTimeString('intl', {hour: '2-digit', minute: '2-digit', hour12: false});
   setTimeout(setTime, 1000);

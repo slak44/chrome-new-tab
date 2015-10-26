@@ -1,4 +1,10 @@
 'use strict';
+var activeSchemeIndex = 0;
+
+async.parallel([loadButtons, loadSettings, loadSchemesAndUI, configureButtonPane], function (err) {
+  if (err) throw err;
+});
+
 byId('floating-save-button').addEventListener('click', function (evt) {
   if (hasClass(byId('settings-tab'), 'focused')) {
 		var keys = Object.keys(settings);
@@ -31,6 +37,12 @@ byId('floating-save-button').addEventListener('click', function (evt) {
 	  }
 		storage.store('settings');
 		storage.store('buttons');
+	} else if (hasClass(byId('color-scheme-tab'), 'focused')) {
+		// Switch the active one at the top
+		var originalScheme = colorScheme[0];
+		colorScheme[0] = colorScheme[activeSchemeIndex];
+		colorScheme[activeSchemeIndex] = originalScheme;
+		storage.store('colorScheme');
 	}
 });
 
@@ -44,6 +56,7 @@ function showTab(id) {
 byId('plugin-settings').addEventListener('click', showTab('settings-tab'));
 byId('button-list').addEventListener('click', showTab('buttons-tab'));
 byId('backup-and-restore').addEventListener('click', showTab('json-tab'));
+byId('color-scheme').addEventListener('click', showTab('color-scheme-tab'));
 
 byId('copy-data').addEventListener('click', function (event) {
 	byId('temp-data').value = JSON.stringify({
@@ -54,6 +67,7 @@ byId('copy-data').addEventListener('click', function (event) {
   var status = document.execCommand('copy');
 	console.log(status);
 });
+
 byId('add-plugin').addEventListener('click', function (e) {
   byId('file-input').addEventListener('change', function (e) {addPlugins(e, true);}, false);
   byId('file-input').click();
@@ -62,8 +76,16 @@ byId('remove-plugin').addEventListener('click', function (e) {
   storage.remove('plugins', prompt('Plugin to remove:'));
 });
 
-async.parallel([loadButtons, loadSettings, configureButtonPane], function (err) {
-  if (err) throw err;
+byId('add-scheme').addEventListener('click', function (e) {
+  // TODO
+});
+byId('remove-scheme').addEventListener('click', function (e) {
+	if (!confirm('Remove this scheme?')) return;
+  colorScheme.splice(activeSchemeIndex, 1);
+	var schemeElement = document.querySelector('#color-scheme-list > a.active');
+	schemeElement.parentNode.removeChild(schemeElement);
+	byId('color-scheme-list').children[0].classList.add('active');
+	storage.store('colorScheme');
 });
 
 function configureButtonPane(cb) {
@@ -178,6 +200,34 @@ function loadPlugins(cb) {
       catch(e) {console.error('Execution failed: ' + e.message);}
     }
     cb();
+  });
+}
+
+function loadSchemesAndUI() {
+  loadSchemes(function () {
+		activateScheme(colorScheme[0]);
+		colorScheme.forEach(function (scheme, i, array) {
+			var htmlContent = '<a href="#!" class="collection-item color">' + scheme.name + '<div class="row top-margin">';
+			Object.keys(scheme).forEach(function (color, i, array) {
+			  if (color === 'name') return;
+				if (color === 'isDark') {
+					htmlContent += '<div style="background-color: ' + (scheme.isDark ? 'black' : 'white') + ';" class="col s1 color-sample"></div>';
+					return;
+				}
+				htmlContent += '<div style="background-color: ' + scheme[color] + ';" class="col s1 color-sample"></div>';
+			});
+			htmlContent += '</div></a>';
+		  byId('color-scheme-list').insertAdjacentHTML('beforeend', htmlContent);
+			Array.prototype.forEach.apply(byId('color-scheme-list').children, [function (schemeElement, i, arr) {
+				if (i === 0) schemeElement.classList.add('active');
+			  schemeElement.addEventListener('click', function (evt) {
+					var actives = document.querySelector('#color-scheme-list > a.active');
+					if (actives) actives.classList.remove('active');
+			    schemeElement.classList.add('active');
+					activeSchemeIndex = i;
+			  });
+			}]);
+		});
   });
 }
 
