@@ -65,10 +65,6 @@ img {
 	top: -100px;
 }
 
-#copy-data {
-	margin-top: 10px;
-}
-
 #settings-link {
   z-index: 10000;
   position: absolute;
@@ -77,8 +73,8 @@ img {
 	color: black;
 }
 
-#buttons-list-controls {
-	margin-top: 10px;
+ul.tabs {
+	margin-bottom: 10px;
 }
 
 div.indicator.bgcolor + div.indicator {
