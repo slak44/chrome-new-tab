@@ -17,7 +17,7 @@
 				<ul id="buttons" class="collection">
 				</ul>
 			</div>
-			<div class="col s12 right right-align">
+			<div class="col s12">
 				<ul class="tabs">
 					<li id="plugin-settings" class="tab col s2"><a href="#settings-tab" class="color">Plugin Settings</a></li>
 					<li id="button-list" class="tab col s2"><a href="#buttons-tab" class="color">Button List</a></li>
@@ -36,18 +36,11 @@
 					<ul id="buttons-list" class="color dropdown-content"></ul>
 				</div>
 				<div id="json-tab" class="setting-tab">
-					<h4>All settings and buttons data:
-						<p></p>
-						<small>Click on it, Ctrl-A, Ctrl-C to copy</small>
-						<p></p>
-						<div id="json-out"></div>
-					</h4>
-					<h4>Input object here to overwrite current data:
-						<p></p>
-						<small>If the object is valid, it will be evaluated on save</small>
-						<p></p>
-						<input id="json-in" type="text"></input>
-					</h4>
+					<textarea id="temp-data"></textarea>
+					<a id="copy-data" class="col s3 bgcolor lighten-2 waves-effect waves-light btn" href="#"><i class="material-icons right">content_copy</i>Copy data to clipboard</a>
+					<br>
+					<h5><br>To restore data, paste in the box and save</h5>
+					<textarea id="insert-data"></textarea>
 				</div>
 			</div>
 		</div>
