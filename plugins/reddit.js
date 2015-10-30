@@ -38,4 +38,5 @@ var plugin = {
     setTimeout(updateRedditKarma, 0);
   }
 };
+/*jshint -W030 */
 plugin;
