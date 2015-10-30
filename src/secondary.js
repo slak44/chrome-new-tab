@@ -137,7 +137,7 @@ function loadButtons(cb) {
 				return function (evt) {
 					setCurrentButton(buttons[id], id);
 				};
-			})(id));
+			})(id)); // jshint ignore:line
 		}
     cb();
   });
