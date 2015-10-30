@@ -1,4 +1,5 @@
 'use strict';
+setTimeout(loadSchemes, 0, function () {activateScheme(colorScheme[0]);});
 setTimeout(function setTime() {
   byId('time').innerHTML = new Date().toLocaleTimeString('intl', {hour: '2-digit', minute: '2-digit', hour12: false});
   setTimeout(setTime, 1000);
@@ -49,7 +50,7 @@ function loadPlugins() {
   window.pluginCss = byId('plugin-css');
   // If a visible value is empty, it fails immediately
   for (var e in settings) if (settings[e].isVisible && settings[e].value === undefined) window.location.replace('/secondary.html');
-  byId('title').innerHTML = settings['Main page title'].value;
+  byId('title').children[0].innerHTML = settings['Main page title'].value;
   storage.load('plugins',
   function (error) {
     for (var p in plugins) {
