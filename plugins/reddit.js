@@ -8,7 +8,7 @@ var plugin = {
     storage.add('settings', {
       name: 'Reddit username',
       desc: 'Used to get karma information.',
-      type: 'string',
+      type: 'text',
       isVisible: true
     });
     storage.add('settings', {
@@ -26,7 +26,7 @@ var plugin = {
         if (req.status === 200) {
           var data = JSON.parse(req.response);
           byId('reddit-karma').innerHTML =
-            'Comment karma: ' + data.data.comment_karma + '; Link karma: ' + data.data.link_karma;
+						'<span class="color accent-4">' + data.data.comment_karma + '</span> comment karma<br><span class="color accent-4">' + data.data.link_karma + '</span> link karma';
         } else throw new Error('Failed request.');
       };
       req.onloadend = function () {
@@ -34,8 +34,9 @@ var plugin = {
       };
       req.send();
     }
-    byClass('bottom-text')[0].insertAdjacentHTML('beforeend', '<span id="reddit-karma"></span>');
+    byId('data-collection').insertAdjacentHTML('beforeend', '<li class="collection-item"><h5 id="reddit-karma"></h5></li>');
     setTimeout(updateRedditKarma, 0);
   }
 };
+/*jshint -W030 */
 plugin;

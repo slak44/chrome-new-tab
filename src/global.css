@@ -1,5 +1,4 @@
 body {
-  background-color: #303030;
   margin: 0px;
   padding: 0px;
   border: 0px;
@@ -16,29 +15,6 @@ img {
   pointer-events: none;
 }
 
-h1 > small {
-  font-size: 12px;
-  color: #888888;
-}
-
-h2 > input {
-  width: calc(100% - 200px);
-  left: 100px;
-  position: absolute;
-}
-
-h2 > input[type="checkbox"] {
-  width: auto;
-  left: 10px;
-  position: relative;
-}
-
-.rotate {
-  position: absolute;
-  top: 0px;
-  -webkit-animation: cRotate 7.5s linear 0s infinite reverse;
-}
-
 .centered {
   position: absolute;
   margin: auto;
@@ -48,23 +24,41 @@ h2 > input[type="checkbox"] {
   right: 0px;
 }
 
-.global-text {
-  color: #AAAAAA;
-  font-family: 'Courier New';
-  font-weight: bold;
-  white-space: nowrap;
+.button-text {
+	font-size: large;
+	margin-left: 16px;
 }
 
-#date {
-  font-size: 50px;
+.button-link {
+	color: black;
 }
 
-#data-pane {
-  width: 800px;
+.button-image-wrapper {
+	width: 50px;
+	height: 50px;
 }
 
-#data-pane > div {
-	margin-top: 200px;
+.button-image-wrapper > i.material-icons {
+	font-size: 50px;
+}
+
+.color-sample {
+	min-height: 50px;
+	border: solid 1px rgba(0, 0, 0, 0.2);
+}
+
+.top-margin {
+	margin-top: 5px;
+}
+
+#floating-save-button {
+	position: absolute !important;
+	bottom: 25px;
+	right: 25px;
+}
+
+#buttons > li {
+	width: 100%;
 }
 
 #default-pane {
@@ -75,109 +69,29 @@ h2 > input[type="checkbox"] {
   display: none;
 }
 
+#temp-data {
+	position: absolute;
+	top: -100px;
+}
+
 #settings-link {
   z-index: 10000;
   position: absolute;
   bottom: 5px;
   right: 5px;
-  width: 55px;
-  height: 25px;
-  line-height: 25px;
-  animation: none;
+	color: black;
 }
 
-#json-out {
-  background-color: #FFFFFF;
-  -webkit-user-select: all;
-  color: #000000;
-  font-weight: normal;
-  font-family: auto;
-  font-size: 10px;
-  width: calc(100% - 100px);
-  height: 25px;
-  overflow: hidden;
+ul.tabs {
+	margin-bottom: 10px;
 }
 
-#json-in {
-  width: calc(100% - 100px);
+div.indicator.bgcolor + div.indicator {
+	display: none;
 }
 
-h1.setting-header {
-  font-size: 50px;
-  margin: 5px;
-}
-
-p.dpane-text {
-  text-align: center;
-  font-size: 100px;
-  width: 100%;
-  margin: 0px;
-}
-
-a.button {
-  display: block;
-  margin-top: 5px;
-  margin-left: 25px;
-  width: 200px;
-  height: 75px;
-  border-radius: 10px;
-  background-color: #BE9D76;
-  line-height: 75px; /* Equal to height. */
-  font-size: 13px;
-  text-decoration: none;
-  -webkit-animation: buttonAnimDefault 0.25s ease 0s 1 both;
-}
-a.button:hover {
-  cursor: pointer;
-  color: #FFFFFF;
-  -webkit-animation: buttonAnim 0.25s ease 0s 1 both;
-}
-a.button:hover > pre.button-text {
-  text-decoration: underline;
-}
-
-pre.button-text {
-  vertical-align: middle;
-  display: inline;
-  color: #FFFFFF;
-  font-family: Segoe UI;
-  white-space: pre;
-  margin: auto 5px auto;
-}
-
-img.button-img {
-  display: inline;
-  vertical-align: middle;
-  background-position: left;
-  background-repeat: no-repeat;
-}
-
-div.setting-tab {
-  opacity: 0;
-  position: absolute;
-  top: 0px;
-  left: 0px;
-  right: 0px;
-  margin-left: 250px;
-  height: 100%;
-  overflow-y: scroll;
-}
-
-span.button-separator {
-  width: 200px;
-  height: 5px;
-  background-color: white;
-  display: inline-block;
-  margin: 5px 5px 0px 5px;
-  border-radius: 10px;
-}
-
-div.bottom-text {
-  position: fixed;
-  bottom: 0px;
-  left: 0px;
-  margin: 5px;
-  font-size: 18px;
+ul.color.dropdown-content > li > a {
+	color: inherit;
 }
 
 div.focused {
@@ -212,16 +126,4 @@ div.unfocused {
     z-index: -1;
     opacity: 0;
   }
-}
-
-@-webkit-keyframes cRotate {
-  100% {-webkit-transform: rotate(360deg);}
-}
-
-@-webkit-keyframes buttonAnim {
-  100% {-webkit-transform: translate(20px);}
-}
-
-@-webkit-keyframes buttonAnimDefault {
-  100% {-webkit-transform: translate(-20px);}
 }
