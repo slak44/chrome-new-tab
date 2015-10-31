@@ -9,12 +9,14 @@ var plugin = {
       name: 'Reddit username',
       desc: 'Karma information for this user',
       type: 'text',
+      value: '',
       isVisible: true
     },
     {
       name: 'Data update period',
       desc: 'Time between karma updates, in milliseconds',
       type: 'number',
+      value: '',
       isVisible: true
     }
   ],
