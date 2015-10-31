@@ -106,7 +106,6 @@ byId('add-buttons').addEventListener('click', function (e) {
   };
   setCurrentButton(buttons[id], id);
   byId('buttons-list').insertAdjacentHTML('beforeend', '<li id="' + id + '"><a href="#!">' + id + '</a></li>');
-  if (Object.keys(buttons).length === 1) addButtonConfig(id);
 });
 byId('remove-buttons').addEventListener('click', function (e) {
   e.preventDefault();
@@ -140,6 +139,7 @@ function loadButtons(cb) {
 }
 
 function setCurrentButton(buttonData, id) {
+  if (byId('buttonText') === null) addButtonConfig(id);
 	byId('buttonText').setAttribute('data-button-id', id);
 	byId('buttonText').value = buttonData.text;
 	byId('buttonLink').value = buttonData.href;
