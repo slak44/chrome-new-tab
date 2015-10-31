@@ -1,9 +1,9 @@
 'use strict';
 var plugin = {
   name: 'Reddit Karma Info',
-  desc: 'Gets reddit karma from specified user',
+  desc: 'Displays reddit karma for given user',
   author: 'Slak44',
-  version: '1.1',
+  version: '1.1.1',
   settings: [
     {
       name: 'Reddit username',
