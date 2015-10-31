@@ -22,21 +22,23 @@
 					<div class="bgcolor indicator"></div>
 				</ul>
 				<a id="floating-save-button" class="bgcolor waves-effect waves-light btn-floating btn-large floating-save-button" href="#"><i class="material-icons">save</i></a>
-				<div id="settings-tab" class="focused">
+				<div id="settings-tab" class="data-tab focused">
 					<div class="row">
-						<a id="add-plugin" class="col s5 bgcolor lighten-2 waves-effect waves-light btn" href="#"><i class="material-icons right">add</i>Add plugin</a>
-						<a id="remove-plugin" class="col s5 right bgcolor lighten-2 waves-effect waves-light btn" href="#"><i class="material-icons right">remove</i>Remove plugin</a>
+            <a class="col s3 bgcolor lighten-2 waves-effect waves-light dropdown-button btn" data-activates="plugins-list" href="#">Select plugin</a>
+            <a id="remove-plugin" class="col s1 right waves-effect waves-light btn-flat" href="#"><i class="material-icons right">remove</i>Remove plugin</a>
+						<a id="add-plugin" class="col s1 right waves-effect waves-light btn-flat" href="#"><i class="material-icons right">add</i>Add plugin</a>
 					</div>
+          <ul id="plugins-list" class="color dropdown-content"></ul>
 				</div>
-				<div id="buttons-tab" class="">
+				<div id="buttons-tab" class="data-tab">
 					<div id="buttons-list-controls" class="row center-align">
 						<a class="col s3 bgcolor lighten-2 waves-effect waves-light dropdown-button btn" data-activates="buttons-list" href="#">Select button</a>
-						<a id="remove-buttons" class="col s1 right waves-effect waves-light btn-flat" href="#">Remove</a>
-						<a id="add-buttons" class="col s1 right waves-effect waves-light btn-flat" href="#">Add</a>
+						<a id="remove-buttons" class="col s1 right waves-effect waves-light btn-flat" href="#"><i class="material-icons right">remove</i>Remove</a>
+						<a id="add-buttons" class="col s1 right waves-effect waves-light btn-flat" href="#"><i class="material-icons right">add</i>Add</a>
 					</div>
 					<ul id="buttons-list" class="color dropdown-content"></ul>
 				</div>
-				<div id="color-scheme-tab" class="">
+				<div id="color-scheme-tab" class="data-tab">
 					<div class="row">
 						<a id="add-scheme" class="col s5 bgcolor lighten-2 waves-effect waves-light btn" href="#"><i class="material-icons right">add</i>Add scheme</a>
 						<a id="remove-scheme" class="col s5 right bgcolor lighten-2 waves-effect waves-light btn" href="#"><i class="material-icons right">remove</i>Remove scheme</a>
@@ -46,7 +48,7 @@
 				    </ul>
 					</div>
 				</div>
-				<div id="json-tab" class="">
+				<div id="json-tab" class="data-tab">
 					<textarea id="temp-data"></textarea>
 					<a id="copy-data" class="col s3 bgcolor lighten-2 waves-effect waves-light btn" href="#"><i class="material-icons right">content_copy</i>Copy data to clipboard</a>
 					<br>

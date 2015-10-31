@@ -1,6 +1,5 @@
 'use strict';
 var plugins = {};
-var settings = {};
 var buttons = {};
 var colorScheme = [];
 
@@ -14,6 +13,7 @@ var storage = new (function () {
         desc: 'message',
         author: 'name',
         version: 'ver',
+        settings: [],
         init: function () {},
         main: function () {},
         secondary: function () {}
@@ -22,6 +22,7 @@ var storage = new (function () {
     desc: what it does.
     author: self-explanatory.
     version: self-explanatory.
+    settings: array of objects, format described below.
     These will be stored as strings:
     init: executed when the plugin is added.
     main: executed in the main page.
@@ -39,7 +40,7 @@ var storage = new (function () {
     desc: description of setting.
     type: what kind of input tag is necessary. (number, text, checkbox, radiobox, etc)
     value: undefined until set.
-    isVisible: if false, it means the setting is just storage.
+    isVisible: if false, it means this 'setting' is just storage.
     
     Button format:
       {
@@ -77,7 +78,7 @@ var storage = new (function () {
 			isDark: false
 		}
   */
-  this.stored = ['settings', 'plugins', 'buttons', 'colorScheme'];
+  this.stored = ['plugins', 'buttons', 'colorScheme'];
 
   this.load = function (what, onLoadEnd) {
     chrome.storage.local.get('stored' + capitalize(what), function (data) {
@@ -181,6 +182,10 @@ function byId(id) {
 
 function byClass(className) {
   return document.getElementsByClassName(className);
+}
+
+function byQSelect(selector) {
+  return document.querySelector(selector);
 }
 
 function capitalize(string) {

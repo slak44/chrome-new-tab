@@ -1,20 +1,18 @@
 'use strict';
 var activeSchemeIndex = 0;
 
-async.parallel([loadButtons, loadSettings, loadSchemesAndUI, configureButtonPane], function (err) {
+async.parallel([loadButtons, loadPlugins, loadSchemesAndUI, configureButtonPane], function (err) {
   if (err) throw err;
 });
 
 byId('floating-save-button').addEventListener('click', function (evt) {
   if (hasClass(byId('settings-tab'), 'focused')) {
-		var keys = Object.keys(settings);
-		for (var i = 0; i < keys.length; i++) {
-			if (!settings[keys[i]].isVisible) continue;
-			var input = byId(keys[i]);
-			if (input === undefined || input === null) continue;
-			settings[keys[i]].value = input.value;
-		}
-		storage.store('settings');
+    var currentPlugin = byQSelect('.plugin-container.focused');
+    var cpId = currentPlugin.id.slice(0, -10);
+    Array.prototype.forEach.apply(currentPlugin.children, [function (settingDiv, i, children) {
+      plugins[cpId].settings[i].value = settingDiv.children[0].value;
+    }]);
+		storage.store('plugins');
 	} else if (hasClass(byId('buttons-tab'), 'focused')) {
 		var id = byId('buttonText').getAttribute('data-button-id');
 		if (id === '') return;
@@ -49,7 +47,7 @@ byId('floating-save-button').addEventListener('click', function (evt) {
 function showTab(id) {
   return function (e) {
     e.preventDefault();
-    toggleDiv(byClass('focused')[0], true);
+    toggleDiv(byQSelect('.data-tab.focused'), true);
     toggleDiv(id);
   };
 }
@@ -82,7 +80,7 @@ byId('add-scheme').addEventListener('click', function (e) {
 byId('remove-scheme').addEventListener('click', function (e) {
 	if (!confirm('Remove this scheme?')) return;
   colorScheme.splice(activeSchemeIndex, 1);
-	var schemeElement = document.querySelector('#color-scheme-list > a.active');
+	var schemeElement = byQSelect('#color-scheme-list > a.active');
 	schemeElement.parentNode.removeChild(schemeElement);
 	byId('color-scheme-list').children[0].classList.add('active');
 	storage.store('colorScheme');
@@ -166,40 +164,39 @@ function getFirstButton() {
 	else return buttons[Object.keys(buttons)[0]];
 }
 
-function loadSettings(cb) {
-  storage.load('settings', 
-    function (error) {
-      if (error) {
-        storage.add('settings', {
-          name: 'Main page title',
-          desc: 'Title displayed in the center of the main page.',
-          type: 'text',
-          isVisible: true
-        }, {});
-      }
-      for (var i in settings) {
-        if (!settings[i].isVisible) continue;
-				byId('settings-tab').insertAdjacentHTML('beforeend',
-				'<div class="input-field">'+
-          '<input id="' + settings[i].name + '" placeholder="' + settings[i].desc + '" type="' + settings[i].type + '" value="' + settings[i].value + '" class="">' +
-          '<label for="' + settings[i].name + '" class="active">' + settings[i].name + '</label>' +
-        '</div>'
-				);
-      }
-      loadPlugins(cb);
-    }
-  );
-}
-
 function loadPlugins(cb) {
   storage.load('plugins', function (error) {
-    if (!error) for (var p in plugins) {
-      console.log('Executing plugin: ' + plugins[p].name);
-      /*jshint -W061*/
-      try {if (plugins[p].secondary) eval('(' + plugins[p].secondary + ').apply(this, [])');}
-      catch(e) {console.error('Execution failed: ' + e.message);}
-    }
+    if (!error) Object.keys(plugins).forEach(function (name, i, array) {
+      var plugin = plugins[name];
+      console.log('Executing plugin: ' + plugin.name);
+      addPluginData(plugin, !byClass('plugin-container').length);
+      /*jshint -W061 */
+      try {
+        if (plugin.secondary) eval('(' + plugin.secondary + ').apply(this, [])');
+      } catch(e) {
+        console.error('Execution failed: ' + e.message);
+      }
+    });
     cb();
+  });
+}
+
+function addPluginData(plugin, focus) {
+  byId('plugins-list').insertAdjacentHTML('beforeend', '<li id="' + plugin.name + '"><a href="#!">' + plugin.name + '</a></li>');
+  byId('settings-tab').insertAdjacentHTML('beforeend', '<div id="' + plugin.name + '-container" class="plugin-container ' + (focus ? 'focused' : 'unfocused') + '"></div>');
+  var container = byId(plugin.name + '-container');
+  if (plugin.settings) plugin.settings.forEach(function (setting, i, settings) {
+    if (!setting.isVisible) return;
+    container.insertAdjacentHTML('beforeend',
+    '<div class="input-field">'+
+      '<input id="' + setting.name + '" placeholder="' + setting.desc + '" type="' + setting.type + '" value="' + setting.value + '" class="">' +
+      '<label for="' + setting.name + '" class="active">' + setting.name + '</label>' +
+    '</div>'
+    );
+  });
+  byId(plugin.name).addEventListener('click', function (evt) {
+    toggleDiv(byQSelect('.plugin-container.focused'), true);
+    toggleDiv(plugin.name + '-container');
   });
 }
 
@@ -221,7 +218,7 @@ function loadSchemesAndUI() {
 			Array.prototype.forEach.apply(byId('color-scheme-list').children, [function (schemeElement, i, arr) {
 				if (i === 0) schemeElement.classList.add('active');
 			  schemeElement.addEventListener('click', function (evt) {
-					var actives = document.querySelector('#color-scheme-list > a.active');
+					var actives = byQSelect('#color-scheme-list > a.active');
 					if (actives) actives.classList.remove('active');
 			    schemeElement.classList.add('active');
 					activeSchemeIndex = i;
@@ -276,6 +273,9 @@ function addPlugins(event, allowUpdate) {
       if (typeof plugin.init === 'function') plugin.init = plugin.init.toString();
       if (typeof plugin.main === 'function') plugin.main = plugin.main.toString();
       if (typeof plugin.secondary === 'function') plugin.secondary = plugin.secondary.toString();
+      // If settings already exist and the new plugin has things to set, use existing data
+      if (plugins[plugin.name] && plugins[plugin.name].settings && plugin.settings) plugin.settings = plugins[plugin.name].settings;
+      
       storage.add('plugins', plugin, {update: allowUpdate});
     };
   })(file);
