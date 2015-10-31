@@ -37,7 +37,7 @@ var storage = new (function () {
       }
     name: title of setting.
     desc: description of setting.
-    type: what kind of input is necessary. (number, string, checkbox, radiobox, etc)
+    type: what kind of input tag is necessary. (number, text, checkbox, radiobox, etc)
     value: undefined until set.
     isVisible: if false, it means the setting is just storage.
     
