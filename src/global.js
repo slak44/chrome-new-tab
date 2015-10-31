@@ -3,6 +3,7 @@ var plugins = {};
 var buttons = {};
 var colorScheme = [];
 
+/* jshint -W057, -W061*/
 var storage = new (function () {
   /*
     Existing storage objects. Usable as 'what' parameters.
@@ -124,6 +125,7 @@ var storage = new (function () {
 })();
 
 function activateScheme(scheme) {
+  /* jshint -W004 */
   var css = '.bgcolor {background-color: ' + scheme.main + ' !important;}';
 	for (var i = 1; i <= 4; i++) css += '\n.bgcolor.darken-' + i +' {background-color: ' + scheme['darken' + i] + ' !important;}';
 	for (var i = 1; i <= 5; i++) css += '\n.bgcolor.lighten-' + i +' {background-color: ' + scheme['lighten' + i] + ' !important;}';
