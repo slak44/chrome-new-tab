@@ -195,7 +195,10 @@ function addPluginData(plugin, focus) {
     );
   });
   byId(plugin.name).addEventListener('click', function (evt) {
-    toggleDiv(byQSelect('.plugin-container.focused'), true);
+    var container = byQSelect('.plugin-container.focused');
+    toggleDiv(container, true);
+    container.style.display = 'none';
+    byId(plugin.name + '-container').style.display = 'block';
     toggleDiv(plugin.name + '-container');
   });
 }
