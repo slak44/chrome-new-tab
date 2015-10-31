@@ -16,7 +16,7 @@ var storage = new (function () {
         version: 'ver',
         settings: [],
         init: function () {},
-        main: function () {},
+        main: function (plugin) {},
         secondary: function () {}
       }
     name: what it is.
@@ -26,7 +26,7 @@ var storage = new (function () {
     settings: array of objects, format described below.
     These will be stored as strings:
     init: executed when the plugin is added.
-    main: executed in the main page.
+    main: executed in the main page, is passed this plugin object.
     secondary: executed in the options page.
     
     Setting format:
