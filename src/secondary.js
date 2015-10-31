@@ -10,7 +10,7 @@ byId('floating-save-button').addEventListener('click', function (evt) {
     var currentPlugin = byQSelect('.plugin-container.focused');
     var cpId = currentPlugin.id.slice(0, -10);
     Array.prototype.forEach.apply(currentPlugin.children, [function (settingDiv, i, children) {
-      if (i === 0) return; // Ignore the title
+      if (i <= 1) return; // Ignore the title and the description
       plugins[cpId].settings[i].value = settingDiv.children[0].value;
     }]);
 		storage.store('plugins');
@@ -185,7 +185,7 @@ function addPluginData(plugin, focus) {
   byId('plugins-list').insertAdjacentHTML('beforeend', '<li id="' + plugin.name + '"><a href="#!">' + plugin.name + '</a></li>');
   byId('settings-tab').insertAdjacentHTML('beforeend', '<div id="' + plugin.name + '-container" class="plugin-container ' + (focus ? 'focused' : 'unfocused') + '"></div>');
   var container = byId(plugin.name + '-container');
-  container.insertAdjacentHTML('beforeend', '<h5>' + plugin.name + '</h5>');
+  container.insertAdjacentHTML('beforeend', '<h5 class="plugin-title">' + plugin.name + '</h5><p class="plugin-desc">' + plugin.desc + '</p>');
   if (plugin.settings) {
     plugin.settings.forEach(function (setting, i, settings) {
       if (!setting.isVisible) return;
