@@ -185,7 +185,7 @@ function addPluginData(plugin, focus) {
   byId('plugins-list').insertAdjacentHTML('beforeend', '<li id="' + plugin.name + '"><a href="#!">' + plugin.name + '</a></li>');
   byId('settings-tab').insertAdjacentHTML('beforeend', '<div id="' + plugin.name + '-container" class="plugin-container ' + (focus ? 'focused' : 'unfocused') + '"></div>');
   var container = byId(plugin.name + '-container');
-  container.insertAdjacentHTML('beforeend', '<h5 class="plugin-title">' + plugin.name + '</h5><p class="plugin-desc">' + plugin.desc + '</p>');
+  container.insertAdjacentHTML('beforeend', '<h5 class="plugin-title">' + plugin.name + '</h5><p class="plugin-desc">' + plugin.desc + '<br>' + plugin.version + ' by ' + plugin.author + '</p>');
   if (plugin.settings) {
     plugin.settings.forEach(function (setting, i, settings) {
       if (!setting.isVisible) return;
