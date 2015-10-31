@@ -1,7 +1,7 @@
 'use strict';
 var activeSchemeIndex = 0;
 
-async.parallel([loadButtons, loadPlugins, loadSchemesAndUI, configureButtonPane], function (err) {
+async.parallel([loadButtons, loadPlugins, loadSchemesAndUI], function (err) {
   if (err) throw err;
 });
 
@@ -88,39 +88,35 @@ byId('remove-scheme').addEventListener('click', function (e) {
 	storage.store('colorScheme');
 });
 
-function configureButtonPane(cb) {
-  byId('add-buttons').addEventListener('click', function (e) {
-    e.preventDefault();
-    var id = prompt('Input a unique identifier for the button:');
-    if (id === null) return;
-    if (buttons[id] !== undefined && buttons[id] !== null) {
-      alert('Identifier already exists.');
-      return;
-    }
-    buttons[id] = {
-      text: '',
-      href: '',
-      imagePath: '',
-      hotkey: '',
-			order: '',
-			checked: false
-    };
-		setCurrentButton(buttons[id], id);
-    byId('buttons-list').insertAdjacentHTML('beforeend', '<li id="' + id + '"><a href="#!">' + id + '</a></li>');
-    if (Object.keys(buttons).length === 1) addButtonConfig(id);
-  });
-	
-  byId('remove-buttons').addEventListener('click', function (e) {
-    e.preventDefault();
-    if (!confirm('Are you sure you want to delete this button?')) return;
-		var id = byId('buttonText').getAttribute('data-button-id');
-    delete buttons[id];
-		byId(id).parentNode.removeChild(byId(id));
-		setCurrentButton(getFirstButton());
-    storage.store('buttons');
-  });
-  cb();
-}
+byId('add-buttons').addEventListener('click', function (e) {
+  e.preventDefault();
+  var id = prompt('Input a unique identifier for the button:');
+  if (id === null) return;
+  if (buttons[id] !== undefined && buttons[id] !== null) {
+    alert('Identifier already exists.');
+    return;
+  }
+  buttons[id] = {
+    text: '',
+    href: '',
+    imagePath: '',
+    hotkey: '',
+    order: '',
+    checked: false
+  };
+  setCurrentButton(buttons[id], id);
+  byId('buttons-list').insertAdjacentHTML('beforeend', '<li id="' + id + '"><a href="#!">' + id + '</a></li>');
+  if (Object.keys(buttons).length === 1) addButtonConfig(id);
+});
+byId('remove-buttons').addEventListener('click', function (e) {
+  e.preventDefault();
+  if (!confirm('Are you sure you want to delete this button?')) return;
+  var id = byId('buttonText').getAttribute('data-button-id');
+  delete buttons[id];
+  byId(id).parentNode.removeChild(byId(id));
+  setCurrentButton(getFirstButton());
+  storage.store('buttons');
+});
 
 function loadButtons(cb) {
   storage.load('buttons',
