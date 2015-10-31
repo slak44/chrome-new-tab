@@ -1,36 +1,38 @@
 'use strict';
 var plugin = {
-  name: 'Reddit Karma',
+  name: 'Reddit Karma Info',
   desc: 'Gets reddit karma from specified user',
   author: 'Slak44',
-  version: '1.0',
-  init: function () {
-    storage.add('settings', {
+  version: '1.1',
+  settings: [
+    {
       name: 'Reddit username',
-      desc: 'Used to get karma information.',
+      desc: 'Karma information for this user',
       type: 'text',
       isVisible: true
-    });
-    storage.add('settings', {
-      name: 'Reddit request time',
-      desc: 'How frequent karma updates are.',
+    },
+    {
+      name: 'Data update period',
+      desc: 'Time between karma updates, in milliseconds',
       type: 'number',
       isVisible: true
-    });
+    }
+  ],
+  init: function () {
   },
-  main: function () {
+  main: function (plugin) {
     function updateRedditKarma() {
       var req = new XMLHttpRequest();
-      req.open('GET', 'https://www.reddit.com/user/' + settings['Reddit username'].value + '/about.json?');
+      req.open('GET', 'https://www.reddit.com/user/' + plugin.settings[0].value + '/about.json?');
       req.onload = function () {
         if (req.status === 200) {
           var data = JSON.parse(req.response);
           byId('reddit-karma').innerHTML =
-						'<span class="color accent-4">' + data.data.comment_karma + '</span> comment karma<br><span class="color accent-4">' + data.data.link_karma + '</span> link karma';
+            '<span class="color accent-4">' + data.data.comment_karma + '</span> comment karma<br><span class="color accent-4">' + data.data.link_karma + '</span> link karma';
         } else throw new Error('Failed request.');
       };
       req.onloadend = function () {
-        setTimeout(updateRedditKarma, settings['Reddit request time'].value);
+        setTimeout(updateRedditKarma, plugin.settings[1].value);
       };
       req.send();
     }
