@@ -28,12 +28,15 @@ byId('floating-save-button').addEventListener('click', function (evt) {
 	} else if (hasClass(byId('json-tab'), 'focused')) {
 	  if (byId('insert-data').value !== '') {
 	    var data = JSON.parse(byId('insert-data').value);
-	    if (data.settingsData !== undefined && data.buttonsData !== undefined) {
-	      settings = data.settingsData;
-	      buttons = data.buttonsData;
-	    }
+	    if (data.pluginsData) {
+        plugins = data.pluginsData;
+        storage.store('plugins');
+	    } else {} // TODO alert
+      if (data.buttonsData) {
+        buttons = data.buttonsData;
+        storage.store('buttons');
+      } else {} // TODO alert
 	  }
-		storage.store('buttons');
 	} else if (hasClass(byId('color-scheme-tab'), 'focused')) {
 		// Switch the active one at the top
 		var originalScheme = colorScheme[0];
@@ -57,7 +60,7 @@ byId('color-scheme').addEventListener('click', showTab('color-scheme-tab'));
 
 byId('copy-data').addEventListener('click', function (event) {
 	byId('temp-data').value = JSON.stringify({
-    settingsData: settings,
+    pluginsData: plugins,
     buttonsData: buttons
   });
 	byId('temp-data').select();
