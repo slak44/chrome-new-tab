@@ -74,6 +74,7 @@ byId('add-plugin').addEventListener('click', function (e) {
 });
 byId('remove-plugin').addEventListener('click', function (e) {
   storage.remove('plugins', prompt('Plugin to remove:'));
+  window.location.reload();
 });
 
 byId('add-scheme').addEventListener('click', function (e) {
@@ -278,6 +279,7 @@ function addPlugins(event, allowUpdate) {
       if (plugins[plugin.name] && plugins[plugin.name].settings && plugin.settings) plugin.settings = plugins[plugin.name].settings;
       
       storage.add('plugins', plugin, {update: allowUpdate});
+      window.location.reload();
     };
   })(file);
   reader.readAsText(file);
