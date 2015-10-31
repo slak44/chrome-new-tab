@@ -11,7 +11,7 @@ byId('floating-save-button').addEventListener('click', function (evt) {
     var cpId = currentPlugin.id.slice(0, -10);
     Array.prototype.forEach.apply(currentPlugin.children, [function (settingDiv, i, children) {
       if (i <= 1) return; // Ignore the title and the description
-      plugins[cpId].settings[i].value = settingDiv.children[0].value;
+      plugins[cpId].settings[i - 2].value = settingDiv.children[0].value;
     }]);
 		storage.store('plugins');
 	} else if (hasClass(byId('buttons-tab'), 'focused')) {
