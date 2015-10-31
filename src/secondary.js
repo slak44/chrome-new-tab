@@ -33,7 +33,6 @@ byId('floating-save-button').addEventListener('click', function (evt) {
 	      buttons = data.buttonsData;
 	    }
 	  }
-		storage.store('settings');
 		storage.store('buttons');
 	} else if (hasClass(byId('color-scheme-tab'), 'focused')) {
 		// Switch the active one at the top
