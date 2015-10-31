@@ -149,7 +149,7 @@ function activateScheme(scheme) {
 	css += '\n[type="checkbox"]:checked + label:before {border-bottom-color: ' + scheme.main + ' !important; border-right-color: ' + scheme.main + ' !important;}';
 	
 	if (scheme.isDark) {
-		css += 'div {background-color: black;}';
+    // TODO
 	}
 	
 	byId('dynamic-colors').innerHTML = css;
@@ -198,7 +198,6 @@ function toggleDiv(id, isElement) {
 		id.classList.remove('focused');
     id.classList.add('unfocused');
   } else {
-		id.style.display = 'block';
     id.classList.remove('unfocused');
     id.classList.add('focused');
   }
