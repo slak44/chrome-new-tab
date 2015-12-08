@@ -2,9 +2,11 @@ EXTENSION = src.crx
 SOURCES = $(wildcard ./src/*.js)
 OBJECTS = $(SOURCES:./src/%.js=./make/%.js)
 
-.PHONY: all clean cleanph
+.PHONY: all clean compile
 
 all: $(SOURCES) $(EXTENSION)
+	@touch make
+	@touch make/tmp
 	@mv src/*.js make/tmp
 	@mv make/*.js src/
 	@chromium --pack-extension=src --pack-extension-key=src.pem
