@@ -1,10 +1,10 @@
 'use strict';
-var plugins = {};
-var buttons = {};
-var colorScheme = [];
+let plugins = {};
+let buttons = {};
+let colorScheme = [];
 
 /* jshint -W057, -W061*/
-var storage = new (function () {
+let storage = new (function () {
   /*
     Existing storage objects. Usable as 'what' parameters.
     
@@ -114,7 +114,7 @@ var storage = new (function () {
     Wipes all storage, both in-memory and persistent.
   */
   this.clearStorage = function () {
-    for (var i = 0; i < storage.stored.length; i++) eval(storage.stored[i] + ' = {}');
+    for (let i = 0; i < storage.stored.length; i++) eval(storage.stored[i] + ' = {}');
     chrome.storage.local.clear();
   };
   
@@ -126,15 +126,15 @@ var storage = new (function () {
 
 function activateScheme(scheme) {
   /* jshint -W004 */
-  var css = '.bgcolor {background-color: ' + scheme.main + ' !important;}';
-	for (var i = 1; i <= 4; i++) css += '\n.bgcolor.darken-' + i +' {background-color: ' + scheme['darken' + i] + ' !important;}';
-	for (var i = 1; i <= 5; i++) css += '\n.bgcolor.lighten-' + i +' {background-color: ' + scheme['lighten' + i] + ' !important;}';
-	for (var i = 1; i <= 4; i++) css += '\n.bgcolor.accent-' + i +' {background-color: ' + scheme['accent' + i] + ' !important;}';
+  let css = '.bgcolor {background-color: ' + scheme.main + ' !important;}';
+	for (let i = 1; i <= 4; i++) css += '\n.bgcolor.darken-' + i +' {background-color: ' + scheme['darken' + i] + ' !important;}';
+	for (let i = 1; i <= 5; i++) css += '\n.bgcolor.lighten-' + i +' {background-color: ' + scheme['lighten' + i] + ' !important;}';
+	for (let i = 1; i <= 4; i++) css += '\n.bgcolor.accent-' + i +' {background-color: ' + scheme['accent' + i] + ' !important;}';
 	
 	css += '.color {color: ' + scheme.main + ' !important;}';
-	for (var i = 1; i <= 4; i++) css += '\n.color.darken-' + i +' {color: ' + scheme['darken' + i] + ' !important;}';
-	for (var i = 1; i <= 5; i++) css += '\n.color.lighten-' + i +' {color: ' + scheme['lighten' + i] + ' !important;}';
-	for (var i = 1; i <= 4; i++) css += '\n.color.accent-' + i +' {color: ' + scheme['accent' + i] + ' !important;}';
+	for (let i = 1; i <= 4; i++) css += '\n.color.darken-' + i +' {color: ' + scheme['darken' + i] + ' !important;}';
+	for (let i = 1; i <= 5; i++) css += '\n.color.lighten-' + i +' {color: ' + scheme['lighten' + i] + ' !important;}';
+	for (let i = 1; i <= 4; i++) css += '\n.color.accent-' + i +' {color: ' + scheme['accent' + i] + ' !important;}';
 	
 	css += '\n.collection-item.active {background-color: ' + scheme.darken4 + ' !important;}';
 	
@@ -161,7 +161,7 @@ function activateScheme(scheme) {
 function createButton(options) {
   if (options.parent === undefined || options.parent === null ||
       options.parent.insertAdjacentHTML === undefined) options.parent = byId('buttons');
-	var image = options.imagePath ? '<img src="' + options.imagePath + '"/>' : '<i class="material-icons">send</i>';
+	let image = options.imagePath ? '<img src="' + options.imagePath + '"/>' : '<i class="material-icons">send</i>';
 	options.parent.insertAdjacentHTML('beforeend',
 	'<li class="waves-effect waves-light collection-item">' +
 		'<a href="'+(options.href || '')+'" class="button-link">' +
@@ -172,7 +172,7 @@ function createButton(options) {
 		'</a>' +
 	'</li>'
 	);
-  var anchor = options.parent.children[options.parent.children.length - 1];
+  let anchor = options.parent.children[options.parent.children.length - 1];
   if (options.href !== undefined && (options.href.indexOf('chrome://') === 0 || options.openInNew))
     anchor.addEventListener('click', function (e) {chrome.tabs.create({url: options.href}); window.close();});
   return anchor;

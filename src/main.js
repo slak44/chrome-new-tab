@@ -9,7 +9,9 @@ async.parallel([loadButtons, loadPlugins],
   loadPlugins);
 
 document.onkeydown = function (e) {
-  if (e.altKey) for (var b in buttons) if (buttons[b].hotkey.charCodeAt() === e.keyCode) window.location.replace(buttons[b].href);
+  if (e.altKey) {
+    for (let b in buttons) if (buttons[b].hotkey.charCodeAt() === e.keyCode) window.location.replace(buttons[b].href);
+  }
 };
 
 function loadButtons(cb) {
@@ -18,14 +20,14 @@ function loadButtons(cb) {
     if (error) {
       createButton({text: 'Configure buttons here', href: '/secondary.html'});
     } else {
-      var orderedButtons = [];
-      for (var i in buttons) orderedButtons.push(buttons[i]);
+      let orderedButtons = [];
+      for (let i in buttons) orderedButtons.push(buttons[i]);
       orderedButtons.sort(function (a, b) {
         if (Number(a.position) < Number(b.position)) return -1;
         else return 1;
       });
       /*jshint -W004*/
-      for (var i = 0; i < orderedButtons.length; i++) 
+      for (let i = 0; i < orderedButtons.length; i++) 
         createButton({
             imagePath: orderedButtons[i].imagePath,
             href: orderedButtons[i].href,
@@ -43,7 +45,7 @@ function loadPlugins() {
   window.pluginCss = byId('plugin-css');
   storage.load('plugins',
   function (error) {
-    for (var p in plugins) {
+    for (let p in plugins) {
       console.log('Executing plugin: ' + plugins[p].name);
       /*jshint -W061*/
       try {if (plugins[p].main) eval('(' + plugins[p].main + ').apply(this, [plugins[\'' + p + '\']])');}
