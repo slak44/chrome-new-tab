@@ -4,7 +4,7 @@ let buttons = {};
 let colorScheme = [];
 
 /* jshint -W057, -W061*/
-let storage = new (function () {
+const storage = new (function () {
   /*
     Existing storage objects. Usable as 'what' parameters.
     
@@ -86,17 +86,17 @@ let storage = new (function () {
       window[what] = data['stored' + capitalize(what)];
       // Make sure there's something there
       if (window[what] === undefined || window[what] === null || window[what] === {} || window[what] === []) {
-        onLoadEnd(new Error('No ' + what + ' found.'));
+        onLoadEnd(new Error(`No ${what} found.`));
         return;
       }
-      console.log('Done loading ' + what + '.');
+      console.log(`Done loading ${what}.`);
       onLoadEnd();
     });
   };
   
   this.add = function (what, toAdd) {
     window[what] = (window[what])? window[what] : {};
-    if (toAdd === undefined || toAdd === null || typeof toAdd !== 'object') throw new Error('Invalid argument: ' + toAdd);
+    if (toAdd === undefined || toAdd === null || typeof toAdd !== 'object') throw new Error(`Invalid argument: ${toAdd}`);
     window[what][toAdd.name] = toAdd;
     this.store(what);
   };
@@ -107,7 +107,7 @@ let storage = new (function () {
   };
   
   this.store = function (what) {
-    eval('chrome.storage.local.set({stored' + capitalize(what) + ': ' + what + '}, undefined)');
+    eval(`chrome.storage.local.set({stored${capitalize(what)}: ${what}}, undefined)`);
   };
 
   /*
@@ -120,7 +120,7 @@ let storage = new (function () {
   
   this.clear = function (what) {
     window[what] = {};
-    eval('chrome.storage.local.set({stored' + capitalize(what) + ': {}}, undefined)');
+    eval(`chrome.storage.local.set({stored${capitalize(what)}: {}}, undefined)`);
   };
 })();
 
@@ -161,16 +161,19 @@ function activateScheme(scheme) {
 function createButton(options) {
   if (options.parent === undefined || options.parent === null ||
       options.parent.insertAdjacentHTML === undefined) options.parent = byId('buttons');
-	let image = options.imagePath ? '<img src="' + options.imagePath + '"/>' : '<i class="material-icons">send</i>';
 	options.parent.insertAdjacentHTML('beforeend',
-	'<li class="waves-effect waves-light collection-item">' +
-		'<a href="'+(options.href || '')+'" class="button-link">' +
-			'<div class="valign-wrapper">' +
-				'<div class="button-image-wrapper">'+image+'</div>' +
-				'<div class="valign thin button-text">'+options.text+'</div>' +
-			'</div>' +
-		'</a>' +
-	'</li>'
+	`<li class="waves-effect waves-light collection-item">
+		<a href="${options.href || ''}" class="button-link">
+			<div class="valign-wrapper">
+				<div class="button-image-wrapper">
+          ${options.imagePath ?
+            `<img src="${options.imagePath}"/>` :
+            `<i class="material-icons">send</i>`}
+        </div>
+				<div class="valign thin button-text">${options.text}</div>
+			</div>
+		</a>
+	</li>`
 	);
   let anchor = options.parent.children[options.parent.children.length - 1];
   if (options.href !== undefined && (options.href.indexOf('chrome://') === 0 || options.openInNew))
