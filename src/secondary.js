@@ -66,11 +66,10 @@ byId('copy-data').addEventListener('click', function (event) {
   });
 	byId('temp-data').select();
   let status = document.execCommand('copy');
-	console.log(status);
 });
 
 byId('add-plugin').addEventListener('click', function (e) {
-  byId('file-input').addEventListener('change', function (e) {addPlugins(e, true);}, false);
+  byId('file-input').addEventListener('change', (e) => addPlugins(e, true), false);
   byId('file-input').click();
 });
 byId('remove-plugin').addEventListener('click', function (e) {
@@ -107,7 +106,11 @@ byId('add-buttons').addEventListener('click', function (e) {
     checked: false
   };
   setCurrentButton(buttons[id], id);
-  byId('buttons-list').insertAdjacentHTML('beforeend', '<li id="' + id + '"><a href="#!">' + id + '</a></li>');
+  byId('buttons-list').insertAdjacentHTML('beforeend',
+    `<li id="${id}">
+      <a href="#!">${id}</a>
+    </li>`
+  );
 });
 byId('remove-buttons').addEventListener('click', function (e) {
   e.preventDefault();
@@ -129,7 +132,11 @@ function loadButtons(cb) {
 		addButtonConfig(Object.keys(buttons)[0]);
     let dropdown = byId('buttons-list');
     for (let id in buttons) {
-			dropdown.insertAdjacentHTML('beforeend', '<li id="' + id + '"><a href="#!">' + id + '</a></li>');
+			dropdown.insertAdjacentHTML('beforeend', 
+        `<li id="${id}">
+          <a href="#!">${id}</a>
+        </li>`
+      );
 			byId(id).addEventListener('click', (function (id) {
 				return function (evt) {
 					setCurrentButton(buttons[id], id);
@@ -182,18 +189,31 @@ function loadPlugins(cb) {
 }
 
 function addPluginData(plugin, focus) {
-  byId('plugins-list').insertAdjacentHTML('beforeend', '<li id="' + plugin.name + '"><a href="#!">' + plugin.name + '</a></li>');
-  byId('settings-tab').insertAdjacentHTML('beforeend', '<div id="' + plugin.name + '-container" class="plugin-container ' + (focus ? 'focused' : 'unfocused') + '"></div>');
+  byId('plugins-list').insertAdjacentHTML('beforeend',
+    `<li id="${plugin.name}">
+      <a href="#!">${plugin.name}</a>
+    </li>`
+  );
+  byId('settings-tab').insertAdjacentHTML('beforeend',
+    `<div id="${plugin.name}-container" class="plugin-container ${(focus ? 'focused' : 'unfocused')}"></div>`
+  );
   let container = byId(plugin.name + '-container');
-  container.insertAdjacentHTML('beforeend', '<h5 class="plugin-title">' + plugin.name + '</h5><p class="plugin-desc">' + plugin.desc + '<br>' + plugin.version + ' by ' + plugin.author + '</p>');
+  container.insertAdjacentHTML('beforeend', 
+    `<h5 class="plugin-title">${plugin.name}</h5>
+    <p class="plugin-desc">
+      ${plugin.desc}
+      <br>
+      ${plugin.version} by ${plugin.author}
+    </p>`
+  );
   if (plugin.settings) {
     plugin.settings.forEach(function (setting, i, settings) {
       if (!setting.isVisible) return;
       container.insertAdjacentHTML('beforeend',
-      '<div class="input-field">'+
-        '<input id="' + setting.name + '" placeholder="' + setting.desc + '" type="' + setting.type + '" value="' + setting.value + '" class="">' +
-        '<label for="' + setting.name + '" class="active">' + setting.name + '</label>' +
-      '</div>'
+      `<div class="input-field">
+        <input id="${setting.name}" placeholder="${setting.desc}" type="${setting.type}" value="${setting.value}" class="">
+        <label for="${setting.name}" class="active">${setting.name}</label>
+      </div>`
       );
     });
   } else {
@@ -212,14 +232,14 @@ function loadSchemesAndUI() {
   loadSchemes(function () {
 		activateScheme(colorScheme[0]);
 		colorScheme.forEach(function (scheme, i, array) {
-			let htmlContent = '<a href="#!" class="collection-item color">' + scheme.name + '<div class="row top-margin">';
+			let htmlContent = `<a href="#!" class="collection-item color">${scheme.name}<div class="row top-margin">`;
 			Object.keys(scheme).forEach(function (color, i, array) {
 			  if (color === 'name') return;
 				if (color === 'isDark') {
-					htmlContent += '<div style="background-color: ' + (scheme.isDark ? 'black' : 'white') + ';" class="col s1 color-sample"></div>';
+					htmlContent += `<div style="background-color: ${scheme.isDark ? 'black' : 'white'};" class="col s1 color-sample"></div>`;
 					return;
 				}
-				htmlContent += '<div style="background-color: ' + scheme[color] + ';" class="col s1 color-sample"></div>';
+				htmlContent += `<div style="background-color: ${scheme[color]};" class="col s1 color-sample"></div>`;
 			});
 			htmlContent += '</div></a>';
 		  byId('color-scheme-list').insertAdjacentHTML('beforeend', htmlContent);
@@ -238,30 +258,30 @@ function loadSchemesAndUI() {
 
 function addButtonConfig(buttonId) {
   byId('buttons-tab').insertAdjacentHTML('beforeend',
-	'<div class="input-field">'+
-		'<input id="buttonText" type="text" class="" data-button-id="' + buttonId + '" value="' + buttons[buttonId].text + '">' +
-		'<label for="buttonText" class="active">Text</label>' +
-	'</div>' +
-	'<div class="input-field">'+
-		'<input id="buttonLink" type="url" class="validate" value="' + buttons[buttonId].href + '">' +
-		'<label for="buttonLink" class="active">Link</label>' +
-	'</div>' +
-	'<div class="input-field">'+
-		'<input id="buttonImage" type="url" class="validate" value="' + buttons[buttonId].imagePath + '">' +
-		'<label for="buttonImage" class="active">Image</label>' +
-	'</div>' +
-	'<div class="input-field">'+
-		'<input id="buttonPosition" type="number" class="" value="' + buttons[buttonId].position + '">' +
-		'<label for="buttonPosition" class="active">Order</label>' +
-	'</div>' +
-	'<div class="input-field">'+
-		'<input id="buttonHotkey" type="text" maxlength="1" class="" value="' + buttons[buttonId].hotkey + '">' +
-		'<label for="buttonHotkey" class="active">Hotkey</label>' +
-	'</div>' +
-	'<div class="input-field left align-left">'+
-		'<input id="buttonOpenInNew" type="checkbox" class="" checked="' + buttons[buttonId].hotkey + '">' +
-		'<label for="buttonOpenInNew" class="active">Replace current tab</label>' +
-	'</div>'
+	`<div class="input-field">
+		<input id="buttonText" type="text" class="" data-button-id="${buttonId}" value="${buttons[buttonId].text}">
+		<label for="buttonText" class="active">Text</label>
+	</div>
+	<div class="input-field">
+		<input id="buttonLink" type="url" class="validate" value="${buttons[buttonId].href}">
+		<label for="buttonLink" class="active">Link</label>
+	</div>
+	<div class="input-field">
+		<input id="buttonImage" type="url" class="validate" value="${buttons[buttonId].imagePath}">
+		<label for="buttonImage" class="active">Image</label>
+	</div>
+	<div class="input-field">
+		<input id="buttonPosition" type="number" class="" value="${buttons[buttonId].position}">
+		<label for="buttonPosition" class="active">Order</label>
+	</div>
+	<div class="input-field">
+		<input id="buttonHotkey" type="text" maxlength="1" class="" value="${buttons[buttonId].hotkey}">
+		<label for="buttonHotkey" class="active">Hotkey</label>
+	</div>
+	<div class="input-field left align-left">
+		<input id="buttonOpenInNew" type="checkbox" class="" checked="${buttons[buttonId].hotkey}">
+		<label for="buttonOpenInNew" class="active">Replace current tab</label>
+	</div>`
 	);
 }
 
