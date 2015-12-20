@@ -215,7 +215,7 @@ function toggleDiv(id, isElement) {
 
 function loadSchemes(cb) {
 	storage.load('colorScheme', function (err) {
-		if (err) {
+		if (err || colorScheme.length < 1) {
 			colorScheme = [{
 				// Orange is default
 				lighten5: '#fff3e0',
