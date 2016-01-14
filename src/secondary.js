@@ -302,7 +302,7 @@ function addPlugins(event) {
       if (typeof plugin.main === 'function') plugin.main = plugin.main.toString();
       if (typeof plugin.secondary === 'function') plugin.secondary = plugin.secondary.toString();
       // If settings already exist and the new plugin has things to set, use existing data
-      if (plugins[plugin.name] && plugins[plugin.name].settings && plugin.settings) plugin.settings = plugins[plugin.name].settings;
+      if (plugins[plugin.name] && plugins[plugin.name].settings && plugin.settings) plugin.settings = Object.assign({}, plugins.settings, plugins[plugin.name].settings);
       storage.add('plugins', plugin, () => window.location.reload());
     };
   })(file);
