@@ -303,9 +303,7 @@ function addPlugins(event) {
       if (typeof plugin.secondary === 'function') plugin.secondary = plugin.secondary.toString();
       // If settings already exist and the new plugin has things to set, use existing data
       if (plugins[plugin.name] && plugins[plugin.name].settings && plugin.settings) plugin.settings = plugins[plugin.name].settings;
-      
-      storage.add('plugins', plugin);
-      window.location.reload();
+      storage.add('plugins', plugin, () => window.location.reload());
     };
   })(file);
   reader.readAsText(file);
