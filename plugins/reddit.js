@@ -23,14 +23,15 @@ var plugin = {
   init: function () {
   },
   main: function (plugin) {
+    var url = 'https://www.reddit.com/user/' + plugin.settings[0].value;
     function updateRedditKarma() {
       var req = new XMLHttpRequest();
-      req.open('GET', 'https://www.reddit.com/user/' + plugin.settings[0].value + '/about.json?');
+      req.open('GET', url + '/about.json');
       req.onload = function () {
         if (req.status === 200) {
           var data = JSON.parse(req.response);
           byId('reddit-karma').innerHTML =
-            '<span class="color accent-4">' + data.data.comment_karma + '</span> comment karma<br><span class="color accent-4">' + data.data.link_karma + '</span> link karma';
+            '<a href="'+url+'" class="color accent-4">' + data.data.comment_karma + '</a> comment karma<br><a href="'+url+'" class="color accent-4">' + data.data.link_karma + '</a> link karma';
         } else throw new Error('Failed request.');
       };
       req.onloadend = function () {
