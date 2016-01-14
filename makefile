@@ -5,13 +5,8 @@ OBJECTS = $(SOURCES:./src/%.js=./make/%.js)
 .PHONY: all clean compile
 
 all: $(SOURCES) $(EXTENSION)
-	@touch make
-	@touch make/tmp
-	@mv src/*.js make/tmp
-	@mv make/*.js src/
-	@chromium --pack-extension=src --pack-extension-key=src.pem
-	@mv src/*.js make/
-	@mv make/tmp/* src/
+	@ln -nfrs -t make `find src -maxdepth 1 -not -name "*.js" | tail -n +2` # symlink everything that's not js to the make folder
+	@chromium --pack-extension=make --pack-extension-key=src.pem
 	@echo "Built extension"
 	
 $(EXTENSION): $(OBJECTS)
