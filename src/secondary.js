@@ -69,7 +69,7 @@ byId('copy-data').addEventListener('click', function (event) {
 });
 
 byId('add-plugin').addEventListener('click', function (e) {
-  byId('file-input').addEventListener('change', (e) => addPlugins(e, true), false);
+  byId('file-input').addEventListener('change', (e) => addPlugins(e), false);
   byId('file-input').click();
 });
 byId('remove-plugin').addEventListener('click', function (e) {
@@ -285,7 +285,7 @@ function addButtonConfig(buttonId) {
 	);
 }
 
-function addPlugins(event, allowUpdate) {
+function addPlugins(event) {
   let file = event.target.files[0];
   let reader = new FileReader();
   reader.onloadend = (function (fileIn) {
@@ -304,7 +304,7 @@ function addPlugins(event, allowUpdate) {
       // If settings already exist and the new plugin has things to set, use existing data
       if (plugins[plugin.name] && plugins[plugin.name].settings && plugin.settings) plugin.settings = plugins[plugin.name].settings;
       
-      storage.add('plugins', plugin, {update: allowUpdate});
+      storage.add('plugins', plugin);
       window.location.reload();
     };
   })(file);
