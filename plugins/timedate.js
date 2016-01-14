@@ -21,6 +21,8 @@ let plugin = {
         <h5>
       		<span id="time" class="right">00:00</span>
       		<br>
+          <span id="weekday" class="right">${new Date().toLocaleDateString('en-GB', {weekday: "long"})}</span>
+          <br>
       		<span id="date">${new Date().toLocaleDateString('en-GB', {month: 'long', day: '2-digit', year: 'numeric'})}</span>
       	</h5>
       </li>`
