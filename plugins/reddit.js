@@ -18,6 +18,13 @@ let plugin = {
       type: 'number',
       value: '',
       isVisible: true
+    },
+    {
+      name: 'Position',
+      desc: 'The text will be inserted after this many elements',
+      type: 'number',
+      value: '',
+      isVisible: true
     }
   ],
   init: function () {
@@ -39,10 +46,13 @@ let plugin = {
       req.onloadend = () => setTimeout(updateRedditKarma, plugin.settings[1].value);
       req.send();
     }
-    byId('data-collection').insertAdjacentHTML('beforeend',
-    `<li class="collection-item">
-      <h5 id="reddit-karma"></h5>
-    </li>`);
+    addPanel({
+      position: plugin.settings[2] || 0,
+      htmlContent:
+      `<li class="collection-item">
+        <h5 id="reddit-karma"></h5>
+      </li>`
+    });
     setTimeout(updateRedditKarma, 0);
   }
 };
