@@ -94,20 +94,20 @@ const storage = new (function () {
     });
   };
   
-  this.add = function (what, toAdd) {
+  this.add = function (what, toAdd, callback) {
     window[what] = (window[what])? window[what] : {};
     if (toAdd === undefined || toAdd === null || typeof toAdd !== 'object') throw new Error(`Invalid argument: ${toAdd}`);
     window[what][toAdd.name] = toAdd;
-    this.store(what);
+    this.store(what, callback);
   };
   
-  this.remove = function (what, name) {
+  this.remove = function (what, name, callback) {
     delete window[what][name];
-    this.store(what);
+    this.store(what, callback);
   };
   
-  this.store = function (what) {
-    eval(`chrome.storage.local.set({stored${capitalize(what)}: ${what}}, undefined)`);
+  this.store = function (what, callback) {
+    eval(`chrome.storage.local.set({stored${capitalize(what)}: ${what}}, ${callback.toString()})`);
   };
 
   /*
