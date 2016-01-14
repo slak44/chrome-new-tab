@@ -107,7 +107,7 @@ const storage = new (function () {
   };
   
   this.store = function (what, callback) {
-    eval(`chrome.storage.local.set({stored${capitalize(what)}: ${what}}, ${callback.toString()})`);
+    eval(`chrome.storage.local.set({stored${capitalize(what)}: ${what}}, ${callback === undefined ? 'undefined' : callback.toString()})`);
   };
 
   /*
