@@ -4,6 +4,14 @@ setTimeout(loadSchemes, 0, () => activateScheme(colorScheme[0]));
 async.parallel([loadButtons, loadPlugins],
   loadPlugins);
 
+let panels = [];
+function addPanel(panelObject) {
+  panels.push(panelObject);
+  panels = panels.sort((a, b) => a.position < b.position ? -1 : 1);
+  byId('data-collection').innerHTML = '';
+  panels.forEach(e => byId('data-collection').insertAdjacentHTML('beforeend', e.htmlContent));
+}
+
 document.onkeydown = function (e) {
   if (e.altKey) {
     for (let b in buttons) if (buttons[b].hotkey.charCodeAt() === e.keyCode) window.location.replace(buttons[b].href);
