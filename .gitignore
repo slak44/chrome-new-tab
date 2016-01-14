@@ -1,0 +1,9 @@
+*.pem
+*.crx
+.jshintrc
+.babelrc
+materialize.css
+materialize.js
+src/libs/materialize/README.md
+node_modules/
+make/
