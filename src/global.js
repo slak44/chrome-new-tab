@@ -95,7 +95,7 @@ const storage = new (function () {
   };
   
   this.add = function (what, toAdd, callback) {
-    window[what] = (window[what])? window[what] : {};
+    window[what] = window[what] ? window[what] : {};
     if (toAdd === undefined || toAdd === null || typeof toAdd !== 'object') throw new Error(`Invalid argument: ${toAdd}`);
     window[what][toAdd.name] = toAdd;
     this.store(what, callback);
@@ -216,7 +216,7 @@ function capitalize(string) {
 }
 
 function hasClass(element, className) {
-  if (Array.prototype.indexOf.apply(element.classList, [className]) > -1) return true;
+  if (Array.from(element.classList).includes(className)) return true;
 	else return false;
 }
 
