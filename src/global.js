@@ -125,31 +125,49 @@ const storage = new (function () {
 })();
 
 function activateScheme(scheme) {
-  /* jshint -W004 */
-  let css = '.bgcolor {background-color: ' + scheme.main + ' !important;}';
-	for (let i = 1; i <= 4; i++) css += '\n.bgcolor.darken-' + i +' {background-color: ' + scheme['darken' + i] + ' !important;}';
-	for (let i = 1; i <= 5; i++) css += '\n.bgcolor.lighten-' + i +' {background-color: ' + scheme['lighten' + i] + ' !important;}';
-	for (let i = 1; i <= 4; i++) css += '\n.bgcolor.accent-' + i +' {background-color: ' + scheme['accent' + i] + ' !important;}';
-	
-	css += '.color {color: ' + scheme.main + ' !important;}';
-	for (let i = 1; i <= 4; i++) css += '\n.color.darken-' + i +' {color: ' + scheme['darken' + i] + ' !important;}';
-	for (let i = 1; i <= 5; i++) css += '\n.color.lighten-' + i +' {color: ' + scheme['lighten' + i] + ' !important;}';
-	for (let i = 1; i <= 4; i++) css += '\n.color.accent-' + i +' {color: ' + scheme['accent' + i] + ' !important;}';
-	
-	css += '\n.collection-item.active {background-color: ' + scheme.darken4 + ' !important;}';
-	
-	css += '\ninput[type=text]:focus:not([readonly]), input[type=password]:focus:not([readonly]), input[type=email]:focus:not([readonly]), input[type=url]:focus:not([readonly]),' +
-	'input[type=time]:focus:not([readonly]), input[type=date]:focus:not([readonly]), input[type=datetime-local]:focus:not([readonly]), input[type=tel]:focus:not([readonly]),' +
-	'input[type=number]:focus:not([readonly]), input[type=search]:focus:not([readonly]), textarea.materialize-textarea:focus:not([readonly]) {' +
-	'	border-bottom-color: ' + scheme.main + ' !important;' +
-	'	box-shadow: 0 1px 0 0 ' + scheme.main + ' !important;' +
-	'}';
-	css += '\ninput[type=text]:focus:not([readonly]) + label, input[type=password]:focus:not([readonly]) + label, input[type=email]:focus:not([readonly]) + label,' +
-	'input[type=url]:focus:not([readonly]) + label, input[type=time]:focus:not([readonly]) + label, input[type=date]:focus:not([readonly]) + label,' +
-	'input[type=datetime-local]:focus:not([readonly]) + label, input[type=tel]:focus:not([readonly]) + label, input[type=number]:focus:not([readonly]) + label,' +
-	'input[type=search]:focus:not([readonly]) + label, textarea.materialize-textarea:focus:not([readonly]) + label {' +
-	'color: ' + scheme.main + ' !important;}';
-	css += '\n[type="checkbox"]:checked + label:before {border-bottom-color: ' + scheme.main + ' !important; border-right-color: ' + scheme.main + ' !important;}';
+  let css = `
+  .color {color: ${scheme.main} !important;}
+  .bgcolor {background-color: ${scheme.main} !important;}
+  `;
+  for (let i = 1; i <= 4; i++) {
+    css +=
+    `
+    .color.darken-${i} {color: ${scheme[`darken${i}`]} !important;}
+    .color.lighten-${i} {color: ${scheme[`lighten${i}`]} !important;}
+    .color.accent-${i} {color: ${scheme[`accent${i}`]} !important;}
+    
+    .bgcolor.darken-${i} {background-color: ${scheme[`darken${i}`]} !important;}
+    .bgcolor.lighten-${i} {background-color: ${scheme[`lighten${i}`]} !important;}
+    .bgcolor.accent-${i} {background-color: ${scheme[`accent${i}`]} !important;}
+    `;
+  }
+  // There are 5 light colors and 4 dark/accent
+  css += `
+  .color.lighten-5 {color: ${scheme.lighten5} !important;}
+  .bgcolor.lighten-5 {background-color: ${scheme.lighten5} !important;}
+  `;
+  
+	css += `
+  input[type=text]:focus:not([readonly]), input[type=password]:focus:not([readonly]), input[type=email]:focus:not([readonly]), input[type=url]:focus:not([readonly]),
+	input[type=time]:focus:not([readonly]), input[type=date]:focus:not([readonly]), input[type=datetime-local]:focus:not([readonly]), input[type=tel]:focus:not([readonly]),
+	input[type=number]:focus:not([readonly]), input[type=search]:focus:not([readonly]), textarea.materialize-textarea:focus:not([readonly]) {
+		border-bottom-color: ${scheme.main} !important;
+		box-shadow: 0 1px 0 0 ${scheme.main} !important;
+	}
+  input[type=text]:focus:not([readonly]) + label, input[type=password]:focus:not([readonly]) + label, input[type=email]:focus:not([readonly]) + label,
+	input[type=url]:focus:not([readonly]) + label, input[type=time]:focus:not([readonly]) + label, input[type=date]:focus:not([readonly]) + label,
+	input[type=datetime-local]:focus:not([readonly]) + label, input[type=tel]:focus:not([readonly]) + label, input[type=number]:focus:not([readonly]) + label,
+	input[type=search]:focus:not([readonly]) + label, textarea.materialize-textarea:focus:not([readonly]) + label {
+    color: ${scheme.main} !important;
+  }
+  
+  [type="checkbox"]:checked + label:before {
+    border-bottom-color: ${scheme.main} !important;
+    border-right-color: ${scheme.main} !important;
+  }
+  
+  .collection-item.active {background-color: ${scheme.darken4} !important;}
+  `;
 	
 	if (scheme.isDark) {
     // TODO
