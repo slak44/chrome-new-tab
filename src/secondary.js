@@ -9,10 +9,10 @@ byId('floating-save-button').addEventListener('click', function (evt) {
   if (hasClass(byId('settings-tab'), 'focused')) {
     let currentPlugin = byQSelect('.plugin-container.focused');
     let cpId = currentPlugin.id.slice(0, -10);
-    Array.prototype.forEach.apply(currentPlugin.children, [function (settingDiv, i, children) {
+    Array.from(currentPlugin.children).forEach(function (settingDiv, i, children) {
       if (i <= 1) return; // Ignore the title and the description
       plugins[cpId].settings[i - 2].value = settingDiv.children[0].value;
-    }]);
+    });
 		storage.store('plugins');
 	} else if (hasClass(byId('buttons-tab'), 'focused')) {
 		let id = byId('buttonText').getAttribute('data-button-id');
@@ -233,7 +233,7 @@ function loadSchemesAndUI() {
 		activateScheme(colorScheme[0]);
 		colorScheme.forEach(function (scheme, i, array) {
 			let htmlContent = `<a href="#!" class="collection-item color">${scheme.name}<div class="row top-margin">`;
-			Object.keys(scheme).forEach(function (color, i, array) {
+			Object.keys(scheme).sort().forEach(function (color, i, array) {
 			  if (color === 'name') return;
 				if (color === 'isDark') {
 					htmlContent += `<div style="background-color: ${scheme.isDark ? 'black' : 'white'};" class="col s1 color-sample"></div>`;
@@ -243,7 +243,7 @@ function loadSchemesAndUI() {
 			});
 			htmlContent += '</div></a>';
 		  byId('color-scheme-list').insertAdjacentHTML('beforeend', htmlContent);
-			Array.prototype.forEach.apply(byId('color-scheme-list').children, [function (schemeElement, i, arr) {
+			Array.from(byId('color-scheme-list').children).forEach(function (schemeElement, i, arr) {
 				if (i === 0) schemeElement.classList.add('active');
 			  schemeElement.addEventListener('click', function (evt) {
 					let actives = byQSelect('#color-scheme-list > a.active');
@@ -251,7 +251,7 @@ function loadSchemesAndUI() {
 			    schemeElement.classList.add('active');
 					activeSchemeIndex = i;
 			  });
-			}]);
+			});
 		});
   });
 }
