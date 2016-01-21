@@ -233,7 +233,7 @@ function toggleDiv(id, isElement) {
 
 function loadSchemes(cb) {
 	storage.load('colorScheme', function (err) {
-		if (err || colorScheme.length < 1) {
+		if (err || colorScheme[0] === undefined || colorScheme[0] === null) {
 			colorScheme = [{
 				// Orange is default
 				lighten5: '#fff3e0',
@@ -249,13 +249,13 @@ function loadSchemes(cb) {
 				darken3: 	'#ef6c00',
 				darken4: 	'#e65100',
 				
-				accent1: 	'#ffd180',
-				accent2: 	'#ffab40',
-				accent3: 	'#ff9100',
-				accent4: 	'#ff6d00',
+				accent1: 	'#F4FF81',
+				accent2: 	'#EEFF41',
+				accent3: 	'#C6FF00',
+				accent4: 	'#AEEA00',
 				
 				isDark: false,
-				name: 'Light Orange'
+				name: 'Light Orange, Lime Accents'
 			}];
 			storage.store('colorScheme');
 		}
