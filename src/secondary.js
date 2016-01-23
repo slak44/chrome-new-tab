@@ -1,8 +1,10 @@
 'use strict';
 let activeSchemeIndex = 0;
-
-async.parallel([loadButtons, loadPlugins, loadSchemesAndUI], function (err) {
-  if (err) throw err;
+loadSchemes(() => {
+  activateScheme(colorScheme[0]);
+  async.parallel([loadButtons, loadPlugins, loadSchemesAndUI], function (err) {
+    if (err) throw err;
+  });
 });
 
 byId('floating-save-button').addEventListener('click', function (evt) {
@@ -229,40 +231,37 @@ function addPluginData(plugin, focus) {
 }
 
 function loadSchemesAndUI() {
-  loadSchemes(function () {
-		activateScheme(colorScheme[0]);
-		colorScheme.forEach(function (scheme, i, array) {
-			let htmlContent = `<a href="#!" class="collection-item color">${scheme.name}<div class="row top-margin">`;
-      function addColor(colorName, index, array) {
-        htmlContent += `<div style="background-color: ${scheme[colorName]};" class="col s1 color-sample"></div>`;
-      }
-      // Add dark/light
-      htmlContent += `<div style="background-color: ${scheme.isDark ? 'black' : 'white'};" class="col s1 color-sample"></div>`;
-      // Add dark colors from darkest
-      Object.keys(scheme).filter(e => e.startsWith('darken')).sort((a, b) => b > a ? 1 : -1).forEach(addColor);
-      // Add main color
-      htmlContent += `<div style="background-color: ${scheme.main};" class="col s1 color-sample"></div>`;
-      // Add light colors from least light
-      Object.keys(scheme).filter(e => e.startsWith('lighten')).sort().forEach(addColor);
-      // Split accent from main colors
-      htmlContent += '<br style="line-height: 75px;">';
-      // Add accent
-      Object.keys(scheme).filter(e => e.startsWith('accent')).sort().forEach(addColor);
-      
-			htmlContent += '</div></a>';
-      
-		  byId('color-scheme-list').insertAdjacentHTML('beforeend', htmlContent);
-			Array.from(byId('color-scheme-list').children).forEach(function (schemeElement, i, arr) {
-				if (i === 0) schemeElement.classList.add('active');
-			  schemeElement.addEventListener('click', function (evt) {
-					let actives = byQSelect('#color-scheme-list > a.active');
-					if (actives) actives.classList.remove('active');
-			    schemeElement.classList.add('active');
-					activeSchemeIndex = i;
-			  });
-			});
+	colorScheme.forEach(function (scheme, i, array) {
+		let htmlContent = `<a href="#!" class="collection-item color">${scheme.name}<div class="row top-margin">`;
+    function addColor(colorName, index, array) {
+      htmlContent += `<div style="background-color: ${scheme[colorName]};" class="col s1 color-sample"></div>`;
+    }
+    // Add dark/light
+    htmlContent += `<div style="background-color: ${scheme.isDark ? 'black' : 'white'};" class="col s1 color-sample"></div>`;
+    // Add dark colors from darkest
+    Object.keys(scheme).filter(e => e.startsWith('darken')).sort((a, b) => b > a ? 1 : -1).forEach(addColor);
+    // Add main color
+    htmlContent += `<div style="background-color: ${scheme.main};" class="col s1 color-sample"></div>`;
+    // Add light colors from least light
+    Object.keys(scheme).filter(e => e.startsWith('lighten')).sort().forEach(addColor);
+    // Split accent from main colors
+    htmlContent += '<br style="line-height: 75px;">';
+    // Add accent
+    Object.keys(scheme).filter(e => e.startsWith('accent')).sort().forEach(addColor);
+    
+		htmlContent += '</div></a>';
+    
+	  byId('color-scheme-list').insertAdjacentHTML('beforeend', htmlContent);
+		Array.from(byId('color-scheme-list').children).forEach(function (schemeElement, i, arr) {
+			if (i === 0) schemeElement.classList.add('active');
+		  schemeElement.addEventListener('click', function (evt) {
+				let actives = byQSelect('#color-scheme-list > a.active');
+				if (actives) actives.classList.remove('active');
+		    schemeElement.classList.add('active');
+				activeSchemeIndex = i;
+		  });
 		});
-  });
+	});
 }
 
 function addButtonConfig(buttonId) {

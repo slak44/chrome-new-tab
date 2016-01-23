@@ -1,8 +1,9 @@
 'use strict';
-setTimeout(loadSchemes, 0, () => activateScheme(colorScheme[0]));
-
-async.parallel([loadButtons, loadPlugins],
-  loadPlugins);
+loadSchemes(() => {
+  activateScheme(colorScheme[0]);
+  async.parallel([loadButtons, loadPlugins],
+    loadPlugins);
+});
 
 let panels = [];
 function addPanel(panelObject) {
