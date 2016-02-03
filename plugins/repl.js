@@ -116,7 +116,7 @@ function run() {
   // Load currency conversion script & get currency rates
   let money = new XMLHttpRequest();
   money.onload = function () {
-    eval.apply(window, [this.responseText]);
+    eval.apply(window, [money.responseText]);
     // Syntactic sugar. Usage: convert('123 USD EUR')
     window.convert = function (data) {
       data = data.split(' ');
@@ -125,7 +125,7 @@ function run() {
     // Get current exchange rates
     fx.base = 'EUR';
     let rates = new XMLHttpRequest();
-    rates.onload = () => fx.rates = JSON.parse(this.responseText).rates;
+    rates.onload = () => fx.rates = JSON.parse(rates.responseText).rates;
     rates.open('GET', 'https://api.fixer.io/latest');
     rates.send();
   };
@@ -136,7 +136,7 @@ let plugin = {
   name: 'REPL',
   desc: 'Read-Eval-Print-Loop',
   author: 'Slak44',
-  version: '2.0.0',
+  version: '2.0.1',
   main: run
 };
 /*jshint -W030 */
