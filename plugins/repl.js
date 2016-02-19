@@ -65,6 +65,10 @@ function run() {
     </div>
   </div>
   `);
+  const keycodes = {
+    enter: 13,
+    upArrow: 38
+  };
   let result;
   byId('repl-window').addEventListener('click', event => {
     if (event.target !== event.currentTarget) return; // Only catch direct clicks on the empty div
@@ -76,7 +80,7 @@ function run() {
     byId('repl-window').insertAdjacentHTML('beforeend', `<span class="result-text">${text}</span>`);
   }
   function evaluate(event) {
-    if (event.keyCode === 13 /* Key code for Enter */) {
+    if (event.keyCode === keycodes.enter) {
       let oldElem = byClass('current-text')[0];
       let code = oldElem.textContent.replace(/console\.(log|error|info|debug)/g, 'replLog'); // Replace calls to 'console'
       /*jshint -W061 */
@@ -105,6 +109,9 @@ function run() {
       newElem.onkeydown = evaluate;
       newElem.focus();
       event.preventDefault();
+    } else if (event.keyCode === keycodes.upArrow) {
+      console.log("asdasdada");
+      if (result !== undefined && result !== null) byClass('current-text')[0].innerText = result.toString();
     }
   }
   byClass('current-text')[0].onkeydown = evaluate;
@@ -139,7 +146,7 @@ let plugin = {
   name: 'REPL',
   desc: 'Read-Eval-Print-Loop',
   author: 'Slak44',
-  version: '2.0.2',
+  version: '2.0.3',
   main: run
 };
 /*jshint -W030 */
