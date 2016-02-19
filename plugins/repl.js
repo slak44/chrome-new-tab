@@ -17,6 +17,8 @@ function run() {
     height: 20px;
     width: 100%;
     display: block;
+    -webkit-user-select: initial;
+    cursor: text;
   }
   #repl-history {
     position: absolute;
@@ -65,6 +67,7 @@ function run() {
   `);
   let result;
   byId('repl-window').addEventListener('click', event => {
+    if (event.target !== event.currentTarget) return; // Only catch direct clicks on the empty div
     event.preventDefault();
     byClass('current-text')[0].focus();
   });
@@ -136,7 +139,7 @@ let plugin = {
   name: 'REPL',
   desc: 'Read-Eval-Print-Loop',
   author: 'Slak44',
-  version: '2.0.1',
+  version: '2.0.2',
   main: run
 };
 /*jshint -W030 */
