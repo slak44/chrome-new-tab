@@ -83,11 +83,15 @@ function run() {
     if (event.keyCode === keycodes.enter) {
       let oldElem = byClass('current-text')[0];
       let code = oldElem.textContent.replace(/console\.(log|error|info|debug)/g, 'replLog'); // Replace calls to 'console'
-      /*jshint -W061 */
-      try {
-        result = eval(code);
-      } catch (error) {
-        result = error;
+      if (code.startsWith('convert ')) {
+        result = convert(code.replace('convert ', ''));
+      } else {
+        /*jshint -W061 */
+        try {
+          result = eval(code);
+        } catch (error) {
+          result = error;
+        }
       }
       oldElem.classList.remove('current-text');
       byId('repl-window').insertAdjacentHTML('beforeend', `
@@ -110,7 +114,6 @@ function run() {
       newElem.focus();
       event.preventDefault();
     } else if (event.keyCode === keycodes.upArrow) {
-      console.log("asdasdada");
       if (result !== undefined && result !== null) byClass('current-text')[0].innerText = result.toString();
     }
   }
@@ -146,7 +149,7 @@ let plugin = {
   name: 'REPL',
   desc: 'Read-Eval-Print-Loop',
   author: 'Slak44',
-  version: '2.0.3',
+  version: '2.0.4',
   main: run
 };
 /*jshint -W030 */
