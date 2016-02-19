@@ -67,9 +67,12 @@ function run() {
   `);
   const keycodes = {
     enter: 13,
-    upArrow: 38
+    upArrow: 38,
+    downArrow: 40
   };
   let result;
+  let commandHistory = [];
+  let rewindCount = 0;
   byId('repl-window').addEventListener('click', event => {
     if (event.target !== event.currentTarget) return; // Only catch direct clicks on the empty div
     event.preventDefault();
@@ -81,6 +84,7 @@ function run() {
   }
   function evaluate(event) {
     if (event.keyCode === keycodes.enter) {
+      rewindCount = 0;
       let oldElem = byClass('current-text')[0];
       let code = oldElem.textContent.replace(/console\.(log|error|info|debug)/g, 'replLog'); // Replace calls to 'console'
       if (code.startsWith('convert ')) {
@@ -93,6 +97,7 @@ function run() {
           result = error;
         }
       }
+      commandHistory.push(code);
       oldElem.classList.remove('current-text');
       byId('repl-window').insertAdjacentHTML('beforeend', `
       <span class="result-text">${result}</span>
@@ -114,7 +119,13 @@ function run() {
       newElem.focus();
       event.preventDefault();
     } else if (event.keyCode === keycodes.upArrow) {
-      if (result !== undefined && result !== null) byClass('current-text')[0].innerText = result.toString();
+      rewindCount++;
+      if (commandHistory.length - rewindCount < 0) rewindCount--;
+      byClass('current-text')[0].innerText = commandHistory[commandHistory.length - rewindCount].toString();
+    } else if (event.keyCode === keycodes.downArrow) {
+      rewindCount--;
+      if (rewindCount === 0) rewindCount++;
+      byClass('current-text')[0].innerText = commandHistory[commandHistory.length - rewindCount].toString();
     }
   }
   byClass('current-text')[0].onkeydown = evaluate;
@@ -149,7 +160,7 @@ let plugin = {
   name: 'REPL',
   desc: 'Read-Eval-Print-Loop',
   author: 'Slak44',
-  version: '2.0.4',
+  version: '2.0.5',
   main: run
 };
 /*jshint -W030 */
