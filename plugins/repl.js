@@ -141,9 +141,10 @@ function run() {
   let money = new XMLHttpRequest();
   money.onload = function () {
     eval.apply(window, [money.responseText]);
-    // Syntactic sugar. Usage: convert('123 USD EUR')
+    // Syntactic sugar. Usage: convert('123 USD EUR') or convert('123 usd to eur')
     window.convert = function (data) {
       data = data.split(' ');
+      if (data[2].toLowerCase() === 'to') data.splice(2, 1);
       return fx.convert(Number(data[0]), {from: data[1].toUpperCase(), to: data[2].toUpperCase()}).toFixed(2);
     };
     // Get current exchange rates
