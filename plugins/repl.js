@@ -161,7 +161,7 @@ let plugin = {
   name: 'REPL',
   desc: 'Read-Eval-Print-Loop',
   author: 'Slak44',
-  version: '2.0.5',
+  version: '2.0.6',
   main: run
 };
 /*jshint -W030 */
