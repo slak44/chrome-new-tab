@@ -113,12 +113,8 @@ function run() {
       }
       return Qty(`${data[0]} ${data[1]}`).to(data[2]).toString();
     },
-    query: function (data) {
-      return openInNewTab(`https://www.google.ro/search?q=${encodeURIComponent(data)}`);
-    },
-    wolfram: function (data) {
-      return openInNewTab(`http://www.wolframalpha.com/input/?i=${encodeURIComponent(data)}`);
-    }
+    query: data => openInNewTab(`https://www.google.ro/search?q=${encodeURIComponent(data)}`),
+    wolfram: data => openInNewTab(`http://www.wolframalpha.com/input/?i=${encodeURIComponent(data)}`)
   };
   let commandAliases = {
     cv: 'convert',
