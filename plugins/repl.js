@@ -105,10 +105,10 @@ function run() {
       // !convert 50 m to km
       data = data.split(' ');
       if (data[2].toLowerCase() === 'to') data.splice(2, 1);
-      data[1] = data[1].toUpperCase();
-      data[2] = data[2].toUpperCase();
       // If the unit is currency, use the currency script
       if (Object.keys(fx.rates).includes(data[1])) {
+        data[1] = data[1].toUpperCase();
+        data[2] = data[2].toUpperCase();
         return fx.convert(Number(data[0]), {from: data[1], to: data[2]}).toFixed(2) + ` ${data[2]}`;
       }
       return Qty(`${data[0]} ${data[1]}`).to(data[2]).toString();
