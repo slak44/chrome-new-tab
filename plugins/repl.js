@@ -156,8 +156,8 @@ function run() {
           /*jshint -W061 */
           result = eval(code);
         }
-      } catch (e) {
-        result = error;
+      } catch (err) {
+        result = err;
       }
       commandHistory.push(code);
       oldElem.classList.remove('current-text');
