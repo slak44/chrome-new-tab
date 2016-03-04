@@ -139,11 +139,7 @@ function loadButtons(cb) {
           <a href="#!">${id}</a>
         </li>`
       );
-			byId(id).addEventListener('click', (function (id) {
-				return function (evt) {
-					setCurrentButton(buttons[id], id);
-				};
-			})(id)); // jshint ignore:line
+			byId(id).addEventListener('click', event => setCurrentButton(buttons[id], id)); // jshint ignore:line
 		}
     cb();
   });
