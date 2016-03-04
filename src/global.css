@@ -63,6 +63,25 @@ img {
 	margin-top: 5px;
 }
 
+#backup-card {
+  /*width: 500px;*/
+}
+
+#restore-card {
+  /*width: 500px;*/
+}
+
+.card-top-right-icon {
+  float: right;
+  padding: 20px 20px 0px 0px;
+}
+
+.card-icon-image {
+  text-align: center;
+  width: 100%;
+  font-size: 200px;
+}
+
 #floating-save-button {
 	position: absolute !important;
 	bottom: 25px;
@@ -82,8 +101,8 @@ img {
 }
 
 #temp-data {
-	position: absolute;
-	top: -100px;
+	/*position: absolute;
+	top: -100px;*/
 }
 
 #settings-link {

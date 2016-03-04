@@ -28,18 +28,6 @@ byId('floating-save-button').addEventListener('click', function (evt) {
 			openInNew: !!byId('buttonOpenInNew').checked
 		};
 		storage.store('buttons');
-	} else if (hasClass(byId('json-tab'), 'focused')) {
-	  if (byId('insert-data').value !== '') {
-	    let data = JSON.parse(byId('insert-data').value);
-	    if (data.pluginsData) {
-        plugins = data.pluginsData;
-        storage.store('plugins');
-	    } else {} // TODO alert
-      if (data.buttonsData) {
-        buttons = data.buttonsData;
-        storage.store('buttons');
-      } else {} // TODO alert
-	  }
 	} else if (hasClass(byId('color-scheme-tab'), 'focused')) {
 		// Switch the active one at the top
 		let originalScheme = colorScheme[0];
@@ -61,13 +49,38 @@ byId('button-list').addEventListener('click', showTab('buttons-tab'));
 byId('backup-and-restore').addEventListener('click', showTab('json-tab'));
 byId('color-scheme').addEventListener('click', showTab('color-scheme-tab'));
 
-byId('copy-data').addEventListener('click', function (event) {
-	byId('temp-data').value = JSON.stringify({
+function createDataJson() {
+  byId('copy-data-display').value = JSON.stringify({
     pluginsData: plugins,
     buttonsData: buttons
   });
-	byId('temp-data').select();
+}
+byId('show-data').addEventListener('click', function (event) {
+  createDataJson();
+});
+
+byId('copy-data').addEventListener('click', function (event) {
+  createDataJson();
+	byId('copy-data-display').select();
   let status = document.execCommand('copy');
+  byId('copy-data-display').value = '';
+  byId('copy-data').focus();
+});
+
+byId('restore-data').addEventListener('click', function (event) {
+  // TODO: handle cases where some or all data is missing, possibly by asking the user
+  // TODO: run store calls in parallel, show success/fail dialog with a refresh button in it
+  if (byId('insert-data').value !== '') {
+    let data = JSON.parse(byId('insert-data').value);
+    if (data.pluginsData) {
+      plugins = data.pluginsData;
+      storage.store('plugins');
+    } else {} // TODO alert
+    if (data.buttonsData) {
+      buttons = data.buttonsData;
+      storage.store('buttons');
+    } else {} // TODO alert
+  }
 });
 
 byId('add-plugin').addEventListener('click', function (e) {
