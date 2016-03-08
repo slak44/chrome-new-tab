@@ -122,6 +122,17 @@ function run() {
     w: 'wolfram'
   };
   
+  let replReplace = {
+    'replLog': /console\.(log|error|info|debug)/g,
+    'Math.$1($2)': /(pow|exp|ceil|floor|trunc|log|max|min|random|sqrt|sin|cos|tan|asin|acos)\((\S*)\)/g,
+    'Math.$1': /(PI|E)/g,
+  };
+  
+  function replLog() {
+    let text = Array.from(arguments).reduce((prev, curr) => prev + curr + '\n', '');
+    byId('repl-window').insertAdjacentHTML('beforeend', `<span class="result-text">${text}</span>`);
+  }
+  
   const keycodes = {
     enter: 13,
     upArrow: 38,
@@ -137,29 +148,23 @@ function run() {
     event.preventDefault();
     byClass('current-text')[0].focus();
   });
-  function replLog() {
-    let text = Array.from(arguments).reduce((prev, curr) => prev + curr + '\n', '');
-    byId('repl-window').insertAdjacentHTML('beforeend', `<span class="result-text">${text}</span>`);
-  }
   function evaluate(event) {
     if (event.keyCode === keycodes.enter) {
       rewindCount = 0;
       let oldElem = byClass('current-text')[0];
-      let code = oldElem.textContent
-        .replace(/console\.(log|error|info|debug)/g, 'replLog') // Replace calls to 'console'
-        .trim(); // Remove leading/trailing whitespace
+      let code = oldElem.textContent.trim();
+      commandHistory.push(code);
+      Object.keys(replReplace).forEach(key => code = code.replace(replReplace[key], key));
       try {
         if (code.startsWith('!')) {
           let commandName = code.substr(1, code.indexOf(' ') - 1);
           result = (commands[commandName] || commands[commandAliases[commandName]])(code.replace(`!${commandName} `, ''));
         } else {
-          /*jshint -W061 */
-          result = eval(code);
+          result = eval(code); // jshint ignore: line
         }
       } catch (err) {
         result = err;
       }
-      commandHistory.push(code);
       oldElem.classList.remove('current-text');
       byId('repl-window').insertAdjacentHTML('beforeend', `
       <span class="result-text">${result}</span>
@@ -204,7 +209,7 @@ let plugin = {
   name: 'REPL',
   desc: 'Read-Eval-Print-Loop',
   author: 'Slak44',
-  version: '2.1.9',
+  version: '2.1.10',
   main: run
 };
 /*jshint -W030 */
