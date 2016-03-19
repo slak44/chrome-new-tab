@@ -2,11 +2,12 @@
   "manifest_version": 2,
 
   "name": "A New 'new tab'",
-  "version": "4.2.2",
+  "version": "4.2.3",
   "chrome_url_overrides": {
     "newtab": "main.html"
   },
   "options_page": "secondary.html",
   "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
-  "permissions": ["storage", "file:///*"]
+  "permissions": ["storage", "file:///*"],
+  "optional_permissions": ["https://*/"]
 }
