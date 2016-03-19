@@ -3,7 +3,7 @@ let plugin = {
   name: 'Reddit Karma Info',
   desc: 'Displays reddit karma for given user',
   author: 'Slak44',
-  version: '1.2.0',
+  version: '1.2.1',
   settings: [
     {
       name: 'Reddit username',
@@ -47,7 +47,7 @@ let plugin = {
       req.send();
     }
     addPanel({
-      position: plugin.settings[2] || 0,
+      position: plugin.settings[2].value || 0,
       htmlContent:
       `<li class="collection-item">
         <h5 id="reddit-karma"></h5>

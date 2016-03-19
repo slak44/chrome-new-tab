@@ -3,7 +3,7 @@ let plugin = {
   name: 'Date and Time',
   desc: 'Displays time and date',
   author: 'Slak44',
-  version: '1.0.0',
+  version: '1.0.1',
   settings: [
     {
       name: 'Position',
@@ -15,7 +15,7 @@ let plugin = {
   ],
   main: function (plugin) {
     addPanel({
-      position: plugin.settings[0] || 0,
+      position: plugin.settings[0].value || 0,
       htmlContent:
       `<li class="collection-item">
         <h5>

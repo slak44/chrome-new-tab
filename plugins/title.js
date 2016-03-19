@@ -3,7 +3,7 @@ var plugin = {
   name: 'Title',
   desc: 'Adds a title to the main page',
   author: 'Slak44',
-  version: '1.0.0',
+  version: '1.0.1',
   settings: [
     {
       name: 'Title text',
@@ -22,7 +22,7 @@ var plugin = {
   ],
   main: function (plugin) {
     addPanel({
-      position: plugin.settings[1] || 0,
+      position: plugin.settings[1].value || 0,
       htmlContent:
       `<li id="title" class="collection-item bold">
         <h1>${plugin.settings[0].value}</h1>
