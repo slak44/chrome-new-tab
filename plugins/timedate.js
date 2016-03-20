@@ -3,7 +3,8 @@ let plugin = {
   name: 'Date and Time',
   desc: 'Displays time and date',
   author: 'Slak44',
-  version: '1.0.1',
+  version: '1.0.2',
+  preserveSettings: true,
   settings: [
     {
       name: 'Position',

@@ -3,7 +3,8 @@ var plugin = {
   name: 'Title',
   desc: 'Adds a title to the main page',
   author: 'Slak44',
-  version: '1.0.1',
+  version: '1.0.2',
+  preserveSettings: true,
   settings: [
     {
       name: 'Title text',

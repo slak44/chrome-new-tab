@@ -3,7 +3,8 @@ let plugin = {
   name: 'Reddit Karma Info',
   desc: 'Displays reddit karma for given user',
   author: 'Slak44',
-  version: '1.2.1',
+  version: '1.2.2',
+  preserveSettings: true,
   settings: [
     {
       name: 'Reddit username',
