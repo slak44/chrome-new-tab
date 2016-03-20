@@ -313,11 +313,14 @@ function addPlugins(event) {
       }
       /*jshint -W061*/
       let plugin = eval(e.target.result);
+      let oldPlugin = plugins[plugin.name];
       if (plugin.init) plugin.init();
       // Serialize functions, if they exist
       if (typeof plugin.init === 'function') plugin.init = plugin.init.toString();
       if (typeof plugin.main === 'function') plugin.main = plugin.main.toString();
       if (typeof plugin.secondary === 'function') plugin.secondary = plugin.secondary.toString();
+      // Use existing settings if possible
+      if (oldPlugin && plugin.preserveSettings) plugin.settings = oldPlugin.settings;
       storage.add('plugins', plugin, () => window.location.reload());
     };
   })(file);

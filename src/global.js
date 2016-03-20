@@ -6,14 +6,13 @@ let colorScheme = [];
 /* jshint -W057, -W061*/
 const storage = new (function () {
   /*
-    Existing storage objects. Usable as 'what' parameters.
-    
     Plugin format:
       {
         name: 'displayName',
         desc: 'message',
         author: 'name',
         version: 'ver',
+        preserveSettings: true,
         settings: [],
         init: function () {},
         main: function (plugin) {},
@@ -23,6 +22,7 @@ const storage = new (function () {
     desc: what it does.
     author: self-explanatory.
     version: self-explanatory.
+    preserveSettings: whether or not settings should be preserved after plugin update. If the settings array has been modified in an update, this should be false
     settings: array of objects, format described below.
     These will be stored as strings:
     init: executed when the plugin is added.
@@ -79,6 +79,8 @@ const storage = new (function () {
 			isDark: false
 		}
   */
+  
+  // Existing storage objects. Usable as 'what' parameters.
   this.stored = ['plugins', 'buttons', 'colorScheme'];
 
   this.load = function (what, onLoadEnd) {
