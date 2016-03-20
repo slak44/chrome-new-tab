@@ -9,8 +9,17 @@ let panels = [];
 function addPanel(panelObject) {
   panels.push(panelObject);
   panels = panels.sort((a, b) => a.position < b.position ? -1 : 1);
-  byId('data-collection').innerHTML = '';
-  panels.forEach(e => byId('data-collection').insertAdjacentHTML('beforeend', e.htmlContent));
+  let newPanelIndex = panels.indexOf(panelObject);
+  let children = Array.from(byId('data-collection').children);
+  if (children.length === 0) {
+    byId('data-collection').insertAdjacentHTML('afterbegin', panelObject.htmlContent);
+  } else if (panels.length - 1 === newPanelIndex) {
+    byId('data-collection').insertAdjacentHTML('beforeend', panelObject.htmlContent);
+  } else {
+    children.forEach(function (e, i, array) {
+      if (newPanelIndex === i) e.insertAdjacentHTML('beforebegin', panelObject.htmlContent);
+    });
+  }
 }
 
 document.onkeydown = function (e) {
