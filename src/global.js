@@ -1,7 +1,7 @@
 'use strict';
 let plugins = {};
 let buttons = {};
-let colorScheme = [];
+let colorSchemes = [];
 
 /* jshint -W057, -W061*/
 const storage = new (function () {
@@ -80,49 +80,65 @@ const storage = new (function () {
 		}
   */
   
-  // Existing storage objects. Usable as 'what' parameters.
-  this.stored = ['plugins', 'buttons', 'colorScheme'];
+  /*
+    Constant.
+    Existing storage elements. Usable as 'element' parameters for the other functions in this object.
+  */
+  this.stored = ['plugins', 'buttons', 'colorSchemes'];
+  Object.freeze(this.stored);
+  
+  /*
+    Checks whether or not an element is being stored in this object.
+  */
+  this.isStored = element => this.stored.includes(element);
+  
+  /*
+    Private utility function that throws an error if the element is not in the `stored` array.
+  */
+  function throwIfNotStored(element) {
+    if (!isStored(element)) throw new Error(`The element ${element} does not exist in this object`);
+  }
 
-  this.load = function (what, onLoadEnd) {
-    chrome.storage.local.get('stored' + capitalize(what), function (data) {
-      window[what] = data['stored' + capitalize(what)];
-      // Make sure there's something there
-      if (window[what] === undefined || window[what] === null || window[what] === {} || window[what] === []) {
-        onLoadEnd(new Error(`No ${what} found.`));
+  /*
+    Load a stored element in a global object with the same name.
+  */
+  this.load = function (element, callback) {
+    throwIfNotStored(element);
+    chrome.storage.local.get(`stored${capitalize(element)}`, function (data) {
+      window[element] = data[`stored${capitalize(element)}`];
+      if (window[element] === undefined || window[element] === null) {
+        callback(new Error(`No ${element} found.`));
         return;
       }
-      console.log(`Done loading ${what}.`);
-      onLoadEnd();
+      callback(null);
     });
   };
   
-  this.add = function (what, toAdd, callback) {
-    window[what] = window[what] ? window[what] : {};
-    if (toAdd === undefined || toAdd === null || typeof toAdd !== 'object') throw new Error(`Invalid argument: ${toAdd}`);
-    window[what][toAdd.name] = toAdd;
-    this.store(what, callback);
-  };
-  
-  this.remove = function (what, name, callback) {
-    delete window[what][name];
-    this.store(what, callback);
-  };
-  
-  this.store = function (what, callback) {
-    eval(`chrome.storage.local.set({stored${capitalize(what)}: ${what}}, ${callback === undefined ? 'undefined' : callback.toString()})`);
+  /*
+    Stores an element in the browser storage.
+    The name used for storage is 'stored' + the name of the element, capitalized.
+    To store a new element, it must be first added to the `stored` array.
+  */
+  this.store = function (element, callback) {
+    throwIfNotStored(element);
+    eval(`chrome.storage.local.set({stored${capitalize(element)}: ${element}}, ${callback.toString() || undefined})`);
   };
 
   /*
-    Wipes all storage, both in-memory and persistent.
+    Deletes all elements, both from their respective global objects and from the storage.
   */
   this.clearStorage = function () {
-    for (let i = 0; i < storage.stored.length; i++) eval(storage.stored[i] + ' = {}');
+    this.stored.forEach(element => window[element] = null);
     chrome.storage.local.clear();
   };
   
-  this.clear = function (what) {
-    window[what] = {};
-    eval(`chrome.storage.local.set({stored${capitalize(what)}: {}}, undefined)`);
+  /*
+    Only deletes a single element.
+  */
+  this.clear = function (element) {
+    throwIfNotStored(element);
+    window[element] = null;
+    eval(`chrome.storage.local.set({stored${capitalize(element)}: {}}, undefined)`);
   };
 })();
 
@@ -234,9 +250,9 @@ function toggleDiv(id, isElement) {
 }
 
 function loadSchemes(cb) {
-	storage.load('colorScheme', function (err) {
-		if (err || colorScheme[0] === undefined || colorScheme[0] === null) {
-			colorScheme = [{
+	storage.load('colorSchemes', function (err) {
+		if (err || colorSchemes[0] === undefined || colorSchemes[0] === null) {
+			colorSchemes = [{
 				// Orange is default
 				lighten5: '#fff3e0',
 				lighten4: '#ffe0b2',
@@ -259,7 +275,7 @@ function loadSchemes(cb) {
 				isDark: false,
 				name: 'Light Orange, Lime Accents'
 			}];
-			storage.store('colorScheme');
+			storage.store('colorSchemes');
 		}
 		cb();
 	});

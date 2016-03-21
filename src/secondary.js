@@ -1,7 +1,7 @@
 'use strict';
 let activeSchemeIndex = 0;
 loadSchemes(() => {
-  activateScheme(colorScheme[0]);
+  activateScheme(colorSchemes[0]);
   async.parallel([loadButtons, loadPlugins, loadSchemesAndUI], function (err) {
     if (err) throw err;
   });
@@ -30,10 +30,10 @@ byId('floating-save-button').addEventListener('click', function (evt) {
 		storage.store('buttons');
 	} else if (hasClass(byId('color-scheme-tab'), 'focused')) {
 		// Switch the active one at the top
-		let originalScheme = colorScheme[0];
-		colorScheme[0] = colorScheme[activeSchemeIndex];
-		colorScheme[activeSchemeIndex] = originalScheme;
-		storage.store('colorScheme');
+		let originalScheme = colorSchemes[0];
+		colorSchemes[0] = colorSchemes[activeSchemeIndex];
+		colorSchemes[activeSchemeIndex] = originalScheme;
+		storage.store('colorSchemes');
 	}
 });
 
@@ -88,7 +88,8 @@ byId('add-plugin').addEventListener('click', function (e) {
   byId('file-input').click();
 });
 byId('remove-plugin').addEventListener('click', function (e) {
-  storage.remove('plugins', prompt('Plugin to remove:'));
+  plugins[prompt('Plugin to remove:')] = null;
+  storage.store();
   window.location.reload();
 });
 
@@ -97,11 +98,11 @@ byId('add-scheme').addEventListener('click', function (e) {
 });
 byId('remove-scheme').addEventListener('click', function (e) {
 	if (!confirm('Remove this scheme?')) return;
-  colorScheme.splice(activeSchemeIndex, 1);
+  colorSchemes.splice(activeSchemeIndex, 1);
 	let schemeElement = byQSelect('#color-scheme-list > a.active');
 	schemeElement.parentNode.removeChild(schemeElement);
 	byId('color-scheme-list').children[0].classList.add('active');
-	storage.store('colorScheme');
+	storage.store('colorSchemes');
 });
 
 byId('add-buttons').addEventListener('click', function (e) {
@@ -240,7 +241,7 @@ function addPluginData(plugin, focus) {
 }
 
 function loadSchemesAndUI() {
-	colorScheme.forEach(function (scheme, i, array) {
+	colorSchemes.forEach(function (scheme, i, array) {
 		let htmlContent = `<a href="#!" class="collection-item color">${scheme.name}<div class="row top-margin">`;
     function addColor(colorName, index, array) {
       htmlContent += `<div style="background-color: ${scheme[colorName]};" class="col s1 color-sample"></div>`;
@@ -321,7 +322,8 @@ function addPlugins(event) {
       if (typeof plugin.secondary === 'function') plugin.secondary = plugin.secondary.toString();
       // Use existing settings if possible
       if (oldPlugin && plugin.preserveSettings) plugin.settings = oldPlugin.settings;
-      storage.add('plugins', plugin, () => window.location.reload());
+      plugins[plugin.name] = plugin;
+      storage.store(() => window.location.reload());
     };
   })(file);
   reader.readAsText(file);

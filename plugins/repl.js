@@ -57,7 +57,7 @@ function run() {
     display: block;
   }
   span.history-selected {
-    background-color: ${colorScheme[0].accent4};
+    background-color: ${colorSchemes[0].accent4};
   }
   span.current-text {
     -webkit-user-modify: read-write;

@@ -1,6 +1,6 @@
 'use strict';
 loadSchemes(() => {
-  activateScheme(colorScheme[0]);
+  activateScheme(colorSchemes[0]);
   async.parallel([loadButtons, loadPlugins],
     loadPlugins);
 });
