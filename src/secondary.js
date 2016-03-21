@@ -88,8 +88,8 @@ byId('add-plugin').addEventListener('click', function (e) {
   byId('file-input').click();
 });
 byId('remove-plugin').addEventListener('click', function (e) {
-  plugins[prompt('Plugin to remove:')] = null;
-  storage.store();
+  delete plugins[prompt('Plugin to remove:')];
+  storage.store('plugins');
   window.location.reload();
 });
 

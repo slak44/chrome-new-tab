@@ -130,7 +130,7 @@ const storage = new (function () {
     Deletes all elements, both from their respective global objects and from the storage.
   */
   this.clearStorage = function () {
-    this.stored.forEach(element => window[element] = null);
+    this.stored.forEach(element => delete window[element]);
     chrome.storage.local.clear();
   };
   
@@ -139,7 +139,7 @@ const storage = new (function () {
   */
   this.clear = function (element) {
     throwIfNotStored(element);
-    window[element] = null;
+    delete window[element];
     eval(`chrome.storage.local.set({stored${capitalize(element)}: {}}, undefined)`);
   };
 })();
