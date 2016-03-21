@@ -323,7 +323,7 @@ function addPlugins(event) {
       // Use existing settings if possible
       if (oldPlugin && plugin.preserveSettings) plugin.settings = oldPlugin.settings;
       plugins[plugin.name] = plugin;
-      storage.store(() => window.location.reload());
+      storage.store('plugins', () => window.location.reload());
     };
   })(file);
   reader.readAsText(file);
