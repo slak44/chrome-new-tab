@@ -80,6 +80,8 @@ const storage = new (function () {
 		}
   */
   
+  const self = this;
+  
   /*
     Constant.
     Existing storage elements. Usable as 'element' parameters for the other functions in this object.
@@ -96,7 +98,7 @@ const storage = new (function () {
     Private utility function that throws an error if the element is not in the `stored` array.
   */
   function throwIfNotStored(element) {
-    if (!isStored(element)) throw new Error(`The element ${element} does not exist in this object`);
+    if (!self.isStored(element)) throw new Error(`The element ${element} does not exist in this object`);
   }
 
   /*
