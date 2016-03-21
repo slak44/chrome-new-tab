@@ -123,7 +123,7 @@ const storage = new (function () {
   */
   this.store = function (element, callback) {
     throwIfNotStored(element);
-    eval(`chrome.storage.local.set({stored${capitalize(element)}: ${element}}, ${callback.toString() || undefined})`);
+    eval(`chrome.storage.local.set({stored${capitalize(element)}: ${element}}, ${callback || 'undefined'})`);
   };
 
   /*
