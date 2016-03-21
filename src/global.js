@@ -12,7 +12,7 @@ const storage = new (function () {
         desc: 'message',
         author: 'name',
         version: 'ver',
-        preserveSettings: true,
+        preserveSettings: true, // TODO: check if settings have changed between versions and wipe them if so, disregarding this option
         settings: [],
         init: function () {},
         main: function (plugin) {},
