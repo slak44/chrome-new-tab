@@ -53,12 +53,15 @@ function loadPlugins() {
   window.pluginCss = byId('plugin-css');
   storage.load('plugins',
   function (error) {
-    for (let p in plugins) {
-      console.log('Executing plugin: ' + plugins[p].name);
+    Object.keys(plugins).forEach(function (plugin, i, array) {
+      console.log(`Executing plugin: ${plugins[plugin].name}`);
       /*jshint -W061*/
-      try {if (plugins[p].main) eval('(' + plugins[p].main + ').apply(this, [plugins[\'' + p + '\']])');}
-      catch(e) {console.error('Execution failed: ', e);}
-    }
+      try {
+        if (plugins[plugin].main) eval(`(${plugins[plugin].main})`)(plugins[plugin]);
+      } catch (err) {
+        console.error('Execution failed: ', err);
+      }
+    });
     if (error) console.log('No plugins executed.');
   });
 }
