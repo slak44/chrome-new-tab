@@ -8,3 +8,4 @@ src/libs/materialize/README.md
 node_modules/
 make/
 plugins/make/
+lol-test-data.json

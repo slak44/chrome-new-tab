@@ -36,6 +36,13 @@ var plugin = {
     }
   ],
   main: function (plugin) {
+    const DEBUG = true;
+    const TEST_DATA_PATH = '';
+    let requests = {
+      playerByName: null,
+      currentGame: null,
+      players: []
+    };
     pluginCss.innerHTML += `
     #ingame-pane {
       opacity: 0;
@@ -86,6 +93,11 @@ var plugin = {
       apiUtil.send();
     }
     function checkPlayer(apiCaller) {
+      if (DEBUG) {
+        getDebugInfo(apiCaller);
+        addInfoPanel();
+        return;
+      }
       apiCaller.getPlayerData(plugin.settings[1].value, plugin.settings[0].value, function (err, data) {
         if (err) throw err;
         apiCaller.getCurrentGame(plugin.settings[1].value, data.id, function (err, cgData) {
@@ -97,6 +109,16 @@ var plugin = {
           addInfoPanel();
         });
       });
+    }
+    function getDebugInfo(apiCaller) {
+      let testData = new XMLHttpRequest();
+      testData.onloadend = function () {
+        let data = JSON.parse(this.responseText);
+        requests.playerByName = data['summoner-by-name'];
+        requests.currentGame = data['current-game'];
+      };
+      testData.open('GET', TEST_DATA_PATH);
+      testData.send();
     }
     function addInfoPanel() {
       addPanel({
