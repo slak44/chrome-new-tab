@@ -25,7 +25,7 @@ byId('floating-save-button').addEventListener('click', function (evt) {
 			imagePath: byId('buttonImage').value,
 			position: byId('buttonPosition').value,
 			hotkey: byId('buttonHotkey').value.toUpperCase(),
-			openInNew: !!byId('buttonOpenInNew').checked
+			openInNew: Boolean(byId('buttonOpenInNew').checked)
 		};
 		storage.store('buttons');
 	} else if (hasClass(byId('color-scheme-tab'), 'focused')) {
