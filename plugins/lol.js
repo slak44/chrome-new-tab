@@ -87,13 +87,11 @@ var plugin = {
     }
     function checkPlayer(apiCaller) {
       apiCaller.getPlayerData(plugin.settings[1].value, plugin.settings[0].value, function (err, data) {
-        if (err) {
-          console.error(err);
-          return;
-        }
+        if (err) throw err;
         apiCaller.getCurrentGame(plugin.settings[1].value, data.id, function (err, cgData) {
           if (err) {
-            console.error(err);
+            if (err.toString().includes('404')) console.info('Player not ingame.');
+            else throw err;
             return;
           }
           addInfoPanel();
