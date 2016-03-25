@@ -308,7 +308,7 @@ let persistentPluginReload = false;
 
 function addPlugin(event) {
   let file = event.target.files[0];
-  readPlugin(file, function readCallback(err, plugin) {
+  function readCallback(err, plugin) {
     if (err) {
       alert(err.message);
       throw err;
@@ -322,15 +322,18 @@ function addPlugin(event) {
     // Use existing settings if possible
     if (oldPlugin && plugin.preserveSettings) plugin.settings = oldPlugin.settings;
     plugins[plugin.name] = plugin;
-    storage.store('plugins', () => {
-      if (!persistentPluginReload) {
-        window.location.reload();
-      } else {
-        console.log(`Reload: ${file.name}`);
-        setTimeout(() => readPlugin(file, readCallback), 1000);
-      }
-    });
-  });
+    storage.store('plugins', storeCallback);
+  }
+  let storeCallback = (function () {
+    if (!persistentPluginReload) {
+      window.location.reload();
+    } else {
+      console.log(`Reload: ${this.file.name}`);
+      setTimeout(() => readPlugin(this.file, readCallback), 1000);
+    }
+  }).bind({file});
+  
+  readPlugin(file, readCallback);
 }
 
 function readPlugin(blob, callback) {
