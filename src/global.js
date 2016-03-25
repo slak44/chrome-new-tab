@@ -123,7 +123,9 @@ const storage = new (function () {
   */
   this.store = function (element, callback) {
     throwIfNotStored(element);
-    eval(`chrome.storage.local.set({stored${capitalize(element)}: ${element}}, ${callback || 'undefined'})`);
+    let objToStore = {};
+    objToStore[`stored${capitalize(element)}`] = window[element];
+    chrome.storage.local.set(objToStore, callback);
   };
 
   /*
@@ -137,10 +139,12 @@ const storage = new (function () {
   /*
     Only deletes a single element.
   */
-  this.clear = function (element) {
+  this.clear = function (element, callback) {
     throwIfNotStored(element);
     delete window[element];
-    eval(`chrome.storage.local.set({stored${capitalize(element)}: {}}, undefined)`);
+    let objToStore = {};
+    objToStore[`stored${capitalize(element)}`] = {};
+    chrome.storage.local.set(objToStore, callback);
   };
 })();
 
