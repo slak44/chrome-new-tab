@@ -304,16 +304,15 @@ function addButtonConfig(buttonId) {
 	);
 }
 
+let persistentPluginReload = false;
+
 function addPlugin(event) {
   let file = event.target.files[0];
-  let reader = new FileReader();
-  reader.addEventListener('loadend', function (evt) {
-    if (file.type !== "application/javascript") {
-      alert("Please choose a .js file.");
-      return;
+  readPlugin(file, function readCallback(err, plugin) {
+    if (err) {
+      alert(err.message);
+      throw err;
     }
-    /*jshint -W061*/
-    let plugin = eval(evt.target.result);
     let oldPlugin = plugins[plugin.name];
     if (plugin.init) plugin.init();
     // Serialize functions, if they exist
@@ -323,7 +322,27 @@ function addPlugin(event) {
     // Use existing settings if possible
     if (oldPlugin && plugin.preserveSettings) plugin.settings = oldPlugin.settings;
     plugins[plugin.name] = plugin;
-    storage.store('plugins', () => window.location.reload());
+    storage.store('plugins', () => {
+      if (!persistentPluginReload) {
+        window.location.reload();
+      } else {
+        console.log(`Reload: ${file.name}`);
+        setTimeout(() => readPlugin(file, readCallback), 1000);
+      }
+    });
   });
-  reader.readAsText(file);
+}
+
+function readPlugin(blob, callback) {
+  let reader = new FileReader();
+  reader.addEventListener('loadend', function (event) {
+    if (blob.type !== 'application/javascript') {
+      callback(new Error('File is not javascript'), null);
+      return;
+    }
+    /*jshint -W061*/
+    let plugin = eval(event.target.result);
+    callback(null, plugin);
+  });
+  reader.readAsText(blob);
 }
