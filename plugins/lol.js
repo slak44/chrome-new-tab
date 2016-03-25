@@ -39,6 +39,9 @@ var plugin = {
     const DEBUG = false;
     const TEST_DATA_PATH = '';
     pluginCss.innerHTML += `
+    #ingame-back {
+      margin-top: 5px;
+    }
     #ingame-pane {
       opacity: 0;
     }
