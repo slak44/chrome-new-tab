@@ -84,7 +84,7 @@ byId('restore-data').addEventListener('click', function (event) {
 });
 
 byId('add-plugin').addEventListener('click', function (e) {
-  byId('file-input').addEventListener('change', (e) => addPlugins(e), false);
+  byId('file-input').addEventListener('change', (e) => addPlugin(e), false);
   byId('file-input').click();
 });
 byId('remove-plugin').addEventListener('click', function (e) {
@@ -153,7 +153,8 @@ function loadButtons(cb) {
           <a href="#!">${id}</a>
         </li>`
       );
-			byId(id).addEventListener('click', event => setCurrentButton(buttons[id], id)); // jshint ignore:line
+      /* jshint -W083 */
+			byId(id).addEventListener('click', event => setCurrentButton(buttons[id], id));
 		}
     cb();
   });
@@ -303,28 +304,26 @@ function addButtonConfig(buttonId) {
 	);
 }
 
-function addPlugins(event) {
+function addPlugin(event) {
   let file = event.target.files[0];
   let reader = new FileReader();
-  reader.onloadend = (function (fileIn) {
-    return function (e) {
-      if (fileIn.type !== "application/javascript") {
-        alert("Please choose a .js file.");
-        return;
-      }
-      /*jshint -W061*/
-      let plugin = eval(e.target.result);
-      let oldPlugin = plugins[plugin.name];
-      if (plugin.init) plugin.init();
-      // Serialize functions, if they exist
-      if (typeof plugin.init === 'function') plugin.init = plugin.init.toString();
-      if (typeof plugin.main === 'function') plugin.main = plugin.main.toString();
-      if (typeof plugin.secondary === 'function') plugin.secondary = plugin.secondary.toString();
-      // Use existing settings if possible
-      if (oldPlugin && plugin.preserveSettings) plugin.settings = oldPlugin.settings;
-      plugins[plugin.name] = plugin;
-      storage.store('plugins', () => window.location.reload());
-    };
-  })(file);
+  reader.addEventListener('loadend', function (evt) {
+    if (file.type !== "application/javascript") {
+      alert("Please choose a .js file.");
+      return;
+    }
+    /*jshint -W061*/
+    let plugin = eval(evt.target.result);
+    let oldPlugin = plugins[plugin.name];
+    if (plugin.init) plugin.init();
+    // Serialize functions, if they exist
+    if (typeof plugin.init === 'function') plugin.init = plugin.init.toString();
+    if (typeof plugin.main === 'function') plugin.main = plugin.main.toString();
+    if (typeof plugin.secondary === 'function') plugin.secondary = plugin.secondary.toString();
+    // Use existing settings if possible
+    if (oldPlugin && plugin.preserveSettings) plugin.settings = oldPlugin.settings;
+    plugins[plugin.name] = plugin;
+    storage.store('plugins', () => window.location.reload());
+  });
   reader.readAsText(file);
 }
