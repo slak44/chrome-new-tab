@@ -24,7 +24,7 @@ gulp.task('copy-src', function (callback) {
 
 gulp.task('copy-css', function (callback) {
   gulp.src('node_modules/materialize-css/dist/css/materialize.min.css')
-    .pipe(copy('./build/src/', {prefix: 4}));
+    .pipe(copy('./build/src', {prefix: 4}));
   callback();
 });
 
@@ -43,4 +43,12 @@ gulp.task('extension', function () {
     .pipe(gulp.dest('./build/dist'));
 });
 
-gulp.task('default', sequence(['js-src', 'copy-src', 'copy-css', 'copy-fonts', 'extension']));
+gulp.task('plugins', function () {
+  gulp.src('plugins/*.js')
+    .pipe(babel())
+    .pipe(gulp.dest('./build/plugins'));
+});
+
+gulp.task('default', sequence(['js-src', 'copy-src', 'copy-css', 'copy-fonts']));
+
+gulp.task('all', sequence(['js-src', 'copy-src', 'copy-css', 'copy-fonts', 'extension', 'plugins']));

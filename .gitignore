@@ -2,11 +2,6 @@
 *.crx
 .jshintrc
 .babelrc
-materialize.css
-materialize.js
-src/libs/materialize/README.md
 node_modules/
-make/
 build/
-plugins/make/
 lol-test-data.json
