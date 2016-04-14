@@ -1,4 +1,8 @@
 'use strict';
+
+Object.assign(window, require('./global.js'));
+const async = require('async');
+
 let activeSchemeIndex = 0;
 loadSchemes(() => {
   activateScheme(colorSchemes[0]);

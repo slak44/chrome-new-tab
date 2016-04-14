@@ -1,4 +1,8 @@
 'use strict';
+
+Object.assign(window, require('./global.js'));
+const async = require('async');
+
 loadSchemes(() => {
   activateScheme(colorSchemes[0]);
   async.parallel([loadButtons, loadPlugins],

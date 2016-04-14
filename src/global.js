@@ -1,10 +1,21 @@
 'use strict';
-let plugins = {};
-let buttons = {};
-let colorSchemes = [];
+
+window.jQuery = require('jquery');
+require('../node_modules/materialize-css/dist/js/materialize.min.js');
+
+exports.plugins = {};
+exports.buttons = {};
+exports.colorSchemes = [];
+
+let byId = exports.byId = id => document.getElementById(id);
+let byClass = exports.byClass = className => document.getElementsByClassName(className);
+let byQSelect = exports.byQSelect = selector => document.querySelector(selector);
+
+let capitalize = exports.capitalize = string => string.charAt(0).toUpperCase() + string.substr(1);
+let hasClass = exports.hasClass = (element, className) => Array.from(element.classList).includes(className);
 
 /* jshint -W057, -W061*/
-const storage = new (function () {
+exports.storage = new (function () {
   /*
     Plugin format:
       {
@@ -148,7 +159,7 @@ const storage = new (function () {
   };
 })();
 
-function activateScheme(scheme) {
+exports.activateScheme = function (scheme) {
   let css = `
   .color {color: ${scheme.main} !important;}
   .bgcolor {background-color: ${scheme.main} !important;}
@@ -198,9 +209,9 @@ function activateScheme(scheme) {
 	}
 	
 	byId('dynamic-colors').innerHTML = css;
-}
+};
 
-function createButton(options) {
+exports.createButton = function (options) {
   if (options.parent === undefined || options.parent === null ||
       options.parent.insertAdjacentHTML === undefined) options.parent = byId('buttons');
 	options.parent.insertAdjacentHTML('beforeend',
@@ -221,30 +232,9 @@ function createButton(options) {
   if (options.href !== undefined && (options.href.indexOf('chrome://') === 0 || options.openInNew))
     anchor.addEventListener('click', function (e) {chrome.tabs.create({url: options.href}); window.close();});
   return anchor;
-}
+};
 
-function byId(id) {
-  return document.getElementById(id);
-}
-
-function byClass(className) {
-  return document.getElementsByClassName(className);
-}
-
-function byQSelect(selector) {
-  return document.querySelector(selector);
-}
-
-function capitalize(string) {
-  return string.charAt(0).toUpperCase() + string.substr(1);
-}
-
-function hasClass(element, className) {
-  if (Array.from(element.classList).includes(className)) return true;
-	else return false;
-}
-
-function toggleDiv(id, isElement) {
+exports.toggleDiv = function (id, isElement) {
   if (!isElement) id = byId(id);
   if (hasClass(id, 'focused')) {
 		id.classList.remove('focused');
@@ -253,9 +243,9 @@ function toggleDiv(id, isElement) {
     id.classList.remove('unfocused');
     id.classList.add('focused');
   }
-}
+};
 
-function loadSchemes(cb) {
+exports.loadSchemes = function (cb) {
 	storage.load('colorSchemes', function (err) {
 		if (err || colorSchemes[0] === undefined || colorSchemes[0] === null) {
 			colorSchemes = [{
@@ -285,4 +275,4 @@ function loadSchemes(cb) {
 		}
 		cb();
 	});
-}
+};
