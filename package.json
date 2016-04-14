@@ -1,0 +1,19 @@
+{
+  "name": "chrome-new-tab",
+  "version": "4.2.3",
+  "dependencies": {},
+  "devDependencies": {
+    "babel-preset-es2015": "^6.3.13",
+    "gulp": "^3.9.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/slak44/ChromeNewTab.git"
+  },
+  "author": "Slak44",
+  "license": "SEE LICENSE IN LICENSE",
+  "bugs": {
+    "url": "https://github.com/slak44/ChromeNewTab/issues"
+  },
+  "homepage": "https://github.com/slak44/ChromeNewTab#readme"
+}
