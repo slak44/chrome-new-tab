@@ -215,11 +215,14 @@ exports.loadPlugins = function (callback) {
       /*jshint -W061*/
       try {
         if (plugins[pluginName].dependencyCode) eval(plugins[pluginName].dependencyCode);
+        if (plugins[pluginName].html.global) Object.keys(plugins[pluginName].html.global).forEach(function (selector, i, array) {
+          byQSelect(selector).insertAdjacentHTML('beforeend', plugins[pluginName].html.global[selector]);
+        });
+        if (plugins[pluginName].css.global) pluginCss.innerHTML += plugins[pluginName].css.global;
         if (plugins[pluginName].js.global) eval(plugins[pluginName].js.global);
       } catch (err) {
         console.error(`Execution for ${pluginName} failed: `, err);
       }
-      pluginCss.innerHTML += plugins[pluginName].css.global;
     });
     callback(null);
   });
