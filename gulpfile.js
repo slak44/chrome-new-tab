@@ -44,9 +44,10 @@ gulp.task('extension', function () {
 });
 
 gulp.task('plugins', function () {
-  gulp.src('plugins/*.js')
-    .pipe(babel())
-    .pipe(gulp.dest('./build/plugins'));
+  // TODO: invoke bundler automatically
+  // gulp.src('plugins/*.js')
+  //   .pipe(babel())
+  //   .pipe(gulp.dest('./build/plugins'));
 });
 
 gulp.task('default', sequence(['js-src', 'copy-src', 'copy-css', 'copy-fonts']));
