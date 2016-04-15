@@ -8,6 +8,7 @@ loadSchemes(() => {
   activateScheme(colorSchemes[0]);
   async.parallel([loadButtons, loadPlugins, loadSchemesAndUI], function (err) {
     if (err) throw err;
+    runPlugins();
   });
 });
 
@@ -188,20 +189,19 @@ function getFirstButton() {
 	else return buttons[Object.keys(buttons)[0]];
 }
 
-function loadPlugins(cb) {
-  storage.load('plugins', function (error) {
-    if (!error) Object.keys(plugins).forEach(function (name, i, array) {
-      let plugin = plugins[name];
-      console.log('Executing plugin: ' + plugin.name);
-      addPluginData(plugin, !byClass('plugin-container').length);
-      /*jshint -W061 */
-      try {
-        if (plugin.secondary) eval('(' + plugin.secondary + ').apply(this, [])');
-      } catch(e) {
-        console.error('Execution failed: ' + e.message);
-      }
-    });
-    cb();
+function runPlugins() {
+  Object.keys(plugins).forEach(pluginName => {
+    addPluginData(plugins[pluginName], !byClass('plugin-container').length); // Only the first addition gets focus
+    /* jshint -W061 */
+    try {
+      if (plugins[pluginName].html.secondary) Object.keys(plugins[pluginName].html.secondary).forEach(function (selector, i, array) {
+        byQSelect(selector).insertAdjacentHTML('beforeend', array[selector]);
+      });
+      if (plugins[pluginName].css.secondary) pluginCss.innerHTML += plugins[pluginName].css.secondary;
+      if (plugins[pluginName].js.secondary) eval(plugins[pluginName].js.secondary);
+    } catch (err) {
+      console.error(`Execution for ${pluginName} failed: `, err);
+    }
   });
 }
 
@@ -318,13 +318,11 @@ function addPlugin(event) {
       throw err;
     }
     let oldPlugin = plugins[plugin.name];
-    if (plugin.init) plugin.init();
-    // Serialize functions, if they exist
-    if (typeof plugin.init === 'function') plugin.init = plugin.init.toString();
-    if (typeof plugin.main === 'function') plugin.main = plugin.main.toString();
-    if (typeof plugin.secondary === 'function') plugin.secondary = plugin.secondary.toString();
+    /*jshint -W061*/
+    if (plugin.init) eval(plugin.js.init);
     // Use existing settings if possible
     if (oldPlugin && plugin.preserveSettings) plugin.settings = oldPlugin.settings;
+    // TODO: check if settings have changed between versions and wipe them if so, disregarding this option
     plugins[plugin.name] = plugin;
     storage.store('plugins', storeCallback);
   }
@@ -347,8 +345,7 @@ function readPlugin(blob, callback) {
       callback(new Error('File is not javascript'), null);
       return;
     }
-    /*jshint -W061*/
-    let plugin = eval(event.target.result);
+    let plugin = JSON.parse(event.target.result);
     callback(null, plugin);
   });
   reader.readAsText(blob);

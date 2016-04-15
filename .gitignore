@@ -1,7 +1,6 @@
 *.pem
 *.crx
 .jshintrc
-.babelrc
 node_modules/
 build/
 lol-test-data.json

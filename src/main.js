@@ -5,8 +5,13 @@ const async = require('async');
 
 loadSchemes(() => {
   activateScheme(colorSchemes[0]);
-  async.parallel([loadButtons, loadPlugins],
-    loadPlugins);
+  async.parallel(
+    [loadButtons, loadPlugins],
+    function (err, results) {
+      if (err) throw err;
+      runPlugins();
+    }
+  );
 });
 
 let panels = [];
@@ -32,7 +37,7 @@ document.onkeydown = function (e) {
   }
 };
 
-function loadButtons(cb) {
+function loadButtons(callback) {
   storage.load('buttons',
   function (error) {
     if (error) {
@@ -48,24 +53,21 @@ function loadButtons(cb) {
           openInNew: e.openInNew
         }));
     }
-    cb();
+    callback(null);
   });
 }
 
-function loadPlugins() {
-  document.getElementsByTagName('head')[0].insertAdjacentHTML('beforeend', '<style id="plugin-css"></style>');
-  window.pluginCss = byId('plugin-css');
-  storage.load('plugins',
-  function (error) {
-    Object.keys(plugins).forEach(function (plugin, i, array) {
-      console.log(`Executing plugin: ${plugins[plugin].name}`);
-      /*jshint -W061*/
-      try {
-        if (plugins[plugin].main) eval(`(${plugins[plugin].main})`)(plugins[plugin]);
-      } catch (err) {
-        console.error('Execution failed: ', err);
-      }
-    });
-    if (error) console.log('No plugins executed.');
+function runPlugins() {
+  Object.keys(plugins).forEach(pluginName => {
+    /* jshint -W061 */
+    try {
+      if (plugins[pluginName].html.main) Object.keys(plugins[pluginName].html.main).forEach(function (selector, i, array) {
+        byQSelect(selector).insertAdjacentHTML('beforeend', plugins[pluginName].html.main[selector]);
+      });
+      if (plugins[pluginName].css.main) pluginCss.innerHTML += plugins[pluginName].css.main;
+      if (plugins[pluginName].js.main) eval(plugins[pluginName].js.main);
+    } catch (err) {
+      console.error(`Execution for ${pluginName} failed: `, err);
+    }
   });
 }
