@@ -164,6 +164,15 @@ Color Scheme format:
 }
 ```
 
+### Using the plugin bundler
+- Run `npm init` in the plugin's folder and fill out the info
+- Use `npm install --save` to add your dependencies
+- Add the `html`, `css` and `js` sections described above
+- Add the `babel` config
+- Run the bundler (`bundler.js`) with `node`, the first argument being the plugin folder
+
+The resulting .js file can be found in `$PWD/build/nameOfPlugin-plugin.js`.
+
 ## reddit API
 This API is used in [/plugins/reddit.js](https://github.com/slak44/ChromeNewTab/tree/master/plugins/reddit.js).  
 The page will perform GET requests for the user data associated with the given username.
