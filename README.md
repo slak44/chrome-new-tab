@@ -2,7 +2,7 @@
 
 A chrome extension that replaces the new tab.
 
-Run `npm install` then `gulp`, and the extension can be found packed in the `./build/dist` directory, or unpacked in the `./build/src` directory.
+Run `npm install` then `gulp all`, and the extension can be found packed in the `./build/dist` directory, or unpacked in the `./build/src` directory.
 
 #### Plugin format:  
 This should be valid JSON.  
