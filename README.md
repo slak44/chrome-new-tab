@@ -1,9 +1,8 @@
-ChromeNewTab
-============
+# ChromeNewTab
 
 A chrome extension that replaces the new tab.
 
-Plugin format:  
+#### Plugin format:  
 This should be valid JSON.  
 ```
   {
@@ -53,7 +52,7 @@ Each of them also has a `global` property, which is executed/added on every page
 - `css`: the css from each property will be added to it's respective view
 - `html`: every property targets a view. For every view, `htmlToAdd` will be added at the position specified by the `querySelector`. There can be multiple `querySelector`s
 
-Plugin `package.json` format:  
+#### Plugin `package.json` format:  
 This file is used by `npm`, by `babel`, and by the bundler.  
 Paths are relative to the `package.json`'s directory.
 ```
@@ -108,7 +107,7 @@ Paths are relative to the `package.json`'s directory.
 - `css`: each property represents a view. The css files for each view are concatenated, and the merged data is appended to a stylesheet after the html has been inserted
 - `js`: each property represents a position. The positions are described above. Similar to the css files, all the js files are concatenated (in order of appearance), and the resulting script is executed at its respective position
 
-Setting format:
+#### Setting format:
 ```
   {
     "name": "displayName",
@@ -124,7 +123,7 @@ Setting format:
 - `value`: undefined until set
 - `isVisible`: if false, it means this 'setting' is just storage
 
-Button format:
+#### Button format:
 ```
   {
     "imagePath": "path",
@@ -142,7 +141,7 @@ Button format:
 - `hotkey`: using alt+key triggers the button
 - `openInNew`: if true, opens the link in a new tab that replaces the current one
 
-Color Scheme format:
+#### Color Scheme format:
 ```
 {
   // Orange is default
