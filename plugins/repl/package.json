@@ -1,0 +1,24 @@
+{
+  "name": "repl-plugin",
+  "version": "2.1.10",
+  "description": "Read-Eval-Print-Loop",
+  "author": "Slak44",
+  "babel": {
+    "presets": ["es2015"]
+  },
+  "dependencies": {
+    "js-quantities": "^1.6.1",
+    "money": "^0.2.0"
+  },
+  "html": {
+    "main": {
+      "main.html": "body"
+    }
+  },
+  "css": {
+    "main": ["main.css"]
+  },
+  "js": {
+    "main": ["main.js"]
+  }
+}
