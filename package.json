@@ -1,6 +1,6 @@
 {
   "name": "chrome-new-tab",
-  "version": "5.0.0",
+  "version": "5.0.1",
   "dependencies": {},
   "devDependencies": {
     "babel": "^6.5.2",
