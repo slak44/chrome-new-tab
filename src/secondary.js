@@ -148,6 +148,7 @@ function loadButtons(cb) {
   function (error) {
     if (error || Object.keys(buttons).length === 0) {
       buttons = {};
+      cb(error);
       return;
     }
 		addButtonConfig(Object.keys(buttons)[0]);
@@ -245,8 +246,8 @@ function addPluginData(plugin, focus) {
   });
 }
 
-function loadSchemesAndUI() {
-	colorSchemes.forEach(function (scheme, i, array) {
+function loadSchemesAndUI(callback) {
+  function eachScheme(scheme, i, array) {
 		let htmlContent = `<a href="#!" class="collection-item color">${scheme.name}<div class="row top-margin">`;
     function addColor(colorName, index, array) {
       htmlContent += `<div style="background-color: ${scheme[colorName]};" class="col s1 color-sample"></div>`;
@@ -276,7 +277,11 @@ function loadSchemesAndUI() {
 				activeSchemeIndex = i;
 		  });
 		});
-	});
+	}
+  setTimeout(() => {
+    colorSchemes.forEach(eachScheme);
+    callback();
+  }, 0);
 }
 
 function addButtonConfig(buttonId) {
