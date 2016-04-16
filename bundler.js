@@ -8,6 +8,11 @@ const babel = require('babel-core');
 const pluginDir = process.argv[2];
 const pkg = JSON.parse(fs.readFileSync(`${pluginDir}/package.json`));
 
+pkg.js = pkg.js || {};
+pkg.html = pkg.html || {};
+pkg.css = pkg.css || {};
+pkg.dependencies = pkg.dependencies || {};
+
 let pluginObject = {
   name: pkg.name,
   desc: pkg.desc || '',
