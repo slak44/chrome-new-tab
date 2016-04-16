@@ -1,0 +1,9 @@
+#ingame-back {
+  margin-top: 5px;
+}
+#ingame-pane {
+  opacity: 0;
+}
+#ingame-panel {
+  justify-content: flex-end;
+}

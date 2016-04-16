@@ -1,0 +1,48 @@
+{
+  "name": "LoL Current Match",
+  "version": "0.2.0",
+  "description": "Allows to check a player's current game information",
+  "author": "Slak44",
+  "preserveSettings": true,
+  "settings": [
+    {
+      "name": "Player Name",
+      "desc": "Player to search for",
+      "type": "text",
+      "value": "",
+      "isVisible": true
+    },
+    {
+      "name": "Region",
+      "desc": "What region to search in",
+      "type": "text",
+      "value": "",
+      "isVisible": true
+    },
+    {
+      "name": "Riot API Key",
+      "desc": "API key to use in requests",
+      "type": "text",
+      "value": "",
+      "isVisible": true
+    },
+    {
+      "name": "Position",
+      "desc": "The text will be inserted after this many elements",
+      "type": "number",
+      "value": "",
+      "isVisible": true
+    }
+  ],
+  "html": {
+    "main": {
+      "match-view.html": "body"
+    }
+  },
+  "css": {
+    "main": ["main.css"]
+  },
+  "js": {
+    "main": ["main.js"]
+  }
+}

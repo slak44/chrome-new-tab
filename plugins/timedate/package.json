@@ -1,0 +1,19 @@
+{
+  "name": "Date and Time",
+  "version": "2.0.0",
+  "description": "Displays time and date",
+  "author": "Slak44",
+  "preserveSettings": true,
+  "settings": [
+    {
+      "name": "Position",
+      "desc": "The text will be inserted after this many elements",
+      "type": "number",
+      "value": "",
+      "isVisible": true
+    }
+  ],
+  "js": {
+    "main": ["main.js"]
+  }
+}
