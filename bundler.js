@@ -23,7 +23,7 @@ let pluginObject = {
 };
 
 function iifeBabel(code) {
-  return babel.transform(`(function () {${code}})()`, pkg.babel || {}).code;
+  return babel.transform(`(function (pluginName) {${code}})('${pkg.name}')`, pkg.babel || {}).code;
 }
 
 function mergeFiles(src, transform, callback) {
