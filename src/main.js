@@ -37,6 +37,29 @@ document.onkeydown = function (e) {
   }
 };
 
+function createButton(options) {
+  if (options.parent === undefined || options.parent === null ||
+      options.parent.insertAdjacentHTML === undefined) options.parent = byId('buttons');
+	options.parent.insertAdjacentHTML('beforeend',
+	`<li class="waves-effect waves-light collection-item">
+		<a href="${options.href || ''}" class="button-link">
+			<div class="valign-wrapper">
+				<div class="button-image-wrapper">
+          ${options.imagePath ?
+            `<img src="${options.imagePath}"/>` :
+            `<i class="material-icons">send</i>`}
+        </div>
+				<div class="valign thin button-text">${options.text}</div>
+			</div>
+		</a>
+	</li>`
+	);
+  let anchor = options.parent.children[options.parent.children.length - 1];
+  if (options.href !== undefined && (options.href.indexOf('chrome://') === 0 || options.openInNew))
+    anchor.addEventListener('click', function (e) {chrome.tabs.create({url: options.href}); window.close();});
+  return anchor;
+}
+
 function loadButtons(callback) {
   storage.load('buttons',
   function (error) {
