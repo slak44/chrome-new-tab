@@ -1,6 +1,6 @@
 {
-  "name": "repl-plugin",
-  "version": "3.0.0",
+  "name": "REPL",
+  "version": "3.0.1",
   "description": "Read-Eval-Print-Loop",
   "author": "Slak44",
   "babel": {

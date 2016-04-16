@@ -1,3 +1,4 @@
+'use strict';
 window.fx = window.money;
 window.Qty = window['js-quantities'];
 
