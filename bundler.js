@@ -15,7 +15,7 @@ pkg.dependencies = pkg.dependencies || {};
 
 let pluginObject = {
   name: pkg.name,
-  desc: pkg.desc || '',
+  desc: pkg.description || '',
   version: pkg.version,
   author: pkg.author,
   settings: pkg.settings || [],
