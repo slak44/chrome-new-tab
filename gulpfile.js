@@ -7,6 +7,8 @@ const sequence = require('gulp-sequence');
 const copy = require('gulp-copy');
 const gulpBrowser = require('gulp-browser');
 const fs = require('fs');
+const cp = require('child_process');
+const async = require('async');
 
 gulp.task('js-src', function (callback) {
   gulp.src('src/*.js')
@@ -43,11 +45,28 @@ gulp.task('extension', function () {
     .pipe(gulp.dest('./build/dist'));
 });
 
-gulp.task('plugins', function () {
-  // TODO: invoke bundler automatically
-  // gulp.src('plugins/*.js')
-  //   .pipe(babel())
-  //   .pipe(gulp.dest('./build/plugins'));
+gulp.task('plugins', function (done) {
+  fs.readdir('./plugins', function (err, folders) {
+    if (err) throw err;
+    let bundleTasks = folders.map(folderName => function (callback) {
+      // If there are other things there, ignore them
+      if (folderName.startsWith('.')) {
+        callback(null);
+        return;
+      }
+      cp.exec(`node bundler.js plugins/${folderName}`, (err, stdout, stderr) => {
+        if (err) {
+          callback(err, null);
+          return;
+        }
+        callback(null, stdout.toString());
+      });
+    });
+    async.parallel(bundleTasks, function (err, results) {
+      if (err) throw err;
+      done();
+    });
+  });
 });
 
 gulp.task('default', sequence(['js-src', 'copy-src', 'copy-css', 'copy-fonts']));
