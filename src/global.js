@@ -14,7 +14,7 @@ let byQSelect = exports.byQSelect = selector => document.querySelector(selector)
 let capitalize = exports.capitalize = string => string.charAt(0).toUpperCase() + string.substr(1);
 let hasClass = exports.hasClass = (element, className) => Array.from(element.classList).includes(className);
 
-/* jshint -W057, -W061*/
+/* jshint -W057 */
 exports.storage = new (function () {
   const self = this;
   
