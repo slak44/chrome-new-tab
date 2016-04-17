@@ -1,6 +1,8 @@
 'use strict';
 const DEBUG = false;
 const TEST_DATA_PATH = '';
+
+window.EventEmitter2 = window.eventemitter2;
 document.body.addEventListener('click', function () {
   chrome.permissions.request({
     origins: ['https://*.pvp.net/*']
@@ -16,7 +18,6 @@ let requests = {
 };
 if (DEBUG) {
   async.waterfall([
-    getEventEmitter,
     getApiUtil,
     getDebugInfo,
     addDataToPane
@@ -25,7 +26,6 @@ if (DEBUG) {
   });
 } else {
   async.waterfall([
-    getEventEmitter,
     getApiUtil,
     getPlayerData,
     getCurrentGame,
@@ -49,20 +49,6 @@ function getDebugInfo(apiCaller, callback) {
   });
   testData.open('GET', TEST_DATA_PATH);
   testData.send();
-}
-
-function getEventEmitter(callback) {
-  let eventemitter2 = new XMLHttpRequest();
-  eventemitter2.addEventListener('loadend', function () {
-    if (eventemitter2.status === 200) {
-      eval.apply(window, [eventemitter2.responseText]);
-      callback(null);
-    } else {
-      callback(new Error(`Status code ${eventemitter2.status}`));
-    }
-  });
-  eventemitter2.open('GET', 'https://raw.githubusercontent.com/asyncly/EventEmitter2/1.0.0/lib/eventemitter2.js');
-  eventemitter2.send();
 }
 
 function getApiUtil(callback) {

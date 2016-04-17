@@ -1,6 +1,6 @@
 {
   "name": "LoL Current Match",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Allows to check a player's current game information",
   "author": "Slak44",
   "preserveSettings": true,
@@ -40,9 +40,16 @@
     }
   },
   "css": {
-    "main": ["main.css"]
+    "main": [
+      "main.css"
+    ]
   },
   "js": {
-    "main": ["main.js"]
+    "main": [
+      "main.js"
+    ]
+  },
+  "dependencies": {
+    "eventemitter2": "^1.0.0"
   }
 }
