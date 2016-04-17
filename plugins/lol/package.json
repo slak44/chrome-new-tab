@@ -50,6 +50,7 @@
     ]
   },
   "dependencies": {
+    "async": "^2.0.0-rc.3",
     "eventemitter2": "^1.0.0"
   }
 }
