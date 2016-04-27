@@ -313,7 +313,8 @@ function addButtonConfig(buttonId) {
 	);
 }
 
-let persistentPluginReload = false;
+// Set to true using devtools to constantly read and update a plugin automatically without refreshing the page
+window.persistentPluginReload = false;
 
 function addPlugin(event) {
   let file = event.target.files[0];
