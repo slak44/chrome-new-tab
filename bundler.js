@@ -70,6 +70,18 @@ function parseHtmlInserts(view, callback) {
   );
 }
 
+function installDeps(callback) {
+  require('child_process').exec('npm install', {cwd: pluginDir}, function (err, stdout, stderr) {
+    console.log(stdout);
+    console.error(stderr);
+    if (err) {
+      callback(err);
+      return;
+    }
+    callback(null);
+  });
+}
+
 function browserifyDeps(callback) {
   let toBrowserify = Object.keys(pkg.dependencies).map(depName => `window['${depName}'] = require('${depName}');`).join('\n');
   let fileName = `${pluginDir}/browserify_TMPFILE`;
@@ -99,7 +111,10 @@ async.parallel([
   callback => parseHtmlInserts('global', callback),
   callback => parseHtmlInserts('main', callback),
   callback => parseHtmlInserts('secondary', callback),
-  callback => browserifyDeps(callback)
+  callback => installDeps(err => {
+    if (err) throw err;
+    browserifyDeps(callback);
+  })
 ], function (err, results) {
   if (err) throw err;
   fs.writeFileSync(`./build/${pluginObject.name}.js`, JSON.stringify(pluginObject));
