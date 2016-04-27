@@ -6,6 +6,8 @@ const crx = require('gulp-crx-pack');
 const sequence = require('gulp-sequence');
 const copy = require('gulp-copy');
 const gulpBrowser = require('gulp-browser');
+const gulpBump = require('gulp-bump');
+const merge = require('merge-stream');
 const fs = require('fs');
 const cp = require('child_process');
 const async = require('async');
@@ -79,3 +81,21 @@ gulp.task('plugins', function (done) {
 gulp.task('default', sequence(['js-src', 'copy-src', 'copy-css', 'copy-fonts']));
 
 gulp.task('all', sequence(['js-src', 'copy-src', 'copy-css', 'copy-fonts', 'extension', 'plugins']));
+
+function createVersionTask(bumpType) {
+  return function () {
+    let packageJson =
+    gulp.src('./package.json')
+      .pipe(gulpBump({type: bumpType}))
+      .pipe(gulp.dest('./'));
+    let manifestJson =
+    gulp.src('./src/manifest.json')
+      .pipe(gulpBump({type: bumpType}))
+      .pipe(gulp.dest('./src/'));
+    return merge([packageJson, manifestJson]);
+  };
+}
+
+gulp.task('patch', createVersionTask('patch'));
+gulp.task('minor', createVersionTask('minor'));
+gulp.task('major', createVersionTask('major'));
