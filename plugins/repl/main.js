@@ -79,12 +79,12 @@ function evaluate(event) {
     let oldElem = byClass('current-text')[0];
     let code = oldElem.textContent.trim();
     commandHistory.push(code);
-    Object.keys(replReplace).forEach(key => code = code.replace(replReplace[key], key));
     try {
       if (code.startsWith('!')) {
         let commandName = code.substr(1, code.indexOf(' ') - 1);
         result = (commands[commandName] || commands[commandAliases[commandName]])(code.replace(`!${commandName} `, ''));
       } else {
+        Object.keys(replReplace).forEach(key => code = code.replace(replReplace[key], key));
         result = eval(code); // jshint ignore: line
       }
     } catch (err) {
