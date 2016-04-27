@@ -49,7 +49,7 @@ let commandAliases = {
 
 let replReplace = {
   'replLog': /console\.(log|error|info|debug)/g,
-  'Math.$1($2)': /(pow|exp|ceil|floor|trunc|log|max|min|random|sqrt|sin|cos|tan|asin|acos)\((\S*)\)/g,
+  'Math.$1($2)': /(pow|exp|ceil|floor|trunc|log|max|min|random|sqrt|sin|cos|tan|asin|acos)\(([\s\S]*)\)/g,
   'Math.$1': /(PI|E)/g,
 };
 
