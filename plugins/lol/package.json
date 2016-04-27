@@ -1,5 +1,5 @@
 {
-  "name": "LoL Current Match",
+  "pluginName": "LoL Current Match",
   "version": "0.2.1",
   "description": "Allows to check a player's current game information",
   "author": "Slak44",

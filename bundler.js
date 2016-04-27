@@ -14,7 +14,7 @@ pkg.css = pkg.css || {};
 pkg.dependencies = pkg.dependencies || {};
 
 let pluginObject = {
-  name: pkg.name,
+  name: pkg.pluginName,
   desc: pkg.description || '',
   version: pkg.version,
   author: pkg.author,

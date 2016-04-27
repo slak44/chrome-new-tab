@@ -46,7 +46,7 @@ This file is used by `npm`, by `babel`, and by the bundler.
 Paths are relative to the `package.json`'s directory.
 ```
   {
-    "name": "displayName",
+    "pluginName": "displayName",
     "description": "message",
     "author": "name",
     "version": "ver",
@@ -84,7 +84,7 @@ Paths are relative to the `package.json`'s directory.
     }
   }
 ```
-- `name`: name of plugin. Also serves as the key to this plugin in the global `plugins` object, so it must be unique
+- `pluginName`: name of plugin. Also serves as the key to this plugin in the global `plugins` object, so it must be unique
 - `description`: plugin description. 
 - `author`: self-explanatory
 - `version`: self-explanatory
@@ -132,7 +132,7 @@ This should be valid JSON.
     }
   }
 ```
-- `name`: see above
+- `name`: see above, is equivalent to `pluginName`
 - `desc`: see above, is equivalent to `description`
 - `author`: see above
 - `version`: see above

@@ -1,5 +1,5 @@
 {
-  "name": "Reddit Karma Info",
+  "pluginName": "Reddit Karma Info",
   "version": "2.0.0",
   "description": "Displays reddit karma for given user",
   "author": "Slak44",
