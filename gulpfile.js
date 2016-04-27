@@ -37,9 +37,16 @@ gulp.task('copy-fonts', function (callback) {
 });
 
 gulp.task('extension', function () {
+  let pKey;
+  try {
+    // This doesn't have to exist
+    pKey = fs.readFileSync('./ext.pem', 'utf8');
+  } catch (e) {
+    pKey = undefined;
+  }
   return gulp.src('./build/src')
     .pipe(crx({
-      privateKey: fs.readFileSync('./ext.pem', 'utf8'),
+      privateKey: pKey,
       filename: 'ext.crx'
     }))
     .pipe(gulp.dest('./build/dist'));
