@@ -73,22 +73,29 @@ byId('copy-data').addEventListener('click', function (event) {
 });
 
 byId('restore-data').addEventListener('click', function (event) {
-  // TODO: handle cases where some or all data is missing, possibly by asking the user
-  // TODO: run store calls in parallel, show success/fail dialog with a refresh button in it
+  function restore(what, dataObject) {
+    return function (callback) {
+      window[what] = dataObject[`${what}Data`];
+      storage.store(what, callback);
+    };
+  }
   if (byId('insert-data').value !== '') {
     let data = JSON.parse(byId('insert-data').value);
-    if (data.pluginsData) {
-      plugins = data.pluginsData;
-      storage.store('plugins');
-    } else {
-      // TODO alert
+    let toRestore = [restore('plugins', data), restore('buttons', data)];
+    if (!data.pluginsData) {
+      if (!confirm('Plugin data is missing. Continue?')) toRestore.unshift();
     }
-    if (data.buttonsData) {
-      buttons = data.buttonsData;
-      storage.store('buttons');
-    } else {
-      // TODO alert
+    if (!data.buttonsData) {
+      if (!confirm('Button data is missing. Continue?')) toRestore.pop();
     }
+    async.parallel(toRestore, function (err, results) {
+      if (err) {
+        alert(`Data restore failed: ${err}`);
+        throw err;
+      }
+      alert('Data restore successful!');
+      window.location.reload();
+    });
   }
 });
 
