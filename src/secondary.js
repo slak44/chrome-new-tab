@@ -20,26 +20,26 @@ byId('floating-save-button').addEventListener('click', function (evt) {
       if (i <= 1) return; // Ignore the title and the description
       plugins[cpId].settings[i - 2].value = settingDiv.children[0].value;
     });
-		storage.store('plugins');
-	} else if (hasClass(byId('buttons-tab'), 'focused')) {
-		let id = byId('buttonText').getAttribute('data-button-id');
-		if (id === '') return;
-		buttons[id] = {
-			text: byId('buttonText').value,
-			href: byId('buttonLink').value,
-			imagePath: byId('buttonImage').value,
-			position: byId('buttonPosition').value,
-			hotkey: byId('buttonHotkey').value.toUpperCase(),
-			openInNew: Boolean(byId('buttonOpenInNew').checked)
-		};
-		storage.store('buttons');
-	} else if (hasClass(byId('color-scheme-tab'), 'focused')) {
-		// Switch the active one at the top
-		let originalScheme = colorSchemes[0];
-		colorSchemes[0] = colorSchemes[activeSchemeIndex];
-		colorSchemes[activeSchemeIndex] = originalScheme;
-		storage.store('colorSchemes');
-	}
+    storage.store('plugins');
+  } else if (hasClass(byId('buttons-tab'), 'focused')) {
+    let id = byId('buttonText').getAttribute('data-button-id');
+    if (id === '') return;
+    buttons[id] = {
+      text: byId('buttonText').value,
+      href: byId('buttonLink').value,
+      imagePath: byId('buttonImage').value,
+      position: byId('buttonPosition').value,
+      hotkey: byId('buttonHotkey').value.toUpperCase(),
+      openInNew: Boolean(byId('buttonOpenInNew').checked)
+    };
+    storage.store('buttons');
+  } else if (hasClass(byId('color-scheme-tab'), 'focused')) {
+    // Switch the active one at the top
+    let originalScheme = colorSchemes[0];
+    colorSchemes[0] = colorSchemes[activeSchemeIndex];
+    colorSchemes[activeSchemeIndex] = originalScheme;
+    storage.store('colorSchemes');
+  }
 });
 
 function showTab(id) {
@@ -66,8 +66,8 @@ byId('show-data').addEventListener('click', function (event) {
 
 byId('copy-data').addEventListener('click', function (event) {
   createDataJson();
-	byId('copy-data-display').select();
-  let status = document.execCommand('copy');
+  byId('copy-data-display').select();
+  document.execCommand('copy');
   byId('copy-data-display').value = '';
   byId('copy-data').focus();
 });
@@ -80,11 +80,15 @@ byId('restore-data').addEventListener('click', function (event) {
     if (data.pluginsData) {
       plugins = data.pluginsData;
       storage.store('plugins');
-    } else {} // TODO alert
+    } else {
+      // TODO alert
+    }
     if (data.buttonsData) {
       buttons = data.buttonsData;
       storage.store('buttons');
-    } else {} // TODO alert
+    } else {
+      // TODO alert
+    }
   }
 });
 
@@ -102,12 +106,12 @@ byId('add-scheme').addEventListener('click', function (e) {
   // TODO
 });
 byId('remove-scheme').addEventListener('click', function (e) {
-	if (!confirm('Remove this scheme?')) return;
+  if (!confirm('Remove this scheme?')) return;
   colorSchemes.splice(activeSchemeIndex, 1);
-	let schemeElement = byQSelect('#color-scheme-list > a.active');
-	schemeElement.parentNode.removeChild(schemeElement);
-	byId('color-scheme-list').children[0].classList.add('active');
-	storage.store('colorSchemes');
+  let schemeElement = byQSelect('#color-scheme-list > a.active');
+  schemeElement.parentNode.removeChild(schemeElement);
+  byId('color-scheme-list').children[0].classList.add('active');
+  storage.store('colorSchemes');
 });
 
 byId('add-buttons').addEventListener('click', function (e) {
@@ -128,10 +132,10 @@ byId('add-buttons').addEventListener('click', function (e) {
   };
   setCurrentButton(buttons[id], id);
   byId('buttons-list').insertAdjacentHTML('beforeend',
-    `<li id="${id}">
-      <a href="#!">${id}</a>
-    </li>`
-  );
+  `<li id="${id}">
+  <a href="#!">${id}</a>
+  </li>`
+);
 });
 byId('remove-buttons').addEventListener('click', function (e) {
   e.preventDefault();
@@ -151,49 +155,47 @@ function loadButtons(cb) {
       cb(error);
       return;
     }
-		addButtonConfig(Object.keys(buttons)[0]);
+    addButtonConfig(Object.keys(buttons)[0]);
     let dropdown = byId('buttons-list');
     for (let id in buttons) {
-			dropdown.insertAdjacentHTML('beforeend', 
+      dropdown.insertAdjacentHTML('beforeend', 
         `<li id="${id}">
-          <a href="#!">${id}</a>
+        <a href="#!">${id}</a>
         </li>`
       );
-      /* jshint -W083 */
-			byId(id).addEventListener('click', event => setCurrentButton(buttons[id], id));
-		}
+      byId(id).addEventListener('click', event => setCurrentButton(buttons[id], id));
+    }
     cb();
   });
 }
 
 function setCurrentButton(buttonData, id) {
   if (byId('buttonText') === null) addButtonConfig(id);
-	byId('buttonText').setAttribute('data-button-id', id);
-	byId('buttonText').value = buttonData.text;
-	byId('buttonLink').value = buttonData.href;
-	byId('buttonImage').value = buttonData.imagePath;
-	byId('buttonPosition').value = buttonData.position;
-	byId('buttonHotkey').value = buttonData.hotkey;
-	byId('buttonOpenInNew').checked = buttonData.openInNew;
+  byId('buttonText').setAttribute('data-button-id', id);
+  byId('buttonText').value = buttonData.text;
+  byId('buttonLink').value = buttonData.href;
+  byId('buttonImage').value = buttonData.imagePath;
+  byId('buttonPosition').value = buttonData.position;
+  byId('buttonHotkey').value = buttonData.hotkey;
+  byId('buttonOpenInNew').checked = buttonData.openInNew;
 }
 
 function getFirstButton() {
-	if (buttons === undefined || Object.keys(buttons).length === 0) return {
-		id: '',
-		text: '',
-		href: '',
-		imagePath: '',
-		hotkey: '',
-		order: '',
-		checked: false
-	};
-	else return buttons[Object.keys(buttons)[0]];
+  if (buttons === undefined || Object.keys(buttons).length === 0) return {
+    id: '',
+    text: '',
+    href: '',
+    imagePath: '',
+    hotkey: '',
+    order: '',
+    checked: false
+  };
+  else return buttons[Object.keys(buttons)[0]];
 }
 
 function runPlugins() {
   Object.keys(plugins).forEach(pluginName => {
     addPluginData(plugins[pluginName], !byClass('plugin-container').length); // Only the first addition gets focus
-    /* jshint -W061 */
     try {
       if (plugins[pluginName].html.secondary) Object.keys(plugins[pluginName].html.secondary).forEach(function (selector, i, array) {
         byQSelect(selector).insertAdjacentHTML('beforeend', array[selector]);
@@ -209,7 +211,7 @@ function runPlugins() {
 function addPluginData(plugin, focus) {
   byId('plugins-list').insertAdjacentHTML('beforeend',
     `<li id="${plugin.name}">
-      <a href="#!">${plugin.name}</a>
+    <a href="#!">${plugin.name}</a>
     </li>`
   );
   byId('settings-tab').insertAdjacentHTML('beforeend',
@@ -219,19 +221,19 @@ function addPluginData(plugin, focus) {
   container.insertAdjacentHTML('beforeend', 
     `<h5 class="plugin-title">${plugin.name}</h5>
     <p class="plugin-desc">
-      ${plugin.desc}
-      <br>
-      ${plugin.version} by ${plugin.author}
+    ${plugin.desc}
+    <br>
+    ${plugin.version} by ${plugin.author}
     </p>`
   );
   if (plugin.settings) {
     plugin.settings.forEach(function (setting, i, settings) {
       if (!setting.isVisible) return;
       container.insertAdjacentHTML('beforeend',
-      `<div class="input-field">
+        `<div class="input-field">
         <input id="${setting.name}" placeholder="${setting.desc}" type="${setting.type}" value="${setting.value}" class="">
         <label for="${setting.name}" class="active">${setting.name}</label>
-      </div>`
+        </div>`
       );
     });
   } else {
@@ -248,7 +250,7 @@ function addPluginData(plugin, focus) {
 
 function loadSchemesAndUI(callback) {
   function eachScheme(scheme, i, array) {
-		let htmlContent = `<a href="#!" class="collection-item color">${scheme.name}<div class="row top-margin">`;
+    let htmlContent = `<a href="#!" class="collection-item color">${scheme.name}<div class="row top-margin">`;
     function addColor(colorName, index, array) {
       htmlContent += `<div style="background-color: ${scheme[colorName]};" class="col s1 color-sample"></div>`;
     }
@@ -265,19 +267,19 @@ function loadSchemesAndUI(callback) {
     // Add accent
     Object.keys(scheme).filter(e => e.startsWith('accent')).sort().forEach(addColor);
     
-		htmlContent += '</div></a>';
+    htmlContent += '</div></a>';
     
-	  byId('color-scheme-list').insertAdjacentHTML('beforeend', htmlContent);
-		Array.from(byId('color-scheme-list').children).forEach(function (schemeElement, i, arr) {
-			if (i === 0) schemeElement.classList.add('active');
-		  schemeElement.addEventListener('click', function (evt) {
-				let actives = byQSelect('#color-scheme-list > a.active');
-				if (actives) actives.classList.remove('active');
-		    schemeElement.classList.add('active');
-				activeSchemeIndex = i;
-		  });
-		});
-	}
+    byId('color-scheme-list').insertAdjacentHTML('beforeend', htmlContent);
+    Array.from(byId('color-scheme-list').children).forEach(function (schemeElement, i, arr) {
+      if (i === 0) schemeElement.classList.add('active');
+      schemeElement.addEventListener('click', function (evt) {
+        let actives = byQSelect('#color-scheme-list > a.active');
+        if (actives) actives.classList.remove('active');
+        schemeElement.classList.add('active');
+        activeSchemeIndex = i;
+      });
+    });
+  }
   setTimeout(() => {
     colorSchemes.forEach(eachScheme);
     callback();
@@ -286,31 +288,31 @@ function loadSchemesAndUI(callback) {
 
 function addButtonConfig(buttonId) {
   byId('buttons-tab').insertAdjacentHTML('beforeend',
-	`<div class="input-field">
-		<input id="buttonText" type="text" class="" data-button-id="${buttonId}" value="${buttons[buttonId].text}">
-		<label for="buttonText" class="active">Text</label>
-	</div>
-	<div class="input-field">
-		<input id="buttonLink" type="url" class="validate" value="${buttons[buttonId].href}">
-		<label for="buttonLink" class="active">Link</label>
-	</div>
-	<div class="input-field">
-		<input id="buttonImage" type="url" class="validate" value="${buttons[buttonId].imagePath}">
-		<label for="buttonImage" class="active">Image</label>
-	</div>
-	<div class="input-field">
-		<input id="buttonPosition" type="number" class="" value="${buttons[buttonId].position}">
-		<label for="buttonPosition" class="active">Order</label>
-	</div>
-	<div class="input-field">
-		<input id="buttonHotkey" type="text" maxlength="1" class="" value="${buttons[buttonId].hotkey}">
-		<label for="buttonHotkey" class="active">Hotkey</label>
-	</div>
-	<div class="input-field left align-left">
-		<input id="buttonOpenInNew" type="checkbox" class="" checked="${buttons[buttonId].hotkey}">
-		<label for="buttonOpenInNew" class="active">Replace current tab</label>
-	</div>`
-	);
+  `<div class="input-field">
+  <input id="buttonText" type="text" class="" data-button-id="${buttonId}" value="${buttons[buttonId].text}">
+  <label for="buttonText" class="active">Text</label>
+  </div>
+  <div class="input-field">
+  <input id="buttonLink" type="url" class="validate" value="${buttons[buttonId].href}">
+  <label for="buttonLink" class="active">Link</label>
+  </div>
+  <div class="input-field">
+  <input id="buttonImage" type="url" class="validate" value="${buttons[buttonId].imagePath}">
+  <label for="buttonImage" class="active">Image</label>
+  </div>
+  <div class="input-field">
+  <input id="buttonPosition" type="number" class="" value="${buttons[buttonId].position}">
+  <label for="buttonPosition" class="active">Order</label>
+  </div>
+  <div class="input-field">
+  <input id="buttonHotkey" type="text" maxlength="1" class="" value="${buttons[buttonId].hotkey}">
+  <label for="buttonHotkey" class="active">Hotkey</label>
+  </div>
+  <div class="input-field left align-left">
+  <input id="buttonOpenInNew" type="checkbox" class="" checked="${buttons[buttonId].hotkey}">
+  <label for="buttonOpenInNew" class="active">Replace current tab</label>
+  </div>`
+);
 }
 
 // Set to true using devtools to constantly read and update a plugin automatically without refreshing the page
@@ -324,7 +326,6 @@ function addPlugin(event) {
       throw err;
     }
     let oldPlugin = plugins[plugin.name];
-    /*jshint -W061*/
     if (plugin.init) eval(plugin.js.init);
     // Use existing settings if possible
     if (oldPlugin && plugin.preserveSettings) plugin.settings = oldPlugin.settings;
@@ -333,7 +334,7 @@ function addPlugin(event) {
     storage.store('plugins', storeCallback);
   }
   let storeCallback = (function () {
-    if (!persistentPluginReload) {
+    if (!window.persistentPluginReload) {
       window.location.reload();
     } else {
       console.log(`Reload: ${this.file.name}`);

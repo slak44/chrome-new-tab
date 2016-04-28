@@ -35,7 +35,6 @@ let commands = {
       data[2] = data[2].toUpperCase();
       return fx.convert(Number(data[0]), {from: data[1], to: data[2]}).toFixed(2) + ` ${data[2]}`;
     }
-    /* jshint -W117 */
     return Qty(`${data[0]} ${data[1]}`).to(data[2]).toString();
   },
   query: data => openInNewTab(`https://www.google.ro/search?q=${encodeURIComponent(data)}`),
@@ -50,7 +49,7 @@ let commandAliases = {
 let replReplace = {
   'replLog': /console\.(log|error|info|debug)/g,
   'Math.$1($2)': /(pow|exp|ceil|floor|trunc|log|max|min|random|sqrt|sin|cos|tan|asin|acos)\(([\s\S]*)\)/g,
-  'Math.$1': /(PI|E)/g,
+  'Math.$1': /(PI|E)/g
 };
 
 function replLog() {
@@ -85,7 +84,7 @@ function evaluate(event) {
         result = (commands[commandName] || commands[commandAliases[commandName]])(code.replace(`!${commandName} `, ''));
       } else {
         Object.keys(replReplace).forEach(key => code = code.replace(replReplace[key], key));
-        result = eval(code); // jshint ignore: line
+        result = eval(code);
       }
     } catch (err) {
       result = err;

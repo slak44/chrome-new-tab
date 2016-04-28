@@ -52,5 +52,14 @@
   "dependencies": {
     "async": "^2.0.0-rc.3",
     "eventemitter2": "^1.0.0"
+  },
+  "babel": {
+    "presets": ["es2015"]
+  },
+  "eslintConfig": {
+    "extends": "../.eslintrc.json",
+    "globals": {
+      "async": false
+    }
   }
 }

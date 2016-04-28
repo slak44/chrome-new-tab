@@ -6,6 +6,13 @@
   "babel": {
     "presets": ["es2015"]
   },
+  "eslintConfig": {
+    "extends": "../.eslintrc.json",
+    "globals": {
+      "fx": false,
+      "Qty": false
+    }
+  },
   "dependencies": {
     "js-quantities": "^1.6.1",
     "money": "^0.2.0"

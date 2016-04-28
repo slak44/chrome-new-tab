@@ -1,0 +1,27 @@
+{
+  "extends": "../.eslintrc.json",
+  "globals": {
+    "loadSchemes": false,
+    "activateScheme": false,
+    "colorSchemes": true,
+    
+    "loadPlugins": false,
+    "plugins": true,
+    "pluginCss": false,
+    
+    "buttons": true,
+    
+    "toggleDiv": false,
+    "createButton": false,
+    "addPanel": false,
+    
+    "byId": false,
+    "byClass": false,
+    "byQSelect": false,
+    "hasClass": false,
+    "capitalize": false,
+    
+    "chrome": true,
+    "storage": false
+  }
+}

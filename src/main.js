@@ -40,14 +40,14 @@ document.onkeydown = function (e) {
 function createButton(options) {
   if (options.parent === undefined || options.parent === null ||
       options.parent.insertAdjacentHTML === undefined) options.parent = byId('buttons');
-	options.parent.insertAdjacentHTML('beforeend',
+  options.parent.insertAdjacentHTML('beforeend',
 	`<li class="waves-effect waves-light collection-item">
 		<a href="${options.href || ''}" class="button-link">
 			<div class="valign-wrapper">
 				<div class="button-image-wrapper">
           ${options.imagePath ?
             `<img src="${options.imagePath}"/>` :
-            `<i class="material-icons">send</i>`}
+            '<i class="material-icons">send</i>'}
         </div>
 				<div class="valign thin button-text">${options.text}</div>
 			</div>
@@ -70,11 +70,11 @@ function loadButtons(callback) {
       for (let i in buttons) orderedButtons.push(buttons[i]);
       orderedButtons.sort((a, b) => Number(a.position) < Number(b.position) ? -1 : 1);
       orderedButtons.forEach(e => createButton({
-          imagePath: e.imagePath,
-          href: e.href,
-          text: e.text,
-          openInNew: e.openInNew
-        }));
+        imagePath: e.imagePath,
+        href: e.href,
+        text: e.text,
+        openInNew: e.openInNew
+      }));
     }
     callback(null);
   });
@@ -82,7 +82,6 @@ function loadButtons(callback) {
 
 function runPlugins() {
   Object.keys(plugins).forEach(pluginName => {
-    /* jshint -W061 */
     try {
       if (plugins[pluginName].html.main) Object.keys(plugins[pluginName].html.main).forEach(function (selector, i, array) {
         byQSelect(selector).insertAdjacentHTML('beforeend', plugins[pluginName].html.main[selector]);

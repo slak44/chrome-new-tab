@@ -14,7 +14,6 @@ let byQSelect = exports.byQSelect = selector => document.querySelector(selector)
 let capitalize = exports.capitalize = string => string.charAt(0).toUpperCase() + string.substr(1);
 let hasClass = exports.hasClass = (element, className) => Array.from(element.classList).includes(className);
 
-/* jshint -W057 */
 exports.storage = new (function () {
   const self = this;
   
@@ -107,17 +106,17 @@ exports.activateScheme = function (scheme) {
   .bgcolor.lighten-5 {background-color: ${scheme.lighten5} !important;}
   `;
   
-	css += `
+  css += `
   input[type=text]:focus:not([readonly]), input[type=password]:focus:not([readonly]), input[type=email]:focus:not([readonly]), input[type=url]:focus:not([readonly]),
-	input[type=time]:focus:not([readonly]), input[type=date]:focus:not([readonly]), input[type=datetime-local]:focus:not([readonly]), input[type=tel]:focus:not([readonly]),
-	input[type=number]:focus:not([readonly]), input[type=search]:focus:not([readonly]), textarea.materialize-textarea:focus:not([readonly]) {
-		border-bottom-color: ${scheme.main} !important;
-		box-shadow: 0 1px 0 0 ${scheme.main} !important;
-	}
+  input[type=time]:focus:not([readonly]), input[type=date]:focus:not([readonly]), input[type=datetime-local]:focus:not([readonly]), input[type=tel]:focus:not([readonly]),
+  input[type=number]:focus:not([readonly]), input[type=search]:focus:not([readonly]), textarea.materialize-textarea:focus:not([readonly]) {
+    border-bottom-color: ${scheme.main} !important;
+    box-shadow: 0 1px 0 0 ${scheme.main} !important;
+  }
   input[type=text]:focus:not([readonly]) + label, input[type=password]:focus:not([readonly]) + label, input[type=email]:focus:not([readonly]) + label,
-	input[type=url]:focus:not([readonly]) + label, input[type=time]:focus:not([readonly]) + label, input[type=date]:focus:not([readonly]) + label,
-	input[type=datetime-local]:focus:not([readonly]) + label, input[type=tel]:focus:not([readonly]) + label, input[type=number]:focus:not([readonly]) + label,
-	input[type=search]:focus:not([readonly]) + label, textarea.materialize-textarea:focus:not([readonly]) + label {
+  input[type=url]:focus:not([readonly]) + label, input[type=time]:focus:not([readonly]) + label, input[type=date]:focus:not([readonly]) + label,
+  input[type=datetime-local]:focus:not([readonly]) + label, input[type=tel]:focus:not([readonly]) + label, input[type=number]:focus:not([readonly]) + label,
+  input[type=search]:focus:not([readonly]) + label, textarea.materialize-textarea:focus:not([readonly]) + label {
     color: ${scheme.main} !important;
   }
   
@@ -128,18 +127,18 @@ exports.activateScheme = function (scheme) {
   
   .collection-item.active {background-color: ${scheme.darken4} !important;}
   `;
-	
-	if (scheme.isDark) {
+  
+  if (scheme.isDark) {
     // TODO
-	}
-	
-	byId('dynamic-colors').innerHTML = css;
+  }
+  
+  byId('dynamic-colors').innerHTML = css;
 };
 
 exports.toggleDiv = function (id, isElement) {
   if (!isElement) id = byId(id);
   if (hasClass(id, 'focused')) {
-		id.classList.remove('focused');
+    id.classList.remove('focused');
     id.classList.add('unfocused');
   } else {
     id.classList.remove('unfocused');
@@ -148,35 +147,35 @@ exports.toggleDiv = function (id, isElement) {
 };
 
 exports.loadSchemes = function (cb) {
-	storage.load('colorSchemes', function (err) {
-		if (err || colorSchemes[0] === undefined || colorSchemes[0] === null) {
-			colorSchemes = [{
-				// Orange is default
-				lighten5: '#fff3e0',
-				lighten4: '#ffe0b2',
-				lighten3: '#ffcc80',
-				lighten2: '#ffb74d',
-				lighten1: '#ffa726',
-				
-				main: 		'#ff9800',
-				
-				darken1: 	'#fb8c00',
-				darken2: 	'#f57c00',
-				darken3: 	'#ef6c00',
-				darken4: 	'#e65100',
-				
-				accent1: 	'#F4FF81',
-				accent2: 	'#EEFF41',
-				accent3: 	'#C6FF00',
-				accent4: 	'#AEEA00',
-				
-				isDark: false,
-				name: 'Light Orange, Lime Accents'
-			}];
-			storage.store('colorSchemes');
-		}
-		cb();
-	});
+  storage.load('colorSchemes', function (err) {
+    if (err || colorSchemes[0] === undefined || colorSchemes[0] === null) {
+      colorSchemes = [{
+        // Orange is default
+        lighten5: '#fff3e0',
+        lighten4: '#ffe0b2',
+        lighten3: '#ffcc80',
+        lighten2: '#ffb74d',
+        lighten1: '#ffa726',
+        
+        main: 		'#ff9800',
+        
+        darken1: 	'#fb8c00',
+        darken2: 	'#f57c00',
+        darken3: 	'#ef6c00',
+        darken4: 	'#e65100',
+        
+        accent1: 	'#F4FF81',
+        accent2: 	'#EEFF41',
+        accent3: 	'#C6FF00',
+        accent4: 	'#AEEA00',
+        
+        isDark: false,
+        name: 'Light Orange, Lime Accents'
+      }];
+      storage.store('colorSchemes');
+    }
+    cb();
+  });
 };
 
 exports.loadPlugins = function (callback) {
@@ -189,7 +188,6 @@ exports.loadPlugins = function (callback) {
       return;
     }
     Object.keys(plugins).forEach(function (pluginName, i, array) {
-      /*jshint -W061*/
       try {
         if (plugins[pluginName].dependencyCode) eval(plugins[pluginName].dependencyCode);
         if (plugins[pluginName].html.global) Object.keys(plugins[pluginName].html.global).forEach(function (selector, i, array) {

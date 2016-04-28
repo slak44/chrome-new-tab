@@ -1,6 +1,5 @@
 *.pem
 *.crx
-.jshintrc
 node_modules/
 build/
 lol-test-data.json
