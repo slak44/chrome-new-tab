@@ -7,6 +7,7 @@ const sequence = require('gulp-sequence');
 const copy = require('gulp-copy');
 const gulpBrowser = require('gulp-browser');
 const gulpBump = require('gulp-bump');
+const zip = require('gulp-zip');
 const merge = require('merge-stream');
 const fs = require('fs');
 const cp = require('child_process');
@@ -78,9 +79,15 @@ gulp.task('plugins', function (done) {
   });
 });
 
+gulp.task('pack-plugins', function () {
+  return gulp.src('./build/plugins/*')
+    .pipe(zip('compiled.zip'))
+    .pipe(gulp.dest('./build/plugins/'));
+});
+
 gulp.task('default', sequence(['js-src', 'copy-src', 'copy-css', 'copy-fonts']));
 
-gulp.task('all', sequence(['js-src', 'copy-src', 'copy-css', 'copy-fonts', 'extension', 'plugins']));
+gulp.task('all', sequence(['default', 'extension', 'plugins', 'pack-plugins']));
 
 function createVersionTask(bumpType) {
   return function () {
