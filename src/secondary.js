@@ -347,10 +347,6 @@ function addPlugin(event) {
 function readPlugin(blob, callback) {
   let reader = new FileReader();
   reader.addEventListener('loadend', function (event) {
-    if (blob.type !== 'application/javascript') {
-      callback(new Error('File is not javascript'), null);
-      return;
-    }
     let plugin = JSON.parse(event.target.result);
     callback(null, plugin);
   });
