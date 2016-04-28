@@ -17,7 +17,7 @@ loadSchemes(() => {
 let panels = [];
 function addPanel(panelObject) {
   panels.push(panelObject);
-  panels = panels.sort((a, b) => a.position < b.position ? -1 : 1);
+  panels = panels.sort((a, b) => (a.position < b.position ? -1 : 1));
   let newPanelIndex = panels.indexOf(panelObject);
   let children = Array.from(byId('data-collection').children);
   if (children.length === 0) {
@@ -68,7 +68,7 @@ function loadButtons(callback) {
     } else {
       let orderedButtons = [];
       for (let i in buttons) orderedButtons.push(buttons[i]);
-      orderedButtons.sort((a, b) => Number(a.position) < Number(b.position) ? -1 : 1);
+      orderedButtons.sort((a, b) => (Number(a.position) < Number(b.position) ? -1 : 1));
       orderedButtons.forEach(e => createButton({
         imagePath: e.imagePath,
         href: e.href,

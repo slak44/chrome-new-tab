@@ -101,11 +101,11 @@ function getParticipantSummaries(apiCaller, callback) {
 }
 
 function getParticipantLeagues(apiCaller, callback) {
-// TODO  
+// TODO
 }
 
 function addDataToPane(apiCaller, callback) {
-// TODO  
+// TODO
 }
 
 function addInfoPanel() {

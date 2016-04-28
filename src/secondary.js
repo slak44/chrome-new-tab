@@ -158,7 +158,7 @@ function loadButtons(cb) {
     addButtonConfig(Object.keys(buttons)[0]);
     let dropdown = byId('buttons-list');
     for (let id in buttons) {
-      dropdown.insertAdjacentHTML('beforeend', 
+      dropdown.insertAdjacentHTML('beforeend',
         `<li id="${id}">
         <a href="#!">${id}</a>
         </li>`
@@ -218,7 +218,7 @@ function addPluginData(plugin, focus) {
     `<div id="${plugin.name}-container" class="plugin-container ${(focus ? 'focused' : 'unfocused')}"></div>`
   );
   let container = byId(plugin.name + '-container');
-  container.insertAdjacentHTML('beforeend', 
+  container.insertAdjacentHTML('beforeend',
     `<h5 class="plugin-title">${plugin.name}</h5>
     <p class="plugin-desc">
     ${plugin.desc}
@@ -257,7 +257,7 @@ function loadSchemesAndUI(callback) {
     // Add dark/light
     htmlContent += `<div style="background-color: ${scheme.isDark ? 'black' : 'white'};" class="col s1 color-sample"></div>`;
     // Add dark colors from darkest
-    Object.keys(scheme).filter(e => e.startsWith('darken')).sort((a, b) => b > a ? 1 : -1).forEach(addColor);
+    Object.keys(scheme).filter(e => e.startsWith('darken')).sort((a, b) => (b > a ? 1 : -1)).forEach(addColor);
     // Add main color
     htmlContent += `<div style="background-color: ${scheme.main};" class="col s1 color-sample"></div>`;
     // Add light colors from least light

@@ -11,6 +11,18 @@
     "quotes": ["warn", "single"],
     "semi": ["warn", "always"],
     "no-unused-vars": ["off"],
-    "no-console": ["off"]
+    "no-console": ["off"],
+    "eqeqeq": ["warn", "smart"],
+    "no-floating-decimal": ["error"],
+    "no-new-wrappers": ["error"],
+    "no-with": ["error"],
+    "wrap-iife": ["error"],
+    "camelcase": ["warn"],
+    "comma-spacing": ["warn", {"before": false, "after": true}],
+    "eol-last": ["warn"],
+    "no-multiple-empty-lines": ["warn"],
+    "no-trailing-spaces": ["error", {"skipBlankLines": true}],
+    "spaced-comment": ["warn", "always"],
+    "no-confusing-arrow": ["warn", {"allowParens": true}]
   }
 }
