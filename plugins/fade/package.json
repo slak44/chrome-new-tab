@@ -1,0 +1,30 @@
+{
+  "pluginName": "Fade",
+  "version": "1.0.0",
+  "description": "Fade the page to black when inactive",
+  "author": "Slak44",
+  "preserveSettings": true,
+  "settings": [
+    {
+      "name": "Featured Panel",
+      "desc": "Pick a zero-indexed number to choose a panel or leave empty for nothing",
+      "type": "number",
+      "value": "",
+      "isVisible": true
+    }
+  ],
+  "babel": {
+    "presets": ["es2015"]
+  },
+  "js": {
+    "main": ["fade.js"]
+  },
+  "css": {
+    "main": ["black.css"]
+  },
+  "html": {
+    "main": {
+      "black.html": "body"
+    }
+  }
+}
