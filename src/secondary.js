@@ -103,7 +103,7 @@ byId('remove-plugin').addEventListener('click', function (e) {
 });
 
 byId('add-scheme').addEventListener('click', function (e) {
-  // TODO
+  alert('This feature is not yet implemented.'); // TODO
 });
 byId('remove-scheme').addEventListener('click', function (e) {
   if (!confirm('Remove this scheme?')) return;
