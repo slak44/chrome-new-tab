@@ -7,6 +7,7 @@ const babel = require('babel-core');
 
 const pluginDir = process.argv[2];
 const pkg = JSON.parse(fs.readFileSync(`${pluginDir}/package.json`));
+const outputFile = process.argv[3] || `./${pkg.pluginName}.json`;
 
 pkg.js = pkg.js || {};
 pkg.html = pkg.html || {};
@@ -117,5 +118,5 @@ async.parallel([
   })
 ], function (err, results) {
   if (err) throw err;
-  fs.writeFileSync(`./build/${pluginObject.name}.js`, JSON.stringify(pluginObject));
+  fs.writeFileSync(outputFile, JSON.stringify(pluginObject));
 });

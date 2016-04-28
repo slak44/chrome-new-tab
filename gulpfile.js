@@ -64,7 +64,7 @@ gulp.task('plugins', function (done) {
         callback(null);
         return;
       }
-      cp.exec(`node bundler.js plugins/${folderName}`, (err, stdout, stderr) => {
+      cp.exec(`node bundler.js plugins/${folderName} build/plugins/${folderName}.json`, (err, stdout, stderr) => {
         if (err) {
           callback(err, null);
           return;
@@ -81,8 +81,8 @@ gulp.task('plugins', function (done) {
 
 gulp.task('pack-plugins', function () {
   return gulp.src('./build/plugins/*')
-    .pipe(zip('compiled.zip'))
-    .pipe(gulp.dest('./build/plugins/'));
+    .pipe(zip('plugins.zip'))
+    .pipe(gulp.dest('./build/dist/'));
 });
 
 gulp.task('default', sequence(['js-src', 'copy-src', 'copy-css', 'copy-fonts']));

@@ -13,9 +13,7 @@ Run `npm install` then `gulp all`, and the extension can be found packed in the 
 - Use `npm install --save` to add your dependencies
 - Add the `html`, `css` and `js` sections to the `package.json` described below
 - Optionally add the `babel` config
-- Run the bundler (`node bundler.js`), the first argument being the plugin folder
-
-The resulting .js file can be found in `$PWD/build/nameOfPlugin-plugin.js`.
+- Run the bundler (`node bundler.js`), the first argument being the plugin folder, and the second being a path where the compiled file should be placed
 
 #### Using installed dependencies
 After a dependency is eval'd, whatever it exports is placed in the global scope, in a variable named after the package.  
