@@ -88,7 +88,9 @@ exports.activateScheme = function (scheme) {
   .color {color: ${scheme.main} !important;}
   .bgcolor {background-color: ${scheme.main} !important;}
   `;
-  for (let i = 1; i <= 4; i++) {
+  // There are 5 light colors and 4 dark/accent
+  const colorCount = 4;
+  for (let i = 1; i <= colorCount; i++) {
     css +=
     `
     .color.darken-${i} {color: ${scheme[`darken${i}`]} !important;}
@@ -100,7 +102,6 @@ exports.activateScheme = function (scheme) {
     .bgcolor.accent-${i} {background-color: ${scheme[`accent${i}`]} !important;}
     `;
   }
-  // There are 5 light colors and 4 dark/accent
   css += `
   .color.lighten-5 {color: ${scheme.lighten5} !important;}
   .bgcolor.lighten-5 {background-color: ${scheme.lighten5} !important;}

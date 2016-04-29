@@ -1,4 +1,5 @@
 'use strict';
+const timeUpdateInterval = 1000;
 addPanel({
   position: plugins[pluginName].settings[0].value || 0,
   htmlContent:
@@ -14,5 +15,5 @@ addPanel({
 });
 setTimeout(function setTime() {
   byId('time').innerHTML = new Date().toLocaleTimeString('intl', {hour: '2-digit', minute: '2-digit', hour12: false});
-  setTimeout(setTime, 1000);
+  setTimeout(setTime, timeUpdateInterval);
 }, 0);

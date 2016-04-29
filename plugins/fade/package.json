@@ -1,6 +1,6 @@
 {
   "pluginName": "Fade",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Fade the page to black when inactive",
   "author": "Slak44",
   "preserveSettings": true,

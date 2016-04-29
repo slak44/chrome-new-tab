@@ -15,10 +15,13 @@ loadSchemes(() => {
 byId('floating-save-button').addEventListener('click', function (evt) {
   if (hasClass(byId('settings-tab'), 'focused')) {
     let currentPlugin = byQSelect('.plugin-container.focused');
-    let cpId = currentPlugin.id.slice(0, -10);
+    // Plugin container ids have the form `${pluginName}-container`
+    const charsToRemove = '-container'.length;
+    let cpId = currentPlugin.id.slice(0, -charsToRemove);
+    const childrenToIgnore = 2; // Ignore the title and the description
     Array.from(currentPlugin.children).forEach(function (settingDiv, i, children) {
-      if (i <= 1) return; // Ignore the title and the description
-      plugins[cpId].settings[i - 2].value = settingDiv.children[0].value;
+      if (i < childrenToIgnore) return;
+      plugins[cpId].settings[i - childrenToIgnore].value = settingDiv.children[0].value;
     });
     storage.store('plugins');
   } else if (hasClass(byId('buttons-tab'), 'focused')) {
@@ -324,6 +327,7 @@ function addButtonConfig(buttonId) {
 
 // Set to true using devtools to constantly read and update a plugin automatically without refreshing the page
 window.persistentPluginReload = false;
+window.reloadTimeout = 1000;
 
 function addPlugin(event) {
   let file = event.target.files[0];
@@ -345,7 +349,7 @@ function addPlugin(event) {
       window.location.reload();
     } else {
       console.log(`Reload: ${this.file.name}`);
-      setTimeout(() => readPlugin(this.file, readCallback), 1000);
+      setTimeout(() => readPlugin(this.file, readCallback), window.reloadTimeout);
     }
   }).bind({file});
   

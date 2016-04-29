@@ -28,6 +28,7 @@ let commands = {
     // !convert 100 usd to EUR
     // !convert 50 m to km
     data = data.split(' ');
+    // Remove 'to' if it's found between units
     if (data[2].toLowerCase() === 'to') data.splice(2, 1);
     // If the unit is currency, use the currency script
     if (Object.keys(fx.rates).includes(data[1].toUpperCase())) {

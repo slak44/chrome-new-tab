@@ -2,6 +2,8 @@
 const DEBUG = false;
 const TEST_DATA_PATH = '';
 
+const httpStatusOk = 200;
+
 window.EventEmitter2 = window.eventemitter2;
 document.body.addEventListener('click', function () {
   chrome.permissions.request({
@@ -55,7 +57,7 @@ function getApiUtil(callback) {
   let apiUtil = new XMLHttpRequest();
   apiUtil.addEventListener('loadend', function () {
     window.ApiCaller = eval.apply(window, [apiUtil.responseText]);
-    if (apiUtil.status === 200) {
+    if (apiUtil.status === httpStatusOk) {
       eval.apply(window, [apiUtil.responseText]);
       let apiCaller = new window.ApiCaller(
         [

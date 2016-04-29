@@ -1,10 +1,11 @@
 'use strict';
-let url = `https://www.reddit.com/user/${plugins[pluginName].settings[0].value}`;
+const httpStatusOk = 200;
+const url = `https://www.reddit.com/user/${plugins[pluginName].settings[0].value}`;
 function updateRedditKarma() {
   let req = new XMLHttpRequest();
   req.open('GET', url + '/about.json');
   req.onload = function () {
-    if (req.status === 200) {
+    if (req.status === httpStatusOk) {
       let data = JSON.parse(req.response);
       byId('reddit-karma').innerHTML =
         `<a href="${url}" class="color accent-4">${data.data.comment_karma}</a> comment karma
