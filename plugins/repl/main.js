@@ -79,7 +79,9 @@ function evaluate(event) {
     rewindCount = 0;
     let oldElem = byClass('current-text')[0];
     let code = oldElem.textContent.trim();
+    commandHistory.pop();
     commandHistory.push(code);
+    commandHistory.push('');
     try {
       if (code.startsWith('!')) {
         let commandName = code.substr(1, code.indexOf(' ') - 1);
@@ -114,7 +116,9 @@ function evaluate(event) {
   } else if (event.keyCode === keycodes.upArrow) {
     rewindCount++;
     if (commandHistory.length - rewindCount < 0) rewindCount--;
-    byClass('current-text')[0].innerText = commandHistory[commandHistory.length - rewindCount].toString();
+    let oldCommand = commandHistory[commandHistory.length - rewindCount].toString();
+    if (oldCommand === '' && commandHistory.length - rewindCount - 1 > 0) oldCommand = commandHistory[commandHistory.length - rewindCount - 1].toString();
+    byClass('current-text')[0].innerText = oldCommand;
   } else if (event.keyCode === keycodes.downArrow) {
     rewindCount--;
     if (rewindCount === 0) rewindCount++;
