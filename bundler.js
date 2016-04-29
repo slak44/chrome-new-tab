@@ -84,7 +84,15 @@ function installDeps(callback) {
 }
 
 function browserifyDeps(callback) {
-  let toBrowserify = Object.keys(pkg.dependencies).map(depName => `window['${depName}'] = require('${depName}');`).join('\n');
+  if (Object.keys(pkg.dependencies).length === 0) {
+    callback(null);
+    return;
+  }
+  let toBrowserify = Object
+    .keys(pkg.dependencies)
+    .map(depName => `window.dependencies['${pkg.pluginName}']['${depName}'] = require('${depName}');`)
+    .join('\n');
+  toBrowserify = `window.dependencies['${pkg.pluginName}'] = {};` + toBrowserify; // Create the plugin's dependencies object before adding them
   let fileName = `${pluginDir}/browserify_TMPFILE`;
   fs.writeFileSync(fileName, toBrowserify);
 

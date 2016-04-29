@@ -1,5 +1,7 @@
 'use strict';
 
+window.dependencies = {};
+
 window.jQuery = require('jquery');
 require('../node_modules/materialize-css/dist/js/materialize.min.js');
 

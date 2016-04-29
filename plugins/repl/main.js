@@ -1,6 +1,7 @@
 'use strict';
-window.fx = window.money;
-window.Qty = window['js-quantities'];
+const pluginDeps = window.dependencies[pluginName];
+let fx = pluginDeps['money'];
+let Qty = pluginDeps['js-quantities'];
 
 // Get current exchange rates
 fx.base = 'EUR';

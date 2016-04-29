@@ -4,7 +4,10 @@ const TEST_DATA_PATH = '';
 
 const httpStatusOk = 200;
 
-window.EventEmitter2 = window.eventemitter2;
+const pluginDeps = window.dependencies[pluginName];
+const async = pluginDeps.async;
+window.EventEmitter2 = pluginDeps.eventemitter2;
+
 document.body.addEventListener('click', function () {
   chrome.permissions.request({
     origins: ['https://*.pvp.net/*']
