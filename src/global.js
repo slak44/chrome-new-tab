@@ -3,18 +3,18 @@
 window.jQuery = require('jquery');
 require('../node_modules/materialize-css/dist/js/materialize.min.js');
 
-exports.plugins = {};
-exports.buttons = {};
-exports.colorSchemes = [];
+window.plugins = {};
+window.buttons = {};
+window.colorSchemes = [];
 
-let byId = exports.byId = id => document.getElementById(id);
-let byClass = exports.byClass = className => document.getElementsByClassName(className);
-let byQSelect = exports.byQSelect = selector => document.querySelector(selector);
+window.byId = id => document.getElementById(id);
+window.byClass = className => document.getElementsByClassName(className);
+window.byQSelect = selector => document.querySelector(selector);
 
-let capitalize = exports.capitalize = string => string.charAt(0).toUpperCase() + string.substr(1);
-let hasClass = exports.hasClass = (element, className) => Array.from(element.classList).includes(className);
+window.capitalize = string => string.charAt(0).toUpperCase() + string.substr(1);
+window.hasClass = (element, className) => Array.from(element.classList).includes(className);
 
-exports.storage = new (function () {
+window.storage = new (function () {
   const self = this;
   
   /*
@@ -83,7 +83,7 @@ exports.storage = new (function () {
   };
 })();
 
-exports.activateScheme = function (scheme) {
+window.activateScheme = function (scheme) {
   let css = `
   .color {color: ${scheme.main} !important;}
   .bgcolor {background-color: ${scheme.main} !important;}
@@ -136,7 +136,7 @@ exports.activateScheme = function (scheme) {
   byId('dynamic-colors').innerHTML = css;
 };
 
-exports.toggleDiv = function (id, isElement) {
+window.toggleDiv = function (id, isElement) {
   if (!isElement) id = byId(id);
   if (hasClass(id, 'focused')) {
     id.classList.remove('focused');
@@ -147,7 +147,7 @@ exports.toggleDiv = function (id, isElement) {
   }
 };
 
-exports.loadSchemes = function (cb) {
+window.loadSchemes = function (cb) {
   storage.load('colorSchemes', function (err) {
     if (err || colorSchemes[0] === undefined || colorSchemes[0] === null) {
       colorSchemes = [{
@@ -179,7 +179,7 @@ exports.loadSchemes = function (cb) {
   });
 };
 
-exports.loadPlugins = function (callback) {
+window.loadPlugins = function (callback) {
   document.getElementsByTagName('head')[0].insertAdjacentHTML('beforeend', '<style id="plugin-css"></style>');
   window.pluginCss = byId('plugin-css');
   storage.load('plugins',

@@ -1,6 +1,6 @@
 'use strict';
 
-Object.assign(window, require('./global.js'));
+require('./global.js');
 const async = require('async');
 
 loadSchemes(() => {
