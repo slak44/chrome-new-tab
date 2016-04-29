@@ -13,7 +13,12 @@ setInterval(function () {
   if (panelId) byId('fade-featured-panel').innerHTML = byId('data-collection').children[panelId].innerHTML;
 }, timeUnit);
 
-document.addEventListener('mousemove', function (event) {
+function stopFade() {
   timeSinceLastMove = 0;
   overlay.classList.remove('fading');
-});
+}
+
+document.addEventListener('mousemove', stopFade);
+document.addEventListener('keypress', stopFade);
+document.addEventListener('click', stopFade);
+document.addEventListener('scroll', stopFade);
