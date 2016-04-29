@@ -16,7 +16,7 @@ Run `npm install` then `gulp all`, and the extension can be found packed in the 
 - Run the bundler (`node bundler.js`), the first argument being the plugin folder, and the second being a path where the compiled file should be placed
 
 #### Using installed dependencies
-After a dependency is eval'd, whatever it exports is placed in the global scope, in a variable named after the package.  
+After a dependency is eval'd, whatever it exports is placed in the dependency object of the plugin (`window.dependencies[pluginName]`), in a variable named after the package.  
 For example, the dependency `hello`
 ```
 'use strict';
@@ -24,7 +24,8 @@ exports.say = who => console.log(`Hello, ${who}!`);
 ```
 can be used in plugin scripts like this:
 ```
-window.hello.say('world');
+let hello = window.dependencies[pluginName].hello;
+hello.say('world');
 ```
 
 #### List of views for inserting HTML/CSS
