@@ -13,6 +13,24 @@ const fs = require('fs');
 const cp = require('child_process');
 const async = require('async');
 
+gulp.task('materialize-bug-fix', function (done) {
+  const libLocation = `${__dirname}/node_modules/pickadate/lib/picker.js`;
+  const missingLibFile = `${__dirname}/node_modules/materialize-css/dist/js/picker.js`;
+  
+  fs.lstat(missingLibFile, function (err, stats) {
+    if (err || !stats.isSymbolicLink()) {
+      symlink();
+    } else done();
+  });
+  
+  function symlink() {
+    fs.symlink(libLocation, missingLibFile, function (err) {
+      if (err) throw err;
+      done();
+    });
+  }
+});
+
 gulp.task('js-src', function (callback) {
   gulp.src('src/*.js')
     .pipe(babel())
@@ -85,7 +103,7 @@ gulp.task('pack-plugins', function () {
     .pipe(gulp.dest('./build/dist/'));
 });
 
-gulp.task('default', sequence(['js-src', 'copy-src', 'copy-css', 'copy-fonts']));
+gulp.task('default', sequence(['materialize-bug-fix', 'js-src', 'copy-src', 'copy-css', 'copy-fonts']));
 
 gulp.task('all', sequence(['default', 'extension', 'plugins', 'pack-plugins']));
 

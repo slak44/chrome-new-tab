@@ -25,9 +25,6 @@
       "es2015"
     ]
   },
-  "scripts": {
-    "install": "ln -sr node_modules/pickadate/lib/picker.js node_modules/materialize-css/dist/js/picker.js"
-  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/slak44/ChromeNewTab.git"
