@@ -20,5 +20,6 @@ function stopFade() {
 
 document.addEventListener('mousemove', stopFade);
 document.addEventListener('keypress', stopFade);
+document.addEventListener('input', stopFade);
 document.addEventListener('click', stopFade);
 document.addEventListener('scroll', stopFade);
