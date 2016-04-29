@@ -93,13 +93,13 @@ function evaluate(event) {
     }
     oldElem.classList.remove('current-text');
     byId('repl-window').insertAdjacentHTML('beforeend', `
-    <span class="result-text">${result}</span>
-    <span class="current-text"></span>
+      <span class="result-text">${result}</span>
+      <span class="current-text"></span>
     `);
     let oldHistory = byClass('history-selected')[0];
     if (oldHistory) oldHistory.classList.remove('history-selected');
     byId('repl-history').insertAdjacentHTML('beforeend', `
-    <span class="history-selected">${result}</span>
+      <span class="history-selected">${result}</span>
     `);
     let historyElem = byClass('history-selected')[0];
     historyElem.addEventListener('click', event => {
