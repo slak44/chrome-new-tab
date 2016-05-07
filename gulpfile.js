@@ -22,7 +22,7 @@ gulp.task('materialize-bug-fix', function (done) {
       done(err);
       return;
     }
-    if (err.code === 'ENOENT' || !stats.isSymbolicLink()) {
+    if ((err && err.code === 'ENOENT') || !stats.isSymbolicLink()) {
       symlink();
     } else done();
   });
