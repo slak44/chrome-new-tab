@@ -9,7 +9,7 @@
   top: 60px;
   bottom: 60px;
   left: 10px;
-  overflow: scroll;
+  overflow: auto;
 }
 #repl-window span:not(:first-child) {
   height: 20px;
@@ -23,7 +23,7 @@
   top: 60px;
   bottom: 60px;
   right: 10px;
-  overflow: scroll;
+  overflow: auto;
 }
 #repl-history span:not(:first-child) {
   cursor: pointer;
