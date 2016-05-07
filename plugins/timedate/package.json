@@ -1,14 +1,35 @@
 {
   "pluginName": "Date and Time",
-  "version": "2.0.1",
+  "version": "3.0.0",
   "description": "Displays time and date",
   "author": "Slak44",
-  "preserveSettings": true,
+  "preserveSettings": false,
   "settings": [
     {
       "name": "Position",
       "desc": "The text will be inserted after this many elements",
       "type": "number",
+      "value": "",
+      "isVisible": true
+    },
+    {
+      "name": "Time Locale",
+      "desc": "A BCP 47 language tag, for example 'de', 'fr', 'en-GB', 'intl', 'en-US', 'ro-RO'",
+      "type": "text",
+      "value": "",
+      "isVisible": true
+    },
+    {
+      "name": "Date Locale",
+      "desc": "A BCP 47 language tag, for example 'de', 'fr', 'en-GB', 'intl', 'en-US', 'ro-RO'",
+      "type": "text",
+      "value": "",
+      "isVisible": true
+    },
+    {
+      "name": "Weekday Locale",
+      "desc": "A BCP 47 language tag, for example 'de', 'fr', 'en-GB', 'intl', 'en-US', 'ro-RO'",
+      "type": "text",
       "value": "",
       "isVisible": true
     }
