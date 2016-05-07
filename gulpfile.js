@@ -35,30 +35,26 @@ gulp.task('materialize-bug-fix', function (done) {
   }
 });
 
-gulp.task('js-src', function (callback) {
-  gulp.src('src/*.js')
+gulp.task('js-src', function () {
+  return gulp.src('src/*.js')
     .pipe(babel())
     .pipe(gulpBrowser.browserify())
     .pipe(gulp.dest('./build/src'));
-  callback();
 });
 
-gulp.task('copy-src', function (callback) {
-  gulp.src(['src/*', '!src/*.js'])
+gulp.task('copy-src', function () {
+  return gulp.src(['src/*', '!src/*.js'])
     .pipe(copy('./build/src', {prefix: 1}));
-  callback();
 });
 
-gulp.task('copy-css', function (callback) {
-  gulp.src('node_modules/materialize-css/dist/css/materialize.min.css')
+gulp.task('copy-css', function () {
+  return gulp.src('node_modules/materialize-css/dist/css/materialize.min.css')
     .pipe(copy('./build/src', {prefix: 4}));
-  callback();
 });
 
-gulp.task('copy-fonts', function (callback) {
-  gulp.src('node_modules/materialize-css/dist/fonts/roboto/*')
+gulp.task('copy-fonts', function () {
+  return gulp.src('node_modules/materialize-css/dist/fonts/roboto/*')
     .pipe(copy('./build/src/fonts/roboto', {prefix: 5}));
-  callback();
 });
 
 gulp.task('extension', function () {
