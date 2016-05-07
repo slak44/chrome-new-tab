@@ -1,17 +1,9 @@
 'use strict';
 
 const gulp = require('gulp');
-const babel = require('gulp-babel');
-const crx = require('gulp-crx-pack');
 const sequence = require('gulp-sequence');
 const copy = require('gulp-copy');
-const gulpBrowser = require('gulp-browser');
-const gulpBump = require('gulp-bump');
-const zip = require('gulp-zip');
-const merge = require('merge-stream');
 const fs = require('fs');
-const cp = require('child_process');
-const async = require('async');
 
 gulp.task('materialize-bug-fix', function (done) {
   const libLocation = `${__dirname}/node_modules/pickadate/lib/picker.js`;
@@ -36,6 +28,8 @@ gulp.task('materialize-bug-fix', function (done) {
 });
 
 gulp.task('js-src', function () {
+  const babel = require('gulp-babel');
+  const gulpBrowser = require('gulp-browser');
   return gulp.src('src/*.js')
     .pipe(babel())
     .pipe(gulpBrowser.browserify())
@@ -58,6 +52,7 @@ gulp.task('copy-fonts', function () {
 });
 
 gulp.task('extension', function () {
+  const crx = require('gulp-crx-pack');
   let pKey;
   try {
     // This doesn't have to exist
@@ -74,6 +69,8 @@ gulp.task('extension', function () {
 });
 
 gulp.task('plugins', function (done) {
+  const cp = require('child_process');
+  const async = require('async');
   fs.readdir('./plugins', function (err, folders) {
     if (err) throw err;
     let bundleTasks = folders.map(folderName => function (callback) {
@@ -98,6 +95,7 @@ gulp.task('plugins', function (done) {
 });
 
 gulp.task('pack-plugins', function () {
+  const zip = require('gulp-zip');
   return gulp.src('./build/plugins/*')
     .pipe(zip('plugins.zip'))
     .pipe(gulp.dest('./build/dist/'));
@@ -108,6 +106,8 @@ gulp.task('default', sequence(['materialize-bug-fix', 'js-src', 'copy-src', 'cop
 gulp.task('all', sequence(['default', 'extension', 'plugins', 'pack-plugins']));
 
 function createVersionTask(bumpType) {
+  const merge = require('merge-stream');
+  const gulpBump = require('gulp-bump');
   return function () {
     let packageJson =
     gulp.src('./package.json')
