@@ -18,7 +18,11 @@ gulp.task('materialize-bug-fix', function (done) {
   const missingLibFile = `${__dirname}/node_modules/materialize-css/dist/js/picker.js`;
   
   fs.lstat(missingLibFile, function (err, stats) {
-    if (err || !stats.isSymbolicLink()) {
+    if (err && err.code !== 'ENOENT') {
+      done(err);
+      return;
+    }
+    if (err.code === 'ENOENT' || !stats.isSymbolicLink()) {
       symlink();
     } else done();
   });
