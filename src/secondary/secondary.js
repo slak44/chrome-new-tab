@@ -3,6 +3,7 @@
 require('./src/global.js');
 const async = require('async');
 const buttonsUtil = require('./src/secondary/buttons.js');
+const pluginsUtil = require('./src/secondary/plugins.js');
 
 let activeSchemeIndex = 0;
 loadSchemes(() => {
@@ -15,16 +16,7 @@ loadSchemes(() => {
 
 byId('floating-save-button').addEventListener('click', function (evt) {
   if (hasClass(byId('settings-tab'), 'focused')) {
-    let currentPlugin = byQSelect('.plugin-container.focused');
-    // Plugin container ids have the form `${pluginName}-container`
-    const charsToRemove = '-container'.length;
-    let cpId = currentPlugin.id.slice(0, -charsToRemove);
-    const childrenToIgnore = 2; // Ignore the title and the description
-    Array.from(currentPlugin.children).forEach(function (settingDiv, i, children) {
-      if (i < childrenToIgnore) return;
-      plugins[cpId].settings[i - childrenToIgnore].value = settingDiv.children[0].value;
-    });
-    storage.store('plugins');
+    pluginsUtil.saveFocusedPluginSettings();
   } else if (hasClass(byId('buttons-tab'), 'focused')) {
     let id = byId('button-text').getAttribute('data-button-id');
     if (id === '') return;
@@ -49,7 +41,7 @@ byId('floating-save-button').addEventListener('click', function (evt) {
 function showTab(id) {
   return function (e) {
     e.preventDefault();
-    toggleDiv(byQSelect('.data-tab.focused'), true);
+    toggleDiv(byQSelect('.data-tab.focused'));
     toggleDiv(id);
   };
 }
@@ -104,13 +96,10 @@ byId('restore-data').addEventListener('click', function (event) {
 });
 
 byId('add-plugin').addEventListener('click', function (e) {
-  byId('file-input').addEventListener('change', (e) => addPlugin(e), false);
-  byId('file-input').click();
+  pluginsUtil.addFromFile();
 });
 byId('remove-plugin').addEventListener('click', function (e) {
-  delete plugins[prompt('Plugin to remove:')];
-  storage.store('plugins');
-  window.location.reload();
+  pluginsUtil.promptRemoval();
 });
 
 byId('add-scheme').addEventListener('click', function (e) {
@@ -150,7 +139,7 @@ function loadButtons(callback) {
 
 function runPlugins() {
   Object.keys(plugins).forEach(pluginName => {
-    addPluginData(plugins[pluginName], !byClass('plugin-container').length); // Only the first addition gets focus
+    pluginsUtil.insertPluginHTML(plugins[pluginName], !byClass('plugin-container').length); // Only the first addition gets focus
     try {
       if (plugins[pluginName].html.secondary) Object.keys(plugins[pluginName].html.secondary).forEach(function (selector, i, array) {
         byQSelect(selector).insertAdjacentHTML('beforeend', array[selector]);
@@ -160,46 +149,6 @@ function runPlugins() {
     } catch (err) {
       console.error(`Execution for ${pluginName} failed: `, err);
     }
-  });
-}
-
-function addPluginData(plugin, focus) {
-  byId('plugins-list').insertAdjacentHTML('beforeend',
-    `<li id="${plugin.name}">
-      <a href="#!">${plugin.name}</a>
-    </li>`
-  );
-  byId('settings-tab').insertAdjacentHTML('beforeend',
-    `<div id="${plugin.name}-container" class="plugin-container ${(focus ? 'focused' : 'unfocused')}"></div>`
-  );
-  let container = byId(plugin.name + '-container');
-  container.insertAdjacentHTML('beforeend',
-    `<h5 class="plugin-title">${plugin.name}</h5>
-    <p class="plugin-desc">
-      ${plugin.desc}
-      <br>
-      ${plugin.version} by ${plugin.author}
-    </p>`
-  );
-  if (plugin.settings) {
-    plugin.settings.forEach(function (setting, i, settings) {
-      if (!setting.isVisible) return;
-      container.insertAdjacentHTML('beforeend',
-        `<div class="input-field">
-          <input id="${setting.name}" placeholder="${setting.desc}" type="${setting.type}" value="${setting.value}" class="">
-          <label for="${setting.name}" class="active">${setting.name}</label>
-        </div>`
-      );
-    });
-  } else {
-    container.insertAdjacentHTML('beforeend', '<p>There isn\'t anything here</p>');
-  }
-  byId(plugin.name).addEventListener('click', function (evt) {
-    let container = byQSelect('.plugin-container.focused');
-    toggleDiv(container, true);
-    container.style.display = 'none';
-    byId(plugin.name + '-container').style.display = 'block';
-    toggleDiv(plugin.name + '-container');
   });
 }
 
@@ -239,44 +188,4 @@ function loadSchemesAndUI(callback) {
     colorSchemes.forEach(eachScheme);
     callback();
   }, 0);
-}
-
-// Set to true using devtools to constantly read and update a plugin automatically without refreshing the page
-window.persistentPluginReload = false;
-window.reloadTimeout = 1000;
-
-function addPlugin(event) {
-  let file = event.target.files[0];
-  function readCallback(err, plugin) {
-    if (err) {
-      alert(err.message);
-      throw err;
-    }
-    let oldPlugin = plugins[plugin.name];
-    if (plugin.init) eval(plugin.js.init);
-    // Use existing settings if possible
-    if (oldPlugin && plugin.preserveSettings) plugin.settings = oldPlugin.settings;
-    // TODO: check if settings have changed between versions and wipe them if so, disregarding this option
-    plugins[plugin.name] = plugin;
-    storage.store('plugins', storeCallback);
-  }
-  let storeCallback = (function () {
-    if (!window.persistentPluginReload) {
-      window.location.reload();
-    } else {
-      console.log(`Reload: ${this.file.name}`);
-      setTimeout(() => readPlugin(this.file, readCallback), window.reloadTimeout);
-    }
-  }).bind({file});
-  
-  readPlugin(file, readCallback);
-}
-
-function readPlugin(blob, callback) {
-  let reader = new FileReader();
-  reader.addEventListener('loadend', function (event) {
-    let plugin = JSON.parse(event.target.result);
-    callback(null, plugin);
-  });
-  reader.readAsText(blob);
 }

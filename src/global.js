@@ -138,14 +138,14 @@ window.activateScheme = function (scheme) {
   byId('dynamic-colors').innerHTML = css;
 };
 
-window.toggleDiv = function (id, isElement) {
-  if (!isElement) id = byId(id);
-  if (hasClass(id, 'focused')) {
-    id.classList.remove('focused');
-    id.classList.add('unfocused');
+window.toggleDiv = function (elem) {
+  if (!(elem instanceof HTMLElement)) elem = byId(elem);
+  if (hasClass(elem, 'focused')) {
+    elem.classList.remove('focused');
+    elem.classList.add('unfocused');
   } else {
-    id.classList.remove('unfocused');
-    id.classList.add('focused');
+    elem.classList.remove('unfocused');
+    elem.classList.add('focused');
   }
 };
 
