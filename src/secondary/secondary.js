@@ -8,11 +8,42 @@ const schemesUtil = require('./src/secondary/schemes.js');
 
 loadSchemes(() => {
   activateScheme(colorSchemes[0]);
-  async.parallel([loadButtons, loadPlugins, loadSchemesAndUI], function (err) {
-    if (err) throw err;
-    runPlugins();
-  });
+  colorSchemes.forEach(scheme => schemesUtil.insertPreviewHTML(scheme));
+  schemesUtil.initSchemesEventListeners();
 });
+async.parallel([loadButtons, loadPlugins], function (err) {
+  if (err) throw err;
+  runPlugins();
+});
+
+function loadButtons(callback) {
+  storage.load('buttons',
+  function (error) {
+    if (error || Object.keys(buttons).length === 0) {
+      buttons = {};
+      callback(error);
+      return;
+    }
+    buttonsUtil.activateDefaultButton();
+    buttonsUtil.initDropdown();
+    callback();
+  });
+}
+
+function runPlugins() {
+  Object.keys(plugins).forEach(pluginName => {
+    pluginsUtil.insertPluginHTML(plugins[pluginName], !byClass('plugin-container').length); // Only the first addition gets focus
+    try {
+      if (plugins[pluginName].html.secondary) Object.keys(plugins[pluginName].html.secondary).forEach(function (selector, i, array) {
+        byQSelect(selector).insertAdjacentHTML('beforeend', array[selector]);
+      });
+      if (plugins[pluginName].css.secondary) pluginCss.innerHTML += plugins[pluginName].css.secondary;
+      if (plugins[pluginName].js.secondary) eval(plugins[pluginName].js.secondary);
+    } catch (err) {
+      console.error(`Execution for ${pluginName} failed: `, err);
+    }
+  });
+}
 
 byId('floating-save-button').addEventListener('click', function (evt) {
   if (hasClass(byId('settings-tab'), 'focused')) {
@@ -105,40 +136,3 @@ byId('remove-buttons').addEventListener('click', function (event) {
   event.preventDefault();
   buttonsUtil.removeButton();
 });
-
-function loadButtons(callback) {
-  storage.load('buttons',
-  function (error) {
-    if (error || Object.keys(buttons).length === 0) {
-      buttons = {};
-      callback(error);
-      return;
-    }
-    buttonsUtil.activateDefaultButton();
-    buttonsUtil.initDropdown();
-    callback();
-  });
-}
-
-function runPlugins() {
-  Object.keys(plugins).forEach(pluginName => {
-    pluginsUtil.insertPluginHTML(plugins[pluginName], !byClass('plugin-container').length); // Only the first addition gets focus
-    try {
-      if (plugins[pluginName].html.secondary) Object.keys(plugins[pluginName].html.secondary).forEach(function (selector, i, array) {
-        byQSelect(selector).insertAdjacentHTML('beforeend', array[selector]);
-      });
-      if (plugins[pluginName].css.secondary) pluginCss.innerHTML += plugins[pluginName].css.secondary;
-      if (plugins[pluginName].js.secondary) eval(plugins[pluginName].js.secondary);
-    } catch (err) {
-      console.error(`Execution for ${pluginName} failed: `, err);
-    }
-  });
-}
-
-function loadSchemesAndUI(callback) {
-  setTimeout(() => {
-    colorSchemes.forEach(scheme => schemesUtil.insertPreviewHTML(scheme));
-    schemesUtil.initSchemesEventListeners();
-    callback();
-  }, 0);
-}
