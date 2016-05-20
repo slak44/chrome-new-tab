@@ -20,15 +20,7 @@ byId('floating-save-button').addEventListener('click', function (evt) {
   } else if (hasClass(byId('buttons-tab'), 'focused')) {
     let id = byId('button-text').getAttribute('data-button-id');
     if (id === '') return;
-    buttons[id] = {
-      text: byId('button-text').value,
-      href: byId('button-link').value,
-      imagePath: byId('button-image').value,
-      position: byId('button-position').value,
-      hotkey: byId('button-hotkey').value.toUpperCase(),
-      openInNew: Boolean(byId('button-replace-tab').checked)
-    };
-    storage.store('buttons');
+    buttonsUtil.saveFocusedButton(id);
   } else if (hasClass(byId('color-scheme-tab'), 'focused')) {
     // Switch the active one at the top
     let originalScheme = colorSchemes[0];

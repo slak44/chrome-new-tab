@@ -31,6 +31,18 @@ function removeButton() {
   storage.store('buttons');
 }
 
+function saveFocusedButton(id) {
+  buttons[id] = {
+    text: byId('button-text').value,
+    href: byId('button-link').value,
+    imagePath: byId('button-image').value,
+    position: byId('button-position').value,
+    hotkey: byId('button-hotkey').value.toUpperCase(),
+    openInNew: Boolean(byId('button-replace-tab').checked)
+  };
+  storage.store('buttons');
+}
+
 function initDropdown() {
   let dropdown = byId('buttons-list');
   for (let id in buttons) {
@@ -65,5 +77,6 @@ module.exports = {
   removeButton,
   initDropdown,
   setActiveButton,
-  activateDefaultButton
+  activateDefaultButton,
+  saveFocusedButton
 };
