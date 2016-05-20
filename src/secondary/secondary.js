@@ -2,6 +2,7 @@
 
 require('./src/global.js');
 const async = require('async');
+const buttonsUtil = require('./src/secondary/buttons.js');
 
 let activeSchemeIndex = 0;
 loadSchemes(() => {
@@ -124,76 +125,27 @@ byId('remove-scheme').addEventListener('click', function (e) {
   storage.store('colorSchemes');
 });
 
-byId('add-buttons').addEventListener('click', function (e) {
-  e.preventDefault();
-  let id = prompt('Input a unique identifier for the button:');
-  if (id === null) return;
-  if (buttons[id] !== undefined && buttons[id] !== null) {
-    alert('Identifier already exists.');
-    return;
-  }
-  buttons[id] = {
-    text: '',
-    href: '',
-    imagePath: '',
-    hotkey: '',
-    order: '',
-    checked: false
-  };
-  setCurrentButton(buttons[id], id);
-  byId('buttons-list').insertAdjacentHTML('beforeend',
-  `<li id="${id}">
-    <a href="#!">${id}</a>
-  </li>`
-  );
+byId('add-buttons').addEventListener('click', function (event) {
+  event.preventDefault();
+  buttonsUtil.createNewButton();
 });
-byId('remove-buttons').addEventListener('click', function (e) {
-  e.preventDefault();
-  if (!confirm('Are you sure you want to delete this button?')) return;
-  let id = byId('button-text').getAttribute('data-button-id');
-  delete buttons[id];
-  byId(id).parentNode.removeChild(byId(id));
-  setDefaultButton();
-  storage.store('buttons');
+byId('remove-buttons').addEventListener('click', function (event) {
+  event.preventDefault();
+  buttonsUtil.removeButton();
 });
 
-function loadButtons(cb) {
+function loadButtons(callback) {
   storage.load('buttons',
   function (error) {
     if (error || Object.keys(buttons).length === 0) {
       buttons = {};
-      cb(error);
+      callback(error);
       return;
     }
-    setDefaultButton();
-    let dropdown = byId('buttons-list');
-    for (let id in buttons) {
-      dropdown.insertAdjacentHTML('beforeend',
-        `<li id="${id}">
-          <a href="#!">${id}</a>
-        </li>`
-      );
-      byId(id).addEventListener('click', event => setCurrentButton(buttons[id], id));
-    }
-    cb();
+    buttonsUtil.activateDefaultButton();
+    buttonsUtil.initDropdown();
+    callback();
   });
-}
-
-function setCurrentButton(buttonData, id) {
-  byId('button-name').innerText = id;
-  byId('button-text').setAttribute('data-button-id', id);
-  byId('button-text').value = buttonData.text;
-  byId('button-link').value = buttonData.href;
-  byId('button-image').value = buttonData.imagePath;
-  byId('button-position').value = buttonData.position;
-  byId('button-hotkey').value = buttonData.hotkey;
-  byId('button-replace-tab').checked = buttonData.openInNew;
-  Materialize.updateTextFields();
-}
-
-function setDefaultButton() {
-  let firstButtonId = Object.keys(buttons)[0];
-  if (firstButtonId !== undefined) setCurrentButton(buttons[firstButtonId], firstButtonId);
 }
 
 function runPlugins() {
