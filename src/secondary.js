@@ -298,31 +298,31 @@ function loadSchemesAndUI(callback) {
 
 function addButtonConfig(buttonId) {
   byId('buttons-tab').insertAdjacentHTML('beforeend',
-  `<div class="input-field">
-  <input id="buttonText" type="text" class="" data-button-id="${buttonId}" value="${buttons[buttonId].text}">
-  <label for="buttonText" class="active">Text</label>
-  </div>
-  <div class="input-field">
-  <input id="buttonLink" type="url" class="validate" value="${buttons[buttonId].href}">
-  <label for="buttonLink" class="active">Link</label>
-  </div>
-  <div class="input-field">
-  <input id="buttonImage" type="url" class="validate" value="${buttons[buttonId].imagePath}">
-  <label for="buttonImage" class="active">Image</label>
-  </div>
-  <div class="input-field">
-  <input id="buttonPosition" type="number" class="" value="${buttons[buttonId].position}">
-  <label for="buttonPosition" class="active">Order</label>
-  </div>
-  <div class="input-field">
-  <input id="buttonHotkey" type="text" maxlength="1" class="" value="${buttons[buttonId].hotkey}">
-  <label for="buttonHotkey" class="active">Hotkey</label>
-  </div>
-  <div class="input-field left align-left">
-  <input id="buttonOpenInNew" type="checkbox" class="" checked="${buttons[buttonId].hotkey}">
-  <label for="buttonOpenInNew" class="active">Replace current tab</label>
-  </div>`
-);
+    `<div class="input-field">
+    <input id="buttonText" type="text" class="" data-button-id="${buttonId}" value="${buttons[buttonId].text}">
+    <label for="buttonText" class="active">Text</label>
+    </div>
+    <div class="input-field">
+    <input id="buttonLink" type="url" class="validate" value="${buttons[buttonId].href}">
+    <label for="buttonLink" class="active">Link</label>
+    </div>
+    <div class="input-field">
+    <input id="buttonImage" type="url" class="validate" value="${buttons[buttonId].imagePath}">
+    <label for="buttonImage" class="active">Image</label>
+    </div>
+    <div class="input-field">
+    <input id="buttonPosition" type="number" class="" value="${buttons[buttonId].position}">
+    <label for="buttonPosition" class="active">Order</label>
+    </div>
+    <div class="input-field">
+    <input id="buttonHotkey" type="text" maxlength="1" class="" value="${buttons[buttonId].hotkey}">
+    <label for="buttonHotkey" class="active">Hotkey</label>
+    </div>
+    <div class="input-field left align-left">
+    <input id="buttonOpenInNew" type="checkbox" class="" checked="${buttons[buttonId].hotkey}">
+    <label for="buttonOpenInNew" class="active">Replace current tab</label>
+    </div>`
+  );
 }
 
 // Set to true using devtools to constantly read and update a plugin automatically without refreshing the page
