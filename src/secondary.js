@@ -143,9 +143,9 @@ byId('add-buttons').addEventListener('click', function (e) {
   setCurrentButton(buttons[id], id);
   byId('buttons-list').insertAdjacentHTML('beforeend',
   `<li id="${id}">
-  <a href="#!">${id}</a>
+    <a href="#!">${id}</a>
   </li>`
-);
+  );
 });
 byId('remove-buttons').addEventListener('click', function (e) {
   e.preventDefault();
@@ -214,7 +214,7 @@ function runPlugins() {
 function addPluginData(plugin, focus) {
   byId('plugins-list').insertAdjacentHTML('beforeend',
     `<li id="${plugin.name}">
-    <a href="#!">${plugin.name}</a>
+      <a href="#!">${plugin.name}</a>
     </li>`
   );
   byId('settings-tab').insertAdjacentHTML('beforeend',
@@ -224,9 +224,9 @@ function addPluginData(plugin, focus) {
   container.insertAdjacentHTML('beforeend',
     `<h5 class="plugin-title">${plugin.name}</h5>
     <p class="plugin-desc">
-    ${plugin.desc}
-    <br>
-    ${plugin.version} by ${plugin.author}
+      ${plugin.desc}
+      <br>
+      ${plugin.version} by ${plugin.author}
     </p>`
   );
   if (plugin.settings) {
@@ -234,8 +234,8 @@ function addPluginData(plugin, focus) {
       if (!setting.isVisible) return;
       container.insertAdjacentHTML('beforeend',
         `<div class="input-field">
-        <input id="${setting.name}" placeholder="${setting.desc}" type="${setting.type}" value="${setting.value}" class="">
-        <label for="${setting.name}" class="active">${setting.name}</label>
+          <input id="${setting.name}" placeholder="${setting.desc}" type="${setting.type}" value="${setting.value}" class="">
+          <label for="${setting.name}" class="active">${setting.name}</label>
         </div>`
       );
     });
