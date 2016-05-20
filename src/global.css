@@ -84,6 +84,11 @@ img {
 	width: 100%;
 }
 
+#button-name {
+  font-weight: 300;
+  margin-bottom: 30px;
+}
+
 #default-pane {
   z-index: 10050;
 }

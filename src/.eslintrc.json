@@ -22,6 +22,8 @@
     "capitalize": false,
     
     "chrome": true,
-    "storage": false
+    "storage": false,
+    
+    "Materialize": false
   }
 }

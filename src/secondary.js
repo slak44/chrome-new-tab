@@ -25,15 +25,15 @@ byId('floating-save-button').addEventListener('click', function (evt) {
     });
     storage.store('plugins');
   } else if (hasClass(byId('buttons-tab'), 'focused')) {
-    let id = byId('buttonText').getAttribute('data-button-id');
+    let id = byId('button-text').getAttribute('data-button-id');
     if (id === '') return;
     buttons[id] = {
-      text: byId('buttonText').value,
-      href: byId('buttonLink').value,
-      imagePath: byId('buttonImage').value,
-      position: byId('buttonPosition').value,
-      hotkey: byId('buttonHotkey').value.toUpperCase(),
-      openInNew: Boolean(byId('buttonOpenInNew').checked)
+      text: byId('button-text').value,
+      href: byId('button-link').value,
+      imagePath: byId('button-image').value,
+      position: byId('button-position').value,
+      hotkey: byId('button-hotkey').value.toUpperCase(),
+      openInNew: Boolean(byId('button-replace-tab').checked)
     };
     storage.store('buttons');
   } else if (hasClass(byId('color-scheme-tab'), 'focused')) {
@@ -150,10 +150,10 @@ byId('add-buttons').addEventListener('click', function (e) {
 byId('remove-buttons').addEventListener('click', function (e) {
   e.preventDefault();
   if (!confirm('Are you sure you want to delete this button?')) return;
-  let id = byId('buttonText').getAttribute('data-button-id');
+  let id = byId('button-text').getAttribute('data-button-id');
   delete buttons[id];
   byId(id).parentNode.removeChild(byId(id));
-  setCurrentButton(getFirstButton());
+  setDefaultButton();
   storage.store('buttons');
 });
 
@@ -165,12 +165,12 @@ function loadButtons(cb) {
       cb(error);
       return;
     }
-    addButtonConfig(Object.keys(buttons)[0]);
+    setDefaultButton();
     let dropdown = byId('buttons-list');
     for (let id in buttons) {
       dropdown.insertAdjacentHTML('beforeend',
         `<li id="${id}">
-        <a href="#!">${id}</a>
+          <a href="#!">${id}</a>
         </li>`
       );
       byId(id).addEventListener('click', event => setCurrentButton(buttons[id], id));
@@ -180,27 +180,20 @@ function loadButtons(cb) {
 }
 
 function setCurrentButton(buttonData, id) {
-  if (byId('buttonText') === null) addButtonConfig(id);
-  byId('buttonText').setAttribute('data-button-id', id);
-  byId('buttonText').value = buttonData.text;
-  byId('buttonLink').value = buttonData.href;
-  byId('buttonImage').value = buttonData.imagePath;
-  byId('buttonPosition').value = buttonData.position;
-  byId('buttonHotkey').value = buttonData.hotkey;
-  byId('buttonOpenInNew').checked = buttonData.openInNew;
+  byId('button-name').innerText = id;
+  byId('button-text').setAttribute('data-button-id', id);
+  byId('button-text').value = buttonData.text;
+  byId('button-link').value = buttonData.href;
+  byId('button-image').value = buttonData.imagePath;
+  byId('button-position').value = buttonData.position;
+  byId('button-hotkey').value = buttonData.hotkey;
+  byId('button-replace-tab').checked = buttonData.openInNew;
+  Materialize.updateTextFields();
 }
 
-function getFirstButton() {
-  if (buttons === undefined || Object.keys(buttons).length === 0) return {
-    id: '',
-    text: '',
-    href: '',
-    imagePath: '',
-    hotkey: '',
-    order: '',
-    checked: false
-  };
-  else return buttons[Object.keys(buttons)[0]];
+function setDefaultButton() {
+  let firstButtonId = Object.keys(buttons)[0];
+  if (firstButtonId !== undefined) setCurrentButton(buttons[firstButtonId], firstButtonId);
 }
 
 function runPlugins() {
@@ -294,35 +287,6 @@ function loadSchemesAndUI(callback) {
     colorSchemes.forEach(eachScheme);
     callback();
   }, 0);
-}
-
-function addButtonConfig(buttonId) {
-  byId('buttons-tab').insertAdjacentHTML('beforeend',
-    `<div class="input-field">
-    <input id="buttonText" type="text" class="" data-button-id="${buttonId}" value="${buttons[buttonId].text}">
-    <label for="buttonText" class="active">Text</label>
-    </div>
-    <div class="input-field">
-    <input id="buttonLink" type="url" class="validate" value="${buttons[buttonId].href}">
-    <label for="buttonLink" class="active">Link</label>
-    </div>
-    <div class="input-field">
-    <input id="buttonImage" type="url" class="validate" value="${buttons[buttonId].imagePath}">
-    <label for="buttonImage" class="active">Image</label>
-    </div>
-    <div class="input-field">
-    <input id="buttonPosition" type="number" class="" value="${buttons[buttonId].position}">
-    <label for="buttonPosition" class="active">Order</label>
-    </div>
-    <div class="input-field">
-    <input id="buttonHotkey" type="text" maxlength="1" class="" value="${buttons[buttonId].hotkey}">
-    <label for="buttonHotkey" class="active">Hotkey</label>
-    </div>
-    <div class="input-field left align-left">
-    <input id="buttonOpenInNew" type="checkbox" class="" checked="${buttons[buttonId].hotkey}">
-    <label for="buttonOpenInNew" class="active">Replace current tab</label>
-    </div>`
-  );
 }
 
 // Set to true using devtools to constantly read and update a plugin automatically without refreshing the page
