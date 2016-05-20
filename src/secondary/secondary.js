@@ -4,8 +4,8 @@ require('./src/global.js');
 const async = require('async');
 const buttonsUtil = require('./src/secondary/buttons.js');
 const pluginsUtil = require('./src/secondary/plugins.js');
+const schemesUtil = require('./src/secondary/schemes.js');
 
-let activeSchemeIndex = 0;
 loadSchemes(() => {
   activateScheme(colorSchemes[0]);
   async.parallel([loadButtons, loadPlugins, loadSchemesAndUI], function (err) {
@@ -22,11 +22,7 @@ byId('floating-save-button').addEventListener('click', function (evt) {
     if (id === '') return;
     buttonsUtil.saveFocusedButton(id);
   } else if (hasClass(byId('color-scheme-tab'), 'focused')) {
-    // Switch the active one at the top
-    let originalScheme = colorSchemes[0];
-    colorSchemes[0] = colorSchemes[activeSchemeIndex];
-    colorSchemes[activeSchemeIndex] = originalScheme;
-    storage.store('colorSchemes');
+    schemesUtil.saveSelected();
   }
 });
 
@@ -98,12 +94,7 @@ byId('add-scheme').addEventListener('click', function (e) {
   alert('This feature is not yet implemented.'); // TODO
 });
 byId('remove-scheme').addEventListener('click', function (e) {
-  if (!confirm('Remove this scheme?')) return;
-  colorSchemes.splice(activeSchemeIndex, 1);
-  let schemeElement = byQSelect('#color-scheme-list > a.active');
-  schemeElement.parentNode.removeChild(schemeElement);
-  byId('color-scheme-list').children[0].classList.add('active');
-  storage.store('colorSchemes');
+  schemesUtil.removeSelected();
 });
 
 byId('add-buttons').addEventListener('click', function (event) {
@@ -145,39 +136,9 @@ function runPlugins() {
 }
 
 function loadSchemesAndUI(callback) {
-  function eachScheme(scheme, i, array) {
-    let htmlContent = `<a href="#!" class="collection-item color">${scheme.name}<div class="row top-margin">`;
-    function addColor(colorName, index, array) {
-      htmlContent += `<div style="background-color: ${scheme[colorName]};" class="col s1 color-sample"></div>`;
-    }
-    // Add dark/light
-    htmlContent += `<div style="background-color: ${scheme.isDark ? 'black' : 'white'};" class="col s1 color-sample"></div>`;
-    // Add dark colors from darkest
-    Object.keys(scheme).filter(e => e.startsWith('darken')).sort((a, b) => (b > a ? 1 : -1)).forEach(addColor);
-    // Add main color
-    htmlContent += `<div style="background-color: ${scheme.main};" class="col s1 color-sample"></div>`;
-    // Add light colors from least light
-    Object.keys(scheme).filter(e => e.startsWith('lighten')).sort().forEach(addColor);
-    // Split accent from main colors
-    htmlContent += '<br style="line-height: 75px;">';
-    // Add accent
-    Object.keys(scheme).filter(e => e.startsWith('accent')).sort().forEach(addColor);
-    
-    htmlContent += '</div></a>';
-    
-    byId('color-scheme-list').insertAdjacentHTML('beforeend', htmlContent);
-    Array.from(byId('color-scheme-list').children).forEach(function (schemeElement, i, arr) {
-      if (i === 0) schemeElement.classList.add('active');
-      schemeElement.addEventListener('click', function (evt) {
-        let actives = byQSelect('#color-scheme-list > a.active');
-        if (actives) actives.classList.remove('active');
-        schemeElement.classList.add('active');
-        activeSchemeIndex = i;
-      });
-    });
-  }
   setTimeout(() => {
-    colorSchemes.forEach(eachScheme);
+    colorSchemes.forEach(scheme => schemesUtil.insertPreviewHTML(scheme));
+    schemesUtil.initSchemesEventListeners();
     callback();
   }, 0);
 }
