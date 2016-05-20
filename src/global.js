@@ -149,35 +149,34 @@ window.toggleDiv = function (elem) {
   }
 };
 
-window.loadSchemes = function (cb) {
+window.loadSchemes = function (callback) {
   storage.load('colorSchemes', function (err) {
     if (err || colorSchemes[0] === undefined || colorSchemes[0] === null) {
       colorSchemes = [{
-        // Orange is default
+        name: 'Light Orange with Lime Accents',
+        isDark: false,
+        
         lighten5: '#fff3e0',
         lighten4: '#ffe0b2',
         lighten3: '#ffcc80',
         lighten2: '#ffb74d',
         lighten1: '#ffa726',
         
-        main: 		'#ff9800',
+        main: '#ff9800',
         
-        darken1: 	'#fb8c00',
-        darken2: 	'#f57c00',
-        darken3: 	'#ef6c00',
-        darken4: 	'#e65100',
+        darken1: '#fb8c00',
+        darken2: '#f57c00',
+        darken3: '#ef6c00',
+        darken4: '#e65100',
         
-        accent1: 	'#F4FF81',
-        accent2: 	'#EEFF41',
-        accent3: 	'#C6FF00',
-        accent4: 	'#AEEA00',
-        
-        isDark: false,
-        name: 'Light Orange, Lime Accents'
+        accent1: '#F4FF81',
+        accent2: '#EEFF41',
+        accent3: '#C6FF00',
+        accent4: '#AEEA00'
       }];
       storage.store('colorSchemes');
     }
-    cb();
+    callback();
   });
 };
 
