@@ -1,6 +1,6 @@
 'use strict';
 
-require('./global.js');
+require('./src/global.js');
 const async = require('async');
 
 loadSchemes(() => {
@@ -64,7 +64,7 @@ function loadButtons(callback) {
   storage.load('buttons',
   function (error) {
     if (error) {
-      createButton({text: 'Configure buttons here', href: '/secondary.html'});
+      createButton({text: 'Configure buttons here', href: '/secondary/secondary.html'});
     } else {
       let orderedButtons = [];
       for (let i in buttons) orderedButtons.push(buttons[i]);

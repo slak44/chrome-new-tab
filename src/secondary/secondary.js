@@ -1,6 +1,6 @@
 'use strict';
 
-require('./global.js');
+require('./src/global.js');
 const async = require('async');
 
 let activeSchemeIndex = 0;

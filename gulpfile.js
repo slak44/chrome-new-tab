@@ -7,7 +7,7 @@ const fs = require('fs');
 
 gulp.task('materialize-bug-fix', function (done) {
   const libLocation = `${__dirname}/node_modules/pickadate/lib/picker.js`;
-  const missingLibFile = `${__dirname}/node_modules/materialize-css/dist/js/picker.js`;
+  const missingLibFile = `${__dirname}/node_modules/materialize-css/bin/picker.js`;
   
   fs.lstat(missingLibFile, function (err, stats) {
     if (err && err.code !== 'ENOENT') {
@@ -30,14 +30,14 @@ gulp.task('materialize-bug-fix', function (done) {
 gulp.task('js-src', function () {
   const babel = require('gulp-babel');
   const gulpBrowser = require('gulp-browser');
-  return gulp.src('src/*.js')
+  return gulp.src(['src/*.js', 'src/*/*.js'], {base: './'})
     .pipe(babel())
     .pipe(gulpBrowser.browserify())
-    .pipe(gulp.dest('./build/src'));
+    .pipe(gulp.dest('./build/'));
 });
 
 gulp.task('copy-src', function () {
-  return gulp.src(['src/*', '!src/*.js'])
+  return gulp.src(['src/*/*', 'src/*', '!src/*.js', '!src/*/*.js'])
     .pipe(copy('./build/src', {prefix: 1}));
 });
 

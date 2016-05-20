@@ -3,7 +3,7 @@
 window.dependencies = {};
 
 window.jQuery = require('jquery');
-require('../node_modules/materialize-css/dist/js/materialize.min.js');
+require('materialize-css');
 
 window.plugins = {};
 window.buttons = {};
