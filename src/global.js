@@ -85,6 +85,15 @@ window.storage = new (function () {
   };
 })();
 
+window.PluginUtil = function (pluginName) {
+  /*
+    Get the value of a setting by its name.
+  */
+  this.getSetting = function (settingName) {
+    return plugins[pluginName].settings.filter(settingObj => settingObj.name === settingName)[0].value;
+  };
+};
+
 window.activateScheme = function (scheme) {
   let css = `
   .color {color: ${scheme.main} !important;}

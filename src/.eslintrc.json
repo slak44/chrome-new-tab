@@ -5,6 +5,7 @@
     "activateScheme": false,
     "colorSchemes": true,
     
+    "PluginUtil": false,
     "loadPlugins": false,
     "plugins": true,
     "pluginCss": false,
