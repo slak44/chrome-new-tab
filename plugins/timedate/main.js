@@ -1,13 +1,14 @@
 'use strict';
+const util = new PluginUtil(pluginName);
 const timeUpdateInterval = 1000;
 const locales = {
-  time: plugins[pluginName].settings[1].value || 'intl',
-  date: plugins[pluginName].settings[2].value || 'intl',
-  weekday: plugins[pluginName].settings[3].value || 'intl'
+  time: util.getSetting('Time Locale') || 'intl',
+  date: util.getSetting('Date Locale') || 'intl',
+  weekday: util.getSetting('Weekday Locale') || 'intl'
 };
 
 addPanel({
-  position: plugins[pluginName].settings[0].value || 0,
+  position: util.getSetting('Position') || 0,
   htmlContent:
   `<li class="collection-item">
     <h5>

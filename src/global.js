@@ -92,6 +92,18 @@ window.PluginUtil = function (pluginName) {
   this.getSetting = function (settingName) {
     return plugins[pluginName].settings.filter(settingObj => settingObj.name === settingName)[0].value;
   };
+  
+  /*
+    Dynamically adds a plugin's css.
+  */
+  this.insertStyles = function (cssText) {
+    byId('plugin-css').innerHTML += cssText;
+  };
+  
+  /*
+    Shortcut to plugin dependencies.
+  */
+  this.deps = window.dependencies[pluginName];
 };
 
 window.activateScheme = function (scheme) {

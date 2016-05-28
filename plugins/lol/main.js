@@ -3,10 +3,10 @@ const DEBUG = false;
 const TEST_DATA_PATH = '';
 
 const httpStatusOk = 200;
+const util = new PluginUtil(pluginName);
 
-const pluginDeps = window.dependencies[pluginName];
-const async = pluginDeps.async;
-window.EventEmitter2 = pluginDeps.eventemitter2;
+const async = util.deps.async;
+window.EventEmitter2 = util.deps.eventemitter2;
 
 document.body.addEventListener('click', function () {
   chrome.permissions.request({
@@ -67,7 +67,7 @@ function getApiUtil(callback) {
           {requests: 10, time: 10, unit: 'seconds'},
           {requests: 500, time: 10, unit: 'minutes'}
         ],
-        plugins[pluginName].settings[2].value);
+        util.getSetting('Riot API Key'));
       callback(null, apiCaller);
     } else {
       callback(new Error(`Status code ${apiUtil.status}`));
@@ -78,7 +78,7 @@ function getApiUtil(callback) {
 }
 
 function getPlayerData(apiCaller, callback) {
-  apiCaller.getPlayerData(plugins[pluginName].settings[1].value, plugins[pluginName].settings[0].value, function (err, data) {
+  apiCaller.getPlayerData(util.getSetting('Region'), util.getSetting('Player Name'), function (err, data) {
     if (err) {
       callback(err);
       return;
@@ -89,7 +89,7 @@ function getPlayerData(apiCaller, callback) {
 }
 
 function getCurrentGame(apiCaller, callback) {
-  apiCaller.getCurrentGame(plugins[pluginName].settings[1].value, requests.playerByName.id, function (err, data) {
+  apiCaller.getCurrentGame(util.getSetting('Region'), requests.playerByName.id, function (err, data) {
     if (err) {
       if (err.toString().includes('404')) callback(new Error('Player not ingame'));
       else callback(err);
@@ -115,12 +115,12 @@ function addDataToPane(apiCaller, callback) {
 
 function addInfoPanel() {
   addPanel({
-    position: plugins[pluginName].settings[3].value || 0,
+    position: util.getSetting('Position') || 0,
     htmlContent:
     `<li class="collection-item">
       <h5>
         <a href="#" id="ingame-panel" class="valign-wrapper grey-text text-darken-4">
-          <span class="color accent-4">${plugins[pluginName].settings[0].value}</span>&nbsp;is ingame! <i class="material-icons valign">keyboard_arrow_right</i>
+          <span class="color accent-4">${util.getSetting('Player Name')}</span>&nbsp;is ingame! <i class="material-icons valign">keyboard_arrow_right</i>
         </a>
       </h5>
     </li>`

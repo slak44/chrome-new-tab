@@ -1,15 +1,15 @@
 'use strict';
 
-const fadeDelay = plugins[pluginName].settings[1].value;
+const util = new PluginUtil(pluginName);
 const timeUnit = 1000; // Second
 
 const overlay = byId('fade-overlay');
-const panelId = plugins[pluginName].settings[0].value;
+const panelId = util.getSetting('Featured Panel');
 let timeSinceLastMove = 0;
 
 setInterval(function () {
   timeSinceLastMove++;
-  if (timeSinceLastMove > fadeDelay) overlay.classList.add('fading');
+  if (timeSinceLastMove > util.getSetting('Fade Delay')) overlay.classList.add('fading');
   if (panelId) byId('fade-featured-panel').innerHTML = byId('data-collection').children[panelId].innerHTML;
 }, timeUnit);
 

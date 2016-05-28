@@ -1,7 +1,7 @@
 'use strict';
-const pluginDeps = window.dependencies[pluginName];
-let fx = pluginDeps['money'];
-let Qty = pluginDeps['js-quantities'];
+const util = new PluginUtil(pluginName);
+let fx = util.deps['money'];
+let Qty = util.deps['js-quantities'];
 
 // Get current exchange rates
 fx.base = 'EUR';
@@ -10,11 +10,11 @@ rates.onload = () => fx.rates = JSON.parse(rates.responseText).rates;
 rates.open('GET', 'https://api.fixer.io/latest');
 rates.send();
 
-pluginCss.innerHTML += `
-span.history-selected {
-  background-color: ${colorSchemes[0].accent4};
-}
-`;
+util.insertStyles(`
+  span.history-selected {
+    background-color: ${colorSchemes[0].accent4};
+  }
+`);
 function openInNewTab(url) {
   let anchor = document.createElement('a');
   anchor.href = url;

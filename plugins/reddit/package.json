@@ -1,6 +1,6 @@
 {
   "pluginName": "Reddit Karma Info",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "Displays reddit karma for given user",
   "author": "Slak44",
   "preserveSettings": true,
