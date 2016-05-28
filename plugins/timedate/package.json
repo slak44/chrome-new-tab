@@ -1,9 +1,9 @@
 {
   "pluginName": "Date and Time",
-  "version": "3.0.1",
+  "version": "3.0.2",
   "description": "Displays time and date",
   "author": "Slak44",
-  "preserveSettings": false,
+  "preserveSettings": true,
   "settings": [
     {
       "name": "Position",
