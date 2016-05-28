@@ -1,6 +1,6 @@
 'use strict';
 
-const fadeDelay = 10;
+const fadeDelay = plugins[pluginName].settings[1].value;
 const timeUnit = 1000; // Second
 
 const overlay = byId('fade-overlay');

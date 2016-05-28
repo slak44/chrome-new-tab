@@ -1,13 +1,20 @@
 {
   "pluginName": "Fade",
-  "version": "1.2.1",
+  "version": "1.3.0",
   "description": "Fade the page to black when inactive",
   "author": "Slak44",
-  "preserveSettings": true,
+  "preserveSettings": false,
   "settings": [
     {
       "name": "Featured Panel",
       "desc": "Pick a zero-indexed number to choose a panel or leave empty for nothing",
+      "type": "number",
+      "value": "",
+      "isVisible": true
+    },
+    {
+      "name": "Fade Delay",
+      "desc": "Delay until the screen starts fading in seconds",
       "type": "number",
       "value": "",
       "isVisible": true
