@@ -1,12 +1,12 @@
 {
   "pluginName": "Title",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "Adds a title to the main page",
   "author": "Slak44",
-  "preserveSettings": true,
+  "preserveSettings": false,
   "settings": [
     {
-      "name": "Title text",
+      "name": "Title Text",
       "desc": "The text to be displayed",
       "type": "text",
       "value": "",

@@ -1,8 +1,9 @@
 'use strict';
+let util = new PluginUtil(pluginName);
 addPanel({
-  position: plugins[pluginName].settings[1].value || 0,
+  position: util.getSetting('Position') || 0,
   htmlContent:
   `<li id="title" class="collection-item bold">
-    <h1>${plugins[pluginName].settings[0].value}</h1>
+    <h1>${util.getSetting('Title Text')}</h1>
   </li>`
 });
