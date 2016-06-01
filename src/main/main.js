@@ -69,12 +69,7 @@ function loadButtons(callback) {
       let orderedButtons = [];
       for (let i in buttons) orderedButtons.push(buttons[i]);
       orderedButtons.sort((a, b) => (Number(a.position) < Number(b.position) ? -1 : 1));
-      orderedButtons.forEach(e => createButton({
-        imagePath: e.imagePath,
-        href: e.href,
-        text: e.text,
-        openInNew: e.openInNew
-      }));
+      orderedButtons.forEach(e => createButton(e));
     }
     callback(null);
   });
