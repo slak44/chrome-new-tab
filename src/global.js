@@ -16,6 +16,9 @@ window.byQSelect = selector => document.querySelector(selector);
 window.capitalize = string => string.charAt(0).toUpperCase() + string.substr(1);
 window.hasClass = (element, className) => Array.from(element.classList).includes(className);
 
+/*
+  Handles localStorage access.
+*/
 window.storage = new (function () {
   const self = this;
   
@@ -85,6 +88,9 @@ window.storage = new (function () {
   };
 })();
 
+/*
+  Provides utilities for plugins. Each plugin should create its own instance.
+*/
 window.PluginUtil = function (pluginName) {
   /*
     Get the value of a setting by its name.
