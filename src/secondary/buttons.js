@@ -1,6 +1,6 @@
 'use strict';
 function createNewButton() {
-  let id = prompt('Input a unique identifier for the button:');
+  const id = prompt('Input a unique identifier for the button:');
   if (id === null) return;
   if (buttons[id] !== undefined && buttons[id] !== null) {
     alert('Identifier already exists.');
@@ -24,7 +24,7 @@ function createNewButton() {
 
 function removeButton() {
   if (!confirm('Are you sure you want to delete this button?')) return;
-  let id = byId('button-text').getAttribute('data-button-id');
+  const id = byId('button-text').getAttribute('data-button-id');
   delete buttons[id];
   byId(id).parentNode.removeChild(byId(id));
   activateDefaultButton();
@@ -44,8 +44,8 @@ function saveFocusedButton(id) {
 }
 
 function initDropdown() {
-  let dropdown = byId('buttons-list');
-  for (let id in buttons) {
+  const dropdown = byId('buttons-list');
+  for (const id in buttons) {
     dropdown.insertAdjacentHTML('beforeend',
       `<li id="${id}">
         <a href="#!">${id}</a>
@@ -68,7 +68,7 @@ function setActiveButton(buttonData, id) {
 }
 
 function activateDefaultButton() {
-  let firstButtonId = Object.keys(buttons)[0];
+  const firstButtonId = Object.keys(buttons)[0];
   if (firstButtonId !== undefined) setActiveButton(buttons[firstButtonId], firstButtonId);
 }
 

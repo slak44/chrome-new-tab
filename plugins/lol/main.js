@@ -8,14 +8,14 @@ const util = new PluginUtil(pluginName);
 const async = util.deps.async;
 window.EventEmitter2 = util.deps.eventemitter2;
 
-document.body.addEventListener('click', function () {
+document.body.addEventListener('click', () => {
   chrome.permissions.request({
     origins: ['https://*.pvp.net/*']
-  }, function (granted) {
+  }, granted => {
     if (!granted) alert('Cannot proceed without origin permissons.');
   });
 });
-let requests = {
+const requests = {
   playerByName: null,
   currentGame: null,
   playerSummaries: [],
@@ -26,7 +26,7 @@ if (DEBUG) {
     getApiUtil,
     getDebugInfo,
     addDataToPane
-  ], function (err) {
+  ], err => {
     if (err) throw err;
   });
 } else {
@@ -37,16 +37,16 @@ if (DEBUG) {
     getParticipantSummaries,
     getParticipantLeagues,
     addDataToPane
-  ], function (err) {
+  ], err => {
     if (err) throw err;
   });
 }
 
 function getDebugInfo(apiCaller, callback) {
   addInfoPanel();
-  let testData = new XMLHttpRequest();
-  testData.addEventListener('loadend', function () {
-    let data = JSON.parse(testData.responseText);
+  const testData = new XMLHttpRequest();
+  testData.addEventListener('loadend', () => {
+    const data = JSON.parse(testData.responseText);
     requests.playerByName = data['summoner-by-name'];
     requests.currentGame = data['current-game'];
     requests.playerSummaries = data['player-summaries'];
@@ -57,12 +57,12 @@ function getDebugInfo(apiCaller, callback) {
 }
 
 function getApiUtil(callback) {
-  let apiUtil = new XMLHttpRequest();
-  apiUtil.addEventListener('loadend', function () {
+  const apiUtil = new XMLHttpRequest();
+  apiUtil.addEventListener('loadend', () => {
     window.ApiCaller = eval.apply(window, [apiUtil.responseText]);
     if (apiUtil.status === httpStatusOk) {
       eval.apply(window, [apiUtil.responseText]);
-      let apiCaller = new window.ApiCaller(
+      const apiCaller = new window.ApiCaller(
         [
           {requests: 10, time: 10, unit: 'seconds'},
           {requests: 500, time: 10, unit: 'minutes'}
@@ -78,7 +78,7 @@ function getApiUtil(callback) {
 }
 
 function getPlayerData(apiCaller, callback) {
-  apiCaller.getPlayerData(util.getSetting('Region'), util.getSetting('Player Name'), function (err, data) {
+  apiCaller.getPlayerData(util.getSetting('Region'), util.getSetting('Player Name'), (err, data) => {
     if (err) {
       callback(err);
       return;
@@ -89,7 +89,7 @@ function getPlayerData(apiCaller, callback) {
 }
 
 function getCurrentGame(apiCaller, callback) {
-  apiCaller.getCurrentGame(util.getSetting('Region'), requests.playerByName.id, function (err, data) {
+  apiCaller.getCurrentGame(util.getSetting('Region'), requests.playerByName.id, (err, data) => {
     if (err) {
       if (err.toString().includes('404')) callback(new Error('Player not ingame'));
       else callback(err);

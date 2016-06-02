@@ -7,7 +7,7 @@ const overlay = byId('fade-overlay');
 const panelId = util.getSetting('Featured Panel');
 let timeSinceLastMove = 0;
 
-setInterval(function () {
+setInterval(() => {
   timeSinceLastMove++;
   if (timeSinceLastMove > util.getSetting('Fade Delay')) overlay.classList.add('fading');
   if (panelId) byId('fade-featured-panel').innerHTML = byId('data-collection').children[panelId].innerHTML;

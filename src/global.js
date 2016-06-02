@@ -46,7 +46,7 @@ window.storage = new (function () {
   */
   this.load = function (element, callback) {
     throwIfNotStored(element);
-    chrome.storage.local.get(`stored${capitalize(element)}`, function (data) {
+    chrome.storage.local.get(`stored${capitalize(element)}`, data => {
       window[element] = data[`stored${capitalize(element)}`];
       if (window[element] === undefined || window[element] === null) {
         callback(new Error(`No ${element} found.`));
@@ -63,7 +63,7 @@ window.storage = new (function () {
   */
   this.store = function (element, callback) {
     throwIfNotStored(element);
-    let objToStore = {};
+    const objToStore = {};
     objToStore[`stored${capitalize(element)}`] = window[element];
     chrome.storage.local.set(objToStore, callback);
   };
@@ -82,7 +82,7 @@ window.storage = new (function () {
   this.clear = function (element, callback) {
     throwIfNotStored(element);
     delete window[element];
-    let objToStore = {};
+    const objToStore = {};
     objToStore[`stored${capitalize(element)}`] = {};
     chrome.storage.local.set(objToStore, callback);
   };
@@ -166,18 +166,19 @@ window.activateScheme = function (scheme) {
 };
 
 window.toggleDiv = function (elem) {
-  if (!(elem instanceof HTMLElement)) elem = byId(elem);
-  if (hasClass(elem, 'focused')) {
-    elem.classList.remove('focused');
-    elem.classList.add('unfocused');
+  let div = elem;
+  if (!(div instanceof HTMLElement)) div = byId(elem);
+  if (hasClass(div, 'focused')) {
+    div.classList.remove('focused');
+    div.classList.add('unfocused');
   } else {
-    elem.classList.remove('unfocused');
-    elem.classList.add('focused');
+    div.classList.remove('unfocused');
+    div.classList.add('focused');
   }
 };
 
 window.loadSchemes = function (callback) {
-  storage.load('colorSchemes', function (err) {
+  storage.load('colorSchemes', err => {
     if (err || colorSchemes[0] === undefined || colorSchemes[0] === null) {
       colorSchemes = [{
         name: 'Light Orange with Lime Accents',
@@ -211,15 +212,15 @@ window.loadPlugins = function (callback) {
   document.getElementsByTagName('head')[0].insertAdjacentHTML('beforeend', '<style id="plugin-css"></style>');
   window.pluginCss = byId('plugin-css');
   storage.load('plugins',
-  function (error) {
+  error => {
     if (error) {
       callback(error);
       return;
     }
-    Object.keys(plugins).forEach(function (pluginName, i, array) {
+    Object.keys(plugins).forEach((pluginName, i, array) => {
       try {
         if (plugins[pluginName].dependencyCode) eval(plugins[pluginName].dependencyCode);
-        if (plugins[pluginName].html.global) Object.keys(plugins[pluginName].html.global).forEach(function (selector, i, array) {
+        if (plugins[pluginName].html.global) Object.keys(plugins[pluginName].html.global).forEach((selector, i, array) => {
           byQSelect(selector).insertAdjacentHTML('beforeend', plugins[pluginName].html.global[selector]);
         });
         if (plugins[pluginName].css.global) pluginCss.innerHTML += plugins[pluginName].css.global;

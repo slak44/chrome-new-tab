@@ -14,7 +14,7 @@ pkg.html = pkg.html || {};
 pkg.css = pkg.css || {};
 pkg.dependencies = pkg.dependencies || {};
 
-let pluginObject = {
+const pluginObject = {
   name: pkg.pluginName,
   desc: pkg.description || '',
   version: pkg.version,
@@ -34,11 +34,10 @@ function iifeBabel(code) {
   return babel.transform(`(function (pluginName) {${code}})('${pkg.pluginName}')`, pkg.babel || {}).code;
 }
 
-function mergeFiles(src, transform, callback) {
-  src = src || [];
+function mergeFiles(src = [], transform, callback) {
   async.series(
     src.map(file => callback => fs.readFile(`${pluginDir}/${file}`, {encoding: 'utf8'}, callback)),
-    function (err, results) {
+    (err, results) => {
       if (err) {
         callback(err, null);
         return;
@@ -51,7 +50,8 @@ function mergeFiles(src, transform, callback) {
 function parseHtmlInserts(view, callback) {
   async.series(
     Object.keys(pkg.html[view] || {}).map(file => function (callback) {
-      fs.readFile(`${pluginDir}/${file}`, {encoding: 'utf8'}, function (err, data) {
+      fs.readFile(`${pluginDir}/${file}`, {encoding: 'utf8'},
+      (err, data) => {
         if (err) {
           callback(err, null);
           return;
@@ -61,7 +61,7 @@ function parseHtmlInserts(view, callback) {
         callback(null, data);
       });
     }),
-    function (err, results) {
+    (err, results) => {
       if (err) {
         callback(err);
         return;
@@ -72,7 +72,8 @@ function parseHtmlInserts(view, callback) {
 }
 
 function installDeps(callback) {
-  require('child_process').exec('npm install', {cwd: pluginDir}, function (err, stdout, stderr) {
+  require('child_process').exec('npm install', {cwd: pluginDir},
+  (err, stdout, stderr) => {
     console.log(stdout);
     console.error(stderr);
     if (err) {
@@ -92,12 +93,12 @@ function browserifyDeps(callback) {
     .keys(pkg.dependencies)
     .map(depName => `window.dependencies['${pkg.pluginName}']['${depName}'] = require('${depName}');`)
     .join('\n');
-  toBrowserify = `window.dependencies['${pkg.pluginName}'] = {};` + toBrowserify; // Create the plugin's dependencies object before adding them
-  let fileName = `${pluginDir}/browserify_TMPFILE`;
+  toBrowserify = `window.dependencies['${pkg.pluginName}'] = {};${toBrowserify}`; // Create the plugin's dependencies object before adding them
+  const fileName = `${pluginDir}/browserify_TMPFILE`;
   fs.writeFileSync(fileName, toBrowserify);
 
-  browserify(fileName, {standalone: `${pkg.name}-dependencies`}).bundle(function (err, result) {
-    fs.unlinkSync(fileName, function (err) {
+  browserify(fileName, {standalone: `${pkg.name}-dependencies`}).bundle((err, result) => {
+    fs.unlinkSync(fileName, err => {
       if (err) throw err;
     });
     if (err) {
@@ -124,7 +125,7 @@ async.parallel([
     if (err) throw err;
     browserifyDeps(callback);
   })
-], function (err, results) {
+], (err, results) => {
   if (err) throw err;
   fs.writeFileSync(outputFile, JSON.stringify(pluginObject));
 });

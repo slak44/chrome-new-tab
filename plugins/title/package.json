@@ -1,6 +1,6 @@
 {
   "pluginName": "Title",
-  "version": "2.1.1",
+  "version": "2.1.2",
   "description": "Adds a title to the main page",
   "author": "Slak44",
   "preserveSettings": true,

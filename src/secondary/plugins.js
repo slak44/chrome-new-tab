@@ -12,12 +12,12 @@ function promptRemoval() {
 }
 
 function saveFocusedPluginSettings() {
-  let currentPlugin = byQSelect('.plugin-container.focused');
+  const currentPlugin = byQSelect('.plugin-container.focused');
   // Plugin container ids have the form `${pluginName}-container`
-  const charsToRemove = '-container'.length;
-  let currentPluginName = currentPlugin.id.slice(0, -charsToRemove);
-  const childrenToIgnore = 2; // Ignore the title and the description
-  Array.from(currentPlugin.children).forEach(function (settingDiv, i, children) {
+  const currentPluginName = currentPlugin.id.slice(0, -('-container'.length));
+  // Ignore the title and the description
+  const childrenToIgnore = 2;
+  Array.from(currentPlugin.children).forEach((settingDiv, i, children) => {
     if (i < childrenToIgnore) return;
     plugins[currentPluginName].settings[i - childrenToIgnore].value = settingDiv.children[0].value;
   });
@@ -35,7 +35,7 @@ function insertPluginHTML(pluginObject, isFocused) {
   byId('settings-tab').insertAdjacentHTML('beforeend',
     `<div id="${pluginObject.name}-container" class="plugin-container ${isFocused ? 'focused' : 'unfocused'}"></div>`
   );
-  let container = byId(`${pluginObject.name}-container`);
+  const container = byId(`${pluginObject.name}-container`);
   // Add metadata
   container.insertAdjacentHTML('beforeend',
     `<h5 class="plugin-title">${pluginObject.name}</h5>
@@ -47,7 +47,7 @@ function insertPluginHTML(pluginObject, isFocused) {
   );
   // If there are settings, add their markup, otherwise add a message saying there are no plugins
   if (pluginObject.settings && pluginObject.settings.length > 0) {
-    pluginObject.settings.forEach(function (setting, i, settings) {
+    pluginObject.settings.forEach((setting, i, settings) => {
       if (!setting.isVisible) return;
       container.insertAdjacentHTML('beforeend',
         `<div class="input-field">
@@ -60,8 +60,8 @@ function insertPluginHTML(pluginObject, isFocused) {
     container.insertAdjacentHTML('beforeend', '<p>There are no settings for this plugin</p>');
   }
   // If the button in the dropdown list is pressed, hide the current plugin's container, and show this plugin's container
-  byId(pluginObject.name).addEventListener('click', function (event) {
-    let focusedContainer = byQSelect('.plugin-container.focused');
+  byId(pluginObject.name).addEventListener('click', event => {
+    const focusedContainer = byQSelect('.plugin-container.focused');
     toggleDiv(focusedContainer);
     focusedContainer.style.display = 'none';
     toggleDiv(container);
@@ -75,21 +75,22 @@ window.persistentPluginReload = false;
 window.reloadTimeout = 1000;
 
 function addPlugin(event) {
-  let file = event.target.files[0];
+  const file = event.target.files[0];
   function readCallback(err, plugin) {
     if (err) {
       alert(err.message);
       throw err;
     }
-    let oldPlugin = plugins[plugin.name];
+    const oldPlugin = plugins[plugin.name];
     if (plugin.init) eval(plugin.js.init);
     // Use existing settings if possible
+    // eslint-disable-next-line no-param-reassign
     if (oldPlugin && plugin.preserveSettings) plugin.settings = oldPlugin.settings;
     // TODO: check if settings have changed between versions(or use the major version?) and wipe them if so, disregarding this option
     plugins[plugin.name] = plugin;
     storage.store('plugins', storeCallback);
   }
-  let storeCallback = (function () {
+  const storeCallback = (function () {
     if (!window.persistentPluginReload) {
       window.location.reload();
     } else {
@@ -102,10 +103,9 @@ function addPlugin(event) {
 }
 
 function readPlugin(blob, callback) {
-  let reader = new FileReader();
-  reader.addEventListener('loadend', function (event) {
-    let plugin = JSON.parse(event.target.result);
-    callback(null, plugin);
+  const reader = new FileReader();
+  reader.addEventListener('loadend', event => {
+    callback(null, JSON.parse(event.target.result));
   });
   reader.readAsText(blob);
 }

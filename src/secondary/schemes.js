@@ -3,7 +3,7 @@ let activeSchemeIndex = 0;
 
 function saveSelected() {
   // Switch the active one at the top
-  let originalScheme = colorSchemes[0];
+  const originalScheme = colorSchemes[0];
   colorSchemes[0] = colorSchemes[activeSchemeIndex];
   colorSchemes[activeSchemeIndex] = originalScheme;
   storage.store('colorSchemes');
@@ -12,20 +12,20 @@ function saveSelected() {
 function removeSelected() {
   if (!confirm('Remove this scheme?')) return;
   colorSchemes.splice(activeSchemeIndex, 1);
-  let schemeElement = byQSelect('#color-scheme-list > a.active');
+  const schemeElement = byQSelect('#color-scheme-list > a.active');
   schemeElement.parentNode.removeChild(schemeElement);
   byId('color-scheme-list').children[0].classList.add('active');
   storage.store('colorSchemes');
 }
 
 function insertPreviewHTML(scheme) {
-  let top = document.createElement('a');
+  const top = document.createElement('a');
   top.href = '#!';
   top.className = 'collection-item color';
   top.innerText = scheme.name;
   
   // Container for samples
-  let div = document.createElement('div');
+  const div = document.createElement('div');
   div.className = 'row top-margin';
   top.appendChild(div);
   
@@ -54,7 +54,7 @@ function insertPreviewHTML(scheme) {
   }
   
   function createColorSampleElement(color) {
-    let sample = document.createElement('div');
+    const sample = document.createElement('div');
     sample.style = `background-color: ${color};`;
     sample.className = 'col s1 color-sample';
     return sample;
@@ -62,10 +62,10 @@ function insertPreviewHTML(scheme) {
 }
 
 function initSchemesEventListeners() {
-  Array.from(byId('color-scheme-list').children).forEach(function (schemeElement, i, arr) {
+  Array.from(byId('color-scheme-list').children).forEach((schemeElement, i, arr) => {
     if (i === 0) schemeElement.classList.add('active');
-    schemeElement.addEventListener('click', function (evt) {
-      let actives = byQSelect('#color-scheme-list > a.active');
+    schemeElement.addEventListener('click', event => {
+      const actives = byQSelect('#color-scheme-list > a.active');
       if (actives) actives.classList.remove('active');
       schemeElement.classList.add('active');
       activeSchemeIndex = i;

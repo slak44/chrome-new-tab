@@ -4,11 +4,11 @@ const httpStatusOk = 200;
 const defaultUpdatePeriod = 7500;
 const userUrl = `https://www.reddit.com/user/${util.getSetting('Reddit username')}`;
 function updateRedditKarma() {
-  let req = new XMLHttpRequest();
-  req.open('GET', userUrl + '/about.json');
+  const req = new XMLHttpRequest();
+  req.open('GET', `${userUrl}/about.json`);
   req.onload = function () {
     if (req.status === httpStatusOk) {
-      let data = JSON.parse(req.response);
+      const data = JSON.parse(req.response);
       byId('reddit-karma').innerHTML =
         `<a href="${userUrl}" class="color accent-4">${data.data.comment_karma}</a> comment karma
         <br>

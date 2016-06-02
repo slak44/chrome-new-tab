@@ -5,11 +5,11 @@ const sequence = require('gulp-sequence');
 const copy = require('gulp-copy');
 const fs = require('fs');
 
-gulp.task('materialize-bug-fix', function (done) {
+gulp.task('materialize-bug-fix', done => {
   const libLocation = `${__dirname}/node_modules/pickadate/lib/picker.js`;
   const missingLibFile = `${__dirname}/node_modules/materialize-css/bin/picker.js`;
   
-  fs.lstat(missingLibFile, function (err, stats) {
+  fs.lstat(missingLibFile, (err, stats) => {
     if (err && err.code !== 'ENOENT') {
       done(err);
       return;
@@ -20,14 +20,14 @@ gulp.task('materialize-bug-fix', function (done) {
   });
   
   function symlink() {
-    fs.symlink(libLocation, missingLibFile, function (err) {
+    fs.symlink(libLocation, missingLibFile, err => {
       if (err) throw err;
       done();
     });
   }
 });
 
-gulp.task('js-src', function () {
+gulp.task('js-src', () => {
   const babel = require('gulp-babel');
   const gulpBrowser = require('gulp-browser');
   return gulp.src(['src/*.js', 'src/*/*.js'], {base: './'})
@@ -36,22 +36,22 @@ gulp.task('js-src', function () {
     .pipe(gulp.dest('./build/'));
 });
 
-gulp.task('copy-src', function () {
-  return gulp.src(['src/*/*', 'src/*', '!src/*.js', '!src/*/*.js'])
-    .pipe(copy('./build/src', {prefix: 1}));
-});
+gulp.task('copy-src', () =>
+  gulp.src(['src/*/*', 'src/*', '!src/*.js', '!src/*/*.js'])
+    .pipe(copy('./build/src', {prefix: 1}))
+);
 
-gulp.task('copy-css', function () {
-  return gulp.src('node_modules/materialize-css/dist/css/materialize.min.css')
-    .pipe(copy('./build/src', {prefix: 4}));
-});
+gulp.task('copy-css', () =>
+  gulp.src('node_modules/materialize-css/dist/css/materialize.min.css')
+    .pipe(copy('./build/src', {prefix: 4}))
+);
 
-gulp.task('copy-fonts', function () {
-  return gulp.src('node_modules/materialize-css/dist/fonts/roboto/*')
-    .pipe(copy('./build/src/fonts/roboto', {prefix: 5}));
-});
+gulp.task('copy-fonts', () =>
+  gulp.src('node_modules/materialize-css/dist/fonts/roboto/*')
+    .pipe(copy('./build/src/fonts/roboto', {prefix: 5}))
+);
 
-gulp.task('extension', function () {
+gulp.task('extension', () => {
   const crx = require('gulp-crx-pack');
   let pKey;
   try {
@@ -68,12 +68,12 @@ gulp.task('extension', function () {
     .pipe(gulp.dest('./build/dist'));
 });
 
-gulp.task('plugins', function (done) {
+gulp.task('plugins', done => {
   const cp = require('child_process');
   const async = require('async');
-  fs.readdir('./plugins', function (err, folders) {
+  fs.readdir('./plugins', (err, folders) => {
     if (err) throw err;
-    let bundleTasks = folders.map(folderName => function (callback) {
+    const bundleTasks = folders.map(folderName => callback => {
       // If there are other things there, ignore them
       if (folderName.startsWith('.')) {
         callback(null);
@@ -87,14 +87,14 @@ gulp.task('plugins', function (done) {
         callback(null, stdout.toString());
       });
     });
-    async.parallel(bundleTasks, function (err, results) {
+    async.parallel(bundleTasks, (err, results) => {
       if (err) throw err;
       done();
     });
   });
 });
 
-gulp.task('pack-plugins', function () {
+gulp.task('pack-plugins', () => {
   const zip = require('gulp-zip');
   return gulp.src('./build/plugins/*')
     .pipe(zip('plugins.zip'))
@@ -108,12 +108,12 @@ gulp.task('all', sequence(['default', 'extension', 'plugins', 'pack-plugins']));
 function createVersionTask(bumpType) {
   const merge = require('merge-stream');
   const gulpBump = require('gulp-bump');
-  return function () {
-    let packageJson =
+  return () => {
+    const packageJson =
     gulp.src('./package.json')
       .pipe(gulpBump({type: bumpType}))
       .pipe(gulp.dest('./'));
-    let manifestJson =
+    const manifestJson =
     gulp.src('./src/manifest.json')
       .pipe(gulpBump({type: bumpType}))
       .pipe(gulp.dest('./src/'));

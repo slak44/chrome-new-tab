@@ -1,5 +1,5 @@
 'use strict';
-let util = new PluginUtil(pluginName);
+const util = new PluginUtil(pluginName);
 addPanel({
   position: util.getSetting('Position') || 0,
   htmlContent:
