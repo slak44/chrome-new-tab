@@ -38,9 +38,9 @@ document.onkeydown = function (e) {
 };
 
 function createButton(options) {
-  if (!(parent instanceof HTMLElement)) throw new Error('options.parent must be a HTMLElement');
+  if (options.parent && !(options.parent instanceof HTMLElement)) throw new Error('options.parent must be a HTMLElement');
   const parent = options.parent || byId('buttons');
-  options.parent.insertAdjacentHTML('beforeend',
+  parent.insertAdjacentHTML('beforeend',
 	`<li class="waves-effect waves-light collection-item">
 		<a href="${options.href || ''}" class="button-link">
 			<div class="valign-wrapper">
@@ -54,7 +54,7 @@ function createButton(options) {
 		</a>
 	</li>`
 	);
-  const anchor = options.parent.children[options.parent.children.length - 1];
+  const anchor = parent.children[parent.children.length - 1];
   if (options.href !== undefined && (options.href.indexOf('chrome://') === 0 || options.openInNew))
     anchor.addEventListener('click', event => {
       chrome.tabs.create({url: options.href});
