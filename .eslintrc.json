@@ -6,7 +6,7 @@
   },
   "extends": "eslint:recommended",
   "rules": {
-    "indent": ["error", 2],
+    "indent": ["error", 2, {"SwitchCase": 1}],
     "brace-style": ["error", "1tbs", {"allowSingleLine": true}],
     "linebreak-style": ["error", "unix"],
     "quotes": ["warn", "single"],
@@ -23,7 +23,7 @@
     "no-floating-decimal": ["error"],
     "no-new-wrappers": ["error"],
     "no-with": ["error"],
-    "wrap-iife": ["error"],
+    "wrap-iife": ["error", "inside"],
     "camelcase": ["warn"],
     "comma-spacing": ["warn", {"before": false, "after": true}],
     "eol-last": ["warn"],
