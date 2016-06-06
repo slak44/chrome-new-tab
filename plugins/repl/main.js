@@ -90,7 +90,7 @@ function evaluate(event) {
         result = (commands[commandName] || commands[commandAliases[commandName]])(code.replace(`!${commandName} `, ''));
       } else {
         Object.keys(replReplace).forEach(key => code = code.replace(replReplace[key], key));
-        result = eval(code);
+        result = window.eval(code);
       }
     } catch (err) {
       result = err;
