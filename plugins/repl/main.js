@@ -81,8 +81,11 @@ function evaluate(event) {
     commandHistory.push('');
     try {
       if (code.startsWith('!')) {
-        const commandName = code.substr(1, code.indexOf(' ') - 1);
-        window.result = (commands[commandName] || commands[commandAliases[commandName]])(code.replace(`!${commandName} `, ''));
+        const commandName = code.substr(1, code.indexOf(' ') - 1); // Skip ! character, and go until the first space
+        const commandArgs = code.replace(`!${commandName} `, '');
+        const commandFunc = commands[commandName] || commands[commandAliases[commandName]];
+        if (!(commandFunc instanceof Function)) throw new Error('Command not found.');
+        window.result = commandFunc(commandArgs);
       } else {
         Object.keys(replReplace).forEach(key => code = code.replace(replReplace[key], key));
         window.result = window.eval(code);
