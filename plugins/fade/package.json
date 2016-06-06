@@ -3,7 +3,6 @@
   "version": "1.3.3",
   "description": "Fade the page to black when inactive",
   "author": "Slak44",
-  "preserveSettings": true,
   "settings": [
     {
       "name": "Featured Panel",

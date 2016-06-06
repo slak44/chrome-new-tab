@@ -75,6 +75,7 @@ window.persistentPluginReload = false;
 window.reloadTimeout = 1000;
 
 function addPlugin(event) {
+  const semver = require('semver');
   const file = event.target.files[0];
   function readCallback(err, plugin) {
     if (err) {
@@ -82,11 +83,16 @@ function addPlugin(event) {
       throw err;
     }
     const oldPlugin = plugins[plugin.name];
+    if (!semver.valid(plugin.version)) {
+      alert('Plugin version is invalid.');
+      return;
+    }
+    // Preserve settings if major versions match
+    if (semver.major(plugin.version) === semver.major(oldPlugin.version)) {
+      // eslint-disable-next-line no-param-reassign
+      plugin.settings = oldPlugin.settings;
+    }
     if (plugin.init) eval(plugin.js.init);
-    // Use existing settings if possible
-    // eslint-disable-next-line no-param-reassign
-    if (oldPlugin && plugin.preserveSettings) plugin.settings = oldPlugin.settings;
-    // TODO: check if settings have changed between versions(or use the major version?) and wipe them if so, disregarding this option
     plugins[plugin.name] = plugin;
     storage.store('plugins', storeCallback);
   }

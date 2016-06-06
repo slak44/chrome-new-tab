@@ -20,7 +20,6 @@ const pluginObject = {
   version: pkg.version,
   author: pkg.author,
   settings: pkg.settings || [],
-  preserveSettings: pkg.preserveSettings || false,
   js: {},
   css: {},
   html: {

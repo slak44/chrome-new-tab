@@ -48,8 +48,7 @@ Paths are relative to the `package.json`'s directory.
     "pluginName": "displayName",
     "description": "message",
     "author": "name",
-    "version": "ver",
-    "preserveSettings": true,
+    "version": "1.1.1",
     "settings": [],
     "dependencies": {},
     "babel": {},
@@ -86,9 +85,8 @@ Paths are relative to the `package.json`'s directory.
 - `pluginName`: name of plugin. Also serves as the key to this plugin in the global `plugins` object, so it must be unique
 - `description`: plugin description. 
 - `author`: self-explanatory
-- `version`: self-explanatory
-- `preserveSettings`: whether or not settings should be preserved after plugin update. If the settings array has been modified in an update, this should be false
-- `settings`: array of objects, format described below
+- `version`: [semver](http://semver.org/) version string
+- `settings`: array of objects, format described below (note: incrementing the major version wipes the user's settings, so changes to the settings object should only happen in major releases)
 - `dependencies`: npm's dependencies field
 - `babel`: babel config
 - `html`: each property represents a view. For each view, there are html files associated with a query selector. The html will be inserted in the element obtained from the selector
@@ -105,8 +103,7 @@ This should be valid JSON.
     "name": "displayName",
     "desc": "message",
     "author": "name",
-    "version": "ver",
-    "preserveSettings": true,
+    "version": "1.1.1",
     "settings": [],
     "dependencyCode": "(function () {})()",
     "js": {
@@ -135,7 +132,6 @@ This should be valid JSON.
 - `desc`: see above, is equivalent to `description`
 - `author`: see above
 - `version`: see above
-- `preserveSettings`: see above
 - `settings`: see above
 - `dependencyCode`: a stringified IIFE, is eval'd before anything else. The bundler places all dependencies here
 - `js`: all functions are stringified IIFEs, each property is a position

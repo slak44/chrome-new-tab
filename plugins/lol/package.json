@@ -3,7 +3,6 @@
   "version": "0.2.5",
   "description": "Allows to check a player's current game information",
   "author": "Slak44",
-  "preserveSettings": true,
   "settings": [
     {
       "name": "Player Name",

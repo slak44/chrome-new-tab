@@ -3,7 +3,6 @@
   "version": "2.0.3",
   "description": "Displays reddit karma for given user",
   "author": "Slak44",
-  "preserveSettings": true,
   "settings": [
     {
       "name": "Reddit username",
