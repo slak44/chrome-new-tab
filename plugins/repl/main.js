@@ -68,14 +68,9 @@ const keycodes = {
 };
 Object.freeze(keycodes);
 
-let result;
+window.result = undefined;
 const commandHistory = [];
 let rewindCount = 0;
-byId('repl-window').addEventListener('click', event => {
-  if (event.target !== event.currentTarget) return; // Only catch direct clicks on the empty div
-  event.preventDefault();
-  byClass('current-text')[0].focus();
-});
 function evaluate(event) {
   if (event.keyCode === keycodes.enter) {
     rewindCount = 0;
@@ -87,27 +82,27 @@ function evaluate(event) {
     try {
       if (code.startsWith('!')) {
         const commandName = code.substr(1, code.indexOf(' ') - 1);
-        result = (commands[commandName] || commands[commandAliases[commandName]])(code.replace(`!${commandName} `, ''));
+        window.result = (commands[commandName] || commands[commandAliases[commandName]])(code.replace(`!${commandName} `, ''));
       } else {
         Object.keys(replReplace).forEach(key => code = code.replace(replReplace[key], key));
-        result = window.eval(code);
+        window.result = window.eval(code);
       }
     } catch (err) {
-      result = err;
+      window.result = err;
     }
     oldElem.classList.remove('current-text');
     byId('repl-window').insertAdjacentHTML('beforeend', `
-      <span class="result-text">${result}</span>
+      <span class="result-text">${window.result}</span>
       <span class="current-text"></span>
     `);
     const oldHistory = byClass('history-selected')[0];
     if (oldHistory) oldHistory.classList.remove('history-selected');
     byId('repl-history').insertAdjacentHTML('beforeend', `
-      <span class="history-selected">${result}</span>
+      <span class="history-selected">${window.result}</span>
     `);
     const historyElem = byClass('history-selected')[0];
     historyElem.addEventListener('click', event => {
-      result = historyElem.textContent;
+      window.result = historyElem.textContent;
       byClass('history-selected')[0].classList.remove('history-selected');
       historyElem.classList.add('history-selected');
     });

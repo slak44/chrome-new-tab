@@ -10,6 +10,8 @@
   bottom: 60px;
   left: 10px;
   overflow: auto;
+  display: flex;
+  flex-flow: column;
 }
 #repl-window span:not(:first-child) {
   height: 20px;
@@ -35,6 +37,8 @@ span.current-text {
   cursor: text;
   outline: none;
   box-shadow: none;
+  flex-grow: 1;
+  flex-shrink: 0;
 }
 #repl-window span::before {
   content: '> ';
