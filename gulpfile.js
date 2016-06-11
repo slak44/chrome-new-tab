@@ -77,6 +77,11 @@ gulp.task('extension', () => {
 gulp.task('plugins', done => {
   const cp = require('child_process');
   const async = require('async');
+  try {
+    fs.mkdirSync('./build/plugins');
+  } catch (err) {
+    if (err.code !== 'EEXIST') throw err;
+  }
   fs.readdir('./plugins', (err, folders) => {
     if (err) throw err;
     const bundleTasks = folders.map(folderName => callback => {
