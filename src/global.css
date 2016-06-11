@@ -74,6 +74,10 @@ img {
   font-size: 200px;
 }
 
+#nav-bar {
+  margin-bottom: 10px;
+}
+
 #floating-save-button {
 	position: absolute !important;
 	bottom: 25px;

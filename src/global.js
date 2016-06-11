@@ -156,6 +156,10 @@ window.activateScheme = function (scheme) {
   }
   
   .collection-item.active {background-color: ${scheme.darken4} !important;}
+  
+  nav {
+    background-color: ${scheme.darken1} !important;
+  }
   `;
   
   if (scheme.isDark) {
