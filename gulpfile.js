@@ -2,7 +2,6 @@
 
 const gulp = require('gulp');
 const sequence = require('gulp-sequence');
-const copy = require('gulp-copy');
 const fs = require('fs');
 
 gulp.task('materialize-bug-fix', done => {
@@ -40,17 +39,17 @@ gulp.task('build-js', () => {
 const copySrcGlob = ['src/**/*.+(html|css|json)', '!src/**/*.js', '!src/**/.eslintrc.json'];
 gulp.task('copy-src', () =>
   gulp.src(copySrcGlob)
-    .pipe(copy('./build/src', {prefix: 1}))
+    .pipe(gulp.dest('./build/src'))
 );
 
 gulp.task('copy-materialize-css', () =>
   gulp.src('node_modules/materialize-css/dist/css/materialize.min.css')
-    .pipe(copy('./build/src', {prefix: 4}))
+    .pipe(gulp.dest('./build/src'))
 );
 
 gulp.task('copy-fonts', () =>
   gulp.src('node_modules/materialize-css/dist/fonts/roboto/*')
-    .pipe(copy('./build/src/fonts/roboto', {prefix: 5}))
+    .pipe(gulp.dest('./build/src/fonts/roboto'))
 );
 
 gulp.task('extension', () => {
