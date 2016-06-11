@@ -60,3 +60,10 @@ ul.color.dropdown-content > li > a {
 #color-scheme-list > a.collection-item > div.row {
   margin-top: 5px;
 }
+
+#version-string {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  line-height: 18px;
+}

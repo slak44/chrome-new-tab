@@ -6,6 +6,8 @@ const buttonsUtil = require('./src/secondary/buttons.js');
 const pluginsUtil = require('./src/secondary/plugins.js');
 const schemesUtil = require('./src/secondary/schemes.js');
 
+byId('version-string').innerText = `version ${chrome.runtime.getManifest().version}`;
+
 loadSchemes(() => {
   activateScheme(colorSchemes[0]);
   colorSchemes.forEach(scheme => schemesUtil.insertPreviewHTML(scheme));
