@@ -7,6 +7,17 @@ function saveSelected() {
   colorSchemes[0] = colorSchemes[activeSchemeIndex];
   colorSchemes[activeSchemeIndex] = originalScheme;
   storage.store('colorSchemes');
+  window.location.reload();
+}
+
+function addFromFile() {
+  getFile((err, file, schemeText) => {
+    const scheme = JSON.parse(schemeText);
+    insertPreviewHTML(scheme);
+    addClickListener(byId('color-scheme-list').lastChild, byId('color-scheme-list').children.length - 1);
+    colorSchemes.push(scheme);
+    storage.store('colorSchemes');
+  });
 }
 
 function removeSelected() {
@@ -63,19 +74,22 @@ function insertPreviewHTML(scheme) {
 }
 
 function initSchemesEventListeners() {
-  Array.from(byId('color-scheme-list').children).forEach((schemeElement, i, arr) => {
-    if (i === 0) schemeElement.classList.add('active');
-    schemeElement.addEventListener('click', event => {
-      const actives = byQSelect('#color-scheme-list > a.active');
-      if (actives) actives.classList.remove('active');
-      schemeElement.classList.add('active');
-      activeSchemeIndex = i;
-    });
+  Array.from(byId('color-scheme-list').children).forEach(addClickListener);
+  byId('color-scheme-list').children[0].classList.add('active');
+}
+
+function addClickListener(schemeElement, indexInParent) {
+  schemeElement.addEventListener('click', event => {
+    const actives = byQSelect('#color-scheme-list > a.active');
+    if (actives) actives.classList.remove('active');
+    schemeElement.classList.add('active');
+    activeSchemeIndex = indexInParent;
   });
 }
 
 module.exports = {
   saveSelected,
+  addFromFile,
   removeSelected,
   insertPreviewHTML,
   initSchemesEventListeners

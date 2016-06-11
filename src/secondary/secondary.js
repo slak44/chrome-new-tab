@@ -124,7 +124,7 @@ byId('remove-plugin').addEventListener('click', event => {
 });
 
 byId('add-scheme').addEventListener('click', event => {
-  alert('This feature is not yet implemented.'); // TODO
+  schemesUtil.addFromFile();
 });
 byId('remove-scheme').addEventListener('click', event => {
   schemesUtil.removeSelected();
