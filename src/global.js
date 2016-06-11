@@ -17,6 +17,28 @@ window.capitalize = string => string.charAt(0).toUpperCase() + string.substr(1);
 window.hasClass = (element, className) => Array.from(element.classList).includes(className);
 
 /*
+  Reads a File object and returns the File object and the contents in a callback.
+*/
+window.readFile = (file, callback) => {
+  const reader = new FileReader();
+  reader.addEventListener('loadend', event => {
+    callback(null, file, event.target.result);
+  });
+  reader.readAsText(file);
+};
+
+/*
+  Prompts the user for a file, and returns the File object and the contents in a callback.
+*/
+window.getFile = callback => {
+  byId('file-input').onchange = event => {
+    const file = event.target.files[0];
+    window.readFile(file, callback);
+  };
+  byId('file-input').click();
+};
+
+/*
   Handles localStorage access.
 */
 window.storage = new (function () {

@@ -1,14 +1,45 @@
 'use strict';
 
+// Set to true using devtools to constantly read and update a plugin automatically without refreshing the page
+window.persistentPluginReload = false;
+// Time between reloads
+window.reloadTimeout = 1000;
+
+function addFromFile() {
+  const semver = require('semver');
+  function readCallback(err, file, pluginText) {
+    if (err) {
+      alert(err.message);
+      throw err;
+    }
+    const plugin = JSON.parse(pluginText);
+    const oldPlugin = plugins[plugin.name];
+    if (!semver.valid(plugin.version)) {
+      alert('Plugin version is invalid.');
+      return;
+    }
+    plugins[plugin.name] = plugin;
+    // Preserve settings if major versions match
+    if (oldPlugin && semver.major(plugin.version) === semver.major(oldPlugin.version)) {
+      plugins[plugin.name].settings = oldPlugin.settings;
+    }
+    if (plugin.init) eval(plugin.js.init);
+    storage.store('plugins', () => {
+      if (!window.persistentPluginReload) {
+        window.location.reload();
+      } else {
+        console.log(`Reload: ${file.name}`);
+        setTimeout(() => readFile(file, readCallback), window.reloadTimeout);
+      }
+    });
+  }
+  getFile(readCallback);
+}
+
 function getFocusedPluginName() {
   const currentPluginContainer = byQSelect('.plugin-container.focused');
   // Plugin container ids have the form `${pluginName}-container`
   return currentPluginContainer.id.slice(0, -('-container'.length));
-}
-
-function addFromFile() {
-  byId('file-input').onchange = addPlugin;
-  byId('file-input').click();
 }
 
 function promptRemoval() {
@@ -73,52 +104,6 @@ function insertPluginSettingsHTML(pluginObject, isFocused) {
     toggleDiv(container);
     container.style.display = 'block';
   });
-}
-
-// Set to true using devtools to constantly read and update a plugin automatically without refreshing the page
-window.persistentPluginReload = false;
-// Time between reloads
-window.reloadTimeout = 1000;
-
-function addPlugin(event) {
-  const semver = require('semver');
-  const file = event.target.files[0];
-  function readCallback(err, plugin) {
-    if (err) {
-      alert(err.message);
-      throw err;
-    }
-    const oldPlugin = plugins[plugin.name];
-    if (!semver.valid(plugin.version)) {
-      alert('Plugin version is invalid.');
-      return;
-    }
-    plugins[plugin.name] = plugin;
-    // Preserve settings if major versions match
-    if (oldPlugin && semver.major(plugin.version) === semver.major(oldPlugin.version)) {
-      plugins[plugin.name].settings = oldPlugin.settings;
-    }
-    if (plugin.init) eval(plugin.js.init);
-    storage.store('plugins', storeCallback);
-  }
-  const storeCallback = (function () {
-    if (!window.persistentPluginReload) {
-      window.location.reload();
-    } else {
-      console.log(`Reload: ${this.file.name}`);
-      setTimeout(() => readPlugin(this.file, readCallback), window.reloadTimeout);
-    }
-  }).bind({file});
-  
-  readPlugin(file, readCallback);
-}
-
-function readPlugin(blob, callback) {
-  const reader = new FileReader();
-  reader.addEventListener('loadend', event => {
-    callback(null, JSON.parse(event.target.result));
-  });
-  reader.readAsText(blob);
 }
 
 module.exports = {

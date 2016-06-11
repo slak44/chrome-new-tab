@@ -22,6 +22,9 @@
     "hasClass": false,
     "capitalize": false,
     
+    "readFile": false,
+    "getFile": false,
+    
     "chrome": true,
     "storage": false,
     
