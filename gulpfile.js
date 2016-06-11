@@ -27,21 +27,21 @@ gulp.task('materialize-bug-fix', done => {
   }
 });
 
-gulp.task('js-src', () => {
+gulp.task('build-js', () => {
   const babel = require('gulp-babel');
   const gulpBrowser = require('gulp-browser');
-  return gulp.src(['src/*.js', 'src/*/*.js'], {base: './'})
+  return gulp.src(['src/*.js', 'src/**/*.js'], {base: './'})
     .pipe(babel())
     .pipe(gulpBrowser.browserify())
     .pipe(gulp.dest('./build/'));
 });
 
 gulp.task('copy-src', () =>
-  gulp.src(['src/*/*', 'src/*', '!src/*.js', '!src/*/*.js'])
+  gulp.src(['src/*', 'src/**/*', '!src/*.js', '!src/**/*.js'])
     .pipe(copy('./build/src', {prefix: 1}))
 );
 
-gulp.task('copy-css', () =>
+gulp.task('copy-materialize-css', () =>
   gulp.src('node_modules/materialize-css/dist/css/materialize.min.css')
     .pipe(copy('./build/src', {prefix: 4}))
 );
@@ -101,7 +101,12 @@ gulp.task('pack-plugins', () => {
     .pipe(gulp.dest('./build/dist/'));
 });
 
-gulp.task('default', sequence(['materialize-bug-fix', 'js-src', 'copy-src', 'copy-css', 'copy-fonts']));
+gulp.task('default', ['materialize-bug-fix', 'build-js', 'copy-src', 'copy-materialize-css', 'copy-fonts']);
+
+gulp.task('default-watch', () => {
+  gulp.watch(['src/*.js', 'src/**/*.js'], ['build-js']);
+  gulp.watch(['src/*', 'src/**/*', '!src/*.js', '!src/**/*.js'], ['copy-src']);
+});
 
 gulp.task('all', sequence(['default', 'extension', 'plugins', 'pack-plugins']));
 
