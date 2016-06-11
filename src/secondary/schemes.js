@@ -26,7 +26,7 @@ function insertPreviewHTML(scheme) {
   
   // Container for samples
   const div = document.createElement('div');
-  div.className = 'row top-margin';
+  div.className = 'row';
   top.appendChild(div);
   
   // Add scheme theme

@@ -1,0 +1,62 @@
+.color-sample {
+	min-height: 50px;
+	border: solid 1px rgba(0, 0, 0, 0.2);
+}
+
+.plugin-title {
+  font-weight: 300;
+}
+
+.plugin-desc {
+  margin-bottom: 30px;
+}
+
+.plugin-container {
+  display: none;
+}
+
+.card-top-right-icon {
+  float: right;
+  padding: 20px 20px 0px 0px;
+}
+
+.card-icon-image {
+  text-align: center;
+  width: 100%;
+  font-size: 200px;
+}
+
+#nav-bar {
+  margin-bottom: 10px;
+}
+
+#floating-save-button {
+	position: absolute !important;
+	bottom: 25px;
+	right: 25px;
+}
+
+#file-input {
+  display: none;
+}
+
+#button-name {
+  font-weight: 300;
+  margin-bottom: 30px;
+}
+
+ul.tabs {
+	margin-bottom: 10px;
+}
+
+div.indicator.bgcolor + div.indicator {
+	display: none;
+}
+
+ul.color.dropdown-content > li > a {
+	color: inherit;
+}
+
+#color-scheme-list > a.collection-item > div.row {
+  margin-top: 5px;
+}

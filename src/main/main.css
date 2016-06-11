@@ -1,0 +1,41 @@
+.button-text {
+	font-size: large;
+	margin-left: 16px;
+}
+
+.button-link {
+	color: black;
+}
+
+.button-image-wrapper > img {
+	width: 50px;
+	height: 50px;
+}
+
+.button-image-wrapper > i.material-icons {
+	font-size: 50px;
+}
+
+.centered {
+  position: absolute;
+  margin: auto;
+  top: 0px;
+  left: 0px;
+  bottom: 0px;
+  right: 0px;
+}
+
+#buttons > li {
+	width: 100%;
+}
+
+#default-pane {
+  z-index: 10050;
+}
+
+#settings-link {
+  z-index: 10000;
+  position: absolute;
+  bottom: 5px;
+  right: 5px;
+}
