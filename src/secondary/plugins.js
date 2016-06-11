@@ -1,23 +1,29 @@
 'use strict';
 
+function getFocusedPluginName() {
+  const currentPluginContainer = byQSelect('.plugin-container.focused');
+  // Plugin container ids have the form `${pluginName}-container`
+  return currentPluginContainer.id.slice(0, -('-container'.length));
+}
+
 function addFromFile() {
   byId('file-input').addEventListener('change', event => addPlugin(event), false);
   byId('file-input').click();
 }
 
 function promptRemoval() {
-  delete plugins[prompt('Plugin to remove:')];
+  const focusedPlugin = getFocusedPluginName();
+  if (!confirm(`Delete the plugin '${focusedPlugin}'?`)) return;
+  delete plugins[focusedPlugin];
   storage.store('plugins');
   window.location.reload();
 }
 
 function saveFocusedPluginSettings() {
-  const currentPluginContainer = byQSelect('.plugin-container.focused');
-  // Plugin container ids have the form `${pluginName}-container`
-  const currentPluginName = currentPluginContainer.id.slice(0, -('-container'.length));
+  const currentPluginName = getFocusedPluginName();
   // Ignore the title and the description
   const childrenToIgnore = 2;
-  Array.from(currentPluginContainer.children).forEach((settingDiv, i, children) => {
+  Array.from(byQSelect('.plugin-container.focused').children).forEach((settingDiv, i, children) => {
     if (i < childrenToIgnore) return;
     plugins[currentPluginName].settings[i - childrenToIgnore].value = settingDiv.children[0].value;
   });
