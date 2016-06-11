@@ -32,7 +32,7 @@ function loadButtons(callback) {
 
 function runPlugins() {
   Object.keys(plugins).forEach(pluginName => {
-    pluginsUtil.insertPluginHTML(plugins[pluginName], !byClass('plugin-container').length); // Only the first addition gets focus
+    pluginsUtil.insertPluginSettingsHTML(plugins[pluginName], !byClass('plugin-container').length); // Only the first addition gets focus
     try {
       if (plugins[pluginName].html.secondary) Object.keys(plugins[pluginName].html.secondary).forEach((selector, i, array) => {
         byQSelect(selector).insertAdjacentHTML('beforeend', array[selector]);

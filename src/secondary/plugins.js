@@ -12,19 +12,19 @@ function promptRemoval() {
 }
 
 function saveFocusedPluginSettings() {
-  const currentPlugin = byQSelect('.plugin-container.focused');
+  const currentPluginContainer = byQSelect('.plugin-container.focused');
   // Plugin container ids have the form `${pluginName}-container`
-  const currentPluginName = currentPlugin.id.slice(0, -('-container'.length));
+  const currentPluginName = currentPluginContainer.id.slice(0, -('-container'.length));
   // Ignore the title and the description
   const childrenToIgnore = 2;
-  Array.from(currentPlugin.children).forEach((settingDiv, i, children) => {
+  Array.from(currentPluginContainer.children).forEach((settingDiv, i, children) => {
     if (i < childrenToIgnore) return;
     plugins[currentPluginName].settings[i - childrenToIgnore].value = settingDiv.children[0].value;
   });
   storage.store('plugins');
 }
 
-function insertPluginHTML(pluginObject, isFocused) {
+function insertPluginSettingsHTML(pluginObject, isFocused) {
   // Add to dropdown list
   byId('plugins-list').insertAdjacentHTML('beforeend',
     `<li id="${pluginObject.name}">
@@ -87,13 +87,12 @@ function addPlugin(event) {
       alert('Plugin version is invalid.');
       return;
     }
+    plugins[plugin.name] = plugin;
     // Preserve settings if major versions match
     if (semver.major(plugin.version) === semver.major(oldPlugin.version)) {
-      // eslint-disable-next-line no-param-reassign
-      plugin.settings = oldPlugin.settings;
+      plugins[plugin.name].settings = oldPlugin.settings;
     }
     if (plugin.init) eval(plugin.js.init);
-    plugins[plugin.name] = plugin;
     storage.store('plugins', storeCallback);
   }
   const storeCallback = (function () {
@@ -119,6 +118,6 @@ function readPlugin(blob, callback) {
 module.exports = {
   addFromFile,
   promptRemoval,
-  insertPluginHTML,
+  insertPluginSettingsHTML,
   saveFocusedPluginSettings
 };
