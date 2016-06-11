@@ -4,6 +4,12 @@ A chrome extension that replaces the new tab.
 
 ## Installation
 
+Download `ext.crx` and `plugins.zip` from [here](https://github.com/slak44/ChromeNewTab/releases/latest).
+Go to chrome://extensions in your browser, then drag `ext.crx` inside.
+Navigate to the settings page to add buttons, plugins, and color schemes.
+
+## Building the extension
+
 Run `npm install` then `gulp all`, and the extension can be found packed in the `./build/dist` directory, or unpacked in the `./build/src` directory.
 
 ## Creating plugins
@@ -93,6 +99,33 @@ Paths are relative to the `package.json`'s directory.
 - `css`: each property represents a view. The css files for each view are concatenated, and the merged data is appended to a stylesheet after the html has been inserted
 - `js`: each property represents a position. Similar to the css files, all the js files are concatenated (in order of appearance), and the resulting script is executed at its respective position
 
+## Creating color schemes
+Color schemes are just JSON files:
+```
+{
+  "lighten5": "#fff3e0",
+  "lighten4": "#ffe0b2",
+  "lighten3": "#ffcc80",
+  "lighten2": "#ffb74d",
+  "lighten1": "#ffa726",
+  
+  "main": "#ff9800",
+  
+  "darken1": "#fb8c00",
+  "darken2": "#f57c00",
+  "darken3": "#ef6c00",
+  "darken4": "#e65100",
+  
+  "accent1": "#ffd180",
+  "accent2": "#ffab40",
+  "accent3": "#ff9100",
+  "accent4": "#ff6d00",
+  
+  "isDark": false,
+  "name": "Default Theme"
+}
+```
+
 ## Implementation details
 
 #### Plugin format:  
@@ -171,28 +204,6 @@ This should be valid JSON.
 - `position`: used to determine order of buttons
 - `hotkey`: using alt+key triggers the button
 - `openInNew`: if true, opens the link in a new tab that replaces the current one
-
-#### Color Scheme format:
-```
-{
-  // Orange is default
-  lighten5: "#fff3e0",
-  lighten4: "#ffe0b2",
-  lighten3: "#ffcc80",
-  lighten2: "#ffb74d",
-  lighten1: "#ffa726",
-  main: 		"#ff9800",
-  darken1: 	"#fb8c00",
-  darken2: 	"#f57c00",
-  darken3: 	"#ef6c00",
-  darken4: 	"#e65100",
-  accent1: 	"#ffd180",
-  accent2: 	"#ffab40",
-  accent3: 	"#ff9100",
-  accent4: 	"#ff6d00",
-  isDark: false
-}
-```
 
 ## reddit API
 This API is used in [/plugins/reddit.js](https://github.com/slak44/ChromeNewTab/tree/master/plugins/reddit.js).  
