@@ -10,7 +10,8 @@ function saveSelected() {
 }
 
 function removeSelected() {
-  if (!confirm('Remove this scheme?')) return;
+  const activeSchemeName = colorSchemes[activeSchemeIndex].name;
+  if (!confirm(`Remove the scheme '${activeSchemeName}'?`)) return;
   colorSchemes.splice(activeSchemeIndex, 1);
   const schemeElement = byQSelect('#color-scheme-list > a.active');
   schemeElement.parentNode.removeChild(schemeElement);
