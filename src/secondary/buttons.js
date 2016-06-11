@@ -23,8 +23,8 @@ function createNewButton() {
 }
 
 function removeButton() {
-  if (!confirm('Are you sure you want to delete this button?')) return;
   const id = byId('button-text').getAttribute('data-button-id');
+  if (!confirm(`Delete the button with id '${id}'?`)) return;
   delete buttons[id];
   byId(id).parentNode.removeChild(byId(id));
   activateDefaultButton();
