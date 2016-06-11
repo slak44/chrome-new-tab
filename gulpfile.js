@@ -47,9 +47,14 @@ gulp.task('copy-materialize-css', () =>
     .pipe(gulp.dest('./build/src'))
 );
 
-gulp.task('copy-fonts', () =>
+gulp.task('copy-fonts-roboto', () =>
   gulp.src('node_modules/materialize-css/dist/fonts/roboto/*')
     .pipe(gulp.dest('./build/src/fonts/roboto'))
+);
+
+gulp.task('copy-fonts-material-icons', () =>
+  gulp.src('node_modules/material-design-icons/iconfont/*')
+    .pipe(gulp.dest('./build/src/fonts/material-design-icons'))
 );
 
 gulp.task('extension', () => {
@@ -102,7 +107,7 @@ gulp.task('pack-plugins', () => {
     .pipe(gulp.dest('./build/dist/'));
 });
 
-gulp.task('default', ['materialize-bug-fix', 'build-js', 'copy-src', 'copy-materialize-css', 'copy-fonts']);
+gulp.task('default', ['materialize-bug-fix', 'build-js', 'copy-src', 'copy-materialize-css', 'copy-fonts-roboto', 'copy-fonts-material-icons']);
 
 gulp.task('default-watch', () => {
   gulp.watch(buildJsGlob, ['build-js']);
