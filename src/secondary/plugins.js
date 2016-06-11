@@ -7,7 +7,7 @@ function getFocusedPluginName() {
 }
 
 function addFromFile() {
-  byId('file-input').addEventListener('change', event => addPlugin(event), false);
+  byId('file-input').onchange = addPlugin;
   byId('file-input').click();
 }
 
@@ -95,7 +95,7 @@ function addPlugin(event) {
     }
     plugins[plugin.name] = plugin;
     // Preserve settings if major versions match
-    if (semver.major(plugin.version) === semver.major(oldPlugin.version)) {
+    if (oldPlugin && semver.major(plugin.version) === semver.major(oldPlugin.version)) {
       plugins[plugin.name].settings = oldPlugin.settings;
     }
     if (plugin.init) eval(plugin.js.init);
