@@ -33,12 +33,12 @@ const executeCommand = (function () {
       const args = stringArgs.split(' ');
       // Remove 'to' if it's found between units
       if (args[2].toLowerCase() === 'to') args.splice(2, 1);
-      let {number, fromUnit, toUnit} = args;
+      let [number, fromUnit, toUnit] = args;
       // If the unit is currency, use the currency script
-      if (Object.keys(fx.rates).includes(args[1].toUpperCase())) {
+      if (Object.keys(fx.rates).includes(toUnit.toUpperCase())) {
         fromUnit = fromUnit.toUpperCase();
         toUnit = toUnit.toUpperCase();
-        const result = fx.convert(Number(number), {fromUnit, toUnit}).toFixed(2);
+        const result = fx.convert(Number(number), {from: fromUnit, to: toUnit}).toFixed(2);
         return `${result} ${toUnit}`;
       }
       return Qty(`${number} ${fromUnit}`).to(toUnit).toString();
