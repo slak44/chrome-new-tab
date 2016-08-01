@@ -62,19 +62,26 @@ window.storage = new (function () {
   function throwIfNotStored(element) {
     if (!self.isStored(element)) throw new Error(`The element ${element} does not exist in this object`);
   }
+  
+  /*
+    Private utility function that returns where in local storage was the element placed.
+  */
+  function storedNameFrom(element) {
+    return `stored${capitalize(element)}`;
+  }
 
   /*
     Load a stored element in a global object with the same name.
   */
   this.load = function (element, callback) {
     throwIfNotStored(element);
-    chrome.storage.local.get(`stored${capitalize(element)}`, data => {
-      window[element] = data[`stored${capitalize(element)}`];
-      if (window[element] === undefined || window[element] === null) {
-        callback(new Error(`No ${element} found.`));
-        return;
+    chrome.storage.local.get(storedNameFrom(element), data => {
+      if (data && data[storedNameFrom(element)]) {
+        window[element] = data[storedNameFrom(element)];
+        callback(null);
+      } else {
+        self.store(element, callback);
       }
-      callback(null);
     });
   };
   
@@ -86,7 +93,7 @@ window.storage = new (function () {
   this.store = function (element, callback) {
     throwIfNotStored(element);
     const objToStore = {};
-    objToStore[`stored${capitalize(element)}`] = window[element];
+    objToStore[storedNameFrom(element)] = window[element];
     chrome.storage.local.set(objToStore, callback);
   };
 
@@ -105,7 +112,7 @@ window.storage = new (function () {
     throwIfNotStored(element);
     delete window[element];
     const objToStore = {};
-    objToStore[`stored${capitalize(element)}`] = {};
+    objToStore[storedNameFrom(element)] = {};
     chrome.storage.local.set(objToStore, callback);
   };
 })();
