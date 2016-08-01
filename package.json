@@ -1,6 +1,6 @@
 {
   "name": "chrome-new-tab",
-  "version": "6.4.0",
+  "version": "6.4.1",
   "dependencies": {
     "async": "^2.0.0-rc.3",
     "babel": "^6.5.2",
