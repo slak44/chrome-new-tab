@@ -2,6 +2,10 @@
 function createNewButton() {
   const id = prompt('Input a unique identifier for the button:');
   if (id === null) return;
+  // We're adding the first button, so show the button config UI
+  if (Object.keys(buttons).length === 0) {
+    byId('button-config').dataset.buttonsExist = 'yes';
+  }
   if (buttons[id] !== undefined && buttons[id] !== null) {
     alert('Identifier already exists.');
     return;

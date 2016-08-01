@@ -21,14 +21,18 @@ async.parallel([loadButtons, loadPlugins], err => {
 function loadButtons(callback) {
   storage.load('buttons',
   error => {
-    if (error || Object.keys(buttons).length === 0) {
+    if (error) {
       buttons = {};
       callback(error);
       return;
     }
+    if (Object.keys(buttons).length === 0) {
+      callback(null);
+      return;
+    }
     buttonsUtil.activateDefaultButton();
     buttonsUtil.initDropdown();
-    callback();
+    callback(null);
   });
 }
 

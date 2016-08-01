@@ -40,6 +40,14 @@
   display: none;
 }
 
+#button-config[data-buttons-exist="no"] {
+  visibility: hidden;
+}
+
+#button-config[data-buttons-exist="yes"] {
+  visibility: visible;
+}
+
 #button-name {
   font-weight: 300;
   margin-bottom: 30px;
