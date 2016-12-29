@@ -1,9 +1,11 @@
 #repl-pane {
   opacity: 0;
 }
+
 #repl-back {
   margin-top: 5px;
 }
+
 #repl-window {
   position: absolute;
   top: 60px;
@@ -13,6 +15,7 @@
   display: flex;
   flex-flow: column;
 }
+
 #repl-window > span:not(:first-child) {
   min-height: 20px;
   height: fit-content;
@@ -21,6 +24,7 @@
   -webkit-user-select: initial;
   cursor: text;
 }
+
 #repl-history {
   position: absolute;
   top: 60px;
@@ -28,11 +32,13 @@
   right: 10px;
   overflow: auto;
 }
+
 #repl-history span:not(:first-child) {
   cursor: pointer;
   width: 100%;
   display: block;
 }
+
 span.current-text {
   -webkit-user-modify: read-write;
   cursor: text;
@@ -41,9 +47,11 @@ span.current-text {
   flex-grow: 1;
   flex-shrink: 0;
 }
+
 #repl-window > span::before {
   content: '> ';
 }
+
 span.result-text::before {
   content: '< ' !important;
 }
