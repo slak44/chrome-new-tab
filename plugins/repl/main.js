@@ -71,7 +71,7 @@ const executeCommand = (function () {
       } else {
         let replaceable = code;
         Object.keys(replReplace).forEach(key => replaceable = replaceable.replace(replReplace[key], key));
-        window.result = window.eval(code);
+        window.result = window.eval(replaceable);
       }
     } catch (err) {
       window.result = err;
