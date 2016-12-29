@@ -43,13 +43,22 @@ const executeCommand = (function () {
       }
       return Qty(`${number} ${fromUnit}`).to(toUnit).toString();
     },
-    query: data => openInNewTab(`https://www.google.ro/search?q=${encodeURIComponent(data)}`),
-    wolfram: data => openInNewTab(`http://www.wolframalpha.com/input/?i=${encodeURIComponent(data)}`)
+    query: data => openInNewTab(`https://www.google.com/search?q=${encodeURIComponent(data)}`),
+    wolfram: data => openInNewTab(`http://www.wolframalpha.com/input/?i=${encodeURIComponent(data)}`),
+    winrate(stringArgs) {
+      /* eslint-disable no-magic-numbers */
+      const args = stringArgs.split(' ');
+      const [wins, losses] = args.map(arg => parseInt(arg, 10));
+      const winrate = wins * 100 / (losses + wins);
+      return `${winrate.toFixed(2)}%`;
+      /* eslint-enable no-magic-numbers */
+    }
   };
   const commandAliases = {
     cv: 'convert',
     q: 'query',
-    w: 'wolfram'
+    w: 'wolfram',
+    wr: 'winrate'
   };
   const replReplace = {
     replLog: /console\.(log|error|info|debug)/g,
