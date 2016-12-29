@@ -14,7 +14,7 @@
     }
   },
   "dependencies": {
-    "js-quantities": "^1.6.1",
+    "js-quantities": "^1.6.3",
     "money": "^0.2.0"
   },
   "html": {
