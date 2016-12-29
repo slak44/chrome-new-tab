@@ -23,6 +23,7 @@
   display: block;
   -webkit-user-select: initial;
   cursor: text;
+  font-family: monospace;
 }
 
 #repl-history {
