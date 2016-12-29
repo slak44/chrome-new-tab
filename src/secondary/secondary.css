@@ -1,6 +1,6 @@
 .color-sample {
-	min-height: 50px;
-	border: solid 1px rgba(0, 0, 0, 0.2);
+  min-height: 50px;
+  border: solid 1px rgba(0, 0, 0, 0.2);
 }
 
 .plugin-title {
@@ -17,7 +17,7 @@
 
 .card-top-right-icon {
   float: right;
-  padding: 20px 20px 0px 0px;
+  padding: 20px 20px 0 0;
 }
 
 .card-icon-image {
@@ -31,20 +31,20 @@
 }
 
 #floating-save-button {
-	position: absolute !important;
-	bottom: 25px;
-	right: 25px;
+  position: absolute !important;
+  bottom: 25px;
+  right: 25px;
 }
 
 #file-input {
   display: none;
 }
 
-#button-config[data-buttons-exist="no"] {
+#button-config [data-buttons-exist="no"] {
   visibility: hidden;
 }
 
-#button-config[data-buttons-exist="yes"] {
+#button-config [data-buttons-exist="yes"] {
   visibility: visible;
 }
 
@@ -54,15 +54,15 @@
 }
 
 ul.tabs {
-	margin-bottom: 10px;
+  margin-bottom: 10px;
 }
 
 div.indicator.bgcolor + div.indicator {
-	display: none;
+  display: none;
 }
 
 ul.color.dropdown-content > li > a {
-	color: inherit;
+  color: inherit;
 }
 
 #color-scheme-list > a.collection-item > div.row {
