@@ -12,6 +12,7 @@
   bottom: 60px;
   left: 10px;
   overflow: auto;
+  word-wrap: break-word;
   display: flex;
   flex-flow: column;
 }
@@ -33,6 +34,7 @@
   bottom: 60px;
   right: 10px;
   overflow: auto;
+  word-wrap: break-word;
 }
 
 #repl-history span:not(:first-child) {
