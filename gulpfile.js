@@ -119,6 +119,10 @@ gulp.task('default-watch', () => {
   gulp.watch(copySrcGlob, ['copy-src']);
 });
 
+gulp.task('plugins-watch', () => {
+  gulp.watch(['plugins/**/*', '!plugins/**/browserify_TMPFILE'], ['plugins']);
+});
+
 gulp.task('all', sequence(['default', 'extension', 'plugins', 'pack-plugins']));
 
 function createVersionTask(bumpType) {

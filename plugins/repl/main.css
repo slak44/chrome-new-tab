@@ -24,6 +24,7 @@
   -webkit-user-select: initial;
   cursor: text;
   font-family: monospace;
+  padding-left: 1em;
 }
 
 #repl-history {
@@ -49,8 +50,10 @@ span.current-text {
   flex-shrink: 0;
 }
 
-#repl-window > span::before {
+#repl-window > span:not(:first-child)::before {
   content: '> ';
+  font-size: 1em;
+  margin-left: -1em;
 }
 
 span.result-text::before {
