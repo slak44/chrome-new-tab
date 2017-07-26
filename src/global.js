@@ -43,26 +43,26 @@ window.getFile = callback => {
 */
 window.storage = new (function () {
   const self = this;
-  
+
   /*
     Constant.
     Existing storage elements. Usable as 'element' parameters for the other functions in this object.
   */
   this.stored = ['plugins', 'buttons', 'colorSchemes'];
   Object.freeze(this.stored);
-  
+
   /*
     Checks whether or not an element is being stored in this object.
   */
   this.isStored = element => this.stored.includes(element);
-  
+
   /*
     Private utility function that throws an error if the element is not in the `stored` array.
   */
   function throwIfNotStored(element) {
     if (!self.isStored(element)) throw new Error(`The element ${element} does not exist in this object`);
   }
-  
+
   /*
     Private utility function that returns where in local storage was the element placed.
   */
@@ -84,7 +84,7 @@ window.storage = new (function () {
       }
     });
   };
-  
+
   /*
     Stores an element in the browser storage.
     The name used for storage is 'stored' + the name of the element, capitalized.
@@ -104,7 +104,7 @@ window.storage = new (function () {
     this.stored.forEach(element => delete window[element]);
     chrome.storage.local.clear();
   };
-  
+
   /*
     Only deletes a single element.
   */
@@ -127,14 +127,14 @@ window.PluginUtil = function (pluginName) {
   this.getSetting = function (settingName) {
     return plugins[pluginName].settings.filter(settingObj => settingObj.name === settingName)[0].value;
   };
-  
+
   /*
     Dynamically adds a plugin's css.
   */
   this.insertStyles = function (cssText) {
     byId('plugin-css').innerHTML += cssText;
   };
-  
+
   /*
     Shortcut to plugin dependencies.
   */
@@ -154,7 +154,7 @@ window.activateScheme = function (scheme) {
     .color.darken-${i} {color: ${scheme[`darken${i}`]} !important;}
     .color.lighten-${i} {color: ${scheme[`lighten${i}`]} !important;}
     .color.accent-${i} {color: ${scheme[`accent${i}`]} !important;}
-    
+
     .bgcolor.darken-${i} {background-color: ${scheme[`darken${i}`]} !important;}
     .bgcolor.lighten-${i} {background-color: ${scheme[`lighten${i}`]} !important;}
     .bgcolor.accent-${i} {background-color: ${scheme[`accent${i}`]} !important;}
@@ -164,7 +164,7 @@ window.activateScheme = function (scheme) {
   .color.lighten-5 {color: ${scheme.lighten5} !important;}
   .bgcolor.lighten-5 {background-color: ${scheme.lighten5} !important;}
   `;
-  
+
   css += `
   input[type=text]:focus:not([readonly]), input[type=password]:focus:not([readonly]), input[type=email]:focus:not([readonly]), input[type=url]:focus:not([readonly]),
   input[type=time]:focus:not([readonly]), input[type=date]:focus:not([readonly]), input[type=datetime-local]:focus:not([readonly]), input[type=tel]:focus:not([readonly]),
@@ -178,23 +178,23 @@ window.activateScheme = function (scheme) {
   input[type=search]:focus:not([readonly]) + label, textarea.materialize-textarea:focus:not([readonly]) + label {
     color: ${scheme.main} !important;
   }
-  
+
   [type="checkbox"]:checked + label:before {
     border-bottom-color: ${scheme.main} !important;
     border-right-color: ${scheme.main} !important;
   }
-  
+
   .collection-item.active {background-color: ${scheme.darken4} !important;}
-  
+
   nav {
     background-color: ${scheme.darken1} !important;
   }
   `;
-  
+
   if (scheme.isDark) {
     // TODO
   }
-  
+
   byId('dynamic-colors').innerHTML = css;
 };
 
@@ -216,20 +216,20 @@ window.loadSchemes = function (callback) {
       colorSchemes = [{
         name: 'Light Orange with Lime Accents',
         isDark: false,
-        
+
         lighten5: '#fff3e0',
         lighten4: '#ffe0b2',
         lighten3: '#ffcc80',
         lighten2: '#ffb74d',
         lighten1: '#ffa726',
-        
+
         main: '#ff9800',
-        
+
         darken1: '#fb8c00',
         darken2: '#f57c00',
         darken3: '#ef6c00',
         darken4: '#e65100',
-        
+
         accent1: '#F4FF81',
         accent2: '#EEFF41',
         accent3: '#C6FF00',
@@ -244,8 +244,7 @@ window.loadSchemes = function (callback) {
 window.loadPlugins = function (callback) {
   document.getElementsByTagName('head')[0].insertAdjacentHTML('beforeend', '<style id="plugin-css"></style>');
   window.pluginCss = byId('plugin-css');
-  storage.load('plugins',
-  error => {
+  storage.load('plugins', error => {
     if (error) {
       callback(error);
       return;
