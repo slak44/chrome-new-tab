@@ -2,12 +2,15 @@
 
 const async = require('async');
 const fs = require('fs');
-const browserify = require('browserify');
+const webpack = require('webpack');
 const babel = require('babel-core');
+const path = require('path');
 
 const pluginDir = process.argv[2];
 const pkg = JSON.parse(fs.readFileSync(`${pluginDir}/package.json`));
 const outputFile = process.argv[3] || `./${pkg.pluginName}.json`;
+
+const webpackBase = require(`${__dirname}/plugins/.plugin.webpack.config.js`);
 
 pkg.js = pkg.js || {};
 pkg.html = pkg.html || {};
@@ -49,8 +52,7 @@ function mergeFiles(src = [], transform, callback) {
 function parseHtmlInserts(view, callback) {
   async.series(
     Object.keys(pkg.html[view] || {}).map(file => function (callback) {
-      fs.readFile(`${pluginDir}/${file}`, {encoding: 'utf8'},
-      (err, data) => {
+      fs.readFile(`${pluginDir}/${file}`, {encoding: 'utf8'}, (err, data) => {
         if (err) {
           callback(err, null);
           return;
@@ -71,8 +73,7 @@ function parseHtmlInserts(view, callback) {
 }
 
 function installDeps(callback) {
-  require('child_process').exec('npm install', {cwd: pluginDir},
-  (err, stdout, stderr) => {
+  require('child_process').exec('npm install', {cwd: pluginDir}, (err, stdout, stderr) => {
     console.log(stdout);
     console.error(stderr);
     if (err) {
@@ -83,28 +84,38 @@ function installDeps(callback) {
   });
 }
 
-function browserifyDeps(callback) {
+function packDeps(callback) {
   if (Object.keys(pkg.dependencies).length === 0) {
     callback(null);
     return;
   }
-  let toBrowserify = Object
+  let toPack = Object
     .keys(pkg.dependencies)
     .map(depName => `window.dependencies['${pkg.pluginName}']['${depName}'] = require('${depName}');`)
     .join('\n');
-  toBrowserify = `window.dependencies['${pkg.pluginName}'] = {};${toBrowserify}`; // Create the plugin's dependencies object before adding them
-  const fileName = `${pluginDir}/browserify_TMPFILE`;
-  fs.writeFileSync(fileName, toBrowserify);
+  // Create an empty plugin dependencies object before adding requires
+  toPack = `window.dependencies['${pkg.pluginName}'] = {};${toPack}`;
+  const fileName = `${pluginDir}/TEMP_PLUGIN_FILE`;
+  fs.writeFileSync(fileName, toPack);
 
-  browserify(fileName, {standalone: `${pkg.name}-dependencies`}).bundle((err, result) => {
+  const webpackConfig = webpackBase;
+  webpackConfig.entry = fileName;
+  webpackConfig.output = {
+    filename: `${pluginDir}/TEMP_PLUGIN_OUTPUT`
+  };
+
+  webpack(webpackConfig, (err, stats) => {
     fs.unlinkSync(fileName, err => {
-      if (err) throw err;
+      if (err) console.error(err);
     });
-    if (err) {
+    if (err || stats.hasErrors()) {
       callback(err);
       return;
     }
-    pluginObject.dependencyCode = result.toString();
+    pluginObject.dependencyCode = fs.readFileSync(webpackConfig.output.filename);
+    fs.unlinkSync(webpackConfig.output.filename, err => {
+      if (err) throw err;
+    });
     callback(null);
   });
 }
@@ -122,7 +133,7 @@ async.parallel([
   callback => parseHtmlInserts('secondary', callback),
   callback => installDeps(err => {
     if (err) throw err;
-    browserifyDeps(callback);
+    packDeps(callback);
   })
 ], (err, results) => {
   if (err) throw err;

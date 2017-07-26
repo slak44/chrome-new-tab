@@ -53,7 +53,9 @@
     "eventemitter2": "^1.0.0"
   },
   "babel": {
-    "presets": ["es2015"]
+    "presets": [
+      "latest"
+    ]
   },
   "eslintConfig": {
     "extends": "../.eslintrc.json",

@@ -2,38 +2,14 @@
 
 const gulp = require('gulp');
 const sequence = require('gulp-sequence');
+const webpack = require('webpack-stream');
 const fs = require('fs');
-
-gulp.task('materialize-bug-fix', done => {
-  const libLocation = `${__dirname}/node_modules/pickadate/lib/picker.js`;
-  const missingLibFile = `${__dirname}/node_modules/materialize-css/bin/picker.js`;
-  
-  fs.lstat(missingLibFile, (err, stats) => {
-    if (err && err.code !== 'ENOENT') {
-      done(err);
-      return;
-    }
-    if ((err && err.code === 'ENOENT') || !stats.isSymbolicLink()) {
-      symlink();
-    } else done();
-  });
-  
-  function symlink() {
-    fs.symlink(libLocation, missingLibFile, err => {
-      if (err) throw err;
-      done();
-    });
-  }
-});
 
 const buildJsGlob = ['src/**/*.js'];
 gulp.task('build-js', () => {
-  const babel = require('gulp-babel');
-  const gulpBrowser = require('gulp-browser');
-  return gulp.src(buildJsGlob, {base: './'})
-    .pipe(babel())
-    .pipe(gulpBrowser.browserify())
-    .pipe(gulp.dest('./build/'));
+  gulp.src(buildJsGlob, {base: './'})
+    .pipe(webpack(require('./webpack.config.js')))
+    .pipe(gulp.dest('./build/src'));
 });
 
 const copySrcGlob = ['src/**/*.+(html|css|json)', '!src/**/*.js', '!src/**/.eslintrc.json'];
@@ -112,7 +88,15 @@ gulp.task('pack-plugins', () => {
     .pipe(gulp.dest('./build/dist/'));
 });
 
-gulp.task('default', ['materialize-bug-fix', 'build-js', 'copy-src', 'copy-materialize-css', 'copy-fonts-roboto', 'copy-fonts-material-icons']);
+gulp.task('default', sequence('build', 'default-watch'));
+
+gulp.task('build', [
+  'build-js',
+  'copy-src',
+  'copy-materialize-css',
+  'copy-fonts-roboto',
+  'copy-fonts-material-icons',
+]);
 
 gulp.task('default-watch', () => {
   gulp.watch(buildJsGlob, ['build-js']);
@@ -120,10 +104,10 @@ gulp.task('default-watch', () => {
 });
 
 gulp.task('plugins-watch', () => {
-  gulp.watch(['plugins/**/*', '!plugins/**/browserify_TMPFILE'], ['plugins']);
+  gulp.watch(['plugins/**/*', '!plugins/**/TEMP_PLUGIN_FILE'], ['plugins']);
 });
 
-gulp.task('all', sequence(['default', 'extension', 'plugins', 'pack-plugins']));
+gulp.task('all', sequence(['build', 'extension', 'plugins', 'pack-plugins']));
 
 function createVersionTask(bumpType) {
   const merge = require('merge-stream');

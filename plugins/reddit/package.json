@@ -27,12 +27,16 @@
     }
   ],
   "babel": {
-    "presets": ["es2015"]
+    "presets": [
+      "latest"
+    ]
   },
   "dependencies": {},
   "html": {},
   "css": {},
   "js": {
-    "main": ["main.js"]
+    "main": [
+      "main.js"
+    ]
   }
 }

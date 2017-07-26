@@ -20,13 +20,19 @@
     }
   ],
   "babel": {
-    "presets": ["es2015"]
+    "presets": [
+      "latest"
+    ]
   },
   "js": {
-    "main": ["fade.js"]
+    "main": [
+      "fade.js"
+    ]
   },
   "css": {
-    "main": ["black.css"]
+    "main": [
+      "black.css"
+    ]
   },
   "html": {
     "main": {
