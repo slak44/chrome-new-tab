@@ -2,8 +2,7 @@
 
 window.dependencies = {};
 
-window.$ = window.jQuery = require('jquery');
-require('materialize-css');
+window.Materialize = require('materialize-css');
 
 window.plugins = {};
 window.buttons = {};

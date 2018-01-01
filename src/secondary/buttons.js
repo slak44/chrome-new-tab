@@ -68,7 +68,6 @@ function setActiveButton(buttonData, id) {
   byId('button-position').value = buttonData.position;
   byId('button-hotkey').value = buttonData.hotkey;
   byId('button-replace-tab').checked = buttonData.openInNew;
-  Materialize.updateTextFields();
 }
 
 function activateDefaultButton() {
