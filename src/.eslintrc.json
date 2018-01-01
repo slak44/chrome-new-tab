@@ -4,30 +4,30 @@
     "loadSchemes": false,
     "activateScheme": false,
     "colorSchemes": true,
-    
+
     "PluginUtil": false,
     "loadPlugins": false,
     "plugins": true,
     "pluginCss": false,
-    
+
     "buttons": true,
-    
+
     "toggleDiv": false,
     "createButton": false,
     "addPanel": false,
-    
+
     "byId": false,
     "byClass": false,
     "byQSelect": false,
     "hasClass": false,
     "capitalize": false,
-    
+
     "readFile": false,
     "getFile": false,
-    
+
     "chrome": true,
     "storage": false,
-    
+
     "Materialize": false
   }
 }

@@ -35,12 +35,12 @@ function insertPreviewHTML(scheme) {
   top.href = '#!';
   top.className = 'collection-item color';
   top.innerText = scheme.name;
-  
+
   // Container for samples
   const div = document.createElement('div');
   div.className = 'row';
   top.appendChild(div);
-  
+
   // Add scheme theme
   div.appendChild(createColorSampleElement(scheme.isDark ? 'black' : 'white'));
   // Add dark colors from darkest
@@ -53,7 +53,7 @@ function insertPreviewHTML(scheme) {
   div.insertAdjacentHTML('beforeend', '<br style="line-height: 75px;">');
   // Add accent colors
   addSamples(name => name.startsWith('accent'));
-  
+
   byId('color-scheme-list').appendChild(top);
 
   function addSamples(filterFunction, sortFunction) {
@@ -64,7 +64,7 @@ function insertPreviewHTML(scheme) {
         div.appendChild(createColorSampleElement(scheme[colorName]));
       });
   }
-  
+
   function createColorSampleElement(color) {
     const sample = document.createElement('div');
     sample.style = `background-color: ${color};`;

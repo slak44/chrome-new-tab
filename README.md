@@ -89,7 +89,7 @@ Paths are relative to the `package.json`'s directory.
   }
 ```
 - `pluginName`: name of plugin. Also serves as the key to this plugin in the global `plugins` object, so it must be unique
-- `description`: plugin description. 
+- `description`: plugin description.
 - `author`: self-explanatory
 - `version`: [semver](http://semver.org/) version string
 - `settings`: array of objects, format described below (note: incrementing the major version wipes the user's settings, so changes to the settings object should only happen in major releases)
@@ -108,19 +108,19 @@ Color schemes are just JSON files:
   "lighten3": "#ffcc80",
   "lighten2": "#ffb74d",
   "lighten1": "#ffa726",
-  
+
   "main": "#ff9800",
-  
+
   "darken1": "#fb8c00",
   "darken2": "#f57c00",
   "darken3": "#ef6c00",
   "darken4": "#e65100",
-  
+
   "accent1": "#ffd180",
   "accent2": "#ffab40",
   "accent3": "#ff9100",
   "accent4": "#ff6d00",
-  
+
   "isDark": false,
   "name": "Default Theme"
 }

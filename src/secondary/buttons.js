@@ -19,8 +19,8 @@ function createNewButton() {
     checked: false
   };
   setActiveButton(buttons[id], id);
-  byId('buttons-list').insertAdjacentHTML('beforeend',
-  `<li id="${id}">
+  byId('buttons-list').insertAdjacentHTML('beforeend', `
+  <li id="${id}">
     <a href="#!">${id}</a>
   </li>`
   );

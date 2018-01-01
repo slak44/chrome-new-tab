@@ -19,8 +19,7 @@ async.parallel([loadButtons, loadPlugins], err => {
 });
 
 function loadButtons(callback) {
-  storage.load('buttons',
-  error => {
+  storage.load('buttons', error => {
     if (error) {
       buttons = {};
       callback(error);

@@ -7,7 +7,7 @@ const fs = require('fs');
 gulp.task('materialize-bug-fix', done => {
   const libLocation = `${__dirname}/node_modules/pickadate/lib/picker.js`;
   const missingLibFile = `${__dirname}/node_modules/materialize-css/bin/picker.js`;
-  
+
   fs.lstat(missingLibFile, (err, stats) => {
     if (err && err.code !== 'ENOENT') {
       done(err);
@@ -17,7 +17,7 @@ gulp.task('materialize-bug-fix', done => {
       symlink();
     } else done();
   });
-  
+
   function symlink() {
     fs.symlink(libLocation, missingLibFile, err => {
       if (err) throw err;

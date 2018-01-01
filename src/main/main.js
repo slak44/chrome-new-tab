@@ -40,8 +40,9 @@ document.onkeydown = function (e) {
 function createButton(options) {
   if (options.parent && !(options.parent instanceof HTMLElement)) throw new Error('options.parent must be a HTMLElement');
   const parent = options.parent || byId('buttons');
-  parent.insertAdjacentHTML('beforeend',
-	`<li class="waves-effect waves-light collection-item">
+  /* eslint-disable indent */
+  parent.insertAdjacentHTML('beforeend', `
+  <li class="waves-effect waves-light collection-item">
 		<a href="${options.href || ''}" class="button-link">
 			<div class="valign-wrapper">
 				<div class="button-image-wrapper">
@@ -52,8 +53,8 @@ function createButton(options) {
 				<div class="valign thin button-text">${options.text}</div>
 			</div>
 		</a>
-	</li>`
-	);
+	</li>`);
+  /* eslint-enable indent */
   const anchor = parent.children[parent.children.length - 1];
   if (options.href !== undefined && (options.href.indexOf('chrome://') === 0 || options.openInNew))
     anchor.addEventListener('click', event => {
@@ -64,8 +65,7 @@ function createButton(options) {
 }
 
 function loadButtons(callback) {
-  storage.load('buttons',
-  err => {
+  storage.load('buttons', err => {
     if (err) {
       createButton({text: 'Configure buttons here', href: '/secondary/secondary.html'});
     } else {
