@@ -49,8 +49,7 @@ function mergeFiles(src = [], transform, callback) {
 function parseHtmlInserts(view, callback) {
   async.series(
     Object.keys(pkg.html[view] || {}).map(file => function (callback) {
-      fs.readFile(`${pluginDir}/${file}`, {encoding: 'utf8'},
-      (err, data) => {
+      fs.readFile(`${pluginDir}/${file}`, {encoding: 'utf8'}, (err, data) => {
         if (err) {
           callback(err, null);
           return;
@@ -71,8 +70,7 @@ function parseHtmlInserts(view, callback) {
 }
 
 function installDeps(callback) {
-  require('child_process').exec('npm install', {cwd: pluginDir},
-  (err, stdout, stderr) => {
+  require('child_process').exec('npm install', {cwd: pluginDir}, (err, stdout, stderr) => {
     console.log(stdout);
     console.error(stderr);
     if (err) {
