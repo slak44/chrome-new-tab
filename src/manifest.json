@@ -2,7 +2,7 @@
   "manifest_version": 2,
 
   "name": "A New 'new tab'",
-  "version": "6.4.1",
+  "version": "6.4.2",
   "chrome_url_overrides": {
     "newtab": "/main/main.html"
   },

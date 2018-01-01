@@ -2,7 +2,7 @@
 
 window.dependencies = {};
 
-window.jQuery = require('jquery');
+window.$ = window.jQuery = require('jquery');
 require('materialize-css');
 
 window.plugins = {};

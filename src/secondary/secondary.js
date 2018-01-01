@@ -1,10 +1,10 @@
 'use strict';
 
-require('./src/global.js');
+require('../global');
 const async = require('async');
-const buttonsUtil = require('./src/secondary/buttons.js');
-const pluginsUtil = require('./src/secondary/plugins.js');
-const schemesUtil = require('./src/secondary/schemes.js');
+const buttonsUtil = require('./buttons');
+const pluginsUtil = require('./plugins');
+const schemesUtil = require('./schemes');
 
 byId('version-string').innerText = `version ${chrome.runtime.getManifest().version}`;
 

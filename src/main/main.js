@@ -1,6 +1,6 @@
 'use strict';
 
-require('./src/global.js');
+require('../global');
 const async = require('async');
 
 loadSchemes(() => {
