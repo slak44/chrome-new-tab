@@ -4,28 +4,6 @@ const gulp = require('gulp');
 const sequence = require('gulp-sequence');
 const fs = require('fs');
 
-gulp.task('materialize-bug-fix', done => {
-  const libLocation = `${__dirname}/node_modules/pickadate/lib/picker.js`;
-  const missingLibFile = `${__dirname}/node_modules/materialize-css/bin/picker.js`;
-
-  fs.lstat(missingLibFile, (err, stats) => {
-    if (err && err.code !== 'ENOENT') {
-      done(err);
-      return;
-    }
-    if ((err && err.code === 'ENOENT') || !stats.isSymbolicLink()) {
-      symlink();
-    } else done();
-  });
-
-  function symlink() {
-    fs.symlink(libLocation, missingLibFile, err => {
-      if (err) throw err;
-      done();
-    });
-  }
-});
-
 const buildJsGlob = ['src/**/*.js'];
 gulp.task('build-js', () => {
   const babel = require('gulp-babel');
@@ -112,7 +90,7 @@ gulp.task('pack-plugins', () => {
     .pipe(gulp.dest('./build/dist/'));
 });
 
-gulp.task('default', ['materialize-bug-fix', 'build-js', 'copy-src', 'copy-materialize-css', 'copy-fonts-roboto', 'copy-fonts-material-icons']);
+gulp.task('default', ['build-js', 'copy-src', 'copy-materialize-css', 'copy-fonts-roboto', 'copy-fonts-material-icons']);
 
 gulp.task('default-watch', () => {
   gulp.watch(buildJsGlob, ['build-js']);
