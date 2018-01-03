@@ -6,27 +6,37 @@
     <link rel="stylesheet" type="text/css" href="/secondary/secondary.css">
     <link rel="stylesheet" type="text/css" href="/materialize.min.css">
   </head>
-  <body class="bgcolor lighten-5">
+  <body>
     <input id="file-input" type="file"></input>
-    <nav id="nav-bar">
-      <div class="nav-wrapper">
-        <a href="#!" class="brand-logo center">New Tab Settings</a>
-        <span id="version-string"></span>
-      </div>
+    <nav id="nav-bar" class="nav-wrapper with-tabs row">
+      <a href="#!" class="brand-logo col text-primary">New Tab Settings</a>
+      <div id="version-string" class="text-primary col"></div>
+      <ul class="tabs">
+        <li id="plugin-settings" class="tab col s2"><a href="#settings-tab">Plugin Settings</a></li>
+        <li id="button-list" class="tab col s2"><a href="#buttons-tab">Button List</a></li>
+        <li id="color-scheme" class="tab col s2"><a href="#color-scheme-tab">Color Schemes</a></li>
+        <li id="backup-and-restore" class="tab col s2"><a href="#json-tab">Backup and restore</a></li>
+      </ul>
+      <a id="floating-save-button" class="waves-effect btn-floating btn-large" href="#"><i class="material-icons">save</i></a>
     </nav>
-		<div class="row">
+    <main>
+      <section id="settings-tab" class="tab-content">
+
+      </section>
+      <section id="buttons-tab" class="tab-content">
+      </section>
+      <section id="color-scheme-tab" class="tab-content">
+
+      </section>
+      <section id="backup-tab" class="tab-content">
+
+      </section>
+    </main>
+		<!-- <div class="row">
 			<div class="col s12">
-				<ul class="tabs">
-					<li id="plugin-settings" class="tab col s3"><a href="#settings-tab" class="color">Plugin Settings</a></li>
-					<li id="button-list" class="tab col s3"><a href="#buttons-tab" class="color">Button List</a></li>
-					<li id="color-scheme" class="tab col s3"><a href="#color-scheme-tab" class="color">Color Schemes</a></li>
-					<li id="backup-and-restore" class="tab col s3"><a href="#json-tab" class="color">Backup and restore</a></li>
-					<div class="bgcolor indicator"></div>
-				</ul>
-				<a id="floating-save-button" class="bgcolor waves-effect waves-light btn-floating btn-large floating-save-button" href="#"><i class="material-icons">save</i></a>
 				<div id="settings-tab" class="data-tab focused">
 					<div class="row center-align">
-            <a class="col s3 bgcolor lighten-2 waves-effect waves-light dropdown-button btn" data-activates="plugins-list" href="#">Select plugin</a>
+            <a class="col s3 waves-effect dropdown-button btn" data-activates="plugins-list" href="#">Select plugin</a>
             <a id="remove-plugin" class="col s1 right waves-effect waves-light btn-flat" href="#"><i class="material-icons right">remove</i>Remove</a>
 						<a id="add-plugin" class="col s1 right waves-effect waves-light btn-flat" href="#"><i class="material-icons right">add</i>Add</a>
 					</div>
@@ -122,7 +132,8 @@
           </div>
 				</div>
 			</div>
-		</div>
-    <script src="secondary.min.js"></script>
+		</div> -->
+    <script src="/global/global.min.js"></script>
+    <script src="/secondary/secondary.min.js"></script>
   </body>
 </html>

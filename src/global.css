@@ -53,6 +53,10 @@ div.unfocused {
   -webkit-animation: hide 0.5s linear 0s 1 normal forwards running;
 }
 
+.capitalized {
+  text-transform: capitalize;
+}
+
 @-webkit-keyframes show {
   0% {
     opacity: 0;

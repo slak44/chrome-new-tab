@@ -26,16 +26,6 @@ div.color-sample {
   font-size: 200px;
 }
 
-#nav-bar {
-  margin-bottom: 10px;
-}
-
-#floating-save-button {
-  position: absolute !important;
-  bottom: 25px;
-  right: 25px;
-}
-
 #file-input {
   display: none;
 }
@@ -53,14 +43,6 @@ div.color-sample {
   margin-bottom: 30px;
 }
 
-ul.tabs {
-  margin-bottom: 10px;
-}
-
-div.indicator.bgcolor + div.indicator {
-  display: none;
-}
-
 ul.color.dropdown-content > li > a {
   color: inherit;
 }
@@ -69,9 +51,62 @@ ul.color.dropdown-content > li > a {
   margin-top: 5px;
 }
 
-#version-string {
-  position: absolute;
-  top: 5px;
-  right: 5px;
-  line-height: 18px;
+nav.with-tabs {
+  height: 112px; /* nav height is 64, tabs height is 48 */
+}
+
+nav.with-tabs > .tabs {
+  background-color: inherit;
+  margin-bottom: 0px;
+}
+
+main {
+  height: -webkit-fill-available;
+}
+
+section.tab-content {
+  height: -webkit-fill-available !important;
+  width: 100% !important;
+  margin-left: 20px;
+}
+
+#floating-save-button {
+  position: absolute !important;
+  right: 128px;
+  top: 84px; /* nav height is 64, tabs height is 48, but we substract btn height / 2 to center it, height is 56 */
+}
+
+#buttons-tab {
+  display: flex;
+}
+
+.card.horizontal {
+  height: fit-content;
+}
+
+.card.horizontal .card-image {
+  min-width: 100px;
+  display: flex;
+  justify-content: center;
+  flex-flow: column;
+}
+
+.card.horizontal .card-image img {
+  display: none;
+}
+
+.card-missing-image {
+  text-align: center;
+}
+
+.card-content {
+  min-width: 400px;
+}
+
+.input-field input {
+  margin-bottom: 10px !important;
+}
+
+.brand-logo {
+  position: initial !important;
 }

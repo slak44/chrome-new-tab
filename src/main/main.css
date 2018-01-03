@@ -33,9 +33,15 @@
   z-index: 10050;
 }
 
-#settings-link {
-  z-index: 10000;
-  position: absolute;
-  bottom: 5px;
-  right: 5px;
+nav.nav-wrapper {
+  z-index: 1000;
+  position: relative;
+}
+
+ul.side-nav.fixed.clipped {
+  padding-top: 72px; /* 64 is nav height, 8 is for padding */
+}
+
+ul.dropdown-content.overflow {
+  margin-top: 16px; /* top padding of icon is 16 */
 }

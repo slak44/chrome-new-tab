@@ -1,6 +1,5 @@
 'use strict';
 
-require('../global');
 const async = require('async');
 const buttonsUtil = require('./buttons');
 const pluginsUtil = require('./plugins');
@@ -10,8 +9,8 @@ byId('version-string').innerText = `version ${chrome.runtime.getManifest().versi
 
 loadSchemes(() => {
   activateScheme(colorSchemes[0]);
-  colorSchemes.forEach(scheme => schemesUtil.insertPreviewHTML(scheme));
-  schemesUtil.initSchemesEventListeners();
+  // colorSchemes.forEach(scheme => schemesUtil.insertPreviewHTML(scheme));
+  // schemesUtil.initSchemesEventListeners();
 });
 async.parallel([loadButtons, loadPlugins], err => {
   if (err) throw err;
@@ -29,8 +28,9 @@ function loadButtons(callback) {
       callback(null);
       return;
     }
-    buttonsUtil.activateDefaultButton();
-    buttonsUtil.initDropdown();
+    for (const button in buttons) buttonsUtil.addButtonCard(buttons[button]);
+    // buttonsUtil.activateDefaultButton();
+    // buttonsUtil.initDropdown();
     callback(null);
   });
 }
@@ -62,82 +62,82 @@ byId('floating-save-button').addEventListener('click', event => {
   }
 });
 
-function showTab(id) {
-  return function (event) {
-    event.preventDefault();
-    toggleDiv(byQSelect('.data-tab.focused'));
-    toggleDiv(id);
-  };
-}
-byId('plugin-settings').addEventListener('click', showTab('settings-tab'));
-byId('button-list').addEventListener('click', showTab('buttons-tab'));
-byId('backup-and-restore').addEventListener('click', showTab('json-tab'));
-byId('color-scheme').addEventListener('click', showTab('color-scheme-tab'));
-
-function createDataJson() {
-  byId('copy-data-display').value = JSON.stringify({
-    pluginsData: plugins,
-    buttonsData: buttons
-  });
-}
-byId('show-data').addEventListener('click', event => {
-  createDataJson();
-});
-
-byId('copy-data').addEventListener('click', event => {
-  createDataJson();
-  byId('copy-data-display').select();
-  document.execCommand('copy');
-  byId('copy-data-display').value = '';
-  byId('copy-data').focus();
-});
-
-byId('restore-data').addEventListener('click', event => {
-  function restore(what, dataObject) {
-    return function (callback) {
-      window[what] = dataObject[`${what}Data`];
-      storage.store(what, callback);
-    };
-  }
-  if (byId('insert-data').value !== '') {
-    const data = JSON.parse(byId('insert-data').value);
-    const toRestore = [restore('plugins', data), restore('buttons', data)];
-    if (!data.pluginsData) {
-      if (!confirm('Plugin data is missing. Continue?')) toRestore.unshift();
-    }
-    if (!data.buttonsData) {
-      if (!confirm('Button data is missing. Continue?')) toRestore.pop();
-    }
-    async.parallel(toRestore, (err, results) => {
-      if (err) {
-        alert(`Data restore failed: ${err}`);
-        throw err;
-      }
-      alert('Data restore successful!');
-      window.location.reload();
-    });
-  }
-});
-
-byId('add-plugin').addEventListener('click', event => {
-  pluginsUtil.addFromFile();
-});
-byId('remove-plugin').addEventListener('click', event => {
-  pluginsUtil.promptRemoval();
-});
-
-byId('add-scheme').addEventListener('click', event => {
-  schemesUtil.addFromFile();
-});
-byId('remove-scheme').addEventListener('click', event => {
-  schemesUtil.removeSelected();
-});
-
-byId('add-buttons').addEventListener('click', event => {
-  event.preventDefault();
-  buttonsUtil.createNewButton();
-});
-byId('remove-buttons').addEventListener('click', event => {
-  event.preventDefault();
-  buttonsUtil.removeButton();
-});
+// function showTab(id) {
+//   return function (event) {
+//     event.preventDefault();
+//     toggleDiv(byQSelect('.data-tab.focused'));
+//     toggleDiv(id);
+//   };
+// }
+// byId('plugin-settings').addEventListener('click', showTab('settings-tab'));
+// byId('button-list').addEventListener('click', showTab('buttons-tab'));
+// byId('backup-and-restore').addEventListener('click', showTab('json-tab'));
+// byId('color-scheme').addEventListener('click', showTab('color-scheme-tab'));
+//
+// function createDataJson() {
+//   byId('copy-data-display').value = JSON.stringify({
+//     pluginsData: plugins,
+//     buttonsData: buttons
+//   });
+// }
+// byId('show-data').addEventListener('click', event => {
+//   createDataJson();
+// });
+//
+// byId('copy-data').addEventListener('click', event => {
+//   createDataJson();
+//   byId('copy-data-display').select();
+//   document.execCommand('copy');
+//   byId('copy-data-display').value = '';
+//   byId('copy-data').focus();
+// });
+//
+// byId('restore-data').addEventListener('click', event => {
+//   function restore(what, dataObject) {
+//     return function (callback) {
+//       window[what] = dataObject[`${what}Data`];
+//       storage.store(what, callback);
+//     };
+//   }
+//   if (byId('insert-data').value !== '') {
+//     const data = JSON.parse(byId('insert-data').value);
+//     const toRestore = [restore('plugins', data), restore('buttons', data)];
+//     if (!data.pluginsData) {
+//       if (!confirm('Plugin data is missing. Continue?')) toRestore.unshift();
+//     }
+//     if (!data.buttonsData) {
+//       if (!confirm('Button data is missing. Continue?')) toRestore.pop();
+//     }
+//     async.parallel(toRestore, (err, results) => {
+//       if (err) {
+//         alert(`Data restore failed: ${err}`);
+//         throw err;
+//       }
+//       alert('Data restore successful!');
+//       window.location.reload();
+//     });
+//   }
+// });
+//
+// byId('add-plugin').addEventListener('click', event => {
+//   pluginsUtil.addFromFile();
+// });
+// byId('remove-plugin').addEventListener('click', event => {
+//   pluginsUtil.promptRemoval();
+// });
+//
+// byId('add-scheme').addEventListener('click', event => {
+//   schemesUtil.addFromFile();
+// });
+// byId('remove-scheme').addEventListener('click', event => {
+//   schemesUtil.removeSelected();
+// });
+//
+// byId('add-buttons').addEventListener('click', event => {
+//   event.preventDefault();
+//   buttonsUtil.createNewButton();
+// });
+// byId('remove-buttons').addEventListener('click', event => {
+//   event.preventDefault();
+//   buttonsUtil.removeButton();
+// });

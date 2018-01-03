@@ -28,6 +28,7 @@
     "chrome": true,
     "storage": false,
 
-    "Materialize": false
+    "Materialize": false,
+    "$": false
   }
 }

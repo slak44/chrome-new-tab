@@ -8,7 +8,7 @@ const fs = require('fs');
 const buildJsGlob = ['src/**/*.js'];
 gulp.task('build-js', () => {
   gulp.src(buildJsGlob, {base: './'})
-    .pipe(webpack(require('./webpack.config.js')))
+    .pipe(webpack(Object.assign({watch: true}, require('./webpack.config.js'))))
     .pipe(gulp.dest('./build/src'));
 });
 
@@ -99,7 +99,6 @@ gulp.task('build', [
 ]);
 
 gulp.task('default-watch', () => {
-  gulp.watch(buildJsGlob, ['build-js']);
   gulp.watch(copySrcGlob, ['copy-src']);
 });
 

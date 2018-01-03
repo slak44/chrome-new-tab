@@ -141,60 +141,32 @@ window.PluginUtil = function (pluginName) {
 };
 
 window.activateScheme = function (scheme) {
-  let css = `
-  .color {color: ${scheme.main} !important;}
-  .bgcolor {background-color: ${scheme.main} !important;}
+  const primaryTextColor = scheme.isDark ? '#FFFFFF' : 'rgba(0, 0, 0, 0.75)';
+  const secondaryTextColor = '#9E9E9E';
+  byId('dynamic-colors').innerText = `
+    input:focus:not([readonly]), textarea.materialize-textarea:focus:not([readonly]) {
+      border-bottom-color: ${scheme.main} !important;
+      box-shadow: 0 1px 0 0 ${scheme.main} !important;
+    }
+    input:focus:not([readonly]) + label, textarea.materialize-textarea:focus:not([readonly]) + label {
+      color: ${scheme.main} !important;
+    }
+    [type="checkbox"]:checked + label:before {
+      border-bottom-color: ${scheme.main} !important;
+      border-right-color: ${scheme.main} !important;
+    }
+    .collection-item.active {background-color: ${scheme.darken4} !important;}
+    nav {background-color: ${scheme.main} !important;}
+    .text-primary {color: ${primaryTextColor} !important;}
+    .waves-effect .waves-ripple {background-color: ${scheme.isDark ? 'rgba(255, 255, 255, 0.45)' : 'rgba(0, 0, 0, 0.2);'} !important;}
+    body {background-color: ${scheme.background} !important;}
+    .btn-floating {background-color: ${scheme.accent2} !important;}
+    .btn-floating i {color: ${primaryTextColor} !important;}
+    .tabs li.indicator {background-color: ${scheme.accent2} !important;}
+    .tabs li a {color: ${primaryTextColor} !important;}
+    .tabs li a.active {color: ${scheme.accent4} !important;}
+    .collapsible > li {background-color: ${scheme.isDark ? '#000000' : '#FFFFFF'} !important;}
   `;
-  // There are 5 light colors and 4 dark/accent
-  const colorCount = 4;
-  for (let i = 1; i <= colorCount; i++) {
-    css +=
-    `
-    .color.darken-${i} {color: ${scheme[`darken${i}`]} !important;}
-    .color.lighten-${i} {color: ${scheme[`lighten${i}`]} !important;}
-    .color.accent-${i} {color: ${scheme[`accent${i}`]} !important;}
-
-    .bgcolor.darken-${i} {background-color: ${scheme[`darken${i}`]} !important;}
-    .bgcolor.lighten-${i} {background-color: ${scheme[`lighten${i}`]} !important;}
-    .bgcolor.accent-${i} {background-color: ${scheme[`accent${i}`]} !important;}
-    `;
-  }
-  css += `
-  .color.lighten-5 {color: ${scheme.lighten5} !important;}
-  .bgcolor.lighten-5 {background-color: ${scheme.lighten5} !important;}
-  `;
-
-  css += `
-  input[type=text]:focus:not([readonly]), input[type=password]:focus:not([readonly]), input[type=email]:focus:not([readonly]), input[type=url]:focus:not([readonly]),
-  input[type=time]:focus:not([readonly]), input[type=date]:focus:not([readonly]), input[type=datetime-local]:focus:not([readonly]), input[type=tel]:focus:not([readonly]),
-  input[type=number]:focus:not([readonly]), input[type=search]:focus:not([readonly]), textarea.materialize-textarea:focus:not([readonly]) {
-    border-bottom-color: ${scheme.main} !important;
-    box-shadow: 0 1px 0 0 ${scheme.main} !important;
-  }
-  input[type=text]:focus:not([readonly]) + label, input[type=password]:focus:not([readonly]) + label, input[type=email]:focus:not([readonly]) + label,
-  input[type=url]:focus:not([readonly]) + label, input[type=time]:focus:not([readonly]) + label, input[type=date]:focus:not([readonly]) + label,
-  input[type=datetime-local]:focus:not([readonly]) + label, input[type=tel]:focus:not([readonly]) + label, input[type=number]:focus:not([readonly]) + label,
-  input[type=search]:focus:not([readonly]) + label, textarea.materialize-textarea:focus:not([readonly]) + label {
-    color: ${scheme.main} !important;
-  }
-
-  [type="checkbox"]:checked + label:before {
-    border-bottom-color: ${scheme.main} !important;
-    border-right-color: ${scheme.main} !important;
-  }
-
-  .collection-item.active {background-color: ${scheme.darken4} !important;}
-
-  nav {
-    background-color: ${scheme.darken1} !important;
-  }
-  `;
-
-  if (scheme.isDark) {
-    // TODO
-  }
-
-  byId('dynamic-colors').innerHTML = css;
 };
 
 window.toggleDiv = function (elem) {
@@ -213,8 +185,10 @@ window.loadSchemes = function (callback) {
   storage.load('colorSchemes', err => {
     if (err || colorSchemes[0] === undefined || colorSchemes[0] === null) {
       colorSchemes = [{
-        name: 'Light Orange with Lime Accents',
+        name: 'Light Orange with Light Green Accents',
         isDark: false,
+
+        background: '#FAFAFA',
 
         lighten5: '#fff3e0',
         lighten4: '#ffe0b2',
@@ -229,10 +203,10 @@ window.loadSchemes = function (callback) {
         darken3: '#ef6c00',
         darken4: '#e65100',
 
-        accent1: '#F4FF81',
-        accent2: '#EEFF41',
-        accent3: '#C6FF00',
-        accent4: '#AEEA00'
+        accent1: '#CCFF90',
+        accent2: '#B2FF59',
+        accent3: '#76FF03',
+        accent4: '#558B2F'
       }];
       storage.store('colorSchemes');
     }
