@@ -7,11 +7,10 @@
     <link rel="stylesheet" type="text/css" href="/materialize.min.css">
   </head>
   <body>
-    <input id="file-input" type="file"></input>
     <nav class="nav-wrapper with-tabs row">
       <a href="#!" class="brand-logo col text-primary">New Tab Settings</a>
       <div id="version-string" class="text-primary col"></div>
-      <ul id="buttons-tab-menu" class="right menu">
+      <ul class="right menu">
         <li><a id="add-button" class="waves-effect text-primary" href="#!">
           <i class="material-icons">add</i>
           <span>New Button</span>
@@ -23,12 +22,13 @@
       <ul id="navbar-overflow-menu" class="dropdown-content overflow menu">
         <li><a id="add-divider" href="#!" class="waves-effect text-primary">Add Divider</a></li>
         <li><a id="add-subheader" href="#!" class="waves-effect text-primary">Add Subheader</a></li>
+        <li><a href="#backup-modal" class="waves-effect text-primary modal-trigger">Backup Data</a></li>
+        <li><a href="#restore-modal" class="waves-effect text-primary modal-trigger">Restore Data</a></li>
       </ul>
       <ul class="tabs">
         <li id="plugin-settings" class="tab col s2"><a href="#settings-tab">Plugin Settings</a></li>
         <li id="button-list" class="tab col s2"><a href="#buttons-tab">Button List</a></li>
         <li id="color-scheme" class="tab col s2"><a href="#color-scheme-tab">Color Schemes</a></li>
-        <li id="backup-and-restore" class="tab col s2"><a href="#json-tab">Backup and restore</a></li>
       </ul>
       <a id="floating-save-button" class="waves-effect btn-floating btn-large" href="#"><i class="material-icons">save</i></a>
     </nav>
@@ -40,10 +40,41 @@
       <section id="color-scheme-tab" class="tab-content">
 
       </section>
-      <section id="backup-tab" class="tab-content">
-
-      </section>
     </main>
+    <div id="backup-modal" class="modal modal-fixed-footer">
+     <div class="modal-content">
+       <h4>Backup Content</h4>
+       <textarea id="backup-content" readonly></textarea>
+     </div>
+     <div class="modal-footer">
+       <a href="#!" class="modal-action modal-close waves-effect btn-flat">Dismiss</a>
+       <a id="copy-backup" href="#!" class="modal-action waves-effect btn-flat">Copy</a>
+       <a id="download-backup" href="#!" class="modal-action waves-effect btn-flat">Download</a>
+     </div>
+   </div>
+   <div id="restore-modal" class="modal">
+    <div class="modal-content">
+      <h4>Restore Content</h4>
+      <h6 class="red-text">Be careful when restoring; it cannot be undone!</h6>
+      <div class="file-field input-field">
+        <div class="btn">
+          <span>Select backup</span>
+          <input id="restore-file" type="file">
+        </div>
+        <div class="file-path-wrapper">
+          <input class="file-path validate" type="text">
+        </div>
+      </div>
+      <p>OR</p>
+      <textarea id="restore-content"></textarea>
+    </div>
+    <div class="modal-footer">
+      <a href="#!" class="modal-action modal-close waves-effect btn-flat">Dismiss</a>
+      <a id="paste-restore" href="#!" class="modal-action waves-effect btn-flat">Restore from text</a>
+      <a id="upload-restore" href="#!" class="modal-action waves-effect btn-flat">Restore from file</a>
+    </div>
+  </div>
+
 		<!-- <div class="row">
 			<div class="col s12">
 				<div id="settings-tab" class="data-tab focused">

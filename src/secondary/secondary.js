@@ -24,7 +24,53 @@ loadSchemes(() => {
 });
 async.parallel([loadButtons, loadPlugins], err => {
   if (err) throw err;
+  $('#backup-modal').modal();
+  $('#backup-content').text(JSON.stringify({buttons, plugins}));
+  $('#restore-modal').modal();
   runPlugins();
+});
+
+const SHORT_DURATION_MS = 3000; // 3 seconds
+
+$('#copy-backup').click(() => {
+  $('#backup-content').focus();
+  $('#backup-content').select();
+  document.execCommand('copy');
+  Materialize.toast($('<span>Copied</span>'), SHORT_DURATION_MS);
+});
+
+$('#download-backup').click(() => {
+  const anchor = document.createElement('a');
+  anchor.download = 'newtab-settings.bck';
+  anchor.href = `data:text/plain;charset=UTF-8,${$('#backup-content').text()}`;
+  anchor.click();
+});
+
+function restore(fromText) {
+  try {
+    ({buttons, plugins} = JSON.parse(fromText));
+  } catch (err) {
+    Materialize.toast($('<span>Failed to restore data (parse error)</span>'), SHORT_DURATION_MS);
+    console.error(err);
+    return;
+  }
+  async.parallel([cb => storage.store('buttons', cb), cb => storage.store('plugins', cb)], err => {
+    if (err) {
+      Materialize.toast($('<span>Failed to restore data (storage error)</span>'), SHORT_DURATION_MS);
+      console.error(err);
+      return;
+    }
+    window.location.reload();
+  });
+}
+
+$('#paste-restore').click(() => restore($('#restore-content').val()));
+
+$('#upload-restore').click(() => {
+  const file = $('#restore-file')[0].files[0];
+  const reader = new FileReader();
+  reader.addEventListener('loadend', event => restore(event.target.result));
+  reader.readAsText(file);
 });
 
 function loadButtons(callback) {
