@@ -35,6 +35,8 @@ body {
   overflow: hidden;
   cursor: default;
   -webkit-user-select: none;
+  font-size: inherit;
+  font-family: 'Roboto', sans-serif;
 }
 
 a {
