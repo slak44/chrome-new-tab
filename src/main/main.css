@@ -1,21 +1,3 @@
-.button-text {
-	font-size: large;
-	margin-left: 16px;
-}
-
-.button-link {
-	color: black;
-}
-
-.button-image-wrapper > img {
-	width: 50px;
-	height: 50px;
-}
-
-.button-image-wrapper > i.material-icons {
-	font-size: 50px;
-}
-
 .centered {
   position: absolute;
   margin: auto;
@@ -23,10 +5,6 @@
   left: 0px;
   bottom: 0px;
   right: 0px;
-}
-
-#buttons > li {
-	width: 100%;
 }
 
 #default-pane {
@@ -38,10 +16,25 @@ nav.nav-wrapper {
   position: relative;
 }
 
+ul.side-nav.fixed > li {
+  width: 100%;
+}
+
 ul.side-nav.fixed.clipped {
   padding-top: 72px; /* 64 is nav height, 8 is for padding */
 }
 
 ul.dropdown-content.overflow {
   margin-top: 16px; /* top padding of icon is 16 */
+}
+
+.button-content {
+  line-height: 48px; /* size of drawer button height */
+  vertical-align: top;
+}
+
+img.button-image {
+  margin: 4px 32px 4px 0px;
+  height: 40px; /* size of drawer button height, minus 4+4 margins */
+  object-fit: contain;
 }

@@ -39,21 +39,19 @@ document.onkeydown = function (e) {
 function createButton(options) {
   if (options.parent && !(options.parent instanceof HTMLElement)) throw new Error('options.parent must be a HTMLElement');
   const parent = options.parent || byId('buttons');
-  /* eslint-disable indent */
+  let picture = '';
+  switch (options.pictureType) {
+    case 'image': if (options.imagePath) picture = `<img src="${options.imagePath}" class="button-image"/>`; break;
+    case 'icon': if (options.ligatureName) picture = `<i class="material-icons">${options.ligatureName}</i>`; break;
+    default: picture = '';
+  }
   parent.insertAdjacentHTML('beforeend', `
-  <li class="waves-effect waves-light collection-item">
-		<a href="${options.href || ''}" class="button-link">
-			<div class="valign-wrapper">
-				<div class="button-image-wrapper">
-          ${options.imagePath ?
-            `<img src="${options.imagePath}"/>` :
-            '<i class="material-icons">send</i>'}
-        </div>
-				<div class="valign thin button-text">${options.text}</div>
-			</div>
+  <li class="waves-effect">
+		<a href="${options.href || ''}">
+      ${picture}
+      <span class="button-content">${options.text}</span>
 		</a>
 	</li>`);
-  /* eslint-enable indent */
   const anchor = parent.children[parent.children.length - 1];
   if (options.href !== undefined && (options.href.indexOf('chrome://') === 0 || options.openInNew))
     anchor.addEventListener('click', event => {

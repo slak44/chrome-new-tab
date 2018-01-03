@@ -190,7 +190,9 @@ This should be valid JSON.
 #### Button format:
 ```
   {
+    "pictureType": "type"
     "imagePath": "path",
+    "ligatureName": "name",
     "href": "ref",
     "text": "text",
     "position": 0,
@@ -199,7 +201,9 @@ This should be valid JSON.
     "deleted": undefined
   }
 ```
+- `pictureType`: if it is `image`, use the `imagePath`, if it is `icon` use `ligatureName`
 - `imagePath`: path to image
+- `ligatureName`: name of material icon
 - `href`: where does it point to
 - `text`: displyed text
 - `position`: used to determine order of buttons

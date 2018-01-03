@@ -1,15 +1,19 @@
 'use strict';
 
+const UNDO_TIME_MS = 10000; // 10 seconds
+
 function addButtonCard(config, idx) {
-  const hasImg = config.imagePath && config.imagePath !== '';
+  const hasImg = config.imagePath && config.imagePath !== '' && config.pictureType === 'image';
+  const hasIcon = config.ligatureName && config.ligatureName !== '' && config.pictureType === 'icon';
   $('#buttons-tab').append(`
   <div class="card horizontal" data-button-idx="${idx}">
     <div class="card-image">
-      <div class="card-missing-image ${hasImg ? 'hidden' : ''}">
+      <div class="card-missing-image ${hasImg || hasIcon ? 'hidden' : ''}">
         <i class="material-icons medium">cloud_off</i>
-        <p>No Image</p>
+        <p>No Picture</p>
       </div>
       <img class="${hasImg ? '' : 'hidden'}" src="${config.imagePath}">
+      <i class="preview medium material-icons ${hasIcon ? '' : 'hidden'}">${config.ligatureName}</i>
     </div>
     <div class="card-stacked">
       <div class="card-content">
@@ -21,7 +25,11 @@ function addButtonCard(config, idx) {
           <input name="url" type="url" value="${config.href}">
           <label for="url" class="active">Target URL</label>
         </div>
-        <div class="input-field">
+        <div class="input-field ${config.pictureType === 'icon' ? '' : 'hidden'}">
+          <input name="icon" type="text" value="${config.ligatureName}">
+          <label for="icon" class="active">Material Icon Name</label>
+        </div>
+        <div class="input-field ${config.pictureType === 'image' ? '' : 'hidden'}">
           <input name="img" type="url" value="${config.imagePath}">
           <label for="img" class="active">Image URL</label>
         </div>
@@ -36,17 +44,39 @@ function addButtonCard(config, idx) {
       </div>
       <div class="card-action">
         <a href="#!" class="remove-action">Remove</a>
+        <div class="switch right no-margin">
+          <span class="grey-text">Use Icons</span>
+          <i class="material-icons grey-text help-tooltip">help</i>
+          <label>
+            <input name="use-icons" type="checkbox" ${config.pictureType === 'icon' ? 'checked' : ''}>
+            <span class="lever"></span>
+          </label>
+        </div>
       </div>
     </div>
   </div>
   `);
   const card = $(`.card[data-button-idx="${idx}"]`);
+  card.find('.help-tooltip').tooltip({
+    position: 'top',
+    delay: 50,
+    html: true,
+    tooltip: 'Use a material icon instead of an image'
+  });
   card.find('.remove-action').click(event => {
     buttons[idx].deleted = true;
     card.addClass('hidden');
     window.changesMade = true;
-    // FIXME show snack with undo
+    const content = $('<span>Deleted button</span>')
+      .add($(`<button id="undo-${idx}" class="btn-flat toast-action">Undo</button>`));
+    Materialize.toast(content, UNDO_TIME_MS);
+    $(`#undo-${idx}`).click(event => {
+      buttons[idx].deleted = false;
+      card.removeClass('hidden');
+      $(`#undo-${idx}`).parent()[0].M_Toast.remove();
+    });
   });
+  // Apply the same blur listener to all of these inputs
   ['text', 'url', 'hotkey'].forEach(propName => {
     card.find(`input[name="${propName}"]`).blur(event => {
       if (!event.target.value) return;
@@ -59,33 +89,72 @@ function addButtonCard(config, idx) {
     buttons[idx].position = parseInt(event.target.value, 10);
     window.changesMade = true;
   });
-  card.find('input[name="img"]').blur(event => {
-    /* eslint-disable no-param-reassign */
-    const image = card.find('img');
-    const noImageDiv = card.find('.card-missing-image');
-    if (event.target.dataset.lastUrl === event.target.value) {
-      return;
-    } else if (!event.target.value) {
-      image.addClass('hidden');
+  const image = card.find('img');
+  const imageInput = card.find('input[name="img"]');
+  const icon = card.find('i.preview');
+  const iconInput = card.find('input[name="icon"]');
+  const noImageDiv = card.find('.card-missing-image');
+  card.find('input[name="use-icons"]').change(event => {
+    imageInput.parent().toggleClass('hidden');
+    iconInput.parent().toggleClass('hidden');
+    const useIcons = $(event.target).is(':checked');
+    const input = useIcons ? iconInput : imageInput;
+    const otherInput = useIcons ? imageInput : iconInput;
+    const target = useIcons ? icon : image;
+    const other = useIcons ? image : icon;
+    input[0].dataset.lastValue = '';
+    otherInput[0].dataset.lastValue = '';
+    other.addClass('hidden');
+    if (input.val()) {
+      target.removeClass('hidden');
+      noImageDiv.addClass('hidden');
+    } else {
+      target.addClass('hidden');
       noImageDiv.removeClass('hidden');
-      event.target.dataset.lastUrl = event.target.value;
+    }
+    buttons[idx].pictureType = useIcons ? 'icon' : 'image';
+    window.changesMade = true;
+  });
+  /* eslint-disable no-param-reassign */
+  // We 'reassign' to the event target dataset, which is not a problem
+  iconInput.blur(event => {
+    event.target.dataset.lastValue = event.target.value;
+    buttons[idx].ligatureName = event.target.value;
+    if (event.target.dataset.lastValue === event.target.value) return;
+    else window.changesMade = true;
+    if (!event.target.value) {
+      icon.addClass('hidden');
+      noImageDiv.removeClass('hidden');
       return;
     }
-    event.target.dataset.lastUrl = event.target.value;
+    icon.text(event.target.value);
+    noImageDiv.addClass('hidden');
+    icon.removeClass('hidden');
+  });
+  imageInput.blur(event => {
+    event.target.dataset.lastValue = event.target.value;
     buttons[idx].imagePath = event.target.value;
-    window.changesMade = true;
+    if (event.target.dataset.lastValue === event.target.value) return;
+    else window.changesMade = true;
+    if (!event.target.value) {
+      image.addClass('hidden');
+      noImageDiv.removeClass('hidden');
+      return;
+    }
     image.attr('src', event.target.value);
     noImageDiv.addClass('hidden');
     image.removeClass('hidden');
-    /* eslint-enable no-param-reassign */
   });
+  /* eslint-enable no-param-reassign */
 }
 
 $('#add-button').click(event => {
   buttons.push({
     text: '',
     href: '',
+    pictureType: 'image',
     imagePath: '',
+    ligatureName: '',
     position: '',
     hotkey: '',
     openInNew: false

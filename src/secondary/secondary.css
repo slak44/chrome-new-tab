@@ -51,6 +51,10 @@ ul.color.dropdown-content > li > a {
   margin-top: 5px;
 }
 
+nav.row {
+  margin-bottom: 0px;
+}
+
 nav.with-tabs {
   height: 112px; /* nav height is 64, tabs height is 48 */
 }
@@ -60,14 +64,9 @@ nav.with-tabs > .tabs {
   margin-bottom: 0px;
 }
 
-main {
-  height: -webkit-fill-available;
-}
-
 section.tab-content {
-  height: -webkit-fill-available !important;
+  height: calc(100% - 112px); /* nav height with tabs is 112 */
   width: 100% !important;
-  margin-left: 20px;
 }
 
 #floating-save-button {
@@ -78,6 +77,13 @@ section.tab-content {
 
 #buttons-tab {
   display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  overflow-y: auto;
+}
+
+section.tab-content > .card {
+  margin: 1rem;
 }
 
 .card.horizontal {
@@ -92,12 +98,41 @@ section.tab-content {
   padding-left: 24px;
 }
 
+.card-image img {
+  object-fit: contain;
+}
+
+.card-image i.preview {
+  text-align: center;
+}
+
 .card-missing-image {
   text-align: center;
 }
 
 .card-content {
   min-width: 400px;
+}
+
+.card-action .switch {
+  display: inline-block;
+}
+
+.switch > span {
+  vertical-align: text-top;
+}
+
+.switch > i.material-icons {
+  vertical-align: middle;
+  font-size: inherit;
+}
+
+.switch.no-margin.right span.lever {
+  margin-right: 0px;
+}
+
+.switch.no-margin.left span.lever {
+  margin-left: 0px;
 }
 
 .input-field input {
