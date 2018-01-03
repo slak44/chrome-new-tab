@@ -5,7 +5,7 @@ window.dependencies = {};
 window.Materialize = require('materialize-css');
 
 window.plugins = {};
-window.buttons = {};
+window.buttons = [];
 window.colorSchemes = [];
 
 window.byId = id => document.getElementById(id);

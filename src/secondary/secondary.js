@@ -5,6 +5,16 @@ const buttonsUtil = require('./buttons');
 const pluginsUtil = require('./plugins');
 const schemesUtil = require('./schemes');
 
+/*
+  Any time the user changes something, set this to false. When they save, reset it to false.
+  If they try to leave without saving, warn them.
+*/
+window.changesMade = false;
+
+$(window).on('beforeunload', () => {
+  if (window.changesMade) return true;
+});
+
 byId('version-string').innerText = `version ${chrome.runtime.getManifest().version}`;
 
 loadSchemes(() => {
@@ -28,7 +38,7 @@ function loadButtons(callback) {
       callback(null);
       return;
     }
-    for (const button in buttons) buttonsUtil.addButtonCard(buttons[button]);
+    buttons.forEach(buttonsUtil.addButtonCard);
     // buttonsUtil.activateDefaultButton();
     // buttonsUtil.initDropdown();
     callback(null);
@@ -51,15 +61,22 @@ function runPlugins() {
 }
 
 byId('floating-save-button').addEventListener('click', event => {
-  if (hasClass(byId('settings-tab'), 'focused')) {
-    pluginsUtil.saveFocusedPluginSettings();
-  } else if (hasClass(byId('buttons-tab'), 'focused')) {
-    const id = byId('button-text').getAttribute('data-button-id');
-    if (id === '') return;
-    buttonsUtil.saveFocusedButton(id);
-  } else if (hasClass(byId('color-scheme-tab'), 'focused')) {
-    schemesUtil.saveSelected();
-  }
+  buttons = buttons.filter(button => !button.deleted);
+  storage.store('buttons');
+  $('#buttons-tab').empty();
+  buttons.forEach(buttonsUtil.addButtonCard);
+  Materialize.updateTextFields();
+
+  window.changesMade = false;
+  // if (hasClass(byId('settings-tab'), 'focused')) {
+  //   pluginsUtil.saveFocusedPluginSettings();
+  // } else if (hasClass(byId('buttons-tab'), 'focused')) {
+  //   const id = byId('button-text').getAttribute('data-button-id');
+  //   if (id === '') return;
+  //   buttonsUtil.saveFocusedButton(id);
+  // } else if (hasClass(byId('color-scheme-tab'), 'focused')) {
+  //   schemesUtil.saveSelected();
+  // }
 });
 
 // function showTab(id) {

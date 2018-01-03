@@ -195,7 +195,8 @@ This should be valid JSON.
     "text": "text",
     "position": 0,
     "hotkey": "K",
-    "openInNew": false
+    "openInNew": false,
+    "deleted": undefined
   }
 ```
 - `imagePath`: path to image
@@ -204,6 +205,7 @@ This should be valid JSON.
 - `position`: used to determine order of buttons
 - `hotkey`: using alt+key triggers the button
 - `openInNew`: if true, opens the link in a new tab that replaces the current one
+- `deleted`: (optional) if true, it signals that this button was "deleted" by the user; this element will be *removed before saving* to storage
 
 ## reddit API
 This API is used in [/plugins/reddit.js](https://github.com/slak44/ChromeNewTab/tree/master/plugins/reddit.js).  
