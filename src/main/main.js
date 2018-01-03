@@ -39,6 +39,11 @@ document.onkeydown = function (e) {
 function createButton(options) {
   if (options.parent && !(options.parent instanceof HTMLElement)) throw new Error('options.parent must be a HTMLElement');
   const parent = options.parent || byId('buttons');
+  switch (options.kind) {
+    case 'divider': parent.insertAdjacentHTML('beforeend', '<li><div class="divider"></div></li>'); return;
+    case 'subheader': parent.insertAdjacentHTML('beforeend', `<li><a class="subheader">${options.text}</a></li>`); return;
+    default: break;
+  }
   let picture = '';
   switch (options.pictureType) {
     case 'image': if (options.imagePath) picture = `<img src="${options.imagePath}" class="button-image"/>`; break;
@@ -68,7 +73,16 @@ function loadButtons(callback) {
     } else {
       const orderedButtons = [];
       for (const i in buttons) orderedButtons.push(buttons[i]);
-      orderedButtons.sort((a, b) => (Number(a.position) < Number(b.position) ? -1 : 1));
+      orderedButtons.sort((a, b) => {
+        const [x, y] = [Number(a.position), Number(b.position)];
+        if (x < y) return -1;
+        else if (x > y) return 1;
+        if (a.kind === 'divider') return -1;
+        if (b.kind === 'divider') return 1;
+        if (a.kind === 'subheader') return -1;
+        if (b.kind === 'subheader') return 1;
+        return (a.text < b.text) ? -1 : 1;
+      });
       orderedButtons.forEach(e => createButton(e));
     }
     callback(null);

@@ -59,6 +59,23 @@ div.unfocused {
   text-transform: capitalize;
 }
 
+nav .menu i.material-icons,
+nav .menu span {
+  display: inline-block;
+  vertical-align: middle;
+  height: 56px;
+  line-height: 56px;
+}
+
+.menu.overflow {
+  min-width: 200px;
+}
+
+.menu > li {
+  line-height: 56px;
+  height: 56px;
+}
+
 @-webkit-keyframes show {
   0% {
     opacity: 0;

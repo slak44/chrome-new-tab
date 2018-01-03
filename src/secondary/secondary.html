@@ -8,11 +8,21 @@
   </head>
   <body>
     <input id="file-input" type="file"></input>
-    <nav id="nav-bar" class="nav-wrapper with-tabs row">
+    <nav class="nav-wrapper with-tabs row">
       <a href="#!" class="brand-logo col text-primary">New Tab Settings</a>
       <div id="version-string" class="text-primary col"></div>
-      <ul id="buttons-tab-menu" class="right">
-        <li><a id="add-button" class="waves-effect" href="#!"><i class="material-icons text-primary">add</i></a></li>
+      <ul id="buttons-tab-menu" class="right menu">
+        <li><a id="add-button" class="waves-effect text-primary" href="#!">
+          <i class="material-icons">add</i>
+          <span>New Button</span>
+        </a></li>
+        <li><a href="#!" class="dropdown-button waves-effect text-primary" data-activates="navbar-overflow-menu">
+          <i class="material-icons">more_vert</i>
+        </a></li>
+      </ul>
+      <ul id="navbar-overflow-menu" class="dropdown-content overflow menu">
+        <li><a id="add-divider" href="#!" class="waves-effect text-primary">Add Divider</a></li>
+        <li><a id="add-subheader" href="#!" class="waves-effect text-primary">Add Subheader</a></li>
       </ul>
       <ul class="tabs">
         <li id="plugin-settings" class="tab col s2"><a href="#settings-tab">Plugin Settings</a></li>

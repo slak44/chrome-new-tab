@@ -38,7 +38,7 @@ function loadButtons(callback) {
       callback(null);
       return;
     }
-    buttons.forEach(buttonsUtil.addButtonCard);
+    buttons.forEach(buttonsUtil.addButton);
     // buttonsUtil.activateDefaultButton();
     // buttonsUtil.initDropdown();
     callback(null);
@@ -64,7 +64,7 @@ byId('floating-save-button').addEventListener('click', event => {
   buttons = buttons.filter(button => !button.deleted);
   storage.store('buttons');
   $('#buttons-tab').empty();
-  buttons.forEach(buttonsUtil.addButtonCard);
+  buttons.forEach(buttonsUtil.addButton);
   Materialize.updateTextFields();
 
   window.changesMade = false;

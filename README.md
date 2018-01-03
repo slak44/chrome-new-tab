@@ -190,26 +190,28 @@ This should be valid JSON.
 #### Button format:
 ```
   {
-    "pictureType": "type"
-    "imagePath": "path",
-    "ligatureName": "name",
-    "href": "ref",
-    "text": "text",
-    "position": 0,
+    "kind": "default",
+    "pictureType": "image",
+    "imagePath": "http://example.com",
+    "ligatureName": "",
+    "href": "http://example.com",
+    "text": "Button",
+    "position": 3.14,
     "hotkey": "K",
     "openInNew": false,
     "deleted": undefined
   }
 ```
-- `pictureType`: if it is `image`, use the `imagePath`, if it is `icon` use `ligatureName`
-- `imagePath`: path to image
-- `ligatureName`: name of material icon
-- `href`: where does it point to
-- `text`: displyed text
-- `position`: used to determine order of buttons
-- `hotkey`: using alt+key triggers the button
-- `openInNew`: if true, opens the link in a new tab that replaces the current one
-- `deleted`: (optional) if true, it signals that this button was "deleted" by the user; this element will be *removed before saving* to storage
+- `kind`: (enum string) what kind of "button" it is; values are `default`, `divider`, `subheader`
+- `pictureType`: (enum string) if it is `image`, use the `imagePath`, if it is `icon` use `ligatureName`
+- `imagePath`: (uri string) path to image
+- `ligatureName`: (string) name of material icon
+- `href`: (uri string) where does it point to
+- `text`: (string) displyed text
+- `position`: (float) used to determine order of buttons
+- `hotkey`: (string) using alt+key triggers the button
+- `openInNew`: (boolean) if true, opens the link in a new tab that replaces the current one
+- `deleted`: (optional boolean) if true, it signals that this button was "deleted" by the user; this element will be *removed before saving* to storage
 
 ## reddit API
 This API is used in [/plugins/reddit.js](https://github.com/slak44/ChromeNewTab/tree/master/plugins/reddit.js).  

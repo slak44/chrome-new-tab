@@ -2,6 +2,110 @@
 
 const UNDO_TIME_MS = 10000; // 10 seconds
 
+function newButton(kind) {
+  switch (kind) {
+    case 'divider': buttons.push({kind, position: ''}); break;
+    case 'subheader': buttons.push({kind, text: '', position: ''}); break;
+    default: buttons.push({
+      text: '',
+      href: '',
+      pictureType: 'image',
+      imagePath: '',
+      ligatureName: '',
+      position: '',
+      hotkey: '',
+      openInNew: false
+    });
+  }
+  window.changesMade = true;
+  addButton(buttons[buttons.length - 1], buttons.length - 1);
+  $(`.card[data-button-idx="${buttons.length - 1}"] input.focus-location`).focus();
+  Materialize.updateTextFields();
+}
+
+$('#add-button').click(event => newButton('default'));
+$('#add-divider').click(event => newButton('divider'));
+$('#add-subheader').click(event => newButton('subheader'));
+
+function addButton(config, idx) {
+  switch (config.kind) {
+    case 'divider': return addDividerCard(config, idx);
+    case 'subheader': return addSubheaderCard(config, idx);
+    default: return addButtonCard(config, idx);
+  }
+}
+
+function removeWithUndoListener(card, idx) {
+  card.find('.remove-action').click(event => {
+    buttons[idx].deleted = true;
+    card.addClass('hidden');
+    window.changesMade = true;
+    const content = $('<span>Deleted button</span>')
+      .add($(`<button id="undo-${idx}" class="btn-flat toast-action">Undo</button>`));
+    Materialize.toast(content, UNDO_TIME_MS);
+    $(`#undo-${idx}`).click(event => {
+      buttons[idx].deleted = false;
+      card.removeClass('hidden');
+      $(`#undo-${idx}`).parent()[0].M_Toast.remove();
+    });
+  });
+}
+
+// propKind can be text or number
+function createBinderOnBlur(card, idx, propName, propKind = 'text') {
+  card.find(`input[name="${propName}"]`).blur(event => {
+    if (!event.target.value) return;
+    if (propKind === 'number') buttons[idx][propName] = parseFloat(event.target.value);
+    else buttons[idx][propName] = event.target.value;
+    window.changesMade = true;
+  });
+}
+
+function addDividerCard(config, idx) {
+  $('#buttons-tab').append(`
+  <div class="card" data-button-idx="${idx}">
+    <div class="card-content">
+      <span class="card-title">Divider</span>
+      <div class="input-field">
+        <input class="focus-location" name="position" type="number" value="${config.position}">
+        <label for="position" class="active">Position</label>
+      </div>
+    </div>
+    <div class="card-action">
+      <a href="#!" class="remove-action">Remove</a>
+    </div>
+  </div>
+  `);
+  const card = $(`.card[data-button-idx="${idx}"]`);
+  removeWithUndoListener(card, idx);
+  createBinderOnBlur(card, idx, 'position', 'number');
+}
+
+function addSubheaderCard(config, idx) {
+  $('#buttons-tab').append(`
+  <div class="card" data-button-idx="${idx}">
+    <div class="card-content">
+      <span class="card-title">Subheader</span>
+      <div class="input-field">
+        <input class="focus-location" name="text" type="text" value="${config.text}">
+        <label for="text" class="active">Text</label>
+      </div>
+      <div class="input-field">
+        <input name="position" type="number" value="${config.position}">
+        <label for="position" class="active">Position</label>
+      </div>
+    </div>
+    <div class="card-action">
+      <a href="#!" class="remove-action">Remove</a>
+    </div>
+  </div>
+  `);
+  const card = $(`.card[data-button-idx="${idx}"]`);
+  removeWithUndoListener(card, idx);
+  createBinderOnBlur(card, idx, 'position', 'number');
+  createBinderOnBlur(card, idx, 'text');
+}
+
 function addButtonCard(config, idx) {
   const hasImg = config.imagePath && config.imagePath !== '' && config.pictureType === 'image';
   const hasIcon = config.ligatureName && config.ligatureName !== '' && config.pictureType === 'icon';
@@ -18,7 +122,7 @@ function addButtonCard(config, idx) {
     <div class="card-stacked">
       <div class="card-content">
         <div class="input-field">
-          <input name="text" type="text" value="${config.text}">
+          <input class="focus-location" name="text" type="text" value="${config.text}">
           <label for="text" class="active">Button Text</label>
         </div>
         <div class="input-field">
@@ -34,7 +138,7 @@ function addButtonCard(config, idx) {
           <label for="img" class="active">Image URL</label>
         </div>
         <div class="input-field">
-          <input name="position" type="number" value=${config.position}>
+          <input name="position" type="number" value="${config.position}">
           <label for="position" class="active">Button Position</label>
         </div>
         <div class="input-field">
@@ -57,38 +161,15 @@ function addButtonCard(config, idx) {
   </div>
   `);
   const card = $(`.card[data-button-idx="${idx}"]`);
+  removeWithUndoListener(card, idx);
   card.find('.help-tooltip').tooltip({
     position: 'top',
     delay: 50,
     html: true,
     tooltip: 'Use a material icon instead of an image'
   });
-  card.find('.remove-action').click(event => {
-    buttons[idx].deleted = true;
-    card.addClass('hidden');
-    window.changesMade = true;
-    const content = $('<span>Deleted button</span>')
-      .add($(`<button id="undo-${idx}" class="btn-flat toast-action">Undo</button>`));
-    Materialize.toast(content, UNDO_TIME_MS);
-    $(`#undo-${idx}`).click(event => {
-      buttons[idx].deleted = false;
-      card.removeClass('hidden');
-      $(`#undo-${idx}`).parent()[0].M_Toast.remove();
-    });
-  });
-  // Apply the same blur listener to all of these inputs
-  ['text', 'url', 'hotkey'].forEach(propName => {
-    card.find(`input[name="${propName}"]`).blur(event => {
-      if (!event.target.value) return;
-      buttons[idx][propName] = event.target.value;
-      window.changesMade = true;
-    });
-  });
-  card.find('input[name="position"]').blur(event => {
-    if (!event.target.value) return;
-    buttons[idx].position = parseInt(event.target.value, 10);
-    window.changesMade = true;
-  });
+  ['text', 'url', 'hotkey'].forEach(propName => createBinderOnBlur(card, idx, propName));
+  createBinderOnBlur(card, idx, 'position', 'number');
   const image = card.find('img');
   const imageInput = card.find('input[name="img"]');
   const icon = card.find('i.preview');
@@ -147,23 +228,6 @@ function addButtonCard(config, idx) {
   });
   /* eslint-enable no-param-reassign */
 }
-
-$('#add-button').click(event => {
-  buttons.push({
-    text: '',
-    href: '',
-    pictureType: 'image',
-    imagePath: '',
-    ligatureName: '',
-    position: '',
-    hotkey: '',
-    openInNew: false
-  });
-  window.changesMade = true;
-  addButtonCard(buttons[buttons.length - 1], buttons.length - 1);
-  $(`.card[data-button-idx="${buttons.length - 1}"] input[name="text"]`).focus();
-  Materialize.updateTextFields();
-});
 
 // function createNewButton() {
 //   const id = prompt('Input a unique identifier for the button:');
@@ -242,7 +306,8 @@ $('#add-button').click(event => {
 // }
 
 module.exports = {
-  addButtonCard,
+  addButton
+  // addButtonCard,
   // createNewButton,
   // removeButton,
   // initDropdown,

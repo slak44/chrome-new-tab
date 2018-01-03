@@ -71,7 +71,7 @@ section.tab-content {
 
 #floating-save-button {
   position: absolute !important;
-  right: 128px;
+  right: 72px; /* arbitrary */
   top: 84px; /* nav height is 64, tabs height is 48, but we substract btn height / 2 to center it, height is 56 */
 }
 
@@ -84,6 +84,8 @@ section.tab-content {
 
 section.tab-content > .card {
   margin: 1rem;
+  height: fit-content;
+  align-self: center;
 }
 
 .card.horizontal {
