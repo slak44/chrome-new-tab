@@ -7,12 +7,12 @@
 
     "PluginUtil": false,
     "loadPlugins": false,
+    "runViewContent": false,
     "plugins": true,
     "pluginCss": false,
 
     "buttons": true,
 
-    "toggleDiv": false,
     "createButton": false,
     "addPanel": false,
 
@@ -22,13 +22,12 @@
     "hasClass": false,
     "capitalize": false,
 
-    "readFile": false,
-    "getFile": false,
-
     "chrome": true,
     "storage": false,
 
     "Materialize": false,
-    "$": false
+    "$": false,
+
+    "SHORT_DURATION_MS": false
   }
 }

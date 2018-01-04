@@ -26,10 +26,6 @@ div.color-sample {
   font-size: 200px;
 }
 
-#file-input {
-  display: none;
-}
-
 #button-config [data-buttons-exist="no"] {
   visibility: hidden;
 }
@@ -49,6 +45,10 @@ ul.color.dropdown-content > li > a {
 
 #color-scheme-list > a.collection-item > div.row {
   margin-top: 5px;
+}
+
+#plugin-file-add {
+  display: none;
 }
 
 nav.row {

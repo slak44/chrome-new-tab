@@ -45,7 +45,7 @@
     "no-useless-escape": ["warn"],
     "prefer-rest-params": ["error"],
     "prefer-spread": ["warn"],
-    "no-param-reassign": ["warn", {"props": true}],
+    "no-param-reassign": ["warn", {"props": false}],
     "prefer-arrow-callback": ["warn", {"allowNamedFunctions": true}],
     "arrow-spacing": ["warn", {"before": true, "after": true}],
     "arrow-parens": ["warn", "as-needed"],

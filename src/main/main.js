@@ -4,13 +4,10 @@ const async = require('async');
 
 loadSchemes(() => {
   activateScheme(colorSchemes[0]);
-  async.parallel(
-    [loadButtons, loadPlugins],
-    (err, results) => {
-      if (err) throw err;
-      runPlugins();
-    }
-  );
+  async.parallel([loadButtons, loadPlugins], (err, results) => {
+    if (err) throw err;
+    plugins.forEach(plugin => runViewContent(plugin, 'main'));
+  });
 });
 
 let panels = [];
@@ -31,9 +28,7 @@ function addPanel(panelObject) {
 }
 
 document.onkeydown = function (e) {
-  if (e.altKey) {
-    for (const b in buttons) if (buttons[b].hotkey.charCodeAt() === e.keyCode) window.location.replace(buttons[b].href);
-  }
+  if (e.altKey) window.location.replace(buttons.find(button => button.hotkey.charCodeAt() === e.keyCode).href);
 };
 
 function createButton(options) {
@@ -69,6 +64,7 @@ function createButton(options) {
 function loadButtons(callback) {
   storage.load('buttons', err => {
     if (err) {
+      // FIXME replace with default value for buttons array
       createButton({text: 'Configure buttons here', href: '/secondary/secondary.html'});
     } else {
       const orderedButtons = [];
@@ -86,19 +82,5 @@ function loadButtons(callback) {
       orderedButtons.forEach(e => createButton(e));
     }
     callback(null);
-  });
-}
-
-function runPlugins() {
-  Object.keys(plugins).forEach(pluginName => {
-    try {
-      if (plugins[pluginName].html.main) Object.keys(plugins[pluginName].html.main).forEach((selector, i, array) => {
-        byQSelect(selector).insertAdjacentHTML('beforeend', plugins[pluginName].html.main[selector]);
-      });
-      if (plugins[pluginName].css.main) pluginCss.innerHTML += plugins[pluginName].css.main;
-      if (plugins[pluginName].js.main) eval(plugins[pluginName].js.main);
-    } catch (err) {
-      console.error(`Execution for ${pluginName} failed: `, err);
-    }
   });
 }

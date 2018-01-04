@@ -30,8 +30,6 @@ async.parallel([loadButtons, loadPlugins], err => {
   runPlugins();
 });
 
-const SHORT_DURATION_MS = 3000; // 3 seconds
-
 $('#copy-backup').click(() => {
   $('#backup-content').focus();
   $('#backup-content').select();
@@ -92,23 +90,29 @@ function loadButtons(callback) {
 }
 
 function runPlugins() {
-  Object.keys(plugins).forEach(pluginName => {
-    pluginsUtil.insertPluginSettingsHTML(plugins[pluginName], !byClass('plugin-container').length); // Only the first addition gets focus
-    try {
-      if (plugins[pluginName].html.secondary) Object.keys(plugins[pluginName].html.secondary).forEach((selector, i, array) => {
-        byQSelect(selector).insertAdjacentHTML('beforeend', array[selector]);
-      });
-      if (plugins[pluginName].css.secondary) pluginCss.innerHTML += plugins[pluginName].css.secondary;
-      if (plugins[pluginName].js.secondary) eval(plugins[pluginName].js.secondary);
-    } catch (err) {
-      console.error(`Execution for ${pluginName} failed: `, err);
-    }
+  plugins.forEach((plugin, idx) => {
+    pluginsUtil.appendPluginUI(plugin, idx);
+    runViewContent(plugin, 'secondary');
+    // pluginsUtil.insertPluginSettingsHTML(plugin, !byClass('plugin-container').length); // Only the first addition gets focus
+    // try {
+    //   if (plugin.html.secondary) Object.keys(plugin.html.secondary).forEach((selector, i, array) => {
+    //     byQSelect(selector).insertAdjacentHTML('beforeend', array[selector]);
+    //   });
+    //   if (plugin.css.secondary) pluginCss.innerHTML += plugin.css.secondary;
+    //   if (plugin.js.secondary) eval(plugin.js.secondary);
+    // } catch (err) {
+    //   console.error(`Execution for ${plugin.name} failed: `, err);
+    // }
   });
 }
 
 byId('floating-save-button').addEventListener('click', event => {
+  // Store plugins
+  pluginsUtil.storePlugins();
+  // Store buttons
   buttons = buttons.filter(button => !button.deleted);
   storage.store('buttons');
+  // FIXME actually look which have been deleted rather than just readding all of them
   $('#buttons-tab').empty();
   buttons.forEach(buttonsUtil.addButton);
   Materialize.updateTextFields();

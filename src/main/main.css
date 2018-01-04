@@ -11,19 +11,6 @@
   z-index: 10050;
 }
 
-nav.nav-wrapper {
-  z-index: 1000;
-  position: relative;
-}
-
-ul.side-nav.fixed > li {
-  width: 100%;
-}
-
-ul.side-nav.fixed.clipped {
-  padding-top: 72px; /* 64 is nav height, 8 is for padding */
-}
-
 .button-content {
   line-height: 48px; /* size of drawer button height */
   vertical-align: top;

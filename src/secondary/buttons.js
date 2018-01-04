@@ -196,8 +196,6 @@ function addButtonCard(config, idx) {
     buttons[idx].pictureType = useIcons ? 'icon' : 'image';
     window.changesMade = true;
   });
-  /* eslint-disable no-param-reassign */
-  // We 'reassign' to the event target dataset, which is not a problem
   iconInput.blur(event => {
     event.target.dataset.lastValue = event.target.value;
     buttons[idx].ligatureName = event.target.value;
@@ -226,7 +224,6 @@ function addButtonCard(config, idx) {
     noImageDiv.addClass('hidden');
     image.removeClass('hidden');
   });
-  /* eslint-enable no-param-reassign */
 }
 
 // function createNewButton() {

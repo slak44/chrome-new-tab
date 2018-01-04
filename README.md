@@ -88,13 +88,13 @@ Paths are relative to the `package.json`'s directory.
     }
   }
 ```
-- `pluginName`: name of plugin. Also serves as the key to this plugin in the global `plugins` object, so it must be unique
+- `pluginName`: name of plugin
 - `description`: plugin description.
 - `author`: self-explanatory
 - `version`: [semver](http://semver.org/) version string
 - `settings`: array of objects, format described below (note: incrementing the major version wipes the user's settings, so changes to the settings object should only happen in major releases)
 - `dependencies`: npm's dependencies field
-- `babel`: babel config
+- `babel`: babel's config
 - `html`: each property represents a view. For each view, there are html files associated with a query selector. The html will be inserted in the element obtained from the selector
 - `css`: each property represents a view. The css files for each view are concatenated, and the merged data is appended to a stylesheet after the html has been inserted
 - `js`: each property represents a position. Similar to the css files, all the js files are concatenated (in order of appearance), and the resulting script is executed at its respective position

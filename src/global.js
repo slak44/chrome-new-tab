@@ -4,7 +4,7 @@ window.dependencies = {};
 
 window.Materialize = require('materialize-css');
 
-window.plugins = {};
+window.plugins = [];
 window.buttons = [];
 window.colorSchemes = [];
 
@@ -14,6 +14,8 @@ window.byQSelect = selector => document.querySelector(selector);
 
 window.capitalize = string => string.charAt(0).toUpperCase() + string.substr(1);
 window.hasClass = (element, className) => Array.from(element.classList).includes(className);
+
+window.SHORT_DURATION_MS = 3000; // 3 seconds
 
 // /*
 //   Reads a File object and returns the File object and the contents in a callback.
@@ -119,12 +121,12 @@ window.storage = new (function () {
 /*
   Provides utilities for plugins. Each plugin should create its own instance.
 */
-window.PluginUtil = function (pluginName) {
+window.PluginUtil = function (plugin) {
   /*
     Get the value of a setting by its name.
   */
   this.getSetting = function (settingName) {
-    return plugins[pluginName].settings.filter(settingObj => settingObj.name === settingName)[0].value;
+    return plugin.settings.filter(settingObj => settingObj.name === settingName)[0].value;
   };
 
   /*
@@ -137,7 +139,7 @@ window.PluginUtil = function (pluginName) {
   /*
     Shortcut to plugin dependencies.
   */
-  this.deps = window.dependencies[pluginName];
+  this.deps = window.dependencies[plugin.name];
 };
 
 window.activateScheme = function (scheme) {
@@ -169,17 +171,17 @@ window.activateScheme = function (scheme) {
   `;
 };
 
-window.toggleDiv = function (elem) {
-  let div = elem;
-  if (!(div instanceof HTMLElement)) div = byId(elem);
-  if (hasClass(div, 'focused')) {
-    div.classList.remove('focused');
-    div.classList.add('unfocused');
-  } else {
-    div.classList.remove('unfocused');
-    div.classList.add('focused');
-  }
-};
+// window.toggleDiv = function (elem) {
+//   let div = elem;
+//   if (!(div instanceof HTMLElement)) div = byId(elem);
+//   if (hasClass(div, 'focused')) {
+//     div.classList.remove('focused');
+//     div.classList.add('unfocused');
+//   } else {
+//     div.classList.remove('unfocused');
+//     div.classList.add('focused');
+//   }
+// };
 
 window.loadSchemes = function (callback) {
   storage.load('colorSchemes', err => {
@@ -208,10 +210,25 @@ window.loadSchemes = function (callback) {
         accent3: '#76FF03',
         accent4: '#558B2F'
       }];
-      storage.store('colorSchemes');
+      storage.store('colorSchemes', callback);
+      return;
     }
-    callback();
+    callback(null);
   });
+};
+
+window.runViewContent = function (plugin, view) {
+  try {
+    if (plugin.dependencyCode && view === 'global') eval(plugin.dependencyCode);
+    if (plugin.html[view]) Object.keys(plugin.html[view]).forEach((selector, i, array) => {
+      byQSelect(selector).insertAdjacentHTML('beforeend', array[selector]);
+    });
+    if (plugin.css[view]) pluginCss.innerHTML += plugin.css[view];
+    if (plugin.js[view]) eval(plugin.js[view]);
+  } catch (err) {
+    Materialize.toast($(`<span>Plugin ${plugin.name} encountered an error</span>`), SHORT_DURATION_MS);
+    console.error(`Execution for ${plugin.name} failed in ${view}: `, err);
+  }
 };
 
 window.loadPlugins = function (callback) {
@@ -222,18 +239,7 @@ window.loadPlugins = function (callback) {
       callback(error);
       return;
     }
-    Object.keys(plugins).forEach((pluginName, i, array) => {
-      try {
-        if (plugins[pluginName].dependencyCode) eval(plugins[pluginName].dependencyCode);
-        if (plugins[pluginName].html.global) Object.keys(plugins[pluginName].html.global).forEach((selector, i, array) => {
-          byQSelect(selector).insertAdjacentHTML('beforeend', plugins[pluginName].html.global[selector]);
-        });
-        if (plugins[pluginName].css.global) pluginCss.innerHTML += plugins[pluginName].css.global;
-        if (plugins[pluginName].js.global) eval(plugins[pluginName].js.global);
-      } catch (err) {
-        console.error(`Execution for ${pluginName} failed: `, err);
-      }
-    });
+    plugins.forEach(plugin => runViewContent(plugin, 'global'));
     callback(null);
   });
 };
