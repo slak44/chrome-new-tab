@@ -19,6 +19,7 @@
       <ul id="navbar-overflow-menu" class="dropdown-content overflow menu">
         <li><a href="#backup-modal" class="waves-effect text-primary modal-trigger">Backup Data</a></li>
         <li><a href="#restore-modal" class="waves-effect text-primary modal-trigger">Restore Data</a></li>
+        <li><a href="#defaults-modal" class="waves-effect text-primary modal-trigger">Restore Defaults</a></li>
       </ul>
       <ul class="tabs">
         <li id="plugin-settings" class="tab col s2"><a href="#settings-tab">Plugins</a></li>
@@ -99,6 +100,16 @@
       <a href="#!" class="modal-action modal-close waves-effect btn-flat">Dismiss</a>
       <a id="paste-restore" href="#!" class="modal-action waves-effect btn-flat">Restore from text</a>
       <a id="upload-restore" href="#!" class="modal-action waves-effect btn-flat">Restore from file</a>
+    </div>
+  </div>
+  <div id="defaults-modal" class="modal">
+    <div class="modal-content">
+      <h4>Restore all settings to default?</h4>
+      <p class="red-text">This action cannot be undone!</p>
+    </div>
+    <div class="modal-footer">
+      <a href="#!" class="modal-action modal-close waves-effect btn-flat">Cancel</a>
+      <a id="restore-defaults" href="#!" class="modal-action modal-close waves-effect btn-flat">Restore defaults</a>
     </div>
   </div>
 

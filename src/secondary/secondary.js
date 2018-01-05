@@ -33,6 +33,7 @@ async.parallel([loadButtons, loadPlugins], err => {
   $('#backup-modal').modal();
   $('#backup-content').text(JSON.stringify({buttons, currentThemeIdx, themes, plugins}));
   $('#restore-modal').modal();
+  $('#defaults-modal').modal();
   runPlugins();
 });
 
@@ -80,6 +81,10 @@ $('#upload-restore').click(() => {
   const reader = new FileReader();
   reader.addEventListener('loadend', event => restore(event.target.result));
   reader.readAsText(file);
+});
+
+$('#restore-defaults').click(() => {
+  restore(`{"buttons": [], "themes": [${JSON.stringify(themesUtil.defaultTheme)}], "currentThemeIdx": 0, "plugins": []}`);
 });
 
 $('#add-button').click(event => buttonsUtil.newSettingCard('default'));
