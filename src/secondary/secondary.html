@@ -2,6 +2,7 @@
   <head>
     <title>New Tab Settings</title>
 		<style id="dynamic-colors"></style>
+    <style id="plugin-css"></style>
     <link rel="stylesheet" type="text/css" href="/global.css">
     <link rel="stylesheet" type="text/css" href="/secondary/secondary.css">
     <link rel="stylesheet" type="text/css" href="/materialize.min.css">
@@ -11,17 +12,17 @@
       <div class="brand-logo col text-primary">New Tab Settings</div>
       <div id="version-string" class="text-primary col"></div>
       <ul class="right menu">
-        <li><a id="add-button" class="waves-effect text-primary" href="#!">
-          <i class="material-icons">add</i>
-          <span>New Button</span>
-        </a></li>
         <li>
           <input id="plugin-file-add" type="file">
           <a id="add-plugin" class="waves-effect text-primary" href="#!">
-            <i class="material-icons">add_box</i>
+            <i class="material-icons">add</i>
             <span>New Plugin</span>
           </a>
         </li>
+        <li><a id="add-button" class="waves-effect text-primary" href="#!">
+          <i class="material-icons">add_box</i>
+          <span>New Button</span>
+        </a></li>
         <li><a href="#!" class="dropdown-button waves-effect text-primary" data-activates="navbar-overflow-menu">
           <i class="material-icons">more_vert</i>
         </a></li>
@@ -34,15 +35,15 @@
       </ul>
       <ul class="tabs">
         <li id="plugin-settings" class="tab col s2"><a href="#settings-tab">Plugin Settings</a></li>
-        <li id="button-list" class="tab col s2"><a href="#buttons-tab">Button List</a></li>
-        <li id="color-scheme" class="tab col s2"><a href="#color-scheme-tab">Color Schemes</a></li>
+        <li id="button-list" class="tab col s2"><a href="#buttons-tab">Button Config</a></li>
+        <li id="theme" class="tab col s2"><a href="#themes-tab">Themes</a></li>
       </ul>
       <a id="floating-save-button" class="waves-effect btn-floating btn-large" href="#"><i class="material-icons">save</i></a>
     </nav>
     <main>
       <section id="settings-tab" class="tab-content">
         <ul id="plugins" class="side-nav with-tabs fixed clipped">
-          <li><a class="subheader">Plugins</a></li>
+          <li><a class="subheader">Installed Plugins</a></li>
         </ul>
         <div id="settings-container" class="section-container"></div>
       </section>
@@ -52,8 +53,16 @@
         </ul>
         <div id="buttons-container" class="section-container"></div>
       </section>
-      <section id="color-scheme-tab" class="tab-content">
-
+      <section id="themes-tab" class="tab-content">
+        <ul id="themes" class="side-nav with-tabs fixed clipped">
+          <li><a id="add-theme" class="waves-effect text-primary" href="#!">
+            <i class="material-icons">color_lens</i>
+            Create Theme
+          </a></li>
+          <li><div class="divider"></div></li>
+          <li><a class="subheader">Installed Themes</a></li>
+        </ul>
+        <div id="themes-container" class="section-container"></div>
       </section>
     </main>
     <div id="backup-modal" class="modal modal-fixed-footer">

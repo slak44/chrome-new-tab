@@ -129,8 +129,8 @@ function appendPluginUI(plugin, idx) {
   `);
   const anchor = $(`#plugins [data-plugin-idx="${idx}"]`);
   anchor.click(event => {
-    $('#plugins li.selected').removeClass('selected');
-    anchor.parent().addClass('selected');
+    $('#plugins li.selection').removeClass('selection');
+    anchor.parent().addClass('selection');
     $('.plugin-data:not(.hidden)').addClass('hidden');
     div.removeClass('hidden');
   });

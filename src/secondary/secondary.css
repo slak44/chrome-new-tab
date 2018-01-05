@@ -173,6 +173,10 @@ section.tab-content {
   display: none !important;
 }
 
+.scale-transition.force-scale-in {
+  transform: scale(1) !important;
+}
+
 #backup-modal textarea {
   width: 100%;
   height: 80%;

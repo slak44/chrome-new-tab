@@ -3,12 +3,14 @@
 const async = require('async');
 const buttonsUtil = require('../buttons');
 
-loadSchemes(() => {
-  activateScheme(colorSchemes[0]);
-  async.parallel([loadButtons, loadPlugins], (err, results) => {
-    if (err) throw err;
-    plugins.forEach(plugin => runViewContent(plugin, 'main'));
-  });
+// loadSchemes(() => {
+//   activateScheme(colorSchemes[0]);
+//
+// });
+
+async.parallel([loadButtons, loadPlugins], (err, results) => {
+  if (err) throw err;
+  plugins.forEach(plugin => runViewContent(plugin, 'main'));
 });
 
 let panels = [];

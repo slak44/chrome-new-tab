@@ -1,17 +1,14 @@
 {
   "extends": "../.eslintrc.json",
   "globals": {
-    "loadSchemes": false,
-    "activateScheme": false,
-    "colorSchemes": true,
+    "themes": true,
+    "currentThemeIdx": true,
+    "buttons": true,
 
     "PluginUtil": false,
     "loadPlugins": false,
     "runViewContent": false,
     "plugins": true,
-    "pluginCss": false,
-
-    "buttons": true,
 
     "addPanel": false,
 

@@ -2,11 +2,14 @@
 
 window.dependencies = {};
 
+const async = require('async');
+const themeUtils = require('./themes');
 window.Materialize = require('materialize-css');
 
 window.plugins = [];
 window.buttons = [];
-window.colorSchemes = [];
+window.themes = [];
+window.currentThemeIdx = 0;
 
 window.byId = id => document.getElementById(id);
 window.byClass = className => document.getElementsByClassName(className);
@@ -50,7 +53,7 @@ window.storage = new (function () {
     Constant.
     Existing storage elements. Usable as 'element' parameters for the other functions in this object.
   */
-  this.stored = ['plugins', 'buttons', 'colorSchemes'];
+  this.stored = ['plugins', 'buttons', 'themes', 'currentThemeIdx'];
   Object.freeze(this.stored);
 
   /*
@@ -134,7 +137,7 @@ window.PluginUtil = function (plugin) {
     Dynamically adds a plugin's css.
   */
   this.insertStyles = function (cssText) {
-    byId('plugin-css').innerHTML += cssText;
+    $('#plugin-css').innerHTML += cssText;
   };
 
   /*
@@ -143,36 +146,20 @@ window.PluginUtil = function (plugin) {
   this.deps = window.dependencies[plugin.name];
 };
 
-window.activateScheme = function (scheme) {
-  const primaryTextColor = scheme.isDark ? '#FFFFFF' : 'rgba(0, 0, 0, 0.75)';
-  const secondaryTextColor = '#9E9E9E';
-  byId('dynamic-colors').innerText = `
-    input:focus:not([readonly]), textarea.materialize-textarea:focus:not([readonly]) {
-      border-bottom-color: ${scheme.main} !important;
-      box-shadow: 0 1px 0 0 ${scheme.main} !important;
-    }
-    input:focus:not([readonly]) + label, textarea.materialize-textarea:focus:not([readonly]) + label {
-      color: ${scheme.main} !important;
-    }
-    [type="checkbox"]:checked + label:before {
-      border-bottom-color: ${scheme.main} !important;
-      border-right-color: ${scheme.main} !important;
-    }
-    .input-field i.prefix.active {color: ${scheme.main} !important;}
-    .collection-item.active {background-color: ${scheme.darken4} !important;}
-    nav {background-color: ${scheme.main} !important;}
-    .text-primary {color: ${primaryTextColor} !important;}
-    .waves-effect .waves-ripple {background-color: ${scheme.isDark ? 'rgba(255, 255, 255, 0.45)' : 'rgba(0, 0, 0, 0.2);'} !important;}
-    body {background-color: ${scheme.background} !important;}
-    .btn-floating {background-color: ${scheme.accent2} !important;}
-    .btn-floating i {color: ${primaryTextColor} !important;}
-    .tabs li.indicator {background-color: ${scheme.accent2} !important;}
-    .tabs li a {color: ${primaryTextColor} !important;}
-    .tabs li a.active {color: ${scheme.accent4} !important;}
-    .collapsible > li {background-color: ${scheme.isDark ? '#000000' : '#FFFFFF'} !important;}
-    .selected {background-color: ${scheme.accent1} !important;}
-  `;
-};
+chrome.runtime.onInstalled.addListener(details => {
+  if (details.reason === 'install') {
+    themes = [themeUtils.defaultTheme];
+    storage.store('themes');
+  }
+});
+
+async.parallel([cb => storage.load('themes', cb), cb => storage.load('currentThemeIdx', cb)], err => {
+  if (err) {
+    console.error(err);
+    Materialize.toast($('<span>Error loading themes</span>'), SHORT_DURATION_MS);
+  }
+  themeUtils.activateTheme(themes[currentThemeIdx] || themeUtils.defaultTheme);
+});
 
 // window.toggleDiv = function (elem) {
 //   let div = elem;
@@ -185,40 +172,39 @@ window.activateScheme = function (scheme) {
 //     div.classList.add('focused');
 //   }
 // };
-
-window.loadSchemes = function (callback) {
-  storage.load('colorSchemes', err => {
-    if (err || colorSchemes[0] === undefined || colorSchemes[0] === null) {
-      colorSchemes = [{
-        name: 'Light Orange with Light Green Accents',
-        isDark: false,
-
-        background: '#FAFAFA',
-
-        lighten5: '#fff3e0',
-        lighten4: '#ffe0b2',
-        lighten3: '#ffcc80',
-        lighten2: '#ffb74d',
-        lighten1: '#ffa726',
-
-        main: '#ff9800',
-
-        darken1: '#fb8c00',
-        darken2: '#f57c00',
-        darken3: '#ef6c00',
-        darken4: '#e65100',
-
-        accent1: '#CCFF90',
-        accent2: '#B2FF59',
-        accent3: '#76FF03',
-        accent4: '#558B2F'
-      }];
-      storage.store('colorSchemes', callback);
-      return;
-    }
-    callback(null);
-  });
-};
+//
+// window.loadThemes = function (callback) {
+//   storage.load('themes', err => {
+//     if (err || themes[0] === undefined || themes[0] === null) {
+//       themes = [{
+//         name: 'Light Orange + Lime Accents',
+//         isDark: false,
+//
+//         background: '#FAFAFA',
+//         main: '#FF9800',
+//
+//         lighten5: '#fff3e0',
+//         lighten4: '#ffe0b2',
+//         lighten3: '#ffcc80',
+//         lighten2: '#ffb74d',
+//         lighten1: '#ffa726',
+//
+//         darken1: '#fb8c00',
+//         darken2: '#f57c00',
+//         darken3: '#ef6c00',
+//         darken4: '#e65100',
+//
+//         accent1: '#CCFF90',
+//         accent2: '#B2FF59',
+//         accent3: '#76FF03',
+//         accent4: '#558B2F'
+//       }];
+//       storage.store('themes', callback);
+//       return;
+//     }
+//     callback(null);
+//   });
+// };
 
 window.runViewContent = function (plugin, view) {
   try {
@@ -226,7 +212,7 @@ window.runViewContent = function (plugin, view) {
     if (plugin.html[view]) Object.keys(plugin.html[view]).forEach((selector, i, array) => {
       byQSelect(selector).insertAdjacentHTML('beforeend', array[selector]);
     });
-    if (plugin.css[view]) pluginCss.innerHTML += plugin.css[view];
+    if (plugin.css[view]) $('#plugin-css').innerHTML += plugin.css[view];
     if (plugin.js[view]) eval(plugin.js[view]);
   } catch (err) {
     Materialize.toast($(`<span>Plugin ${plugin.name} encountered an error</span>`), SHORT_DURATION_MS);
@@ -246,8 +232,8 @@ window.undoToast = function (text, uid, undoClicked) {
 };
 
 window.loadPlugins = function (callback) {
-  document.getElementsByTagName('head')[0].insertAdjacentHTML('beforeend', '<style id="plugin-css"></style>');
-  window.pluginCss = byId('plugin-css');
+  // document.getElementsByTagName('head')[0].insertAdjacentHTML('beforeend', '<style id="plugin-css"></style>');
+  // window.pluginCss = byId('plugin-css');
   storage.load('plugins', error => {
     if (error) {
       callback(error);

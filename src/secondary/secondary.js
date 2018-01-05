@@ -3,7 +3,7 @@
 const async = require('async');
 const buttonsUtil = require('../buttons');
 const pluginsUtil = require('./plugins');
-const schemesUtil = require('./schemes');
+const themesUtil = require('../themes');
 
 /*
   Any time the user changes something, set this to false. When they save, reset it to false.
@@ -17,11 +17,16 @@ $(window).on('beforeunload', () => {
 
 byId('version-string').innerText = `version ${chrome.runtime.getManifest().version}`;
 
-loadSchemes(() => {
-  activateScheme(colorSchemes[0]);
-  // colorSchemes.forEach(scheme => schemesUtil.insertPreviewHTML(scheme));
-  // schemesUtil.initSchemesEventListeners();
+// loadSchemes(() => {
+//   activateScheme(colorSchemes[0]);
+//   colorSchemes.forEach(scheme => schemesUtil.insertPreviewHTML(scheme));
+//   schemesUtil.initSchemesEventListeners();
+// });
+$(document).ready(() => {
+  themes.forEach(themesUtil.addThemeButton);
+  $(`[data-theme-idx="${currentThemeIdx}"] i.scale-transition`).click();
 });
+
 async.parallel([loadButtons, loadPlugins], err => {
   if (err) throw err;
   $('#backup-modal').modal();
@@ -93,7 +98,7 @@ function loadButtons(callback) {
     // }
     buttons.forEach(buttonsUtil.addSettingCard);
     updateButtonPreview();
-    $('#buttons-container input').on('changed keyup paste', event => updateButtonPreview());
+    $('#buttons-container input').on('change keyup paste', event => updateButtonPreview());
     // buttonsUtil.activateDefaultButton();
     // buttonsUtil.initDropdown();
     callback(null);
