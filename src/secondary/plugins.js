@@ -9,10 +9,12 @@ window.reloadTimeout = 1000;
 let reloadCount = 0;
 
 function storePlugins() {
+  let pluginsInited = 0;
   plugins.filter(plugin => plugin.runInitCodeOnSave).forEach(plugin => {
     delete plugin.runInitCodeOnSave;
     try {
       if (plugin.init) eval(plugin.js.init);
+      pluginsInited++;
     } catch (err) {
       Materialize.toast($(`<span>An error occurred during "${plugin.name}" initializtion</span>`), SHORT_DURATION_MS);
       console.error(err);
@@ -20,7 +22,7 @@ function storePlugins() {
   });
   storage.store('plugins', () => {
     if (window.persistentPluginReload) return;
-    window.location.reload();
+    if (pluginsInited > 0) window.location.reload();
   });
 }
 
@@ -73,6 +75,7 @@ $('#add-plugin').click(event => $('#plugin-file-add').click());
 let reloadIntervalId;
 $('#plugin-file-add').change(event => {
   const file = event.target.files[0];
+  $('ul.tabs').tabs('select_tab', 'settings-tab');
   addPlugin(file);
   if (window.persistentPluginReload) {
     if (reloadIntervalId) clearInterval(reloadIntervalId);
@@ -86,14 +89,68 @@ $('#plugin-file-add').change(event => {
 });
 
 function appendPluginUI(plugin, idx) {
+  const inputs = plugin.settings.reduce((accum, setting) => `
+  ${accum}
+  <div class="input-field">
+    ${setting.desc ? `<i class="postfix material-icons grey-text" data-setting-name="${setting.name}">help</i>` : ''}
+    <input name="${setting.name}" type="${setting.type}" value="${setting.value === undefined ? '' : setting.value}">
+    <label for="${setting.name}" class="active">${setting.name}</label>
+  </div>
+  `, '');
+  $('#settings-container').append(`
+  <div class="plugin-data hidden" data-plugin-idx="${idx}">
+    <h2>${plugin.name}</h2>
+    <p>
+      by ${plugin.author}
+      <br/>
+      version ${plugin.version}
+    </p>
+    ${inputs}
+  </div>
+  `);
+  // FIXME cannot call this, update materialize to 1.0
+  // Materialize.updateTextFields();
+  const div = $(`.plugin-data[data-plugin-idx="${idx}"]`);
+  plugin.settings.forEach((setting, settingIdx) => {
+    if (plugin.desc) div.find(`i[data-setting-name="${setting.name}"]`).tooltip({
+      delay: 50,
+      position: 'top',
+      tooltip: setting.desc
+    });
+    div.find(`input[name="${setting.name}"]`).on('keyup change paste', event => {
+      plugins[idx].settings[settingIdx].value = event.target.value;
+      window.changesMade = true;
+    });
+  });
   $('#plugins').append(`
     <li class="waves-effect">
-      <a href="#!" data-plugin-idx="${idx}">${plugin.name}</a>
+      <a href="#!" data-plugin-idx="${idx}">
+        ${plugin.name}
+        <i class="material-icons right scale-transition scale-out waves-effect">close</i>
+      </a>
     </li>
   `);
   const anchor = $(`#plugins [data-plugin-idx="${idx}"]`);
-  // TODO add click listener
-  // TODO add settings ui
+  anchor.click(event => {
+    $('.plugin-data:not(.hidden)').addClass('hidden');
+    div.removeClass('hidden');
+  });
+  const removePluginBtn = $(`#plugins [data-plugin-idx="${idx}"] i`);
+  anchor.parent().hover(
+    event => removePluginBtn.addClass('scale-in'),
+    event => removePluginBtn.removeClass('scale-in')
+  );
+  removePluginBtn.click(event => {
+    event.stopPropagation();
+    plugins[idx].deleted = true;
+    window.changesMade = true;
+    div.addClass('hidden');
+    anchor.parent().addClass('hidden');
+    undoToast(`Deleted plugin "${plugin.name}"`, `plugin-${idx}`, () => {
+      plugins[idx].deleted = false;
+      anchor.parent().removeClass('hidden');
+    });
+  });
 }
 
 // function addFromFile() {

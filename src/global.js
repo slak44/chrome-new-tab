@@ -16,6 +16,7 @@ window.capitalize = string => string.charAt(0).toUpperCase() + string.substr(1);
 window.hasClass = (element, className) => Array.from(element.classList).includes(className);
 
 window.SHORT_DURATION_MS = 3000; // 3 seconds
+window.LONG_DURATION_MS = 10000; // 10 seconds
 
 // /*
 //   Reads a File object and returns the File object and the contents in a callback.
@@ -157,6 +158,7 @@ window.activateScheme = function (scheme) {
       border-bottom-color: ${scheme.main} !important;
       border-right-color: ${scheme.main} !important;
     }
+    .input-field i.prefix.active {color: ${scheme.main} !important;}
     .collection-item.active {background-color: ${scheme.darken4} !important;}
     nav {background-color: ${scheme.main} !important;}
     .text-primary {color: ${primaryTextColor} !important;}
@@ -229,6 +231,17 @@ window.runViewContent = function (plugin, view) {
     Materialize.toast($(`<span>Plugin ${plugin.name} encountered an error</span>`), SHORT_DURATION_MS);
     console.error(`Execution for ${plugin.name} failed in ${view}: `, err);
   }
+};
+
+window.undoToast = function (text, uid, undoClicked) {
+  const content = $(`<span>${text}</span>`)
+    .add($(`<button id="undo-${uid}" class="btn-flat toast-action">Undo</button>`));
+  Materialize.toast(content, LONG_DURATION_MS);
+  const undoBtn = $(`#undo-${uid}`);
+  undoBtn.click(event => {
+    undoClicked();
+    undoBtn.parent()[0].M_Toast.remove();
+  });
 };
 
 window.loadPlugins = function (callback) {

@@ -1,8 +1,7 @@
 'use strict';
 
-const UNDO_TIME_MS = 10000; // 10 seconds
-
 function newButton(kind) {
+  $('ul.tabs').tabs('select_tab', 'buttons-tab');
   switch (kind) {
     case 'divider': buttons.push({kind, position: ''}); break;
     case 'subheader': buttons.push({kind, text: '', position: ''}); break;
@@ -40,20 +39,16 @@ function removeWithUndoListener(card, idx) {
     buttons[idx].deleted = true;
     card.addClass('hidden');
     window.changesMade = true;
-    const content = $('<span>Deleted button</span>')
-      .add($(`<button id="undo-${idx}" class="btn-flat toast-action">Undo</button>`));
-    Materialize.toast(content, UNDO_TIME_MS);
-    $(`#undo-${idx}`).click(event => {
+    undoToast('Deleted button', `button-${idx}`, () => {
       buttons[idx].deleted = false;
       card.removeClass('hidden');
-      $(`#undo-${idx}`).parent()[0].M_Toast.remove();
     });
   });
 }
 
 // propKind can be text or number
 function createBinderOnBlur(card, idx, propName, propKind = 'text') {
-  card.find(`input[name="${propName}"]`).blur(event => {
+  card.find(`input[name="${propName}"]`).on('keyup change paste', event => {
     if (!event.target.value) return;
     if (propKind === 'number') buttons[idx][propName] = parseFloat(event.target.value);
     else buttons[idx][propName] = event.target.value;

@@ -76,6 +76,16 @@ nav.nav-wrapper {
   padding-top: 120px; /* 112 is nav with tabs height, 8 is for padding */
 }
 
+.side-nav li > a > i.material-icons.right {
+  margin: 0px;
+  margin-right: -32px; /* ignore the list item's right padding */
+}
+
+.side-nav li > a > i.material-icons.waves-effect {
+  text-align: center;
+  width: 48px; /* match height for a prettier effect */
+}
+
 nav .menu i.material-icons,
 nav .menu span {
   display: inline-block;
@@ -91,6 +101,28 @@ nav .menu span {
 .menu > li {
   line-height: 56px;
   height: 56px;
+}
+
+.input-field {
+  display: flex;
+}
+
+.input-field i.postfix {
+  position: absolute;
+  right: 0;
+  width: 3rem;
+  font-size: 1.5rem;
+  -webkit-transition: color .2s;
+  transition: color .2s;
+}
+
+.input-field i.postfix + input {
+  margin-right: 3rem;
+}
+
+.input-field i.prefix,
+.input-field i.postfix {
+  align-self: center;
 }
 
 @-webkit-keyframes show {

@@ -158,7 +158,8 @@ This should be valid JSON.
         "querySelector": "htmlToAdd"
         ...
       }
-    }
+    },
+    "deleted": undefined
   }
 ```
 - `name`: see above, is equivalent to `pluginName`
@@ -170,6 +171,7 @@ This should be valid JSON.
 - `js`: all functions are stringified IIFEs, each property is a position
 - `css`: the css from each property will be added to it's respective view
 - `html`: every property targets a view. For every view, `htmlToAdd` will be added at the position specified by the `querySelector`. There can be multiple `querySelector`s
+- `deleted`: (optional boolean) if true, it signals that this plugin was "deleted" by the user; this element will be *removed before saving* to storage
 
 #### Setting format:
 ```
@@ -181,11 +183,11 @@ This should be valid JSON.
     "isVisible": true
   }
 ```
-- `name`: title of setting
-- `desc`: description of setting
-- `type`: what kind of input tag is necessary. (number, text, checkbox, radiobox, etc)
-- `value`: undefined until set
-- `isVisible`: if false, it means this 'setting' is just storage
+- `name`: (string) title of setting
+- `desc`: (optional string) description of setting
+- `type`: (enum string) [input types](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input)
+- `value`: (any) undefined until set
+- `isVisible`: (boolean) if false, it means this 'setting' is just storage
 
 #### Button format:
 ```

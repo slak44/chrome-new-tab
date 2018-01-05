@@ -28,6 +28,9 @@
     "Materialize": false,
     "$": false,
 
-    "SHORT_DURATION_MS": false
+    "SHORT_DURATION_MS": false,
+    "LONG_DURATION_MS": false,
+
+    "undoToast": false
   }
 }

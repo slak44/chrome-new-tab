@@ -67,6 +67,7 @@ nav.with-tabs > .tabs {
 section.tab-content {
   height: calc(100% - 112px); /* nav height with tabs is 112 */
   width: 100% !important;
+  position: relative;
 }
 
 #floating-save-button {
@@ -80,6 +81,29 @@ section.tab-content {
   flex-wrap: wrap;
   justify-content: space-evenly;
   overflow-y: auto;
+}
+
+#settings-container {
+  margin-left: 300px; /* width of side-nav */
+  position: relative;
+  height: 100%;
+}
+
+#settings-container > div {
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  padding-left: 16px;
+  overflow-y: auto;
+}
+
+.plugin-data > p + .input-field {
+  margin-top: 2rem; /* label font size is 1rem, and add another as an actual margin */
+}
+
+.plugin-data .input-field {
+  width: 50%;
+  max-width: 100%;
 }
 
 section.tab-content > .card {

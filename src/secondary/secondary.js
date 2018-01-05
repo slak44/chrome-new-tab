@@ -74,14 +74,14 @@ $('#upload-restore').click(() => {
 function loadButtons(callback) {
   storage.load('buttons', error => {
     if (error) {
-      buttons = {};
+      // buttons = {};
       callback(error);
       return;
     }
-    if (Object.keys(buttons).length === 0) {
-      callback(null);
-      return;
-    }
+    // if (Object.keys(buttons).length === 0) {
+    //   callback(null);
+    //   return;
+    // }
     buttons.forEach(buttonsUtil.addButton);
     // buttonsUtil.activateDefaultButton();
     // buttonsUtil.initDropdown();
