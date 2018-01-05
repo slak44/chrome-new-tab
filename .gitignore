@@ -1,6 +1,7 @@
 *.pem
 *.crx
-node_modules/
+/node_modules/
+plugins/*/node_modules
 build/
 lol-test-data.json
 TODO

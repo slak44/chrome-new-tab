@@ -1,7 +1,8 @@
 'use strict';
 
+require('global');
 const async = require('async');
-const buttonsUtil = require('../buttons');
+const buttonsUtil = require('buttons');
 
 // loadSchemes(() => {
 //   activateScheme(colorSchemes[0]);

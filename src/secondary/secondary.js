@@ -1,9 +1,10 @@
 'use strict';
 
+require('global');
 const async = require('async');
-const buttonsUtil = require('../buttons');
+const buttonsUtil = require('buttons');
 const pluginsUtil = require('./plugins');
-const themesUtil = require('../themes');
+const themesUtil = require('themes');
 
 /*
   Any time the user changes something, set this to false. When they save, reset it to false.

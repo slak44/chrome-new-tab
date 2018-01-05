@@ -4,8 +4,10 @@ const webpack = require('webpack');
 const path = require('path');
 
 module.exports = {
+  resolve: {
+    modules: ['node_modules', 'src/node_modules']
+  },
   entry: {
-    global: path.join(__dirname, 'src', 'global.js'),
     main: path.join(__dirname, 'src', 'main', 'main.js'),
     secondary: path.join(__dirname, 'src', 'secondary', 'secondary.js'),
   },
@@ -16,7 +18,7 @@ module.exports = {
     loaders: [{
       test: /.js$/,
       loader: 'babel-loader',
-      exclude: /node_modules/,
+      exclude: /\.\/node_modules/,
       query: {presets: ['latest']}
     }]
   },
