@@ -24,14 +24,14 @@ byId('version-string').innerText = `version ${chrome.runtime.getManifest().versi
 //   schemesUtil.initSchemesEventListeners();
 // });
 $(document).ready(() => {
-  themes.forEach(themesUtil.addThemeButton);
-  $(`[data-theme-idx="${currentThemeIdx}"] i.scale-transition`).click();
+  themes.forEach(themesUtil.addThemeSettingsUI);
+  themesUtil.setUpInitialUI();
 });
 
 async.parallel([loadButtons, loadPlugins], err => {
   if (err) throw err;
   $('#backup-modal').modal();
-  $('#backup-content').text(JSON.stringify({buttons, plugins}));
+  $('#backup-content').text(JSON.stringify({buttons, currentThemeIdx, themes, plugins}));
   $('#restore-modal').modal();
   runPlugins();
 });
@@ -52,13 +52,18 @@ $('#download-backup').click(() => {
 
 function restore(fromText) {
   try {
-    ({buttons, plugins} = JSON.parse(fromText));
+    ({buttons, currentThemeIdx, themes, plugins} = JSON.parse(fromText));
   } catch (err) {
-    Materialize.toast($('<span>Failed to restore data (parse error)</span>'), SHORT_DURATION_MS);
+    Materialize.toast($('<span>Failed to restore data (parse error, check data)</span>'), SHORT_DURATION_MS);
     console.error(err);
     return;
   }
-  async.parallel([cb => storage.store('buttons', cb), cb => storage.store('plugins', cb)], err => {
+  async.parallel([
+    cb => storage.store('buttons', cb),
+    cb => storage.store('currentThemeIdx', cb),
+    cb => storage.store('themes', cb),
+    cb => storage.store('plugins', cb),
+  ], err => {
     if (err) {
       Materialize.toast($('<span>Failed to restore data (storage error)</span>'), SHORT_DURATION_MS);
       console.error(err);
@@ -80,6 +85,27 @@ $('#upload-restore').click(() => {
 $('#add-button').click(event => buttonsUtil.newSettingCard('default'));
 $('#add-divider').click(event => buttonsUtil.newSettingCard('divider'));
 $('#add-subheader').click(event => buttonsUtil.newSettingCard('subheader'));
+
+$('#add-theme').click(event => themesUtil.newTheme());
+$('#import-theme').click(() => $('#theme-file-add').click());
+
+$('#theme-file-add').change(event => {
+  const file = event.target.files[0];
+  const reader = new FileReader();
+  reader.addEventListener('loadend', event => {
+    let imported;
+    try {
+      imported = JSON.parse(event.target.result);
+    } catch (err) {
+      Materialize.toast($('<span>Failed to import theme (parse error, check data)</span>'), SHORT_DURATION_MS);
+      console.error(err);
+      return;
+    }
+    themesUtil.newTheme(imported);
+    window.changesMade = true;
+  });
+  reader.readAsText(file);
+});
 
 function updateButtonPreview() {
   $('#buttons-live-preview > li').slice(1).remove(); // Keep the "Live Preview" header
@@ -133,7 +159,9 @@ byId('floating-save-button').addEventListener('click', event => {
   $('#buttons-container').empty();
   buttons.forEach(buttonsUtil.addSettingCard);
   Materialize.updateTextFields();
-
+  // Store themes
+  storage.store('themes');
+  storage.store('currentThemeIdx');
   window.changesMade = false;
   // if (hasClass(byId('settings-tab'), 'focused')) {
   //   pluginsUtil.saveFocusedPluginSettings();

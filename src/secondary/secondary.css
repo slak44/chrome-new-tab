@@ -47,10 +47,6 @@ ul.color.dropdown-content > li > a {
   margin-top: 5px;
 } */
 
-#plugin-file-add {
-  display: none;
-}
-
 nav.row {
   margin-bottom: 0px;
 }
@@ -76,12 +72,6 @@ section.tab-content {
   top: 84px; /* nav height is 64, tabs height is 48, but we substract btn height / 2 to center it, height is 56 */
 }
 
-.side-nav + .section-container {
-  margin-left: 300px; /* width of side-nav */
-  position: relative;
-  height: 100%;
-}
-
 #buttons-container {
   display: flex;
   flex-wrap: wrap;
@@ -89,12 +79,24 @@ section.tab-content {
   overflow-y: auto;
 }
 
-#settings-container > div {
+.side-nav + .section-container {
+  margin-left: 300px; /* width of side-nav */
+  position: relative;
+  height: 100%;
+}
+
+.section-container > div:not(.card) {
   height: 100%;
   width: 100%;
   position: absolute;
-  padding-left: 16px;
+  padding-left: 16px; /* arbitrary */
   overflow-y: auto;
+}
+
+.section-container > .card {
+  margin: 1rem;
+  height: fit-content;
+  align-self: center;
 }
 
 .plugin-data > p + .input-field {
@@ -106,10 +108,20 @@ section.tab-content {
   max-width: 100%;
 }
 
-.section-container > .card {
-  margin: 1rem;
-  height: fit-content;
-  align-self: center;
+.theme-data .switch {
+  margin-bottom: 2rem; /* label font size is 1rem, and add another as an actual margin */
+}
+
+.theme-data .input-field {
+  display: inline-block;
+}
+
+.theme-data h2 {
+  display: inline-block;
+}
+
+.theme-data h2 > a.postfix > i {
+  font-size: 2rem; /* arbitrary */
 }
 
 .card.horizontal {
@@ -177,11 +189,22 @@ section.tab-content {
   transform: scale(1) !important;
 }
 
+h1 > .inherit-heading, h2 > .inherit-heading, h3 > .inherit-heading,
+h4 > .inherit-heading, h5 > .inherit-heading, h6 > .inherit-heading {
+  font-size: inherit !important;
+  font-weight: inherit;
+  line-height: inherit;
+  color: inherit;
+  padding-bottom: 4px !important; /* arbitrary */
+  width: fit-content !important;
+  height: inherit !important;
+}
+
 #backup-modal textarea {
   width: 100%;
   height: 80%;
   font-family: monospace;
-  font-size: 1em;
+  font-size: 1rem; /* arbitrary */
   user-select: text;
   cursor: text;
   word-wrap: break-word;
