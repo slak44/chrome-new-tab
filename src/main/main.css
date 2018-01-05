@@ -1,4 +1,4 @@
-.centered {
+/* .centered {
   position: absolute;
   margin: auto;
   top: 0px;
@@ -9,15 +9,4 @@
 
 #default-pane {
   z-index: 10050;
-}
-
-.button-content {
-  line-height: 48px; /* size of drawer button height */
-  vertical-align: top;
-}
-
-img.button-image {
-  margin: 4px 32px 4px 0px;
-  height: 40px; /* size of drawer button height, minus 4+4 margins */
-  object-fit: contain;
-}
+} */

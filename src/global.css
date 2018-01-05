@@ -76,6 +76,11 @@ nav.nav-wrapper {
   padding-top: 120px; /* 112 is nav with tabs height, 8 is for padding */
 }
 
+.side-nav .thin.subheader {
+  font-weight: 200;
+  font-size: 24px; /* arbitrary */
+}
+
 .side-nav li > a > i.material-icons.right {
   margin: 0px;
   margin-right: -32px; /* ignore the list item's right padding */
@@ -84,6 +89,17 @@ nav.nav-wrapper {
 .side-nav li > a > i.material-icons.waves-effect {
   text-align: center;
   width: 48px; /* match height for a prettier effect */
+}
+
+.side-nav li > a img.button-image {
+  margin: 4px 32px 4px 0px;
+  height: 40px; /* size of drawer button height, minus 4+4 margins */
+  object-fit: contain;
+}
+
+.side-nav li > a .button-content {
+  line-height: 48px; /* size of drawer button height */
+  vertical-align: top;
 }
 
 nav .menu i.material-icons,

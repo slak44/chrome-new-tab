@@ -13,7 +13,6 @@
 
     "buttons": true,
 
-    "createButton": false,
     "addPanel": false,
 
     "byId": false,

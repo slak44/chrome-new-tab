@@ -5,8 +5,6 @@ const semver = require('semver');
 window.persistentPluginReload = false;
 // Time between reloads
 window.reloadTimeout = 1000;
-// Times reloaded
-let reloadCount = 0;
 
 function storePlugins() {
   let pluginsInited = 0;
@@ -83,7 +81,6 @@ $('#plugin-file-add').change(event => {
       console.log(`Reload: ${file.name}`);
       addPlugin(file);
       storage.store('plugins');
-      reloadCount++;
     }, window.reloadTimeout);
   }
 });

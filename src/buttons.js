@@ -1,6 +1,6 @@
 'use strict';
 
-function newButton(kind) {
+function newSettingCard(kind) {
   $('ul.tabs').tabs('select_tab', 'buttons-tab');
   switch (kind) {
     case 'divider': buttons.push({kind, position: ''}); break;
@@ -17,16 +17,12 @@ function newButton(kind) {
     });
   }
   window.changesMade = true;
-  addButton(buttons[buttons.length - 1], buttons.length - 1);
+  addSettingCard(buttons[buttons.length - 1], buttons.length - 1);
   $(`.card[data-button-idx="${buttons.length - 1}"] input.focus-location`).focus();
   Materialize.updateTextFields();
 }
 
-$('#add-button').click(event => newButton('default'));
-$('#add-divider').click(event => newButton('divider'));
-$('#add-subheader').click(event => newButton('subheader'));
-
-function addButton(config, idx) {
+function addSettingCard(config, idx) {
   switch (config.kind) {
     case 'divider': return addDividerCard(config, idx);
     case 'subheader': return addSubheaderCard(config, idx);
@@ -57,7 +53,7 @@ function createBinderOnBlur(card, idx, propName, propKind = 'text') {
 }
 
 function addDividerCard(config, idx) {
-  $('#buttons-tab').append(`
+  $('#buttons-container').append(`
   <div class="card" data-button-idx="${idx}">
     <div class="card-content">
       <span class="card-title">Divider</span>
@@ -77,7 +73,7 @@ function addDividerCard(config, idx) {
 }
 
 function addSubheaderCard(config, idx) {
-  $('#buttons-tab').append(`
+  $('#buttons-container').append(`
   <div class="card" data-button-idx="${idx}">
     <div class="card-content">
       <span class="card-title">Subheader</span>
@@ -104,7 +100,7 @@ function addSubheaderCard(config, idx) {
 function addButtonCard(config, idx) {
   const hasImg = config.imagePath && config.imagePath !== '' && config.pictureType === 'image';
   const hasIcon = config.ligatureName && config.ligatureName !== '' && config.pictureType === 'icon';
-  $('#buttons-tab').append(`
+  $('#buttons-container').append(`
   <div class="card horizontal" data-button-idx="${idx}">
     <div class="card-image">
       <div class="card-missing-image ${hasImg || hasIcon ? 'hidden' : ''}">
@@ -221,6 +217,58 @@ function addButtonCard(config, idx) {
   });
 }
 
+// Compare the button's kind
+function compareKind(lhs, rhs) {
+  const kindMap = {
+    divider: 1,
+    subheader: 10,
+    'default': 100
+  };
+  if (kindMap[lhs] < kindMap[rhs]) return -1;
+  else if (kindMap[lhs] === kindMap[rhs]) return 0;
+  else return 1;
+}
+
+// Return a copy of the buttons array, but sorted
+function sorted() {
+  return [...buttons].sort((a, b) => {
+    const [x, y] = [Number(a.position), Number(b.position)];
+    if (x < y) return -1;
+    else if (x > y) return 1;
+    const kres = compareKind(a.kind, b.kind);
+    if (kres !== 0) return kres;
+    else return (a.text < b.text) ? -1 : 1;
+  });
+}
+
+function insertButton(button, parent) {
+  if (!(parent instanceof HTMLElement)) throw new Error('parent must be a HTMLElement');
+  switch (button.kind) {
+    case 'divider': parent.insertAdjacentHTML('beforeend', '<li><div class="divider"></div></li>'); return;
+    case 'subheader': parent.insertAdjacentHTML('beforeend', `<li><a class="subheader">${button.text}</a></li>`); return;
+    default: break;
+  }
+  let picture = '';
+  switch (button.pictureType) {
+    case 'image': if (button.imagePath) picture = `<img src="${button.imagePath}" class="button-image"/>`; break;
+    case 'icon': if (button.ligatureName) picture = `<i class="material-icons">${button.ligatureName}</i>`; break;
+    default: picture = '';
+  }
+  $(parent).append(`
+  <li class="waves-effect">
+		<a href="${button.href || ''}">
+      ${picture}
+      <span class="button-content">${button.text}</span>
+		</a>
+	</li>`);
+  if (button.href !== undefined && (button.href.indexOf('chrome://') === 0 || button.openInNew)) {
+    $(parent).children().last().click(event => {
+      chrome.tabs.create({url: button.href});
+      window.close();
+    });
+  }
+}
+
 // function createNewButton() {
 //   const id = prompt('Input a unique identifier for the button:');
 //   if (id === null) return;
@@ -298,7 +346,10 @@ function addButtonCard(config, idx) {
 // }
 
 module.exports = {
-  addButton
+  newSettingCard,
+  addSettingCard,
+  sorted,
+  insertButton
   // addButtonCard,
   // createNewButton,
   // removeButton,

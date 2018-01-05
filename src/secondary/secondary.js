@@ -1,7 +1,7 @@
 'use strict';
 
 const async = require('async');
-const buttonsUtil = require('./buttons');
+const buttonsUtil = require('../buttons');
 const pluginsUtil = require('./plugins');
 const schemesUtil = require('./schemes');
 
@@ -71,6 +71,15 @@ $('#upload-restore').click(() => {
   reader.readAsText(file);
 });
 
+$('#add-button').click(event => buttonsUtil.newSettingCard('default'));
+$('#add-divider').click(event => buttonsUtil.newSettingCard('divider'));
+$('#add-subheader').click(event => buttonsUtil.newSettingCard('subheader'));
+
+function updateButtonPreview() {
+  $('#buttons-live-preview > li').slice(1).remove(); // Keep the "Live Preview" header
+  buttonsUtil.sorted().forEach(button => buttonsUtil.insertButton(button, $('#buttons-live-preview')[0]));
+}
+
 function loadButtons(callback) {
   storage.load('buttons', error => {
     if (error) {
@@ -82,7 +91,9 @@ function loadButtons(callback) {
     //   callback(null);
     //   return;
     // }
-    buttons.forEach(buttonsUtil.addButton);
+    buttons.forEach(buttonsUtil.addSettingCard);
+    updateButtonPreview();
+    $('#buttons-container input').on('changed keyup paste', event => updateButtonPreview());
     // buttonsUtil.activateDefaultButton();
     // buttonsUtil.initDropdown();
     callback(null);
@@ -113,8 +124,8 @@ byId('floating-save-button').addEventListener('click', event => {
   buttons = buttons.filter(button => !button.deleted);
   storage.store('buttons');
   // FIXME actually look which have been deleted rather than just readding all of them
-  $('#buttons-tab').empty();
-  buttons.forEach(buttonsUtil.addButton);
+  $('#buttons-container').empty();
+  buttons.forEach(buttonsUtil.addSettingCard);
   Materialize.updateTextFields();
 
   window.changesMade = false;
