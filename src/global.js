@@ -170,6 +170,7 @@ window.activateScheme = function (scheme) {
     .tabs li a {color: ${primaryTextColor} !important;}
     .tabs li a.active {color: ${scheme.accent4} !important;}
     .collapsible > li {background-color: ${scheme.isDark ? '#000000' : '#FFFFFF'} !important;}
+    .selected {background-color: ${scheme.accent1} !important;}
   `;
 };
 
