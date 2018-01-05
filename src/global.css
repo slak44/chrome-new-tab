@@ -76,11 +76,6 @@ nav.nav-wrapper {
   padding-top: 120px; /* 112 is nav with tabs height, 8 is for padding */
 }
 
-.side-nav .thin.subheader {
-  font-weight: 200;
-  font-size: 24px; /* arbitrary */
-}
-
 .side-nav li > a > i.material-icons.right {
   margin: 0px;
   margin-right: -32px; /* ignore the list item's right padding */

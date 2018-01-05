@@ -107,8 +107,9 @@ $('#theme-file-add').change(event => {
   reader.readAsText(file);
 });
 
+const keepAmount = $('#buttons-live-preview > li').length;
 function updateButtonPreview() {
-  $('#buttons-live-preview > li').slice(1).remove(); // Keep the "Live Preview" header
+  $('#buttons-live-preview > li').slice(keepAmount).remove(); // Remove everything below the "Live Preview" header
   buttonsUtil.sorted().forEach(button => buttonsUtil.insertButton(button, $('#buttons-live-preview')[0]));
 }
 
