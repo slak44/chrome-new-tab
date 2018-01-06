@@ -6,16 +6,11 @@
     "buttons": true,
 
     "PluginUtil": false,
-    "loadPlugins": false,
     "runViewContent": false,
     "plugins": true,
 
     "addPanel": false,
 
-    "byId": false,
-    "byClass": false,
-    "byQSelect": false,
-    "hasClass": false,
     "capitalize": false,
 
     "chrome": true,
@@ -27,6 +22,7 @@
     "SHORT_DURATION_MS": false,
     "LONG_DURATION_MS": false,
 
-    "undoToast": false
+    "undoToast": false,
+    "onInstallSetup": false
   }
 }

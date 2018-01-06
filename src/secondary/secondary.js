@@ -16,20 +16,41 @@ $(window).on('beforeunload', () => {
   if (window.changesMade) return true;
 });
 
-byId('version-string').innerText = `version ${chrome.runtime.getManifest().version}`;
+$('#version-string').text(`version ${chrome.runtime.getManifest().version}`);
 
 $(document).ready(() => {
   themes.forEach(themesUtil.addThemeSettingsUI);
   themesUtil.setUpInitialUI();
 });
 
-async.parallel([loadButtons, loadPlugins], err => {
-  if (err) throw err;
-  $('#backup-modal').modal();
+const updateButtonPreview = (function () {
+  const keepAmount = $('#buttons-live-preview > li').length;
+  return function () {
+    $('#buttons-live-preview > li').slice(keepAmount).remove(); // Remove everything below the "Live Preview" header
+    buttonsUtil.sorted().forEach(button => buttonsUtil.insertButton(button, $('#buttons-live-preview')[0]));
+  };
+})();
+
+async.parallel([cb => storage.load('buttons', cb), cb => storage.load('plugins', cb)], err => {
+  if (err) {
+    Materialize.toast($('<span>Error loading some content</span>'), SHORT_DURATION_MS);
+    console.error(err);
+  }
+  // Modals
   $('#backup-content').text(JSON.stringify({buttons, currentThemeIdx, themes, plugins}));
+  $('#backup-modal').modal();
   $('#restore-modal').modal();
   $('#defaults-modal').modal();
-  runPlugins();
+  // Buttons
+  buttons.forEach(buttonsUtil.addSettingCard);
+  updateButtonPreview();
+  $('#buttons-container input').on('change keyup paste', event => updateButtonPreview());
+  // Plugins
+  plugins.forEach(plugin => runViewContent(plugin, 'global'));
+  plugins.forEach((plugin, idx) => {
+    runViewContent(plugin, 'secondary');
+    pluginsUtil.appendPluginUI(plugin, idx);
+  });
 });
 
 $('#copy-backup').click(() => {
@@ -46,7 +67,7 @@ $('#download-backup').click(() => {
   anchor.click();
 });
 
-function restore(fromText) {
+function restore(fromText, cb) {
   try {
     ({buttons, currentThemeIdx, themes, plugins} = JSON.parse(fromText));
   } catch (err) {
@@ -65,6 +86,7 @@ function restore(fromText) {
       console.error(err);
       return;
     }
+    if (cb) cb();
     window.location.reload();
   });
 }
@@ -79,7 +101,7 @@ $('#upload-restore').click(() => {
 });
 
 $('#restore-defaults').click(() => {
-  restore(`{"buttons": [], "themes": [${JSON.stringify(themesUtil.defaultTheme)}], "currentThemeIdx": 0, "plugins": []}`);
+  restore('{"buttons": [], "themes": [], "currentThemeIdx": 0, "plugins": []}', onInstallSetup);
 });
 
 $('#add-button').click(event => buttonsUtil.newSettingCard('default'));
@@ -107,35 +129,7 @@ $('#theme-file-add').change(event => {
   reader.readAsText(file);
 });
 
-const keepAmount = $('#buttons-live-preview > li').length;
-function updateButtonPreview() {
-  $('#buttons-live-preview > li').slice(keepAmount).remove(); // Remove everything below the "Live Preview" header
-  buttonsUtil.sorted().forEach(button => buttonsUtil.insertButton(button, $('#buttons-live-preview')[0]));
-}
-
-function loadButtons(callback) {
-  storage.load('buttons', error => {
-    if (error) {
-      // FIXME
-      callback(error);
-      return;
-    }
-    buttons.forEach(buttonsUtil.addSettingCard);
-    updateButtonPreview();
-    $('#buttons-container input').on('change keyup paste', event => updateButtonPreview());
-    callback(null);
-  });
-}
-
-// FIXME
-function runPlugins() {
-  plugins.forEach((plugin, idx) => {
-    pluginsUtil.appendPluginUI(plugin, idx);
-    runViewContent(plugin, 'secondary');
-  });
-}
-
-byId('floating-save-button').addEventListener('click', event => {
+$('#floating-save-button').click(event => {
   // Store plugins
   pluginsUtil.storePlugins();
   // Store buttons
