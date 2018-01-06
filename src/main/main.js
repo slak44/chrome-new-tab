@@ -1,32 +1,23 @@
 'use strict';
 
 require('global');
-const async = require('async');
 const buttonsUtil = require('buttons');
+const themesUtil = require('themes');
 
-$(document).ready(() => {
+const alignments = ['left', 'center', 'right'];
+pluginApi.insertView = (plugin, htmlElement, order, alignment) => {
+  if (!alignments.includes(alignment)) throw Error(`Illegal allignment "${alignment}"; valid: ${alignments.join(' ')}`);
+  if (!(htmlElement instanceof HTMLElement)) throw Error('The argument htmlElement must be of type HTMLElement');
+  htmlElement.style.order = order;
+  $(`#${alignment}`).append(htmlElement);
+};
+
+storage.loadAll(() => {
+  themesUtil.activateTheme(themes[currentThemeIdx] || themesUtil.defaultTheme);
   plugins.forEach(plugin => runViewContent(plugin, 'global'));
   plugins.forEach(plugin => runViewContent(plugin, 'main'));
   buttonsUtil.sorted().forEach(button => buttonsUtil.insertButton(button, $('#buttons')[0]));
 });
-
-// FIXME
-let panels = [];
-function addPanel(panelObject) {
-  panels.push(panelObject);
-  panels = panels.sort((a, b) => (a.position < b.position ? -1 : 1));
-  const newPanelIndex = panels.indexOf(panelObject);
-  const children = Array.from($('#data-collection').children());
-  if (children.length === 0) {
-    $('#data-collection').insertAdjacentHTML('afterbegin', panelObject.htmlContent);
-  } else if (panels.length - 1 === newPanelIndex) {
-    $('#data-collection').insertAdjacentHTML('beforeend', panelObject.htmlContent);
-  } else {
-    children.forEach((child, i) => {
-      if (newPanelIndex === i) child.insertAdjacentHTML('beforebegin', panelObject.htmlContent);
-    });
-  }
-}
 
 $(document).on('keydown', e => {
   if (e.altKey) window.location.replace(buttons.find(button => button.hotkey.charCodeAt() === e.keyCode).href);

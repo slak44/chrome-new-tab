@@ -1,7 +1,6 @@
 'use strict';
 
 require('global');
-const async = require('async');
 const buttonsUtil = require('buttons');
 const pluginsUtil = require('plugins');
 const themesUtil = require('themes');
@@ -16,9 +15,10 @@ $(window).on('beforeunload', () => {
   if (window.changesMade) return true;
 });
 
-$(document).ready(() => {
+storage.loadAll(() => {
+  themesUtil.activateTheme(themes[currentThemeIdx] || themesUtil.defaultTheme);
   themes.forEach(themesUtil.addThemeSettingsUI);
-  themesUtil.setUpInitialUI();
+  themesUtil.initialUISetup();
 
   buttons.forEach(buttonsUtil.addSettingCard);
   updateButtonPreview();
@@ -82,7 +82,7 @@ $('#upload-restore').click(() => {
 });
 
 $('#restore-defaults').click(() => {
-  storage.clearStorage();
+  storage.clearAll();
   location.reload();
 });
 

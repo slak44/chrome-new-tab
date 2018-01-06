@@ -33,7 +33,7 @@ const pluginObject = {
 };
 
 function iifeBabel(code) {
-  return babel.transform(`(function (pluginName) {${code}})('${pkg.pluginName}')`, pkg.babel || {}).code;
+  return babel.transform(`(function (api) {${code}})(window.bindApi('${pkg.pluginName}'))`, pkg.babel || {}).code;
 }
 
 function mergeFiles(src = [], transform, callback) {
