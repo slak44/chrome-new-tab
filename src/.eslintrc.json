@@ -4,16 +4,13 @@
     "themes": true,
     "currentThemeIdx": true,
     "buttons": true,
+    "plugins": true,
 
     "PluginUtil": false,
-    "runViewContent": false,
-    "plugins": true,
 
     "addPanel": false,
 
-    "capitalize": false,
-
-    "chrome": true,
+    "chrome": false,
     "storage": false,
 
     "Materialize": false,
@@ -23,6 +20,6 @@
     "LONG_DURATION_MS": false,
 
     "undoToast": false,
-    "onInstallSetup": false
+    "runViewContent": false
   }
 }

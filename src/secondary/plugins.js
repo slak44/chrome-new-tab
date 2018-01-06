@@ -6,7 +6,8 @@ window.persistentPluginReload = false;
 // Time between reloads
 window.reloadTimeout = 1000;
 
-function storePlugins() {
+// Inits new plugins, and returns whether the page should be reloaded
+function initNewPlugins() {
   let pluginsInited = 0;
   plugins.filter(plugin => plugin.runInitCodeOnSave).forEach(plugin => {
     delete plugin.runInitCodeOnSave;
@@ -18,10 +19,8 @@ function storePlugins() {
       console.error(err);
     }
   });
-  storage.store('plugins', () => {
-    if (window.persistentPluginReload) return;
-    if (pluginsInited > 0) window.location.reload();
-  });
+  if (window.persistentPluginReload) return false;
+  return pluginsInited > 0;
 }
 
 // Preserve values of settings whose name and type did not change
@@ -68,22 +67,24 @@ function addPlugin(file) {
   reader.readAsText(file);
 }
 
-$('#add-plugin').click(event => $('#plugin-file-add').click());
+function initPluginSettingsUI() {
+  $('#add-plugin').click(event => $('#plugin-file-add').click());
 
-let reloadIntervalId;
-$('#plugin-file-add').change(event => {
-  const file = event.target.files[0];
-  $('ul.tabs').tabs('select_tab', 'settings-tab');
-  addPlugin(file);
-  if (window.persistentPluginReload) {
-    if (reloadIntervalId) clearInterval(reloadIntervalId);
-    reloadIntervalId = setInterval(() => {
-      console.log(`Reload: ${file.name}`);
-      addPlugin(file);
-      storage.store('plugins');
-    }, window.reloadTimeout);
-  }
-});
+  let reloadIntervalId;
+  $('#plugin-file-add').change(event => {
+    const file = event.target.files[0];
+    $('ul.tabs').tabs('select_tab', 'settings-tab');
+    addPlugin(file);
+    if (window.persistentPluginReload) {
+      if (reloadIntervalId) clearInterval(reloadIntervalId);
+      reloadIntervalId = setInterval(() => {
+        console.log(`Reload: ${file.name}`);
+        addPlugin(file);
+        storage.store('plugins');
+      }, window.reloadTimeout);
+    }
+  });
+}
 
 function appendPluginUI(plugin, idx) {
   const inputs = plugin.settings.reduce((accum, setting) => `
@@ -153,6 +154,7 @@ function appendPluginUI(plugin, idx) {
 }
 
 module.exports = {
+  initPluginSettingsUI,
   appendPluginUI,
-  storePlugins
+  initNewPlugins
 };

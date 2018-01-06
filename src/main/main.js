@@ -4,13 +4,13 @@ require('global');
 const async = require('async');
 const buttonsUtil = require('buttons');
 
-async.parallel([cb => storage.load('buttons', cb), cb => storage.load('plugins', cb)], (err, results) => {
-  if (err) throw err;
+$(document).ready(() => {
   plugins.forEach(plugin => runViewContent(plugin, 'global'));
   plugins.forEach(plugin => runViewContent(plugin, 'main'));
   buttonsUtil.sorted().forEach(button => buttonsUtil.insertButton(button, $('#buttons')[0]));
 });
 
+// FIXME
 let panels = [];
 function addPanel(panelObject) {
   panels.push(panelObject);
