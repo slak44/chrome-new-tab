@@ -3,7 +3,7 @@
 require('global');
 const async = require('async');
 const buttonsUtil = require('buttons');
-const pluginsUtil = require('./plugins');
+const pluginsUtil = require('plugins');
 const themesUtil = require('themes');
 
 /*
