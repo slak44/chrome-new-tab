@@ -47,14 +47,6 @@ img {
   pointer-events: none;
 }
 
-/* div.focused {
-  -webkit-animation: show 0.5s linear 0s 1 normal forwards running;
-}
-
-div.unfocused {
-  -webkit-animation: hide 0.5s linear 0s 1 normal forwards running;
-} */
-
 .capitalized {
   text-transform: capitalize;
 }
@@ -148,29 +140,3 @@ input[type="color"] {
   width: 150px; /* arbitrary */
   height: 75px; /* arbitrary */
 }
-
-/* @-webkit-keyframes show {
-  0% {
-    opacity: 0;
-  }
-  99.99% {
-    z-index: -1;
-  }
-  100% {
-    z-index: 9999;
-    opacity: 1;
-  }
-}
-
-@-webkit-keyframes hide {
-  0% {
-    opacity: 1;
-  }
-  99.99% {
-    z-index: 9999;
-  }
-  100% {
-    z-index: -1;
-    opacity: 0;
-  }
-} */

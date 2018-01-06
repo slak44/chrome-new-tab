@@ -70,150 +70,48 @@
       </section>
     </main>
     <div id="backup-modal" class="modal modal-fixed-footer">
-     <div class="modal-content">
-       <h4>Backup Content</h4>
-       <textarea id="backup-content" readonly></textarea>
-     </div>
-     <div class="modal-footer">
-       <a href="#!" class="modal-action modal-close waves-effect btn-flat">Dismiss</a>
-       <a id="copy-backup" href="#!" class="modal-action waves-effect btn-flat">Copy</a>
-       <a id="download-backup" href="#!" class="modal-action waves-effect btn-flat">Download</a>
-     </div>
-   </div>
-   <div id="restore-modal" class="modal">
-    <div class="modal-content">
-      <h4>Restore Content</h4>
-      <h6 class="red-text">Be careful when restoring; it cannot be undone!</h6>
-      <div class="file-field input-field">
-        <div class="btn">
-          <span>Select backup</span>
-          <input id="restore-file" type="file">
-        </div>
-        <div class="file-path-wrapper">
-          <input class="file-path validate" type="text">
-        </div>
+      <div class="modal-content">
+        <h4>Backup Content</h4>
+        <textarea id="backup-content" readonly></textarea>
       </div>
-      <p>OR</p>
-      <textarea id="restore-content"></textarea>
+      <div class="modal-footer">
+        <a href="#!" class="modal-action modal-close waves-effect btn-flat">Dismiss</a>
+        <a id="copy-backup" href="#!" class="modal-action waves-effect btn-flat">Copy</a>
+        <a id="download-backup" href="#!" class="modal-action waves-effect btn-flat">Download</a>
+      </div>
     </div>
-    <div class="modal-footer">
-      <a href="#!" class="modal-action modal-close waves-effect btn-flat">Dismiss</a>
-      <a id="paste-restore" href="#!" class="modal-action waves-effect btn-flat">Restore from text</a>
-      <a id="upload-restore" href="#!" class="modal-action waves-effect btn-flat">Restore from file</a>
-    </div>
-  </div>
-  <div id="defaults-modal" class="modal">
-    <div class="modal-content">
-      <h4>Restore all settings to default?</h4>
-      <p class="red-text">This action cannot be undone!</p>
-    </div>
-    <div class="modal-footer">
-      <a href="#!" class="modal-action modal-close waves-effect btn-flat">Cancel</a>
-      <a id="restore-defaults" href="#!" class="modal-action modal-close waves-effect btn-flat">Restore defaults</a>
-    </div>
-  </div>
-
-		<!-- <div class="row">
-			<div class="col s12">
-				<div id="settings-tab" class="data-tab focused">
-					<div class="row center-align">
-            <a class="col s3 waves-effect dropdown-button btn" data-activates="plugins-list" href="#">Select plugin</a>
-            <a id="remove-plugin" class="col s1 right waves-effect waves-light btn-flat" href="#"><i class="material-icons right">remove</i>Remove</a>
-						<a id="add-plugin" class="col s1 right waves-effect waves-light btn-flat" href="#"><i class="material-icons right">add</i>Add</a>
-					</div>
-          <ul id="plugins-list" class="color dropdown-content"></ul>
-				</div>
-				<div id="buttons-tab" class="data-tab">
-					<div id="buttons-list-controls" class="row center-align">
-						<a class="col s3 bgcolor lighten-2 waves-effect waves-light dropdown-button btn" data-activates="buttons-list" href="#">Select button</a>
-						<a id="remove-buttons" class="col s1 right waves-effect waves-light btn-flat" href="#"><i class="material-icons right">remove</i>Remove</a>
-						<a id="add-buttons" class="col s1 right waves-effect waves-light btn-flat" href="#"><i class="material-icons right">add</i>Add</a>
-					</div>
-					<ul id="buttons-list" class="color dropdown-content"></ul>
-          <div id="button-config" data-buttons-exist="no">
-            <h5 id="button-name"></h5>
-            <div class="input-field">
-              <input id="button-text" type="text" class="" data-button-id="" value="">
-              <label for="button-text" class="active">Text</label>
-            </div>
-            <div class="input-field">
-              <input id="button-link" type="url" class="validate" value="">
-              <label for="button-link" class="active">Link</label>
-            </div>
-            <div class="input-field">
-              <input id="button-image" type="url" class="validate" value="">
-              <label for="button-image" class="active">Image</label>
-            </div>
-            <div class="input-field">
-              <input id="button-position" type="number" class="" value="">
-              <label for="button-position" class="active">Order</label>
-            </div>
-            <div class="input-field">
-              <input id="button-hotkey" type="text" maxlength="1" class="" value="">
-              <label for="button-hotkey" class="active">Hotkey</label>
-            </div>
-            <div class="input-field left align-left">
-              <input id="button-replace-tab" type="checkbox" class="" checked="">
-              <label for="button-replace-tab" class="active">Replace current tab</label>
-            </div>
+    <div id="restore-modal" class="modal">
+      <div class="modal-content">
+        <h4>Restore Content</h4>
+        <h6 class="red-text">Be careful when restoring; it cannot be undone!</h6>
+        <div class="file-field input-field">
+          <div class="btn">
+            <span>Select backup</span>
+            <input id="restore-file" type="file">
           </div>
-				</div>
-				<div id="color-scheme-tab" class="data-tab">
-					<div class="row center-align">
-            <a id="remove-scheme" class="col s1 right waves-effect waves-light btn-flat" href="#"><i class="material-icons right">remove</i>Remove</a>
-						<a id="add-scheme" class="col s1 right waves-effect waves-light btn-flat" href="#"><i class="material-icons right">add</i>Add</a>
-					</div>
-					<div class="row">
-						<ul id="color-scheme-list" class="collection">
-				    </ul>
-					</div>
-				</div>
-				<div id="json-tab" class="data-tab">
-          <div class="row">
-            <div id="backup-card" class="card col s5">
-              <div class="card-image waves-effect waves-block waves-light">
-                <i class="card-top-right-icon material-icons activator">info</i>
-                <i class="card-icon-image material-icons activator">backup</i>
-              </div>
-              <div class="card-content">
-                <span class="card-title activator grey-text text-darken-4">Backup</span>
-                <textarea id="copy-data-display"></textarea>
-              </div>
-              <div class="card-action">
-                <a id="copy-data" class="color" href="#">Copy</a>
-                <a id="show-data" class="color" href="#">Show</a>
-              </div>
-              <div class="card-reveal">
-                <span class="card-title grey-text text-darken-4">Backing up data<i class="material-icons right">close</i></span>
-                <p>
-                  The show button will display all your data and enable you to save it.
-                  Or you can press the copy button to save it in the clipboard.
-                </p>
-              </div>
-            </div>
-            <div id="restore-card" class="card col s5 right">
-              <div class="card-image waves-effect waves-block waves-light">
-                <i class="card-top-right-icon material-icons activator">info</i>
-                <i class="card-icon-image material-icons activator">restore</i>
-              </div>
-              <div class="card-content">
-                <span class="card-title activator grey-text text-darken-4">Restore</span>
-                <textarea id="insert-data"></textarea>
-              </div>
-              <div class="card-action">
-                <a id="restore-data" class="color" href="#">Restore data</a>
-              </div>
-              <div class="card-reveal">
-                <span class="card-title grey-text text-darken-4">Restoring data<i class="material-icons right">close</i></span>
-                <p>
-                  Paste the backed up data in the box, and press the restore data button to replace all existing data.
-                </p>
-              </div>
-            </div>
+          <div class="file-path-wrapper">
+            <input class="file-path validate" type="text">
           </div>
-				</div>
-			</div>
-		</div> -->
+        </div>
+        <p>OR</p>
+        <textarea id="restore-content"></textarea>
+      </div>
+      <div class="modal-footer">
+        <a href="#!" class="modal-action modal-close waves-effect btn-flat">Dismiss</a>
+        <a id="paste-restore" href="#!" class="modal-action waves-effect btn-flat">Restore from text</a>
+        <a id="upload-restore" href="#!" class="modal-action waves-effect btn-flat">Restore from file</a>
+      </div>
+    </div>
+    <div id="defaults-modal" class="modal">
+      <div class="modal-content">
+        <h4>Restore all settings to default?</h4>
+        <p class="red-text">This action cannot be undone!</p>
+      </div>
+      <div class="modal-footer">
+        <a href="#!" class="modal-action modal-close waves-effect btn-flat">Cancel</a>
+        <a id="restore-defaults" href="#!" class="modal-action modal-close waves-effect btn-flat">Restore defaults</a>
+      </div>
+    </div>
     <script src="/secondary/secondary.min.js"></script>
   </body>
 </html>
