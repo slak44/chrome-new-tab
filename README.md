@@ -7,6 +7,7 @@ A chrome extension that replaces the new tab.
 Download `ext.crx` and `plugins.zip` from [here](https://github.com/slak44/ChromeNewTab/releases/latest).
 Go to chrome://extensions in your browser, then drag `ext.crx` inside.
 Navigate to the settings page to add buttons, plugins, and themes.
+**IMPORTANT**: Chrome 35 and above disallow installation of non-webstore extensions. See [this](https://superuser.com/a/768154/442735) for possible workarounds.
 
 ## Building the extension
 
@@ -212,7 +213,7 @@ This should be valid JSON.
 - `deleted`: (optional boolean) if true, it signals that this button was "deleted" by the user; this element will be *removed before saving* to storage
 
 ## reddit API
-This API is used in [/plugins/reddit.js](https://github.com/slak44/ChromeNewTab/tree/master/plugins/reddit.js).  
+This API is used in [/plugins/reddit/main.js](https://github.com/slak44/ChromeNewTab/tree/master/plugins/reddit/main.js).  
 The page will perform GET requests for the user data associated with the given username.
 ## License
 [CC-BY-NC-SA 4.0](http://creativecommons.org/licenses/by-nc-sa/4.0/legalcode)
