@@ -7,6 +7,8 @@
 
 main > section {
   flex-basis: 33.33%;
-  display: inline-flex;
   height: inherit;
+  padding: 0 16px;
+  display: inline-flex;
+  flex-flow: column;
 }

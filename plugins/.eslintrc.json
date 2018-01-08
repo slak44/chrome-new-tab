@@ -1,6 +1,6 @@
 {
   "extends": "../src/.eslintrc.json",
   "globals": {
-    "pluginName": false
+    "api": false
   }
 }

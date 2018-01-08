@@ -1,25 +1,26 @@
 'use strict';
 
-const util = new PluginUtil(pluginName);
-const timeUnit = 1000; // Second
+const selector = api.setting('Featured Data');
 
-const overlay = byId('fade-overlay');
-const panelId = util.getSetting('Featured Panel');
+$('#fade-overlay').css('background-color', themes[currentThemeIdx].background);
+// If the theme is light, invert it to get a dark background
+if (!themes[currentThemeIdx].isDark) $('#fade-overlay').addClass('invert');
+
 let timeSinceLastMove = 0;
-
 setInterval(() => {
   timeSinceLastMove++;
-  if (timeSinceLastMove > util.getSetting('Fade Delay')) overlay.classList.add('fading');
-  if (panelId) byId('fade-featured-panel').innerHTML = byId('data-collection').children[panelId].innerHTML;
-}, timeUnit);
+  if (timeSinceLastMove > api.setting('Fade Delay')) $('#fade-overlay').addClass('fading');
+  try {
+    if (selector) {
+      $('#fade-featured').empty();
+      $('#fade-featured').html($(selector).clone());
+    }
+  } catch (err) {
+    console.error(`Selector error: ${err}`);
+  }
+}, 1000); // eslint-disable-line
 
-function stopFade() {
+$(document).on('mousemove keypress input click scroll', () => {
   timeSinceLastMove = 0;
-  overlay.classList.remove('fading');
-}
-
-document.addEventListener('mousemove', stopFade);
-document.addEventListener('keypress', stopFade);
-document.addEventListener('input', stopFade);
-document.addEventListener('click', stopFade);
-document.addEventListener('scroll', stopFade);
+  $('#fade-overlay').removeClass('fading');
+});

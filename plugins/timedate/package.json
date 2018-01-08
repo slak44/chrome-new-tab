@@ -1,13 +1,22 @@
 {
   "pluginName": "Date and Time",
-  "version": "3.0.2",
+  "version": "4.0.0",
   "description": "Displays time and date",
   "author": "Slak44",
   "settings": [
     {
-      "name": "Position",
-      "desc": "The text will be inserted after this many elements",
+      "name": "Alignment",
+      "desc": "Which section to use: left, center, or right",
+      "type": "text",
+      "default": "left",
+      "value": "",
+      "isVisible": true
+    },
+    {
+      "name": "Order in section",
+      "desc": "The elements in a section are ordered based on this value (small values come first)",
       "type": "number",
+      "default": 0,
       "value": "",
       "isVisible": true
     },
@@ -15,6 +24,7 @@
       "name": "Time Locale",
       "desc": "A BCP 47 language tag, for example 'de', 'fr', 'en-GB', 'intl', 'en-US', 'ro-RO'",
       "type": "text",
+      "default": "intl",
       "value": "",
       "isVisible": true
     },
@@ -22,6 +32,7 @@
       "name": "Date Locale",
       "desc": "A BCP 47 language tag, for example 'de', 'fr', 'en-GB', 'intl', 'en-US', 'ro-RO'",
       "type": "text",
+      "default": "intl",
       "value": "",
       "isVisible": true
     },
@@ -29,6 +40,7 @@
       "name": "Weekday Locale",
       "desc": "A BCP 47 language tag, for example 'de', 'fr', 'en-GB', 'intl', 'en-US', 'ro-RO'",
       "type": "text",
+      "default": "intl",
       "value": "",
       "isVisible": true
     }

@@ -1,6 +1,6 @@
 {
   "pluginName": "Reddit Karma Info",
-  "version": "2.0.3",
+  "version": "3.0.0",
   "description": "Displays reddit karma for given user",
   "author": "Slak44",
   "settings": [
@@ -8,20 +8,31 @@
       "name": "Reddit username",
       "desc": "Karma information for this user",
       "type": "text",
+      "default": "",
       "value": "",
       "isVisible": true
     },
     {
       "name": "Data update period",
-      "desc": "Time between karma updates, in milliseconds",
+      "desc": "Time between karma updates, in milliseconds. Updating too quickly may cause reddit to block your access",
       "type": "number",
+      "default": 7500,
       "value": "",
       "isVisible": true
     },
     {
-      "name": "Position",
-      "desc": "The text will be inserted after this many elements",
+      "name": "Alignment",
+      "desc": "Which section to use: left, center, or right",
+      "type": "text",
+      "default": "left",
+      "value": "",
+      "isVisible": true
+    },
+    {
+      "name": "Order in section",
+      "desc": "The elements in a section are ordered based on this value (small values come first)",
       "type": "number",
+      "default": 0,
       "value": "",
       "isVisible": true
     }

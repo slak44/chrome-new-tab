@@ -1,9 +1,3 @@
 'use strict';
-const util = new PluginUtil(pluginName);
-addPanel({
-  position: util.getSetting('Position') || 0,
-  htmlContent:
-  `<li id="title" class="collection-item bold">
-    <h1>${util.getSetting('Title Text')}</h1>
-  </li>`
-});
+const html = $.parseHTML(`<h1>${api.setting('Title Text')}</h1>`);
+api.insertView(html[0], api.setting('Order in section'), api.setting('Alignment'));

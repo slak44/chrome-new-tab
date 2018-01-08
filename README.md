@@ -173,6 +173,7 @@ This should be valid JSON.
     "name": "displayName",
     "desc": "message",
     "type": "type",
+    "default": "",
     "value": undefined,
     "isVisible": true
   }
@@ -180,6 +181,7 @@ This should be valid JSON.
 - `name`: (string) title of setting
 - `desc`: (optional string) description of setting
 - `type`: (enum string) [input types](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input)
+- `default`: (any) if the value is not set, this value should be used as a default
 - `value`: (any) undefined until set
 - `isVisible`: (boolean) if false, it means this 'setting' is just storage
 

@@ -1,26 +1,21 @@
 'use strict';
-const util = new PluginUtil(pluginName);
-const timeUpdateInterval = 1000;
-const locales = {
-  time: util.getSetting('Time Locale') || 'intl',
-  date: util.getSetting('Date Locale') || 'intl',
-  weekday: util.getSetting('Weekday Locale') || 'intl'
-};
+const timeUpdateInterval = 1000; // 1 second
 
-addPanel({
-  position: util.getSetting('Position') || 0,
-  htmlContent:
-  `<li class="collection-item">
-    <h5>
-      <span id="time" class="right">00:00</span>
-      <br>
-      <span id="weekday" class="right">${new Date().toLocaleDateString(locales.weekday, {weekday: 'long'})}</span>
-      <br>
-      <span id="date">${new Date().toLocaleDateString(locales.date, {month: 'long', day: '2-digit', year: 'numeric'})}</span>
-    </h5>
-  </li>`
-});
+const html = $.parseHTML(
+  `<h5>
+    <span id="time" class="right">00:00</span>
+    <br>
+    <span id="weekday" class="right"></span>
+    <br>
+    <span id="date" class="right"></span>
+  </h5>`
+);
+api.insertView(html[0], api.setting('Order in section'), api.setting('Alignment'));
+
 setTimeout(function setTime() {
-  byId('time').innerHTML = new Date().toLocaleTimeString(locales.time, {hour: '2-digit', minute: '2-digit', hour12: false});
+  const d = new Date();
+  $('#time').text(d.toLocaleTimeString(api.setting('Time Locale'), {hour: '2-digit', minute: '2-digit', hour12: false}));
+  $('#weekday').text(d.toLocaleDateString(api.setting('Weekday Locale'), {weekday: 'long'}));
+  $('#date').text(d.toLocaleDateString(api.setting('Date Locale'), {month: 'long', day: '2-digit', year: 'numeric'}));
   setTimeout(setTime, timeUpdateInterval);
 }, 0);
