@@ -20,5 +20,7 @@ storage.loadAll(() => {
 });
 
 $(document).on('keydown', e => {
-  if (e.altKey) window.location.replace(buttons.find(button => button.hotkey.charCodeAt() === e.keyCode).href);
+  if (e.altKey) location.replace(
+    buttons.find(button => button.hotkey && button.hotkey.toUpperCase().charCodeAt() === e.keyCode).href
+  );
 });
