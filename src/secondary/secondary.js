@@ -133,6 +133,7 @@ $('#floating-save-button').click(event => {
   Materialize.updateTextFields();
 
   window.changesMade = false;
+  Materialize.Toast.removeAll();
   storage.storeAll(() => {
     if (shouldReload) location.reload();
   });
