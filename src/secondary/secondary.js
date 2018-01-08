@@ -22,7 +22,6 @@ storage.loadAll(() => {
 
   buttons.forEach(buttonsUtil.addSettingCard);
   updateButtonPreview();
-  $('#buttons-container input').on('change keyup paste', event => updateButtonPreview());
 
   plugins.forEach(plugin => runViewContent(plugin, 'global'));
   pluginsUtil.initPluginSettingsUI();
@@ -40,6 +39,8 @@ storage.loadAll(() => {
 const updateButtonPreview = (function () {
   const keepAmount = $('#buttons-live-preview > li').length;
   return function () {
+    $('#buttons-container input').off('change keyup paste', updateButtonPreview);
+    $('#buttons-container input').on('change keyup paste', updateButtonPreview);
     $('#buttons-live-preview > li').slice(keepAmount).remove(); // Remove everything below the "Live Preview" header
     buttonsUtil.sorted().forEach(button => buttonsUtil.insertButton(button, $('#buttons-live-preview')[0]));
   };
@@ -86,9 +87,18 @@ $('#restore-defaults').click(() => {
   location.reload();
 });
 
-$('#add-button').click(event => buttonsUtil.newSettingCard('default'));
-$('#add-divider').click(event => buttonsUtil.newSettingCard('divider'));
-$('#add-subheader').click(event => buttonsUtil.newSettingCard('subheader'));
+$('#add-button').click(event => {
+  buttonsUtil.newSettingCard('default');
+  updateButtonPreview();
+});
+$('#add-divider').click(event => {
+  buttonsUtil.newSettingCard('divider');
+  updateButtonPreview();
+});
+$('#add-subheader').click(event => {
+  buttonsUtil.newSettingCard('subheader');
+  updateButtonPreview();
+});
 
 $('#add-theme').click(event => themesUtil.newTheme());
 $('#import-theme').click(() => $('#theme-file-add').click());
