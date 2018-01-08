@@ -112,9 +112,6 @@ Themes are just JSON files:
   "background": "#FAFAFA",
   "main": "#FF9800",
   "accent": "#B2FF59",
-  "selection": "#CCFF90",
-  "lighten": "#FFCC80",
-  "darken": "#EF6C00",
 
   "deleted": undefined
 }

@@ -19,6 +19,7 @@
     "materialize-css": "0.100.2",
     "merge-stream": "^1.0.1",
     "semver": "^5.4.1",
+    "tinycolor2": "^1.4.1",
     "webpack": "^3.4.1",
     "webpack-stream": "^3.2.0"
   },
