@@ -83,9 +83,14 @@ nav.nav-wrapper {
 }
 
 .side-nav li > a img.button-image {
-  margin: 4px 32px 4px 0px;
+  margin: 4px 32px 4px 0px; /* vertical padding is arbitrary, left matches material icons' padding */
   height: 40px; /* size of drawer button height, minus 4+4 margins */
+  width: 24px; /* match material icon width */
   object-fit: contain;
+}
+
+.side-nav .divider + .button {
+  margin-top: 8px; /* buttons don't have space at the top like subheaders, so put it for them */
 }
 
 .side-nav li > a .button-content {
