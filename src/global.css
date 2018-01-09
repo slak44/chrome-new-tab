@@ -102,21 +102,12 @@ nav .menu i.material-icons,
 nav .menu span {
   display: inline-block;
   vertical-align: middle;
-  height: 56px;
-  line-height: 56px;
-}
-
-.menu > li {
-  line-height: 56px;
-  height: 56px;
+  height: 64px; /* match navbar height */
+  line-height: 64px; /* match height */
 }
 
 .menu.overflow {
   min-width: 200px;
-}
-
-.menu.overflow > li > a {
-  line-height: 28px; /* used to be 22, but height of anchor is 50, while parent is 56 */
 }
 
 .input-field {
