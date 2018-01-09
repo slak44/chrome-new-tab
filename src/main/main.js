@@ -12,8 +12,7 @@ pluginApi.insertView = (plugin, htmlElement, order, alignment) => {
   $(`#${alignment}`).append(htmlElement);
 };
 
-storage.loadAll(() => {
-  themesUtil.activateTheme(themes[currentThemeIdx] || themesUtil.defaultTheme);
+$(document).ready(() => {
   plugins.forEach(plugin => runViewContent(plugin, 'global'));
   plugins.forEach(plugin => runViewContent(plugin, 'main'));
   buttonsUtil.sorted().forEach(button => buttonsUtil.insertButton(button, $('#buttons')[0]));

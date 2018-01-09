@@ -15,8 +15,7 @@ $(window).on('beforeunload', () => {
   if (window.changesMade) return true;
 });
 
-storage.loadAll(() => {
-  themesUtil.activateTheme(themes[currentThemeIdx] || themesUtil.defaultTheme);
+$(document).ready(() => {
   themes.forEach(themesUtil.addThemeSettingsUI);
   themesUtil.initialUISetup();
 
