@@ -5,33 +5,30 @@ const sequence = require('gulp-sequence');
 const webpack = require('webpack-stream');
 const fs = require('fs');
 
-const buildJsGlob = ['src/**/*.js'];
 gulp.task('build-js', () => {
-  gulp.src(buildJsGlob, {base: './'})
-    .pipe(webpack(Object.assign({watch: true}, require('./webpack.config.js'))))
-    .pipe(gulp.dest('./build/src'));
+  webpack(require('./webpack.config.js')).pipe(gulp.dest('./build/src'));
 });
 
-const copySrcGlob = ['src/**/*.+(html|css|json)', '!src/**/*.js', '!src/**/.eslintrc.json'];
+const copySrcGlob = [
+  'src/global.css',
+  'src/main/main.css',
+  'src/main/main.html',
+  'src/secondary/secondary.css',
+  'src/secondary/secondary.html',
+  'src/manifest.json'
+];
 gulp.task('copy-src', () =>
-  gulp.src(copySrcGlob)
-    .pipe(gulp.dest('./build/src'))
+  gulp.src(copySrcGlob).pipe(gulp.dest('./build/src'))
 );
 
-gulp.task('copy-materialize-css', () =>
+gulp.task('copy-deps', () => {
   gulp.src('node_modules/materialize-css/dist/css/materialize.min.css')
-    .pipe(gulp.dest('./build/src'))
-);
-
-gulp.task('copy-fonts-roboto', () =>
+    .pipe(gulp.dest('./build/src'));
   gulp.src('node_modules/materialize-css/dist/fonts/roboto/*')
-    .pipe(gulp.dest('./build/src/fonts/roboto'))
-);
-
-gulp.task('copy-fonts-material-icons', () =>
+    .pipe(gulp.dest('./build/src/fonts/roboto'));
   gulp.src('node_modules/material-design-icons/iconfont/*')
-    .pipe(gulp.dest('./build/src/fonts/material-design-icons'))
-);
+    .pipe(gulp.dest('./build/src/fonts/material-design-icons'));
+});
 
 gulp.task('extension', () => {
   const crx = require('gulp-crx-pack');
@@ -88,24 +85,15 @@ gulp.task('pack-plugins', () => {
     .pipe(gulp.dest('./build/dist/'));
 });
 
-gulp.task('default', sequence('build', 'default-watch'));
-
-gulp.task('build', [
-  'build-js',
-  'copy-src',
-  'copy-materialize-css',
-  'copy-fonts-roboto',
-  'copy-fonts-material-icons',
-]);
-
-gulp.task('default-watch', () => {
+gulp.task('watch', () => {
   gulp.watch(copySrcGlob, ['copy-src']);
+  gulp.watch(['bundler.js', 'plugins/**/*', '!plugins/**/TEMP_PLUGIN_FILE'], ['plugins']);
+  webpack(Object.assign({watch: true}, require('./webpack.config.js'))).pipe(gulp.dest('./build/src'));
 });
 
-gulp.task('plugins-watch', () => {
-  gulp.watch(['plugins/**/*', '!plugins/**/TEMP_PLUGIN_FILE'], ['plugins']);
-});
+gulp.task('default', sequence(['copy-src', 'copy-deps'], 'watch'));
 
+gulp.task('build', ['build-js', 'copy-src', 'copy-deps']);
 gulp.task('all', sequence(['build', 'extension', 'plugins', 'pack-plugins']));
 
 function createVersionTask(bumpType) {

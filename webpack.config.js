@@ -12,18 +12,19 @@ module.exports = {
     secondary: path.join(__dirname, 'src', 'secondary', 'secondary.js'),
   },
   output: {
-    filename: '[name]/[name].min.js'
+    filename: '[name].min.js'
   },
   module: {
     loaders: [{
       test: /.js$/,
       loader: 'babel-loader',
-      exclude: /\.\/node_modules/,
+      include: path.resolve(__dirname, 'src'),
       query: {presets: ['latest']}
     }]
   },
   plugins: [
-    new webpack.optimize.UglifyJsPlugin(),
-    new webpack.optimize.LimitChunkCountPlugin({maxChunks: 1})
+    new webpack.optimize.UglifyJsPlugin({
+      exclude: [/\.min\.js$/gi]
+    })
   ]
 };

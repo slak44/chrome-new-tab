@@ -15,6 +15,7 @@
     "gulp-sequence": "^0.4.6",
     "gulp-zip": "^3.2.0",
     "jquery": "^3.2.1",
+    "json-loader": "^0.5.7",
     "material-design-icons": "^3.0.1",
     "materialize-css": "0.100.2",
     "merge-stream": "^1.0.1",
