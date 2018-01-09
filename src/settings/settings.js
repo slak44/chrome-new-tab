@@ -20,7 +20,7 @@ $(document).ready(() => {
   themes.forEach(addThemeSettingsUI);
   initialThemeUISetup();
 
-  buttons.forEach(addButtonSettingCard);
+  sortedButtons().forEach(addButtonSettingCard);
   updateButtonPreview();
 
   plugins.forEach(plugin => runViewContent(plugin, 'global'));
@@ -129,7 +129,7 @@ $('#floating-save-button').click(event => {
   const shouldReload = initNewPlugins();
 
   $('#buttons-container').empty();
-  buttons.forEach(addButtonSettingCard);
+  sortedButtons().forEach(addButtonSettingCard);
   Materialize.updateTextFields();
 
   window.changesMade = false;
