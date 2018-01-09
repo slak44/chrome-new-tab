@@ -17,18 +17,18 @@ $(window).on('beforeunload', () => {
 });
 
 $(document).ready(() => {
-  themes.forEach(addThemeSettingsUI);
-  initialThemeUISetup();
-
-  sortedButtons().forEach(addButtonSettingCard);
-  updateButtonPreview();
-
   plugins.forEach(plugin => runViewContent(plugin, 'global'));
   initPluginSettingsUI();
   plugins.forEach((plugin, idx) => {
     runViewContent(plugin, 'settings');
     appendPluginUI(plugin, idx);
   });
+  
+  themes.forEach(addThemeSettingsUI);
+  initialThemeUISetup();
+
+  sortedButtons().forEach(addButtonSettingCard);
+  updateButtonPreview();
 
   $('#backup-content').text(JSON.stringify({buttons, currentThemeIdx, themes, plugins}));
   $('#backup-modal').modal();
