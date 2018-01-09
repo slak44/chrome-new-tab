@@ -23,11 +23,11 @@ $(document).ready(() => {
     runViewContent(plugin, 'settings');
     appendPluginUI(plugin, idx);
   });
-  
+
   themes.forEach(addThemeSettingsUI);
   initialThemeUISetup();
 
-  sortedButtons().forEach(addButtonSettingCard);
+  addButtonCards();
   updateButtonPreview();
 
   $('#backup-content').text(JSON.stringify({buttons, currentThemeIdx, themes, plugins}));
@@ -35,6 +35,10 @@ $(document).ready(() => {
   $('#restore-modal').modal();
   $('#defaults-modal').modal();
 });
+
+function addButtonCards() {
+  sortedButtons().forEach(button => addButtonSettingCard(button, button.realIndex));
+}
 
 const updateButtonPreview = (function () {
   const keepAmount = $('#buttons-live-preview > li').length;
@@ -129,7 +133,7 @@ $('#floating-save-button').click(event => {
   const shouldReload = initNewPlugins();
 
   $('#buttons-container').empty();
-  sortedButtons().forEach(addButtonSettingCard);
+  addButtonCards();
   Materialize.updateTextFields();
   updateButtonPreview();
 

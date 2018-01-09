@@ -137,6 +137,15 @@ nav {
 @label-font-size: 1rem;
 .input-field {
   display: flex;
+  &.col:first-child {
+    padding-left: 0px;
+    label {
+      left: 0;
+    }
+  }
+  &.col:last-child {
+    padding-right: 0px;
+  }
   i.postfix {
     right: 0;
     // Copied from ".input-field .prefix"

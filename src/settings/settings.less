@@ -27,7 +27,7 @@
 
 .section-container {
   .with-side-nav;
-  padding-bottom: 100px;
+  padding-bottom: @nav-with-tabs-height;
   & > :not(.card) {
     height: 100%;
     width: 100%;
@@ -83,14 +83,23 @@
       object-fit: contain;
     }
     i.preview {
+      font-size: 3.5rem; /* arbitrary */
       text-align: center;
     }
     .card-missing-image {
       text-align: center;
+      i {
+        font-size: 2.5rem; /* arbitrary */
+      }
+      span {
+        white-space: nowrap;
+      }
     }
   }
   .card-content {
-    min-width: 400px; /* arbitrary */
+    :last-child {
+      margin-bottom: 0px;
+    }
   }
   .card-action .switch {
     display: inline-block;
