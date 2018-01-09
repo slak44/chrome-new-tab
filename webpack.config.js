@@ -9,7 +9,7 @@ module.exports = {
   },
   entry: {
     main: path.join(__dirname, 'src', 'main', 'main.js'),
-    secondary: path.join(__dirname, 'src', 'secondary', 'secondary.js'),
+    settings: path.join(__dirname, 'src', 'settings', 'settings.js'),
   },
   output: {
     filename: '[name].min.js'

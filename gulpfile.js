@@ -13,8 +13,8 @@ const copySrcGlob = [
   'src/global.css',
   'src/main/main.css',
   'src/main/main.html',
-  'src/secondary/secondary.css',
-  'src/secondary/secondary.html',
+  'src/settings/settings.css',
+  'src/settings/settings.html',
   'src/manifest.json'
 ];
 gulp.task('copy-src', () =>

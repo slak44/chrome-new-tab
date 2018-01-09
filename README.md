@@ -37,13 +37,13 @@ hello.say('world');
 
 #### List of views for inserting HTML/CSS
 - `main`: the main page, the 'new tab'
-- `secondary`: the extension's options page
+- `settings`: the extension's options page
 - `global`: matches any view
 
 #### List of positions for executing JS
 All functions recieve the plugin's name as an argument (`pluginName`).
 - `main`: after load of the main page. Executed after dependencies and globals
-- `secondary`: after load of the extension's options page. Executed after dependencies and globals
+- `settings`: after load of the extension's options page. Executed after dependencies and globals
 - `global`: after dependencies are executed
 - `init`: is executed on plugin install/update
 
@@ -65,7 +65,7 @@ Paths are relative to the `package.json`'s directory.
         "path/to/file2.html": "querySelector2"
         ...
       },
-      "secondary": {
+      "settings": {
         "path/to/file1.html": "querySelector1",
         "path/to/file2.html": "querySelector2"
         ...
@@ -78,12 +78,12 @@ Paths are relative to the `package.json`'s directory.
     },
     "css": {
       "main": ["path/to/file1.css", "path/to/file2.css", ...],
-      "secondary": ["path/to/file3.css", "path/to/file4.css", ...],
+      "settings": ["path/to/file3.css", "path/to/file4.css", ...],
       "global": ["path/to/file5.css", "path/to/file6.css", ...]
     },
     "js": {
       "main": ["path/to/file1.js", "path/to/file2.js", ...],
-      "secondary": ["path/to/file3.js", "path/to/file4.js", ...],
+      "settings": ["path/to/file3.js", "path/to/file4.js", ...],
       "global": ["path/to/file5.js", "path/to/file6.js", ...],
       "init": ["path/to/file7.js", "path/to/file8.js", ...]
     }
@@ -135,18 +135,18 @@ This should be valid JSON.
       "init": "(function () {})()",
       "global": "(function () {})()",
       "main": "(function () {})()",
-      "secondary": "(function () {})()"
+      "settings": "(function () {})()"
     },
     "css": {
       "main": "cssText",
-      "secondary": "cssText",
+      "settings": "cssText",
     },
     "html": {
       "main": {
         "querySelector": "htmlToAdd"
         ...
       },
-      "secondary": {
+      "settings": {
         "querySelector": "htmlToAdd"
         ...
       }

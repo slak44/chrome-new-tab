@@ -26,7 +26,7 @@ storage.loadAll(() => {
   plugins.forEach(plugin => runViewContent(plugin, 'global'));
   pluginsUtil.initPluginSettingsUI();
   plugins.forEach((plugin, idx) => {
-    runViewContent(plugin, 'secondary');
+    runViewContent(plugin, 'settings');
     pluginsUtil.appendPluginUI(plugin, idx);
   });
 

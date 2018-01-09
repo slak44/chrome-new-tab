@@ -28,7 +28,7 @@ const pluginObject = {
   html: {
     global: {},
     main: {},
-    secondary: {}
+    settings: {}
   }
 };
 
@@ -124,13 +124,13 @@ async.parallel([
   callback => mergeFiles(pkg.js.init, result => iifeBabel(result), (err, data) => callback(err, pluginObject.js.init = data)),
   callback => mergeFiles(pkg.js.global, result => iifeBabel(result), (err, data) => callback(err, pluginObject.js.global = data)),
   callback => mergeFiles(pkg.js.main, result => iifeBabel(result), (err, data) => callback(err, pluginObject.js.main = data)),
-  callback => mergeFiles(pkg.js.secondary, result => iifeBabel(result), (err, data) => callback(err, pluginObject.js.secondary = data)),
+  callback => mergeFiles(pkg.js.settings, result => iifeBabel(result), (err, data) => callback(err, pluginObject.js.settings = data)),
   callback => mergeFiles(pkg.css.global, result => result, (err, data) => callback(err, pluginObject.css.global = data)),
   callback => mergeFiles(pkg.css.main, result => result, (err, data) => callback(err, pluginObject.css.main = data)),
-  callback => mergeFiles(pkg.css.secondary, result => result, (err, data) => callback(err, pluginObject.css.secondary = data)),
+  callback => mergeFiles(pkg.css.settings, result => result, (err, data) => callback(err, pluginObject.css.settings = data)),
   callback => parseHtmlInserts('global', callback),
   callback => parseHtmlInserts('main', callback),
-  callback => parseHtmlInserts('secondary', callback),
+  callback => parseHtmlInserts('settings', callback),
   callback => installDeps(err => {
     if (err) throw err;
     packDeps(callback);
