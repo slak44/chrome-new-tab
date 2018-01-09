@@ -2,6 +2,7 @@
 
 const gulp = require('gulp');
 const sequence = require('gulp-sequence');
+const less = require('gulp-less');
 const webpack = require('webpack-stream');
 const fs = require('fs');
 
@@ -9,17 +10,15 @@ gulp.task('build-js', () => {
   webpack(require('./webpack.config.js')).pipe(gulp.dest('./build/src'));
 });
 
-const copySrcGlob = [
-  'src/global.css',
-  'src/main/main.css',
-  'src/main/main.html',
-  'src/settings/settings.css',
-  'src/settings/settings.html',
-  'src/manifest.json'
-];
-gulp.task('copy-src', () =>
-  gulp.src(copySrcGlob).pipe(gulp.dest('./build/src'))
-);
+const lessFiles = ['src/main/main.less', 'src/settings/settings.less'];
+gulp.task('build-css', () => {
+  gulp.src(lessFiles).pipe(less({
+    paths: ['./src/']
+  })).pipe(gulp.dest('./build/src'));
+});
+
+const copySrcGlob = ['src/main/main.html', 'src/settings/settings.html', 'src/manifest.json'];
+gulp.task('copy-src', () => gulp.src(copySrcGlob).pipe(gulp.dest('./build/src')));
 
 gulp.task('copy-deps', () => {
   gulp.src('node_modules/materialize-css/dist/css/materialize.min.css')
@@ -87,13 +86,14 @@ gulp.task('pack-plugins', () => {
 
 gulp.task('watch', () => {
   gulp.watch(copySrcGlob, ['copy-src']);
+  gulp.watch(lessFiles, ['build-css']);
   gulp.watch(['bundler.js', 'plugins/**/*', '!plugins/**/TEMP_PLUGIN_FILE'], ['plugins']);
   webpack(Object.assign({watch: true}, require('./webpack.config.js'))).pipe(gulp.dest('./build/src'));
 });
 
-gulp.task('default', sequence(['copy-src', 'copy-deps'], 'watch'));
+gulp.task('default', sequence(['build-css', 'copy-src', 'copy-deps'], 'watch'));
 
-gulp.task('build', ['build-js', 'copy-src', 'copy-deps']);
+gulp.task('build', ['build-js', 'build-css', 'copy-src', 'copy-deps']);
 gulp.task('all', sequence(['build', 'extension', 'plugins', 'pack-plugins']));
 
 function createVersionTask(bumpType) {
