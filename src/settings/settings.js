@@ -1,9 +1,10 @@
 'use strict';
 
-require('global');
-const buttonsUtil = require('buttons');
-const pluginsUtil = require('plugins');
-const themesUtil = require('themes');
+import 'global';
+import {addThemeSettingsUI, initialUISetup as initialThemeUISetup, newTheme} from 'themes';
+import {addSettingCard as addButtonSettingCard, newSettingCard as newButtonSettingCard,
+  sorted as sortedButtons, insertButton} from 'buttons';
+import {initPluginSettingsUI, appendPluginUI, initNewPlugins} from 'plugins';
 
 /*
   Any time the user changes something, set this to false. When they save, reset it to false.
@@ -16,17 +17,17 @@ $(window).on('beforeunload', () => {
 });
 
 $(document).ready(() => {
-  themes.forEach(themesUtil.addThemeSettingsUI);
-  themesUtil.initialUISetup();
+  themes.forEach(addThemeSettingsUI);
+  initialThemeUISetup();
 
-  buttons.forEach(buttonsUtil.addSettingCard);
+  buttons.forEach(addButtonSettingCard);
   updateButtonPreview();
 
   plugins.forEach(plugin => runViewContent(plugin, 'global'));
-  pluginsUtil.initPluginSettingsUI();
+  initPluginSettingsUI();
   plugins.forEach((plugin, idx) => {
     runViewContent(plugin, 'settings');
-    pluginsUtil.appendPluginUI(plugin, idx);
+    appendPluginUI(plugin, idx);
   });
 
   $('#backup-content').text(JSON.stringify({buttons, currentThemeIdx, themes, plugins}));
@@ -41,7 +42,7 @@ const updateButtonPreview = (function () {
     $('#buttons-container input').off('change keyup paste', updateButtonPreview);
     $('#buttons-container input').on('change keyup paste', updateButtonPreview);
     $('#buttons-live-preview > li').slice(keepAmount).remove(); // Remove everything below the "Live Preview" header
-    buttonsUtil.sorted().forEach(button => buttonsUtil.insertButton(button, $('#buttons-live-preview')[0]));
+    sortedButtons().forEach(button => insertButton(button, $('#buttons-live-preview')[0]));
   };
 })();
 
@@ -87,19 +88,19 @@ $('#restore-defaults').click(() => {
 });
 
 $('#add-button').click(event => {
-  buttonsUtil.newSettingCard('default');
+  newButtonSettingCard('default');
   updateButtonPreview();
 });
 $('#add-divider').click(event => {
-  buttonsUtil.newSettingCard('divider');
+  newButtonSettingCard('divider');
   updateButtonPreview();
 });
 $('#add-subheader').click(event => {
-  buttonsUtil.newSettingCard('subheader');
+  newButtonSettingCard('subheader');
   updateButtonPreview();
 });
 
-$('#add-theme').click(event => themesUtil.newTheme());
+$('#add-theme').click(event => newTheme());
 $('#import-theme').click(() => $('#theme-file-add').click());
 
 $('#theme-file-add').change(event => {
@@ -114,7 +115,7 @@ $('#theme-file-add').change(event => {
       console.error(err);
       return;
     }
-    themesUtil.newTheme(imported);
+    newTheme(imported);
     window.changesMade = true;
   });
   reader.readAsText(file);
@@ -125,10 +126,10 @@ $('#floating-save-button').click(event => {
   themes = themes.filter(theme => !theme.deleted);
   plugins = plugins.filter(plugin => !plugin.deleted);
 
-  const shouldReload = pluginsUtil.initNewPlugins();
+  const shouldReload = initNewPlugins();
 
   $('#buttons-container').empty();
-  buttons.forEach(buttonsUtil.addSettingCard);
+  buttons.forEach(addButtonSettingCard);
   Materialize.updateTextFields();
 
   window.changesMade = false;

@@ -1,8 +1,8 @@
 'use strict';
 
-require('storage');
-const themeLoader = require('theme-loader');
+import 'storage';
+import activateTheme from 'theme-loader';
 
 storage.loadAll(() => {
-  themeLoader.activateTheme(themes[currentThemeIdx] || require('json-loader!default-theme'));
+  activateTheme(themes[currentThemeIdx] || require('json-loader!default-theme'));
 });

@@ -25,7 +25,7 @@ module.exports = {
   },
   plugins: [
     new webpack.optimize.UglifyJsPlugin({
-      exclude: [/\.min\.js$/gi]
+      include: [/src\//]
     })
   ]
 };
