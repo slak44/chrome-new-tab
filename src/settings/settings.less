@@ -1,22 +1,10 @@
-nav.with-tabs {
-  height: 112px; /* nav height is 64, tabs height is 48 */
-}
-
-nav.with-tabs > .tabs {
-  background-color: inherit;
-  margin-bottom: 0px;
-}
-
-section.tab-content {
-  height: calc(100% - 112px); /* nav height with tabs is 112 */
-  width: 100% !important;
-  position: relative;
-}
+@import '../global.less';
 
 #floating-save-button {
+  @fab-height: 56px;
   position: absolute !important;
   right: 72px; /* arbitrary */
-  top: 84px; /* nav height is 64, tabs height is 48, but we substract btn height / 2 to center it, height is 56 */
+  top: @nav-with-tabs-height - @fab-height / 2; // Center it on the edge of the nav
 }
 
 #buttons-container {
@@ -26,28 +14,38 @@ section.tab-content {
   overflow-y: auto;
 }
 
-.side-nav + .section-container {
-  margin-left: 300px; /* width of side-nav */
-  position: relative;
-  height: 100%;
-}
-
-.section-container > div:not(.card) {
-  height: 100%;
+#backup-modal textarea {
   width: 100%;
-  position: absolute;
-  padding-left: 16px; /* arbitrary */
-  overflow-y: auto;
+  height: 80%;
+  font-family: monospace;
+  font-size: 1rem; /* arbitrary */
+  user-select: text;
+  cursor: text;
+  word-wrap: break-word;
+  word-break: break-all;
 }
 
-.section-container > .card {
-  margin: 1rem;
-  height: fit-content;
-  align-self: center;
+.section-container {
+  .with-side-nav;
+  padding-bottom: 100px;
+  & > :not(.card) {
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    padding-left: 16px; /* arbitrary */
+    overflow-y: auto;
+  }
+  & > .card {
+    margin: 1rem;
+    align-self: center;
+  }
 }
+
+// Once for the label itself, and again as a margin
+@label-margin-size: 2 * @label-font-size;
 
 .plugin-data > p + .input-field {
-  margin-top: 2rem; /* label font size is 1rem, and add another as an actual margin */
+  margin-top: @label-margin-size;
 }
 
 .plugin-data .input-field {
@@ -56,7 +54,7 @@ section.tab-content {
 }
 
 .theme-data .switch {
-  margin-bottom: 2rem; /* label font size is 1rem, and add another as an actual margin */
+  margin-bottom: @label-margin-size;
 }
 
 .theme-data .input-field {
@@ -65,63 +63,56 @@ section.tab-content {
 
 .theme-data h2 {
   display: inline-block;
+  & > a.postfix > i {
+    font-size: 2rem; /* arbitrary */
+  }
 }
 
-.theme-data h2 > a.postfix > i {
-  font-size: 2rem; /* arbitrary */
-}
-
-.card.horizontal {
+.card {
   height: fit-content;
+  .card-title {
+    margin-bottom: @label-margin-size !important;
+  }
+  .card-image {
+    width: 100px;
+    display: flex;
+    justify-content: center;
+    flex-flow: column;
+    padding-left: 24px;
+    img {
+      object-fit: contain;
+    }
+    i.preview {
+      text-align: center;
+    }
+    .card-missing-image {
+      text-align: center;
+    }
+  }
+  .card-content {
+    min-width: 400px; /* arbitrary */
+  }
+  .card-action .switch {
+    display: inline-block;
+  }
 }
 
-.card.horizontal .card-title {
-  margin-bottom: 2rem !important; /* label font size is 1rem, and add another as an actual margin */
-}
-
-.card.horizontal .card-image {
-  width: 100px;
-  display: flex;
-  justify-content: center;
-  flex-flow: column;
-  padding-left: 24px;
-}
-
-.card-image img {
-  object-fit: contain;
-}
-
-.card-image i.preview {
-  text-align: center;
-}
-
-.card-missing-image {
-  text-align: center;
-}
-
-.card-content {
-  min-width: 400px;
-}
-
-.card-action .switch {
-  display: inline-block;
-}
-
-.switch > span {
-  vertical-align: text-top;
-}
-
-.switch > i.material-icons {
-  vertical-align: middle;
-  font-size: inherit;
-}
-
-.switch.no-margin.right span.lever {
-  margin-right: 0px;
-}
-
-.switch.no-margin.left span.lever {
-  margin-left: 0px;
+.switch {
+  & > span {
+    vertical-align: text-top;
+  }
+  & > i.material-icons {
+    vertical-align: middle;
+    font-size: inherit;
+  }
+  &.no-margin {
+    &.right span.lever {
+      margin-right: 0px;
+    }
+    &.left span.lever {
+      margin-left: 0px;
+    }
+  }
 }
 
 .input-field input {
@@ -140,24 +131,14 @@ section.tab-content {
   transform: scale(1) !important;
 }
 
-h1 > .inherit-heading, h2 > .inherit-heading, h3 > .inherit-heading,
-h4 > .inherit-heading, h5 > .inherit-heading, h6 > .inherit-heading {
-  font-size: inherit !important;
-  font-weight: inherit;
-  line-height: inherit;
-  color: inherit;
-  padding-bottom: 4px !important; /* arbitrary */
-  width: fit-content !important;
-  height: inherit !important;
-}
-
-#backup-modal textarea {
-  width: 100%;
-  height: 80%;
-  font-family: monospace;
-  font-size: 1rem; /* arbitrary */
-  user-select: text;
-  cursor: text;
-  word-wrap: break-word;
-  word-break: break-all;
+h1, h2, h3, h4, h5, h6 {
+  & > .inherit-heading {
+    font-size: inherit !important;
+    font-weight: inherit;
+    line-height: inherit;
+    color: inherit;
+    padding-bottom: 4px !important; /* arbitrary */
+    width: fit-content !important;
+    height: inherit !important;
+  }
 }

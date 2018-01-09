@@ -1,20 +1,23 @@
+@import (inline) '../node_modules/materialize-css/dist/css/materialize.min.css';
+
 @font-face {
   font-family: 'Material Icons';
   font-style: normal;
   font-weight: 400;
-  src: url(chrome-extension://__MSG_@@extension_id__/fonts/material-design-icons/MaterialIcons-Regular.eot); /* For IE6-8 */
+  src: url(/fonts/material-design-icons/MaterialIcons-Regular.eot); /* For IE6-8 */
   src: local('Material Icons'),
        local('MaterialIcons-Regular'),
-       url(chrome-extension://__MSG_@@extension_id__/fonts/material-design-icons/MaterialIcons-Regular.woff2) format('woff2'),
-       url(chrome-extension://__MSG_@@extension_id__/fonts/material-design-icons/MaterialIcons-Regular.woff) format('woff'),
-       url(chrome-extension://__MSG_@@extension_id__/fonts/material-design-icons/MaterialIcons-Regular.ttf) format('truetype');
+       url(/fonts/material-design-icons/MaterialIcons-Regular.woff2) format('woff2'),
+       url(/fonts/material-design-icons/MaterialIcons-Regular.woff) format('woff'),
+       url(/fonts/material-design-icons/MaterialIcons-Regular.ttf) format('truetype');
 }
 
+@material-icon-size: 24px;
 .material-icons {
   font-family: 'Material Icons';
   font-weight: normal;
   font-style: normal;
-  font-size: 24px;
+  font-size: @material-icon-size;
   display: inline-block;
   line-height: 1;
   text-transform: none;
@@ -51,84 +54,104 @@ img {
   text-transform: capitalize;
 }
 
-nav.row {
-  margin-bottom: 0px;
+@tabs-height: 48px;
+@nav-height: 64px;
+@nav-with-tabs-height: @nav-height + @tabs-height;
+@material-icon-height: 48px;
+
+nav {
+  &.row {
+    margin-bottom: 0px;
+  }
+  &.nav-wrapper {
+    z-index: 1000;
+    position: relative;
+  }
+  &.with-tabs {
+    height: @nav-with-tabs-height;
+    & > .tabs {
+      background-color: inherit;
+      margin-bottom: 0px;
+    }
+  }
+  .menu {
+    &.overflow {
+      min-width: 200px; /* arbitrary */
+    }
+    i.material-icons, span {
+      display: inline-block;
+      vertical-align: middle;
+      height: @nav-height;
+      line-height: @nav-height;
+    }
+  }
 }
 
-nav.nav-wrapper {
-  z-index: 1000;
+@side-nav-width: 300px; // from materialize
+.side-nav {
+  &.fixed > li {
+    width: 100%;
+  }
+  &.fixed.clipped {
+    padding-top: @nav-height + 8px;
+    &.with-tabs {
+      padding-top: @nav-with-tabs-height + 8px;
+    }
+  }
+  li {
+    @item-height: @material-icon-height;
+    @material-icon-right-padding: 32px;
+    a > i.material-icons.right {
+      margin: 0px;
+      margin-right: -@material-icon-right-padding; /* we are aligned to the right, negate padding */
+    }
+    a > i.material-icons.waves-effect {
+      text-align: center;
+      width: @material-icon-height; /* square => prettier effect */
+    }
+    a > img.button-image {
+      // This image emulates a material icon
+      @img-vertical-margin: 4px;
+      margin: @img-vertical-margin @material-icon-right-padding @img-vertical-margin 0px;
+      height: @material-icon-height - 2 * @img-vertical-margin;
+      width: @material-icon-size;
+      object-fit: contain;
+    }
+    a > .button-content {
+      line-height: @item-height;
+      vertical-align: top;
+    }
+  }
+  .divider + .button {
+    // Buttons don't have space at the top like subheaders, so add some for them
+    margin-top: 8px;
+  }
+}
+
+.with-side-nav {
+  margin-left: @side-nav-width;
   position: relative;
+  height: 100%;
 }
 
-.side-nav.fixed > li {
-  width: 100%;
-}
-
-.side-nav.fixed.clipped {
-  padding-top: 72px; /* 64 is nav height, 8 is for padding */
-}
-
-.side-nav.fixed.clipped.with-tabs {
-  padding-top: 120px; /* 112 is nav with tabs height, 8 is for padding */
-}
-
-.side-nav li > a > i.material-icons.right {
-  margin: 0px;
-  margin-right: -32px; /* ignore the list item's right padding */
-}
-
-.side-nav li > a > i.material-icons.waves-effect {
-  text-align: center;
-  width: 48px; /* match height for a prettier effect */
-}
-
-.side-nav li > a img.button-image {
-  margin: 4px 32px 4px 0px; /* vertical padding is arbitrary, left matches material icons' padding */
-  height: 40px; /* size of drawer button height, minus 4+4 margins */
-  width: 24px; /* match material icon width */
-  object-fit: contain;
-}
-
-.side-nav .divider + .button {
-  margin-top: 8px; /* buttons don't have space at the top like subheaders, so put it for them */
-}
-
-.side-nav li > a .button-content {
-  line-height: 48px; /* size of drawer button height */
-  vertical-align: top;
-}
-
-nav .menu i.material-icons,
-nav .menu span {
-  display: inline-block;
-  vertical-align: middle;
-  height: 64px; /* match navbar height */
-  line-height: 64px; /* match height */
-}
-
-.menu.overflow {
-  min-width: 200px;
-}
-
+@label-font-size: 1rem;
 .input-field {
   display: flex;
-}
-
-.input-field i.postfix {
-  position: absolute;
-  right: 0;
-  width: 3rem;
-  font-size: 1.5rem;
-  transition: color .2s;
-}
-
-.input-field i.postfix + input {
-  margin-right: 3rem;
-}
-
-.input-field i.prefix,
-.input-field i.postfix {
-  align-self: center;
+  i.postfix {
+    right: 0;
+    // Copied from ".input-field .prefix"
+    position: absolute;
+    width: 3rem;
+    font-size: 2rem;
+    -webkit-transition: color .2s;
+    transition: color .2s
+  }
+  i.prefix, i.postfix {
+    align-self: center;
+  }
+  i.postfix + input {
+    margin-right: 3rem;
+  }
 }
 
 input[type="color"] {

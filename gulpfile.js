@@ -6,23 +6,15 @@ const less = require('gulp-less');
 const webpack = require('webpack-stream');
 const fs = require('fs');
 
-gulp.task('build-js', () => {
-  webpack(require('./webpack.config.js')).pipe(gulp.dest('./build/src'));
-});
+gulp.task('build-js', () => webpack(require('./webpack.config.js')).pipe(gulp.dest('./build/src')));
 
 const lessFiles = ['src/main/main.less', 'src/settings/settings.less'];
-gulp.task('build-css', () => {
-  gulp.src(lessFiles).pipe(less({
-    paths: ['./src/']
-  })).pipe(gulp.dest('./build/src'));
-});
+gulp.task('build-css', () => gulp.src(lessFiles).pipe(less()).pipe(gulp.dest('./build/src')));
 
 const copySrcGlob = ['src/main/main.html', 'src/settings/settings.html', 'src/manifest.json'];
 gulp.task('copy-src', () => gulp.src(copySrcGlob).pipe(gulp.dest('./build/src')));
 
 gulp.task('copy-deps', () => {
-  gulp.src('node_modules/materialize-css/dist/css/materialize.min.css')
-    .pipe(gulp.dest('./build/src'));
   gulp.src('node_modules/materialize-css/dist/fonts/roboto/*')
     .pipe(gulp.dest('./build/src/fonts/roboto'));
   gulp.src('node_modules/material-design-icons/iconfont/*')
@@ -86,7 +78,7 @@ gulp.task('pack-plugins', () => {
 
 gulp.task('watch', () => {
   gulp.watch(copySrcGlob, ['copy-src']);
-  gulp.watch(lessFiles, ['build-css']);
+  gulp.watch(lessFiles.concat('src/global.less'), ['build-css']);
   gulp.watch(['bundler.js', 'plugins/**/*', '!plugins/**/TEMP_PLUGIN_FILE'], ['plugins']);
   webpack(Object.assign({watch: true}, require('./webpack.config.js'))).pipe(gulp.dest('./build/src'));
 });
