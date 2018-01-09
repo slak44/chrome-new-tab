@@ -131,6 +131,7 @@ $('#floating-save-button').click(event => {
   $('#buttons-container').empty();
   sortedButtons().forEach(addButtonSettingCard);
   Materialize.updateTextFields();
+  updateButtonPreview();
 
   window.changesMade = false;
   Materialize.Toast.removeAll();
