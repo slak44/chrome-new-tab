@@ -74,16 +74,14 @@ nav {
       margin-bottom: 0px;
     }
   }
-  .menu {
-    &.overflow {
-      min-width: 200px; /* arbitrary */
-    }
-    i.material-icons, span {
-      display: inline-block;
-      vertical-align: middle;
-      height: @nav-height;
-      line-height: @nav-height;
-    }
+  .menu.overflow {
+    min-width: 200px; /* arbitrary */
+  }
+  i.material-icons, span {
+    display: inline-block;
+    vertical-align: middle;
+    height: @nav-height;
+    line-height: @nav-height;
   }
 }
 
@@ -187,6 +185,10 @@ nav {
       white-space: nowrap;
     }
   }
+}
+
+.hidden {
+  display: none !important;
 }
 
 input[type="color"] {

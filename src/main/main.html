@@ -1,6 +1,6 @@
 <html>
   <head>
-    <title>New Tab</title>
+    <title class="activity-title">New Tab</title>
 		<style id="dynamic-colors"></style>
     <style id="plugin-css"></style>
     <script src="/preloader.min.js"></script>
@@ -8,16 +8,19 @@
   </head>
   <body>
     <nav class="nav-wrapper row">
-      <div class="brand-logo col text-primary">New Tab</div>
+      <a href="#!" class="col activity-up-btn hidden"><i class="material-icons">arrow_back</i></a>
+      <div class="brand-logo col text-primary activity-title">New Tab</div>
       <ul class="right menu">
-        <li><a href="#!" class="col right dropdown-button waves-effect text-primary" data-activates="navbar-overflow-menu"><i class="material-icons">more_vert</i></a></li>
+        <li><a href="#!" class="col right dropdown-button waves-effect text-primary" data-activates="navbar-overflow-menu">
+          <i class="material-icons">more_vert</i>
+        </a></li>
       </ul>
     </nav>
     <ul id="navbar-overflow-menu" class="dropdown-content overflow menu">
       <li><a href="/settings.html" class="waves-effect text-primary">Settings</a></li>
     </ul>
     <ul id="buttons" class="side-nav fixed clipped"></ul>
-    <main>
+    <main class="activity">
       <section id="left"></section>
       <section id="center"></section>
       <section id="right"></section>
