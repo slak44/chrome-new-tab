@@ -194,7 +194,6 @@ This should be valid JSON.
     "text": "Button",
     "position": 3.14,
     "hotkey": "K",
-    "openInNew": false,
     "deleted": undefined
   }
 ```
@@ -206,7 +205,6 @@ This should be valid JSON.
 - `text`: (string) displyed text
 - `position`: (float) used to determine order of buttons
 - `hotkey`: (string) using alt+key triggers the button
-- `openInNew`: (boolean) if true, opens the link in a new tab that replaces the current one
 - `deleted`: (optional boolean) if true, it signals that this button was "deleted" by the user; this element will be *removed before saving* to storage
 
 ## reddit API

@@ -135,6 +135,7 @@ nav {
 }
 
 @label-font-size: 1rem;
+@input-height: 3rem;
 .input-field {
   display: flex;
   &.col:first-child {
@@ -147,6 +148,7 @@ nav {
     padding-right: 0px;
   }
   i.postfix {
+    top: 6px; /* arbitrary */
     right: 0;
     // Copied from ".input-field .prefix"
     position: absolute;
@@ -160,6 +162,30 @@ nav {
   }
   i.postfix + input {
     margin-right: 3rem;
+  }
+}
+
+.inline-select {
+  .caret {
+    display: none;
+  }
+  & > input.select-dropdown {
+    display: none;
+  }
+  i.material-icons {
+    cursor: pointer;
+    font-size: 2rem;
+    height: @input-height;
+    line-height: @input-height;
+  }
+  ul.select-dropdown {
+    width: fit-content !important;
+    li:first-child {
+      cursor: default;
+    }
+    span {
+      white-space: nowrap;
+    }
   }
 }
 
