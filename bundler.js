@@ -95,27 +95,21 @@ function packDeps(callback) {
     .join('\n');
   // Create an empty plugin dependencies object before adding requires
   toPack = `window.dependencies['${pkg.pluginName}'] = {};${toPack}`;
-  const fileName = `${pluginDir}/TEMP_PLUGIN_FILE`;
-  fs.writeFileSync(fileName, toPack);
+  const filename = `${pluginDir}/TEMP_PLUGIN_FILE.js`;
+  fs.writeFileSync(filename, toPack);
 
   const webpackConfig = webpackBase;
-  webpackConfig.entry = fileName;
-  webpackConfig.output = {
-    filename: `${pluginDir}/TEMP_PLUGIN_OUTPUT`
-  };
+  webpackConfig.entry = filename;
+  webpackConfig.output = {filename: 'TEMP_PLUGIN_FILE.js'};
 
   webpack(webpackConfig, (err, stats) => {
-    fs.unlinkSync(fileName, err => {
-      if (err) console.error(err);
-    });
     if (err || stats.hasErrors()) {
       callback(err);
       return;
     }
-    pluginObject.dependencyCode = fs.readFileSync(webpackConfig.output.filename);
-    fs.unlinkSync(webpackConfig.output.filename, err => {
-      if (err) throw err;
-    });
+    pluginObject.dependencyCode = fs.readFileSync(webpackConfig.output.filename, {encoding: 'utf8'});
+    fs.unlinkSync(filename);
+    fs.unlinkSync(webpackConfig.output.filename);
     callback(null);
   });
 }

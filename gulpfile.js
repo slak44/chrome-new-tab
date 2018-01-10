@@ -54,12 +54,12 @@ gulp.task('plugins', done => {
         callback(null);
         return;
       }
-      cp.exec(`node bundler.js plugins/${folderName} build/plugins/${folderName}.json`, (err, stdout, stderr) => {
+      cp.exec(`node bundler.js ${__dirname}/plugins/${folderName} ${__dirname}/build/plugins/${folderName}.json`, (err, stdout, stderr) => {
         if (err) {
           callback(err, null);
           return;
         }
-        callback(null, stdout.toString());
+        callback(null, null);
       });
     });
     async.parallel(bundleTasks, (err, results) => {
