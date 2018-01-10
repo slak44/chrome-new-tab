@@ -11,6 +11,8 @@ pluginApi.insertView = (plugin, htmlElement, order, alignment) => {
   $(`#${alignment}`).append(htmlElement);
 };
 
+const activityStack = [];
+
 class Activity {
   constructor(name, htmlElement) {
     if (!(htmlElement instanceof HTMLElement)) throw Error('The argument htmlElement must be of type HTMLElement');
@@ -24,13 +26,17 @@ class Activity {
   hide() {
     this.element.addClass('hidden');
   }
+  static current() {
+    return activityStack[activityStack.length - 1];
+  }
 }
 
-const activityStack = [
-  new Activity('New Tab', $('main.activity')[0])
-];
+activityStack.push(new Activity('New Tab', $('main.activity')[0]));
 
 pluginApi.pushActivity = (plugin, activityName, htmlElement) => {
+  // No duplicates
+  if (Activity.current().name === activityName) return;
+  Activity.current().hide();
   const a = new Activity(activityName, htmlElement);
   a.show();
   activityStack.push(a);
@@ -40,7 +46,7 @@ pluginApi.pushActivity = (plugin, activityName, htmlElement) => {
 pluginApi.popActivity = plugin => {
   if (activityStack.length === 1) return;
   activityStack.pop().hide();
-  activityStack[activityStack.length - 1].show();
+  Activity.current().show();
   if (activityStack.length === 1) $('.activity-up-btn').addClass('hidden');
 };
 
