@@ -4,7 +4,14 @@ const gulp = require('gulp');
 const sequence = require('gulp-sequence');
 const less = require('gulp-less');
 const webpack = require('webpack-stream');
-const fs = require('fs');
+const zip = require('gulp-zip');
+const packCrx = require('gulp-crx-pack');
+const gulpBump = require('gulp-bump');
+const path = require('path');
+const bluebird = require('bluebird');
+const cp = bluebird.promisifyAll(require('child_process'), {multiArgs: true});
+const fs = bluebird.promisifyAll(require('fs'));
+const bundlePlugin = require('./bundler.js');
 
 gulp.task('build-js', () => webpack(require('./webpack.config.js')).pipe(gulp.dest('./build/src')));
 
@@ -15,95 +22,46 @@ const copySrcGlob = ['src/main/main.html', 'src/settings/settings.html', 'src/ma
 gulp.task('copy-src', () => gulp.src(copySrcGlob).pipe(gulp.dest('./build/src')));
 
 gulp.task('copy-deps', () => {
-  gulp.src('node_modules/materialize-css/dist/fonts/roboto/*')
-    .pipe(gulp.dest('./build/src/fonts/roboto'));
-  gulp.src('node_modules/material-design-icons/iconfont/*')
-    .pipe(gulp.dest('./build/src/fonts/material-design-icons'));
+  gulp.src('node_modules/materialize-css/dist/fonts/roboto/*').pipe(gulp.dest('./build/src/fonts/roboto'));
+  gulp.src('node_modules/material-design-icons/iconfont/*').pipe(gulp.dest('./build/src/fonts/material-design-icons'));
 });
 
-gulp.task('extension', () => {
-  const crx = require('gulp-crx-pack');
-  let pKey;
-  try {
-    // This doesn't have to exist
-    pKey = fs.readFileSync('./ext.pem', 'utf8');
-  } catch (e) {
-    pKey = undefined;
-  }
-  return gulp.src('./build/src')
-    .pipe(crx({
-      privateKey: pKey,
-      filename: 'ext.crx'
-    }))
-    .pipe(gulp.dest('./build/dist'));
+gulp.task('extension', async () => {
+  const privateKey = await fs.readFileAsync('./ext.pem', {encoding: 'utf8'})
+    .catch(err => console.warn('Warning: Packing extension without a private key'));
+  return gulp.src('./build/src').pipe(packCrx({privateKey, filename: 'ext.crx'})).pipe(gulp.dest('./build/dist'));
 });
 
-gulp.task('plugins', done => {
-  const cp = require('child_process');
-  const async = require('async');
-  try {
-    fs.mkdirSync('./build/plugins');
-  } catch (err) {
-    if (err.code !== 'EEXIST') throw err;
-  }
-  fs.readdir('./plugins', (err, folders) => {
-    if (err) throw err;
-    const bundleTasks = folders.map(folderName => callback => {
-      // If there are other things there, ignore them
-      if (folderName.startsWith('.')) {
-        callback(null);
-        return;
-      }
-      cp.exec(`node bundler.js ${__dirname}/plugins/${folderName} ${__dirname}/build/plugins/${folderName}.json`, (err, stdout, stderr) => {
-        if (err) {
-          callback(err, null);
-          return;
-        }
-        callback(null, null);
-      });
-    });
-    async.parallel(bundleTasks, (err, results) => {
-      if (err) throw err;
-      done();
-    });
-  });
+function runBundler(pluginName) {
+  const pluginDirPath = path.resolve(__dirname, 'plugins', pluginName);
+  const pkg = require(path.resolve(pluginDirPath, 'package.json'));
+  const outputPath = path.resolve(__dirname, 'build/plugins', `${pluginName}.json`);
+  return bundlePlugin(pkg, pluginDirPath, outputPath);
+}
+
+gulp.task('plugins', async done => {
+  await fs.mkdirAsync(path.resolve(__dirname, 'build/plugins')).catch(err => {if (err.code !== 'EEXIST') throw err;});
+  const res = await Promise.all(['fade', 'reddit', 'repl', 'timedate', 'title'].map(p => runBundler(p).catch(e => e)));
+  res.filter(result => result instanceof Error).forEach(console.error);
 });
 
-gulp.task('pack-plugins', () => {
-  const zip = require('gulp-zip');
-  return gulp.src('./build/plugins/*')
-    .pipe(zip('plugins.zip'))
-    .pipe(gulp.dest('./build/dist/'));
-});
+gulp.task('pack-plugins', () => gulp.src('build/plugins/*').pipe(zip('plugins.zip')).pipe(gulp.dest('./build/dist/')));
 
 gulp.task('watch', () => {
   gulp.watch(copySrcGlob, ['copy-src']);
   gulp.watch(lessFiles.concat('src/global.less'), ['build-css']);
-  gulp.watch(['bundler.js', 'plugins/**/*', '!plugins/**/TEMP_PLUGIN_FILE'], ['plugins']);
+  gulp.watch(['bundler.js', 'plugins/**/*'], ['plugins']);
   webpack(Object.assign({watch: true}, require('./webpack.config.js'))).pipe(gulp.dest('./build/src'));
 });
 
 gulp.task('default', sequence(['build-css', 'copy-src', 'copy-deps'], 'watch'));
-
 gulp.task('build', ['build-js', 'build-css', 'copy-src', 'copy-deps']);
-gulp.task('all', sequence(['build', 'extension', 'plugins', 'pack-plugins']));
+gulp.task('pack', sequence(['build', 'extension', 'plugins', 'pack-plugins']));
 
-function createVersionTask(bumpType) {
-  const merge = require('merge-stream');
-  const gulpBump = require('gulp-bump');
-  return () => {
-    const packageJson =
-    gulp.src('./package.json')
-      .pipe(gulpBump({type: bumpType}))
-      .pipe(gulp.dest('./'));
-    const manifestJson =
-    gulp.src('./src/manifest.json')
-      .pipe(gulpBump({type: bumpType}))
-      .pipe(gulp.dest('./src/'));
-    return merge([packageJson, manifestJson]);
-  };
+function versionTask(bumpType) {
+  return () => gulp.src(['package.json', 'src/manifest.json']).pipe(gulpBump({type: bumpType})).pipe(gulp.dest('./'));
 }
 
-gulp.task('patch', createVersionTask('patch'));
-gulp.task('minor', createVersionTask('minor'));
-gulp.task('major', createVersionTask('major'));
+gulp.task('patch', versionTask('patch'));
+gulp.task('minor', versionTask('minor'));
+gulp.task('major', versionTask('major'));

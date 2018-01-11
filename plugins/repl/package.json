@@ -3,11 +3,7 @@
   "version": "4.0.0",
   "description": "Read-Eval-Print-Loop: a pretty JS console",
   "author": "Slak44",
-  "babel": {
-    "presets": [
-      "latest"
-    ]
-  },
+  "webpackConfig": "../plugin.webpack.config.js",
   "eslintConfig": {
     "extends": "../.eslintrc.json",
     "globals": {
@@ -30,8 +26,6 @@
     ]
   },
   "js": {
-    "main": [
-      "main.js"
-    ]
+    "main": "main.js"
   }
 }

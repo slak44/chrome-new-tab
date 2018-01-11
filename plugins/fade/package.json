@@ -3,6 +3,7 @@
   "version": "2.0.0",
   "description": "Fade the page to black when inactive",
   "author": "Slak44",
+  "webpackConfig": "../plugin.webpack.config.js",
   "settings": [
     {
       "name": "Featured Data",
@@ -21,15 +22,8 @@
       "isVisible": true
     }
   ],
-  "babel": {
-    "presets": [
-      "latest"
-    ]
-  },
   "js": {
-    "main": [
-      "fade.js"
-    ]
+    "main": "fade.js"
   },
   "css": {
     "main": [

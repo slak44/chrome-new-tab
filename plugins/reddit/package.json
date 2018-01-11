@@ -3,6 +3,7 @@
   "version": "3.0.0",
   "description": "Displays reddit karma for given user",
   "author": "Slak44",
+  "webpackConfig": "../plugin.webpack.config.js",
   "settings": [
     {
       "name": "Reddit username",
@@ -37,17 +38,10 @@
       "isVisible": true
     }
   ],
-  "babel": {
-    "presets": [
-      "latest"
-    ]
-  },
   "dependencies": {},
   "html": {},
   "css": {},
   "js": {
-    "main": [
-      "main.js"
-    ]
+    "main": "main.js"
   }
 }

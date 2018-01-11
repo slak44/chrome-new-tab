@@ -3,6 +3,7 @@
   "version": "0.2.5",
   "description": "Allows to check a player's current game information",
   "author": "Slak44",
+  "webpackConfig": "../plugin.webpack.config.js",
   "settings": [
     {
       "name": "Player Name",
@@ -44,18 +45,11 @@
     ]
   },
   "js": {
-    "main": [
-      "main.js"
-    ]
+    "main": "main.js"
   },
   "dependencies": {
     "async": "^2.0.0-rc.3",
     "eventemitter2": "^1.0.0"
-  },
-  "babel": {
-    "presets": [
-      "latest"
-    ]
   },
   "eslintConfig": {
     "extends": "../.eslintrc.json",

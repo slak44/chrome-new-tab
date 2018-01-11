@@ -3,6 +3,7 @@
   "version": "3.0.0",
   "description": "Adds a title to the main page",
   "author": "Slak44",
+  "webpackConfig": "../plugin.webpack.config.js",
   "settings": [
     {
       "name": "Title Text",
@@ -30,8 +31,6 @@
     }
   ],
   "js": {
-    "main": [
-      "main.js"
-    ]
+    "main": "main.js"
   }
 }

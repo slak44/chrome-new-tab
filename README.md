@@ -5,51 +5,36 @@ A chrome extension that replaces the new tab.
 ## Installation
 
 Download `ext.crx` and `plugins.zip` from [here](https://github.com/slak44/ChromeNewTab/releases/latest).
-Go to chrome://extensions in your browser, then drag `ext.crx` inside.
+Go to `chrome://extensions` in your browser, then drag `ext.crx` inside.
 Navigate to the settings page to add buttons, plugins, and themes.
 **IMPORTANT**: Chrome 35 and above disallow installation of non-webstore extensions. See [this](https://superuser.com/a/768154/442735) for possible workarounds.
 
 ## Building the extension
 
-Run `npm install` then `gulp all`, and the extension can be found packed in the `./build/dist` directory, or unpacked in the `./build/src` directory.
+Run `npm install` then `gulp pack`, and the extension can be found packed in the `./build/dist` directory, or unpacked in the `./build/src` directory.
 
 ## Creating plugins
 
 #### With the plugin bundler
 - Run `npm init` in the plugin's folder and fill out the info
 - Use `npm install --save` to add your dependencies
-- Add the `html`, `css` and `js` sections to the `package.json` described below
-- Optionally add the `babel` config
-- Run the bundler (`node bundler.js`), the first argument being the plugin folder, and the second being a path where the compiled file should be placed
-
-#### Using installed dependencies
-After a dependency is eval'd, whatever it exports is placed in the dependency object of the plugin (`window.dependencies[pluginName]`), in a variable named after the package.  
-For example, the dependency `hello`
-```
-'use strict';
-exports.say = who => console.log(`Hello, ${who}!`);
-```
-can be used in plugin scripts like this:
-```
-let hello = window.dependencies[pluginName].hello;
-hello.say('world');
-```
+- Create a `package.json` like the one described below
+- Run the bundler (`node bundler.js`), with the first argument the plugin folder, and the second a path to write the compiled plugin file to
 
 #### List of views for inserting HTML/CSS
 - `main`: the main page, the 'new tab'
 - `settings`: the extension's options page
 - `global`: matches any view
 
-#### List of positions for executing JS
-All functions recieve the plugin's name as an argument (`pluginName`).
+#### List of hooks for executing JS
+Each of these scripts recieves a plugin api object called `api`.
 - `main`: after load of the main page. Executed after dependencies and globals
 - `settings`: after load of the extension's options page. Executed after dependencies and globals
-- `global`: after dependencies are executed
-- `init`: is executed on plugin install/update
+- `global`: matches any view, runs after dependencies are executed
+- `init`: is executed only on plugin install/update
 
 #### Plugin `package.json` format:  
-This file is used by `npm`, by `babel`, and by the bundler.  
-Paths are relative to the `package.json`'s directory.
+This file is used by `npm` and by the bundler. Paths are relative to the `package.json`'s directory.
 ```
   {
     "pluginName": "displayName",
@@ -58,7 +43,7 @@ Paths are relative to the `package.json`'s directory.
     "version": "1.1.1",
     "settings": [],
     "dependencies": {},
-    "babel": {},
+    "webpackConfig": {},
     "html": {
       "main": {
         "path/to/file1.html": "querySelector1",
@@ -82,10 +67,10 @@ Paths are relative to the `package.json`'s directory.
       "global": ["path/to/file5.css", "path/to/file6.css", ...]
     },
     "js": {
-      "main": ["path/to/file1.js", "path/to/file2.js", ...],
-      "settings": ["path/to/file3.js", "path/to/file4.js", ...],
-      "global": ["path/to/file5.js", "path/to/file6.js", ...],
-      "init": ["path/to/file7.js", "path/to/file8.js", ...]
+      "main": "path/to/file1.js",
+      "settings": "path/to/file2.js",
+      "global": "path/to/file3.js",
+      "init": "path/to/file4.js"
     }
   }
 ```
@@ -95,10 +80,10 @@ Paths are relative to the `package.json`'s directory.
 - `version`: [semver](http://semver.org/) version string
 - `settings`: array of objects, format described below. Setting values are preserved during updates only if the `name` and `type` properties are unchanged
 - `dependencies`: npm's dependencies field
-- `babel`: babel's config
+- `webpackConfig`: path to a webpack config to be require'd. The `entry` and `output` properties are handled by the bundler
 - `html`: each property represents a view. For each view, there are html files associated with a query selector. The html will be inserted in the element obtained from the selector
-- `css`: each property represents a view. The css files for each view are concatenated, and the merged data is appended to a stylesheet after the html has been inserted
-- `js`: each property represents a position. Similar to the css files, all the js files are concatenated (in order of appearance), and the resulting script is executed at its respective position
+- `css`: each property represents a view. The css files for each view are concatenated, and the merged data is appended to an inline stylesheet after the html has been inserted
+- `js`: each property represents a hook. The js at the specified path for each hook is an entry point for webpack
 
 ## Implementation details
 
@@ -119,10 +104,8 @@ Themes are just JSON files:
 - `isDark`: (boolean) whether or not the theme should be considered "dark", as dark themes trigger light styles for some elements/text
 - `deleted`: (optional boolean) if true, it signals that this theme was "deleted" by the user; this element will be *removed before saving* to storage
 
-
-#### Plugin format:  
-Usually, this is to be generated by the bundler from the `package.json` above.
-This should be valid JSON.  
+#### Plugin format:
+Usually, this is to be generated by the bundler from the `package.json` above. This should be valid JSON.
 ```
   {
     "name": "displayName",
@@ -130,12 +113,11 @@ This should be valid JSON.
     "author": "name",
     "version": "1.1.1",
     "settings": [],
-    "dependencyCode": "(function () {})()",
     "js": {
-      "init": "(function () {})()",
-      "global": "(function () {})()",
-      "main": "(function () {})()",
-      "settings": "(function () {})()"
+      "init": "(function (api) {})()",
+      "global": "(function (api) {})()",
+      "main": "(function (api) {})()",
+      "settings": "(function (api) {})()"
     },
     "css": {
       "main": "cssText",
@@ -159,8 +141,7 @@ This should be valid JSON.
 - `author`: see above
 - `version`: see above
 - `settings`: see above
-- `dependencyCode`: a stringified IIFE, is eval'd before anything else. The bundler places all dependencies here
-- `js`: all functions are stringified IIFEs, each property is a position
+- `js`: all functions are stringified IIFEs, each property is a hook
 - `css`: the css from each property will be added to it's respective view
 - `html`: every property targets a view. For every view, `htmlToAdd` will be added at the position specified by the `querySelector`. There can be multiple `querySelector`s
 - `deleted`: (optional boolean) if true, it signals that this plugin was "deleted" by the user; this element will be *removed before saving* to storage
@@ -210,5 +191,3 @@ This should be valid JSON.
 ## reddit API
 This API is used in [/plugins/reddit/main.js](https://github.com/slak44/ChromeNewTab/tree/master/plugins/reddit/main.js).  
 The page will perform GET requests for the user data associated with the given username.
-## License
-[CC-BY-NC-SA 4.0](http://creativecommons.org/licenses/by-nc-sa/4.0/legalcode)
