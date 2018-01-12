@@ -59,7 +59,7 @@ gulp.task('build', ['build-js', 'build-css', 'copy-src', 'copy-deps']);
 gulp.task('pack', sequence(['build', 'extension', 'plugins', 'pack-plugins']));
 
 function versionTask(bumpType) {
-  return () => gulp.src(['package.json', 'src/manifest.json']).pipe(gulpBump({type: bumpType})).pipe(gulp.dest('./'));
+  return () => gulp.src(['package.json', 'src/manifest.json'], {base: './'}).pipe(gulpBump({type: bumpType})).pipe(gulp.dest('./'));
 }
 
 gulp.task('patch', versionTask('patch'));
