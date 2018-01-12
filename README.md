@@ -7,6 +7,7 @@ A chrome extension that replaces the new tab.
 Download `ext.crx` and `plugins.zip` from [here](https://github.com/slak44/ChromeNewTab/releases/latest).
 Go to `chrome://extensions` in your browser, then drag `ext.crx` inside.
 Navigate to the settings page to add buttons, plugins, and themes.
+
 **IMPORTANT**: Chrome 35 and above disallow installation of non-webstore extensions. See [this](https://superuser.com/a/768154/442735) for possible workarounds.
 
 ## Building the extension
@@ -27,13 +28,21 @@ Run `npm install` then `gulp pack`, and the extension can be found packed in the
 - `global`: matches any view
 
 #### List of hooks for executing JS
-Each of these scripts recieves a plugin api object called `api`.
-- `main`: after load of the main page. Executed after dependencies and globals
-- `settings`: after load of the extension's options page. Executed after dependencies and globals
-- `global`: matches any view, runs after dependencies are executed
+Any of these can access a plugin api object called `api`.
+- `main`: runs on the main view
+- `settings`: runs on the settings view
+- `global`: runs on any view, but before the view-specific hook
 - `init`: is executed only on plugin install/update
 
-#### Plugin `package.json` format:  
+#### Plugin `api` object
+- `api.setting(settingName)`: get value of specified setting, or its default if it's unset
+- `api.insertStyle(css)`: insert the given css string into an inline style element
+- `api.registerAction(displayName, actionPathname, handler)`: register a handler for a custom button action. Run this in the `global` hook
+- `api.insertView(htmlElement, order, alignment)`: (only in the `main` hook) insert a view to the default activity. `alignment` can be `left`, `center` or `right`. `order` is the order within each alignment, and it maps to the css property `order`
+- `api.pushActivity(activityName, htmlElement)`: (only in the `main` hook) navigate to another activity. When called, the current activity's element will be hidden, the given element will be shown, the `activityName` will replace the tab title and navbar title, and a button to navigate back appears in the navbar
+- `api.popActivity()`: (only in the `main` hook) hide current activity, and show previous one. If the default activity is shown, this function is a no-op
+
+#### Plugin `package.json` format
 This file is used by `npm` and by the bundler. Paths are relative to the `package.json`'s directory.
 ```
   {
@@ -43,7 +52,7 @@ This file is used by `npm` and by the bundler. Paths are relative to the `packag
     "version": "1.1.1",
     "settings": [],
     "dependencies": {},
-    "webpackConfig": {},
+    "webpackConfig": "path/to/webpack.config",
     "html": {
       "main": {
         "path/to/file1.html": "querySelector1",
@@ -74,16 +83,16 @@ This file is used by `npm` and by the bundler. Paths are relative to the `packag
     }
   }
 ```
-- `pluginName`: name of plugin
-- `description`: plugin description.
-- `author`: self-explanatory
-- `version`: [semver](http://semver.org/) version string
-- `settings`: array of objects, format described below. Setting values are preserved during updates only if the `name` and `type` properties are unchanged
-- `dependencies`: npm's dependencies field
-- `webpackConfig`: path to a webpack config to be require'd. The `entry` and `output` properties are handled by the bundler
-- `html`: each property represents a view. For each view, there are html files associated with a query selector. The html will be inserted in the element obtained from the selector
-- `css`: each property represents a view. The css files for each view are concatenated, and the merged data is appended to an inline stylesheet after the html has been inserted
-- `js`: each property represents a hook. The js at the specified path for each hook is an entry point for webpack
+- `pluginName`: (string) name of plugin
+- `description`: (string) plugin description
+- `author`: (string) self-explanatory
+- `version`: (string) [semver](http://semver.org/) version string
+- `settings`: (array of objects) setting format described below. Setting values are preserved during updates only if the `name` and `type` properties are unchanged
+- `dependencies`: (object) npm's dependencies field
+- `webpackConfig`: (path string) path to a webpack config to be require'd. The `entry` and `output` properties are handled by the bundler
+- `html`: (object) each property represents a view. For each view, there are html files associated with a query selector. The html will be inserted in the element obtained from the selector
+- `css`: (object) each property represents a view. The css files for each view are concatenated, and the merged data is appended to an inline stylesheet after the html has been inserted
+- `js`: (object) each property represents a hook. The js at the specified path for each hook is an entry point for webpack
 
 ## Implementation details
 
@@ -101,10 +110,12 @@ Themes are just JSON files:
   "deleted": undefined
 }
 ```
+- `name`: (string) name of theme
 - `isDark`: (boolean) whether or not the theme should be considered "dark", as dark themes trigger light styles for some elements/text
+- `background`, `main`, `accent`: (css color strings) base colors for the UI
 - `deleted`: (optional boolean) if true, it signals that this theme was "deleted" by the user; this element will be *removed before saving* to storage
 
-#### Plugin format:
+#### Plugin format
 Usually, this is to be generated by the bundler from the `package.json` above. This should be valid JSON.
 ```
   {
@@ -136,17 +147,17 @@ Usually, this is to be generated by the bundler from the `package.json` above. T
     "deleted": undefined
   }
 ```
-- `name`: see above, is equivalent to `pluginName`
-- `desc`: see above, is equivalent to `description`
-- `author`: see above
-- `version`: see above
-- `settings`: see above
-- `js`: all functions are stringified IIFEs, each property is a hook
-- `css`: the css from each property will be added to it's respective view
-- `html`: every property targets a view. For every view, `htmlToAdd` will be added at the position specified by the `querySelector`. There can be multiple `querySelector`s
+- `name`: (string) see above, is equivalent to `pluginName`
+- `desc`: (string) see above, is equivalent to `description`
+- `author`: (string) see above
+- `version`: (semver string) see above
+- `settings`: (array of setting objects) see above
+- `js`: (object) all functions are stringified IIFEs, each property is a hook
+- `css`: (object) the css from each property will be added to it's respective view
+- `html`: (object of objects) every property targets a view. For every view, `htmlToAdd` will be added at the position specified by the `querySelector`. There can be multiple `querySelector`s
 - `deleted`: (optional boolean) if true, it signals that this plugin was "deleted" by the user; this element will be *removed before saving* to storage
 
-#### Setting format:
+#### Setting format
 ```
   {
     "name": "displayName",
@@ -164,7 +175,7 @@ Usually, this is to be generated by the bundler from the `package.json` above. T
 - `value`: (any) undefined until set
 - `isVisible`: (boolean) if false, it means this 'setting' is just storage
 
-#### Button format:
+#### Button format
 ```
   {
     "kind": "default",
