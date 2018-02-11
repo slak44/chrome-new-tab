@@ -34,7 +34,7 @@ async function bundlePlugin(pkg, pluginDirPath, outputPath) {
   const views = ['global', 'main', 'settings'];
   views.filter(view => pkg.css[view]).forEach(view => pluginObject.css[view] = pkg.css[view].map(awaitFile).join('\n'));
   views.filter(view => pkg.html[view]).forEach(view => {
-    Object.entries(pkg.html[view]).forEach(pair => pluginObject.html[view][pair[1]] = awaitFile(pair[0]));
+    Object.entries(pkg.html[view]).forEach(async pair => pluginObject.html[view][pair[1]] = await awaitFile(pair[0]));
   });
   const [npmStdout, npmStderr] = await cp.execAsync('npm install', {cwd: pluginDirPath});
   if (npmStdout) process.stdout.write(npmStdout);
