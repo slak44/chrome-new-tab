@@ -13,8 +13,8 @@ div.console > .card-content {
 }
 
 div.history {
-  flex-basis: 20%;
-  max-width: 20%;
+  flex-basis: 25%;
+  max-width: 25%;
   height: 90%;
 }
 
