@@ -1,17 +1,22 @@
 @import '../global.less';
 
+@activity-padding: 16px;
+
 .activity {
   .with-side-nav;
+  padding: 0 @activity-padding;
 }
 
 main {
   display: flex;
+  // Ignore the activity padding, our children will have it
+  padding: 0 !important;
 }
 
 main > section {
   flex-basis: 33.33%;
   height: inherit;
-  padding: 0 16px;
+  padding: 0 @activity-padding;
   display: inline-flex;
   flex-flow: column;
 }
