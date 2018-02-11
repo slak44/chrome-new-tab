@@ -32,7 +32,13 @@ async function bundlePlugin(pkg, pluginDirPath, outputPath) {
   };
   const awaitFile = async filePath => await fs.readFileAsync(path.resolve(pluginDirPath, filePath), {encoding: 'utf8'});
   const views = ['global', 'main', 'settings'];
-  views.filter(view => pkg.css[view]).forEach(view => pluginObject.css[view] = pkg.css[view].map(awaitFile).join('\n'));
+  views.filter(view => pkg.css[view]).forEach(view => {
+    pluginObject.css[view] = '';
+    pkg.css[view].forEach(async file => {
+      pluginObject.css[view] += await awaitFile(file);
+      pluginObject.css[view] += '\n';
+    });
+  });
   views.filter(view => pkg.html[view]).forEach(view => {
     Object.entries(pkg.html[view]).forEach(async pair => pluginObject.html[view][pair[1]] = await awaitFile(pair[0]));
   });
