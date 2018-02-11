@@ -84,14 +84,14 @@ const executeCommand = (function () {
         const commandArgs = code.replace(new RegExp(`!${commandName} ?`), '');
         const action = Command.fetchActionFor(commandName);
         if (!(action instanceof Function)) throw new Error('Command not found');
-        window.result = action(commandArgs);
+        window.ans = action(commandArgs);
       } else {
         let replaceable = code;
         Object.keys(replReplace).forEach(key => replaceable = replaceable.replace(replReplace[key], key));
-        window.result = window.eval(replaceable);
+        window.ans = window.eval(replaceable);
       }
     } catch (err) {
-      window.result = err;
+      window.ans = err;
     }
   };
 })();
@@ -121,14 +121,14 @@ promptWrite.on('keydown', event => {
       consoleList.append(`<span class="former-prompt">${text}</span>`);
       promptWrite.addClass('hidden');
       executeCommand(text);
-      results.push(window.result);
-      consoleList.append(`<span class="result">${window.result}</span>`);
+      results.push(window.ans);
+      consoleList.append(`<span class="result">${window.ans}</span>`);
       historyAnswers.find('.selection').removeClass('selection');
-      const res = $(`<li class="selection" data-result-idx="${results.length - 1}">${window.result}</li>`);
+      const res = $(`<li class="selection" data-result-idx="${results.length - 1}">${window.ans}</li>`);
       res.click(event => {
         historyAnswers.find('.selection').removeClass('selection');
         res.addClass('selection');
-        window.result = results[res.data('result-idx')];
+        window.ans = results[res.data('result-idx')];
       });
       historyAnswers.append(res);
       promptWrite.removeClass('hidden');
