@@ -1,82 +1,90 @@
 'use strict';
-const util = new PluginUtil(pluginName);
-const fx = util.deps.money;
-const Qty = util.deps['js-quantities'];
+const fx = require('money');
+const Qty = require('js-quantities');
+
+api.insertStyle(`#repl-activity .console-text {background-color: ${themes[currentThemeIdx].background};}`);
+api.insertStyle(`#repl-activity .history span.selection {background-color: ${themes[currentThemeIdx].accent};}`);
 
 // Get current exchange rates
+$.get('https://api.fixer.io/latest', data => fx.rates = data.rates, 'json');
 fx.base = 'EUR';
-const rates = new XMLHttpRequest();
-rates.onload = () => fx.rates = JSON.parse(rates.responseText).rates;
-rates.open('GET', 'https://api.fixer.io/latest');
-rates.send();
 
-util.insertStyles(`
-  span.history-selected {
-    background-color: ${colorSchemes[0].accent4};
+const container = $('#repl-activity');
+const consoleList = container.find('.console-text');
+const history = container.find('.history');
+
+const commands = [];
+class Command {
+  constructor(name, alias, action) {
+    this.name = name;
+    this.alias = alias;
+    this.action = action;
+    commands.push(this);
   }
-`);
+  static fetchActionFor(nameOrAlias) {
+    const command = commands.find(command => command.name === nameOrAlias || command.alias === nameOrAlias);
+    return command ? command.action : null;
+  }
+}
+
+new Command('convert', 'cv', stringArgs => {
+  // !convert 100 usd to EUR
+  // !convert 50 m to km
+  const args = stringArgs.split(' ');
+  // Remove 'to' if it's found between units
+  if (args[2].toLowerCase() === 'to') args.splice(2, 1);
+  let [number, fromUnit, toUnit] = args;
+  // If the unit is currency, use the currency script
+  if (Object.keys(fx.rates).includes(toUnit.toUpperCase())) {
+    fromUnit = fromUnit.toUpperCase();
+    toUnit = toUnit.toUpperCase();
+    const result = fx.convert(Number(number), {from: fromUnit, to: toUnit}).toFixed(2);
+    return `${result} ${toUnit}`;
+  }
+  return Qty(`${number} ${fromUnit}`).to(toUnit).toString();
+});
+
+new Command('winrate', 'wr', stringArgs => {
+  /* eslint-disable no-magic-numbers */
+  const args = stringArgs.split(' ');
+  const [wins, losses] = args.map(arg => parseInt(arg, 10));
+  const winrate = wins * 100 / (losses + wins);
+  return `${winrate.toFixed(2)}%`;
+  /* eslint-enable no-magic-numbers */
+});
+
+function openInNewTab(url) {
+  const anchor = document.createElement('a');
+  anchor.href = url;
+  anchor.target = '_blank';
+  anchor.click();
+  return anchor.href;
+}
+new Command('query', 'q', data => openInNewTab(`https://www.google.com/search?q=${encodeURIComponent(data)}`));
+new Command('wolfram', 'w', data => openInNewTab(`http://www.wolframalpha.com/input/?i=${encodeURIComponent(data)}`));
 
 // Command syntax: `!COMMAND_NAME ARGS`
 // ARGS will be passed as a string to each command
 const executeCommand = (function () {
-  function openInNewTab(url) {
-    const anchor = document.createElement('a');
-    anchor.href = url;
-    anchor.target = '_blank';
-    anchor.click();
-    return anchor.href;
-  }
-  const commands = {
-    convert(stringArgs) {
-      // !convert 100 usd to EUR
-      // !convert 50 m to km
-      const args = stringArgs.split(' ');
-      // Remove 'to' if it's found between units
-      if (args[2].toLowerCase() === 'to') args.splice(2, 1);
-      let [number, fromUnit, toUnit] = args;
-      // If the unit is currency, use the currency script
-      if (Object.keys(fx.rates).includes(toUnit.toUpperCase())) {
-        fromUnit = fromUnit.toUpperCase();
-        toUnit = toUnit.toUpperCase();
-        const result = fx.convert(Number(number), {from: fromUnit, to: toUnit}).toFixed(2);
-        return `${result} ${toUnit}`;
-      }
-      return Qty(`${number} ${fromUnit}`).to(toUnit).toString();
-    },
-    query: data => openInNewTab(`https://www.google.com/search?q=${encodeURIComponent(data)}`),
-    wolfram: data => openInNewTab(`http://www.wolframalpha.com/input/?i=${encodeURIComponent(data)}`),
-    winrate(stringArgs) {
-      /* eslint-disable no-magic-numbers */
-      const args = stringArgs.split(' ');
-      const [wins, losses] = args.map(arg => parseInt(arg, 10));
-      const winrate = wins * 100 / (losses + wins);
-      return `${winrate.toFixed(2)}%`;
-      /* eslint-enable no-magic-numbers */
-    }
-  };
-  const commandAliases = {
-    cv: 'convert',
-    q: 'query',
-    w: 'wolfram',
-    wr: 'winrate'
-  };
   const replReplace = {
     replLog: /console\.(log|error|info|debug)/g,
     'Math.$1($2)': /(pow|exp|ceil|floor|trunc|log|max|min|random|sqrt|sin|cos|tan|asin|acos)\(([\s\S]*)\)/g,
     'Math.$1': /(PI|E)/g
   };
-  function replLog(...args) {
+  window.replLog = function replLog(...args) {
     const text = args.reduce((prev, curr) => `${prev}${curr}\n`, '');
-    byId('repl-window').insertAdjacentHTML('beforeend', `<span class="result-text">${text}</span>`);
-  }
+    consoleList.append(`<span class="result">${text}</span>`);
+  };
   return function (code) {
     try {
       if (code.startsWith('!')) {
-        const commandName = code.substr(1, code.indexOf(' ') - 1); // Skip ! character, and go until the first space
-        const commandArgs = code.replace(`!${commandName} `, '');
-        const commandFunc = commands[commandName] || commands[commandAliases[commandName]];
-        if (!(commandFunc instanceof Function)) throw new Error('Command not found');
-        window.result = commandFunc(commandArgs);
+        const firstSpace = code.indexOf(' ');
+        // Skip ! character, and go until the first space, or until the end if there are no spaces
+        const commandName = firstSpace > -1 ? code.substr(1, firstSpace - 1) : code.slice(1);
+        const commandArgs = code.replace(new RegExp(`!${commandName} ?`), '');
+        const action = Command.fetchActionFor(commandName);
+        if (!(action instanceof Function)) throw new Error('Command not found');
+        window.result = action(commandArgs);
       } else {
         let replaceable = code;
         Object.keys(replReplace).forEach(key => replaceable = replaceable.replace(replReplace[key], key));
@@ -88,88 +96,69 @@ const executeCommand = (function () {
   };
 })();
 
-function REPL() {
-  const commandHistory = [];
-  let rewindCount = 0;
-  this.currentElement = byClass('current-text')[0];
-  this.currentHistory = byClass('history-selected')[0];
-  byId('repl-history').addEventListener('click', event => {
-    // Ignore the title
-    if (Array.from(event.target.classList).includes('card-title')) return;
-    this.currentHistory.classList.remove('history-selected');
-    event.target.classList.add('history-selected');
-    window.result = event.target.innerText;
-    this.currentHistory = event.target;
-  });
-  const insertResult = () => {
-    this.currentElement.classList.remove('current-text');
-    byId('repl-window').insertAdjacentHTML('beforeend', `
-      <span class="result-text">${window.result}</span>
-      <span class="current-text"></span>
-    `);
-    this.currentElement = byClass('current-text')[0];
-    this.currentElement.focus();
-  };
-  const insertHistory = () => {
-    if (this.currentHistory) this.currentHistory.classList.remove('history-selected');
-    byId('repl-history').insertAdjacentHTML('beforeend', `
-      <span class="history-selected">${window.result}</span>
-    `);
-    this.currentHistory = byClass('history-selected')[0];
-  };
-  this.run = () => {
-    rewindCount = 0;
-    const code = this.currentElement.textContent.trim();
-    commandHistory.shift(); // Remove the empty string added below
-    commandHistory.unshift(code); // Add this command's code
-    commandHistory.unshift(''); //  Add empty string (will be replaced by the above lines on next run)
-    executeCommand(code);
-    insertResult();
-    insertHistory();
-  };
-  const getRewindedCommand = () => commandHistory[rewindCount].toString();
-  this.rewind = () => {
-    rewindCount++;
-    // Don't actually rewind if we're at the history limit
-    if (rewindCount === commandHistory.length) rewindCount--;
-    this.currentElement.innerText = getRewindedCommand();
-  };
-  this.forward = () => {
-    rewindCount--;
-    // Don't go before the newest item
-    if (rewindCount === -1) rewindCount++;
-    this.currentElement.innerText = getRewindedCommand();
-  };
-}
-
-const keycodes = {
+const keycodes = Object.freeze({
   enter: 13,
   upArrow: 38,
   downArrow: 40
-};
-Object.freeze(keycodes);
+});
 
-window.result = undefined;
-const repl = new REPL();
-byId('repl-window').addEventListener('keydown', event => {
+const historyAnswers = container.find('ol.answers');
+const promptWrite = container.find('span.prompt-write');
+
+const prompts = [];
+const results = [];
+let pendingText = '';
+let currentPromptDelta = 0;
+
+promptWrite.on('keydown', event => {
   switch (event.keyCode) {
-    case keycodes.enter:
-      repl.run();
-      event.preventDefault();
+    case keycodes.enter: {
+      if (event.shiftKey) return;
+      const text = promptWrite.text();
+      promptWrite.empty();
+      prompts.push(text);
+      currentPromptDelta = prompts.length;
+      consoleList.append(`<span class="former-prompt">${text}</span>`);
+      promptWrite.addClass('hidden');
+      executeCommand(text);
+      results.push(window.result);
+      consoleList.append(`<span class="result">${window.result}</span>`);
+      historyAnswers.find('.selection').removeClass('selection');
+      const res = $(`<li class="selection" data-result-idx="${results.length - 1}">${window.result}</li>`);
+      res.click(event => {
+        historyAnswers.find('.selection').removeClass('selection');
+        res.addClass('selection');
+        window.result = results[res.data('result-idx')];
+      });
+      historyAnswers.append(res);
+      promptWrite.removeClass('hidden');
+      promptWrite.focus();
+      promptWrite[0].scrollIntoView(false);
       break;
+    }
     case keycodes.upArrow:
-      repl.rewind();
+      if (currentPromptDelta === 0) break;
+      currentPromptDelta--;
+      promptWrite.text(prompts[currentPromptDelta]);
       break;
     case keycodes.downArrow:
-      repl.rewind();
+      if (currentPromptDelta === prompts.length - 1) {
+        promptWrite.text(pendingText);
+        currentPromptDelta++;
+        break;
+      } else if (currentPromptDelta === prompts.length) {
+        break;
+      }
+      currentPromptDelta++;
+      promptWrite.text(prompts[currentPromptDelta]);
       break;
+    default: return;
+  }
+  event.preventDefault();
+});
+
+promptWrite.on('keyup change paste', event => {
+  if (currentPromptDelta === prompts.length) {
+    pendingText = promptWrite.text();
   }
 });
-const replBtn = createButton({text: 'REPL'});
-function toggle(e) {
-  e.preventDefault();
-  toggleDiv('repl-pane');
-  toggleDiv('default-pane');
-}
-replBtn.addEventListener('click', toggle);
-byId('repl-back').addEventListener('click', toggle);

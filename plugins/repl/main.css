@@ -1,4 +1,70 @@
-#repl-pane {
+#repl-activity {
+  display: flex;
+  justify-content: space-around;
+}
+
+div.console {
+  flex-basis: 70%;
+  height: 90%;
+}
+
+div.console > .card-content {
+  height: 100%;
+}
+
+div.history {
+  flex-basis: 20%;
+  max-width: 20%;
+  height: 90%;
+}
+
+ol.answers {
+  overflow-y: auto;
+  max-height: 90%;
+  word-wrap: break-word;
+  font-family: monospace;
+}
+
+div.console-text {
+  height: 95%;
+  display: flex;
+  flex-flow: column;
+  overflow-y: auto;
+  font-family: monospace;
+}
+
+div.console-text > span {
+  cursor: text;
+  margin: 8px 8px 0 8px;
+}
+
+span.prompt {
+  flex-grow: 1;
+  display: flex;
+  order: 99999999;
+  min-height: fit-content;
+  margin-bottom: 8px !important;
+}
+
+span.result,
+span.former-prompt {
+  user-select: text;
+}
+
+span.prompt > span.prompt-write {
+  -webkit-user-modify: read-write;
+  outline: none;
+  display: block;
+  flex-grow: 1;
+}
+
+span.prompt > span.prompt-text::before,
+span.former-prompt::before {
+  content: '$';
+  margin-right: 8px;
+}
+
+/* #repl-pane {
   background-color: red;
 }
 
@@ -7,12 +73,6 @@
 }
 
 #repl-window {
-  position: absolute;
-  top: 60px;
-  bottom: 60px;
-  left: 10px;
-  overflow: auto;
-  word-wrap: break-word;
   display: flex;
   flex-flow: column;
 }
@@ -60,4 +120,4 @@ span.current-text {
 
 span.result-text::before {
   content: '< ' !important;
-}
+} */
