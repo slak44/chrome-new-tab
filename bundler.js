@@ -61,7 +61,7 @@ async function bundlePlugin(pkg, pluginDirPath, outputPath) {
 }
 
 if (require.main === module) {
-  bundlePlugin(process.argv[2], require(path.resolve(process.argv[2], 'package.json')), process.argv[3]);
+  bundlePlugin(require(path.resolve(process.argv[2], 'package.json')), process.argv[2], process.argv[3]);
 } else {
   module.exports = bundlePlugin;
 }
