@@ -104,6 +104,16 @@ const results = [];
 let pendingText = '';
 let currentPromptDelta = 0;
 
+function moveCursorToEnd() {
+  // Adapted from: https://stackoverflow.com/a/3866442
+  const range = document.createRange();
+  range.selectNodeContents(promptWrite[0]);
+  range.collapse(false);
+  const selection = window.getSelection();
+  selection.removeAllRanges();
+  selection.addRange(range);
+}
+
 promptWrite.on('keydown', event => {
   switch (event.key) {
     case 'Enter': {
@@ -134,10 +144,12 @@ promptWrite.on('keydown', event => {
       if (currentPromptDelta === 0) break;
       currentPromptDelta--;
       promptWrite.text(prompts[currentPromptDelta]);
+      moveCursorToEnd();
       break;
     case 'ArrowDown':
       if (currentPromptDelta === prompts.length - 1) {
         promptWrite.text(pendingText);
+        moveCursorToEnd();
         currentPromptDelta++;
         break;
       } else if (currentPromptDelta === prompts.length) {
@@ -145,6 +157,7 @@ promptWrite.on('keydown', event => {
       }
       currentPromptDelta++;
       promptWrite.text(prompts[currentPromptDelta]);
+      moveCursorToEnd();
       break;
     case 'c':
       if (event.ctrlKey) {
