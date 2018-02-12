@@ -96,12 +96,6 @@ const executeCommand = (function () {
   };
 })();
 
-const keycodes = Object.freeze({
-  enter: 13,
-  upArrow: 38,
-  downArrow: 40
-});
-
 const historyAnswers = container.find('ol.answers');
 const promptWrite = container.find('span.prompt-write');
 
@@ -111,8 +105,8 @@ let pendingText = '';
 let currentPromptDelta = 0;
 
 promptWrite.on('keydown', event => {
-  switch (event.keyCode) {
-    case keycodes.enter: {
+  switch (event.key) {
+    case 'Enter': {
       if (event.shiftKey) return;
       const text = promptWrite.text();
       promptWrite.empty();
@@ -136,12 +130,12 @@ promptWrite.on('keydown', event => {
       promptWrite[0].scrollIntoView(false);
       break;
     }
-    case keycodes.upArrow:
+    case 'ArrowUp':
       if (currentPromptDelta === 0) break;
       currentPromptDelta--;
       promptWrite.text(prompts[currentPromptDelta]);
       break;
-    case keycodes.downArrow:
+    case 'ArrowDown':
       if (currentPromptDelta === prompts.length - 1) {
         promptWrite.text(pendingText);
         currentPromptDelta++;
@@ -152,6 +146,16 @@ promptWrite.on('keydown', event => {
       currentPromptDelta++;
       promptWrite.text(prompts[currentPromptDelta]);
       break;
+    case 'c':
+      if (event.ctrlKey) {
+        const text = `${promptWrite.text()}^C`;
+        promptWrite.empty();
+        pendingText = '';
+        currentPromptDelta = prompts.length;
+        consoleList.append(`<span class="former-prompt">${text}</span>`);
+        break;
+      }
+      return;
     default: return;
   }
   event.preventDefault();
