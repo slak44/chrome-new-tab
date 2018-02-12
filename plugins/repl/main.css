@@ -35,6 +35,10 @@ ol.answers {
   font-family: monospace;
 }
 
+ol.answers > li {
+  cursor: pointer;
+}
+
 div.console-text {
   flex-grow: 1;
   display: flex;
