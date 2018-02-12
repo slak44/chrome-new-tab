@@ -162,3 +162,6 @@ promptWrite.on('keyup change paste', event => {
     pendingText = promptWrite.text();
   }
 });
+
+container.find('.clear-history').click(event => historyAnswers.empty());
+container.find('.clear-console').click(event => consoleList.children(':not(.prompt)').remove());

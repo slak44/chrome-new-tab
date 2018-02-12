@@ -6,16 +6,26 @@
 div.console {
   flex-basis: 70%;
   height: 90%;
+  display: flex;
+  flex-direction: column;
 }
 
 div.console > .card-content {
-  height: 100%;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
 }
 
 div.history {
   flex-basis: 25%;
   max-width: 25%;
   height: 90%;
+  display: flex;
+  flex-direction: column;
+}
+
+div.history > .card-content {
+  flex-grow: 1;
 }
 
 ol.answers {
@@ -26,9 +36,9 @@ ol.answers {
 }
 
 div.console-text {
-  height: 95%;
+  flex-grow: 1;
   display: flex;
-  flex-flow: column;
+  flex-direction: column;
   overflow-y: auto;
   font-family: monospace;
 }
