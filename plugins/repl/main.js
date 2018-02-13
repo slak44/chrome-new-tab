@@ -99,10 +99,12 @@ const executeCommand = (function () {
 const historyAnswers = container.find('ol.answers');
 const promptWrite = container.find('span.prompt-write');
 
-const prompts = [];
+const oldPromptsKey = 'REPL-oldPrompts';
+
+const prompts = JSON.parse(localStorage.getItem(oldPromptsKey)) || [];
 const results = [];
 let pendingText = '';
-let currentPromptDelta = 0;
+let currentPromptDelta = prompts.length;
 
 function moveCursorToEnd() {
   // Adapted from: https://stackoverflow.com/a/3866442
@@ -117,7 +119,7 @@ function moveCursorToEnd() {
 promptWrite.on('keydown', event => {
   switch (event.key) {
     case 'Enter': {
-      if (event.shiftKey) return;
+      if (event.shiftKey) break;
       const text = promptWrite.text();
       promptWrite.empty();
       prompts.push(text);
@@ -138,6 +140,7 @@ promptWrite.on('keydown', event => {
       promptWrite.removeClass('hidden');
       promptWrite.focus();
       promptWrite[0].scrollIntoView(false);
+      localStorage.setItem(oldPromptsKey, JSON.stringify(prompts));
       break;
     }
     case 'ArrowUp':
