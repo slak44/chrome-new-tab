@@ -63,6 +63,11 @@ function openInNewTab(url) {
 new Command('query', 'q', data => openInNewTab(`https://www.google.com/search?q=${encodeURIComponent(data)}`));
 new Command('wolfram', 'w', data => openInNewTab(`http://www.wolframalpha.com/input/?i=${encodeURIComponent(data)}`));
 
+new Command('clear', null, () => {
+  container.find('.clear-console').click();
+  return 'Cleared';
+});
+
 // Command syntax: `!COMMAND_NAME ARGS`
 // ARGS will be passed as a string to each command
 const executeCommand = (function () {
