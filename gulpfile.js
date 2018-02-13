@@ -39,19 +39,24 @@ function runBundler(pluginName) {
   return bundlePlugin(pkg, pluginDirPath, outputPath);
 }
 
+const pluginArray = ['fade', 'reddit', 'repl', 'timedate', 'title'];
+
 gulp.task('plugins', async done => {
   await fs.mkdirAsync(path.resolve(__dirname, 'build/plugins')).catch(err => {if (err.code !== 'EEXIST') throw err;});
-  const res = await Promise.all(['fade', 'reddit', 'repl', 'timedate', 'title'].map(p => runBundler(p).catch(e => e)));
+  const res = await Promise.all(pluginArray.map(p => runBundler(p).catch(e => e)));
   res.filter(result => result instanceof Error).forEach(console.error);
 });
 
 gulp.task('pack-plugins', () => gulp.src('build/plugins/*').pipe(zip('plugins.zip')).pipe(gulp.dest('./build/dist/')));
 
 gulp.task('watch', () => {
+  webpack(Object.assign({watch: true}, require('./webpack.config.js'))).pipe(gulp.dest('./build/src'));
   gulp.watch(copySrcGlob, ['copy-src']);
   gulp.watch(lessFiles.concat('src/global.less'), ['build-css']);
-  gulp.watch(['bundler.js', 'plugins/**/*'], ['plugins']);
-  webpack(Object.assign({watch: true}, require('./webpack.config.js'))).pipe(gulp.dest('./build/src'));
+  gulp.watch(['bundler.js'], ['plugins']);
+  pluginArray.map(name => `${path.resolve(__dirname, 'plugins', name)}/**/*`).forEach((glob, idx) => {
+    gulp.watch(glob, async () => await runBundler(pluginArray[idx]).catch(e => e));
+  });
 });
 
 gulp.task('default', sequence(['build-css', 'copy-src', 'copy-deps'], 'watch'));
