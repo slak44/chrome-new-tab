@@ -1,13 +1,16 @@
 {
   "pluginName": "REPL",
-  "version": "4.0.1",
+  "version": "4.1.0",
   "description": "Read-Eval-Print-Loop: a pretty JS console",
   "author": "Slak44",
-  "webpackConfig": "../plugin.webpack.config.js",
+  "webpackConfig": "webpack.config.js",
   "dependencies": {
+    "ansi-to-html": "^0.6.4",
     "highlight.js": "^9.12.0",
+    "insect": "^5.0.0",
     "js-quantities": "^1.6.3",
-    "money": "^0.2.0"
+    "money": "^0.2.0",
+    "setimmediate": "^1.0.5"
   },
   "html": {
     "main": {
