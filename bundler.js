@@ -58,8 +58,8 @@ async function bundlePlugin(pkg, pluginDirPath, outputPath) {
     const memfs = new MemoryFS();
     compiler.outputFileSystem = memfs;
     const stats = await (bluebird.promisify(compiler.run, {context: compiler}))();
-    if (stats.hasErrors()) console.error(stats.toJson().errors);
-    if (stats.hasWarnings()) console.warn(stats.toJson().warnings);
+    if (stats.hasErrors()) console.error(stats.toJson().errors.join('\n\n'));
+    if (stats.hasWarnings()) console.warn(stats.toJson().warnings.join('\n\n'));
     hooks.forEach(hook => pluginObject.js[hook] =
       `(function (api) {\n${memfs.readFileSync(`/${hook}.js`)}\n})(window.bindApi('${pkg.pluginName}'))`);
   }
