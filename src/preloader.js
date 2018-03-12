@@ -1,8 +1,12 @@
 'use strict';
 
 import 'storage';
-import activateTheme from 'theme-loader';
+import {tryLoadingPrecompiledStyles, switchTheme} from 'theme-loader';
+
+const themeLoaded = tryLoadingPrecompiledStyles();
 
 storage.loadAll(() => {
-  activateTheme(themes[currentThemeIdx] || require('json-loader!default-theme'));
+  if (themeLoaded) return;
+  const theme = themes[currentThemeIdx] || require('json-loader!default-theme');
+  switchTheme(theme, true);
 });
