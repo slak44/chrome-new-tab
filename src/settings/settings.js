@@ -5,7 +5,6 @@ import {addThemeSettingsUI, initialUISetup as initialThemeUISetup, newTheme} fro
 import {addSettingCard as addButtonSettingCard, newSettingCard as newButtonSettingCard,
   sorted as sortedButtons, insertButton} from 'buttons';
 import {initPluginSettingsUI, appendPluginUI, initNewPlugins} from 'plugins';
-import {clearCompiledCache} from 'theme-loader';
 
 /*
   Any time the user changes something, set this to false. When they save, reset it to false.
@@ -142,7 +141,7 @@ $('#floating-save-button').click(event => {
 
   window.changesMade = false;
   Materialize.Toast.removeAll();
-  clearCompiledCache();
+  storage.clearAllCached();
   storage.storeAll(() => {
     if (shouldReload) location.reload();
   });
