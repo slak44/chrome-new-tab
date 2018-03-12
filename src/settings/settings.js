@@ -53,6 +53,8 @@ const updateButtonPreview = (function () {
 
 $('#version-string').text(`version ${chrome.runtime.getManifest().version}`);
 
+$('#show-backup-content').click(() => $('#backup-content').removeClass('hidden'));
+
 $('#copy-backup').click(() => {
   $('#backup-content').focus();
   $('#backup-content').select();
