@@ -1,7 +1,7 @@
 'use strict';
 
 import 'storage';
-import {tryLoadingPrecompiledStyles, switchTheme} from 'theme-loader';
+import {switchTheme} from 'theme-loader';
 
 const themeLoaded = storage.loadCached(storage.cacheable.precompiledStyles, styleText => {
   document.getElementById('dynamic-colors').innerText = styleText;

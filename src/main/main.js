@@ -52,10 +52,19 @@ pluginApi.popActivity = plugin => {
 
 $('.activity-up-btn').click(pluginApi.popActivity);
 
+const buttonsLoaded = storage.loadCached(storage.cacheable.buttons, buttonsText => {
+  window.buttons = JSON.parse(buttonsText);
+  buttons.forEach(button => insertButton(button, $('#buttons')[0]));
+});
+
 $(document).ready(() => {
   plugins.forEach(plugin => runViewContent(plugin, 'global'));
   plugins.forEach(plugin => runViewContent(plugin, 'main'));
-  sortedButtons().forEach(button => insertButton(button, $('#buttons')[0]));
+  if (!buttonsLoaded) {
+    const sorted = sortedButtons();
+    sorted.forEach(button => insertButton(button, $('#buttons')[0]));
+    storage.storeCached(storage.cacheable.buttons, JSON.stringify(sorted));
+  }
 });
 
 $(document).on('keydown', e => {
