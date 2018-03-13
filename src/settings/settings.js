@@ -5,6 +5,8 @@ import {addThemeSettingsUI, initialUISetup as initialThemeUISetup, newTheme} fro
 import {addSettingCard as addButtonSettingCard, newSettingCard as newButtonSettingCard,
   sorted as sortedButtons, insertButton} from 'buttons';
 import {initPluginSettingsUI, appendPluginUI, initNewPlugins} from 'plugins';
+import JSZip from 'jszip';
+import {Base64} from 'js-base64';
 
 /*
   Any time the user changes something, set this to false. When they save, reset it to false.
@@ -15,6 +17,10 @@ window.changesMade = false;
 $(window).on('beforeunload', () => {
   if (window.changesMade) return true;
 });
+
+function stringifyAllData() {
+  return JSON.stringify({buttons, currentThemeIdx, themes, plugins});
+}
 
 storageLoad.then(() => {
   plugins.forEach(plugin => runViewContent(plugin, 'global'));
@@ -30,7 +36,7 @@ storageLoad.then(() => {
   addButtonCards();
   updateButtonPreview();
 
-  $('#backup-content').text(JSON.stringify({buttons, currentThemeIdx, themes, plugins}));
+  $('#backup-content').text(stringifyAllData());
   $('#backup-modal').modal();
   $('#restore-modal').modal();
   $('#defaults-modal').modal();
@@ -55,17 +61,22 @@ $('#version-string').text(`version ${chrome.runtime.getManifest().version}`);
 $('#show-backup-content').click(() => $('#backup-content').removeClass('hidden'));
 
 $('#copy-backup').click(() => {
-  $('#backup-content').focus();
-  $('#backup-content').select();
+  $('#backup-copy-helper').text(Base64.encode(stringifyAllData()));
+  $('#backup-copy-helper').focus();
+  $('#backup-copy-helper').select();
   document.execCommand('copy');
   Materialize.toast($('<span>Copied</span>'), SHORT_DURATION_MS);
 });
 
 $('#download-backup').click(() => {
   const anchor = document.createElement('a');
-  anchor.download = 'newtab-settings.bck';
-  anchor.href = `data:text/plain;charset=UTF-8,${$('#backup-content').text()}`;
-  anchor.click();
+  anchor.download = 'newtab-settings.bck.zip';
+  const zip = new JSZip();
+  zip.file('backup.txt', stringifyAllData(), {compression: 'DEFLATE'});
+  zip.generateAsync({type: 'base64'}).then(data => {
+    anchor.href = `data:application/zip;base64,${data}`;
+    anchor.click();
+  });
 });
 
 function restore(fromText) {
@@ -76,20 +87,24 @@ function restore(fromText) {
     console.error(err);
     return;
   }
-  storage.storeAll().then(location.reload);
+  storage.storeAll().then(() => location.reload());
 }
 
-$('#paste-restore').click(() => restore($('#restore-content').val()));
+$('#paste-restore').click(() => restore(Base64.decode($('#restore-content').val())));
 
 $('#upload-restore').click(() => {
   const file = $('#restore-file')[0].files[0];
   const reader = new FileReader();
-  reader.addEventListener('loadend', event => restore(event.target.result));
-  reader.readAsText(file);
+  reader.addEventListener('loadend', event => {
+    const zip = new JSZip();
+    zip.loadAsync(event.target.result).then(zip => zip.file('backup.txt').async('string').then(restore));
+  });
+  reader.readAsArrayBuffer(file);
 });
 
 $('#restore-defaults').click(() => {
   storage.clearAll();
+  storage.clearAllCached();
   location.reload();
 });
 

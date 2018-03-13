@@ -14,7 +14,11 @@
   overflow-y: auto;
 }
 
-#backup-modal textarea {
+#backup-modal > .modal-content {
+  overflow: hidden;
+}
+
+#backup-content {
   width: 100%;
   height: 80%;
   font-family: monospace;
@@ -23,6 +27,17 @@
   cursor: text;
   word-wrap: break-word;
   word-break: break-all;
+}
+
+#backup-copy-helper {
+  // This thing has to be like this for document.execCommand('copy')
+  height: 1px;
+  width: 1px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: clip;
+  user-select: text;
+  transform: translateY(-99999px); /* fuck off the screen */
 }
 
 .section-container {
