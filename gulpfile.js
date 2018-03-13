@@ -24,6 +24,12 @@ gulp.task('copy-src', () => gulp.src(copySrcGlob).pipe(gulp.dest('./build/src'))
 gulp.task('copy-deps', () => {
   gulp.src('node_modules/materialize-css/dist/fonts/roboto/*').pipe(gulp.dest('./build/src/fonts/roboto'));
   gulp.src('node_modules/material-design-icons/iconfont/*').pipe(gulp.dest('./build/src/fonts/material-design-icons'));
+  gulp.src('node_modules/material-design-icons/action/svg/production/ic_settings_48px.svg')
+    .pipe(gulp.dest('./build/src/settings-favicons'));
+  gulp.src('node_modules/material-design-icons/action/2x_web/ic_settings_black_*.png')
+    .pipe(gulp.dest('./build/src/settings-favicons'));
+  gulp.src('node_modules/material-design-icons/action/2x_web/ic_tab_black_*.png')
+    .pipe(gulp.dest('./build/src/extension-icons'));
 });
 
 gulp.task('extension', async () => {
