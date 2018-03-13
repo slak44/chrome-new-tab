@@ -12,6 +12,7 @@
 
     "chrome": false,
     "storage": false,
+    "storageLoad": false,
 
     "Materialize": false,
     "$": false,

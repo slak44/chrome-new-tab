@@ -3,12 +3,16 @@
 import 'storage';
 import {switchTheme} from 'theme-loader';
 
-const themeLoaded = storage.loadCached(storage.cacheable.precompiledStyles, styleText => {
+let themeLoaded = false;
+storage.loadCached(storage.cacheable.precompiledStyles).then(styleText => {
+  if (styleText === null) return;
+  themeLoaded = true;
   document.getElementById('dynamic-colors').innerText = styleText;
 });
 
-storage.loadAll(() => {
-  if (themeLoaded) return;
+window.storageLoad = storage.loadAll().then(items => {
+  if (themeLoaded) return items;
   const theme = themes[currentThemeIdx] || require('json-loader!default-theme');
   switchTheme(theme, true);
+  return items;
 });

@@ -16,7 +16,7 @@ $(window).on('beforeunload', () => {
   if (window.changesMade) return true;
 });
 
-$(document).ready(() => {
+storageLoad.then(() => {
   plugins.forEach(plugin => runViewContent(plugin, 'global'));
   initPluginSettingsUI();
   plugins.forEach((plugin, idx) => {
@@ -76,7 +76,7 @@ function restore(fromText) {
     console.error(err);
     return;
   }
-  storage.storeAll(location.reload);
+  storage.storeAll().then(location.reload);
 }
 
 $('#paste-restore').click(() => restore($('#restore-content').val()));
@@ -142,7 +142,7 @@ $('#floating-save-button').click(event => {
   window.changesMade = false;
   Materialize.Toast.removeAll();
   storage.clearAllCached();
-  storage.storeAll(() => {
+  storage.storeAll().then(() => {
     if (shouldReload) location.reload();
   });
 });

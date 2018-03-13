@@ -52,12 +52,15 @@ pluginApi.popActivity = plugin => {
 
 $('.activity-up-btn').click(pluginApi.popActivity);
 
-const buttonsLoaded = storage.loadCached(storage.cacheable.buttons, buttonsText => {
+let buttonsLoaded = false;
+storage.loadCached(storage.cacheable.buttons).then(buttonsText => {
+  if (buttonsText === null) return;
+  buttonsLoaded = true;
   window.buttons = JSON.parse(buttonsText);
   buttons.forEach(button => insertButton(button, $('#buttons')[0]));
 });
 
-$(document).ready(() => {
+storageLoad.then(() => {
   plugins.forEach(plugin => runViewContent(plugin, 'global'));
   plugins.forEach(plugin => runViewContent(plugin, 'main'));
   if (!buttonsLoaded) {
