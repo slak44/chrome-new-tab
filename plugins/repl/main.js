@@ -3,8 +3,8 @@
 const Prompt = require('./prompt.js');
 const {evalJs, Command} = require('./defaultEvaluate.js');
 
-api.insertStyle(`#repl-activity .console-text {background-color: ${themes[currentThemeIdx].background};}`);
-api.insertStyle(`#repl-activity .history span.selection {background-color: ${themes[currentThemeIdx].accent};}`);
+api.insertStyle(`#repl-activity .console-text {background-color: ${stored.themes[stored.currentThemeIdx].background};}`);
+api.insertStyle(`#repl-activity .history span.selection {background-color: ${stored.themes[stored.currentThemeIdx].accent};}`);
 
 const container = $('#repl-activity');
 const consoleList = container.find('.console-text');

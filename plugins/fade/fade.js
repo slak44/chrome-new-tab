@@ -2,9 +2,9 @@
 
 const selector = api.setting('Featured Data');
 
-$('#fade-overlay').css('background-color', themes[currentThemeIdx].background);
+$('#fade-overlay').css('background-color', stored.themes[stored.currentThemeIdx].background);
 // If the theme is light, invert it to get a dark background
-if (!themes[currentThemeIdx].isDark) $('#fade-overlay').addClass('invert');
+if (!stored.themes[stored.currentThemeIdx].isDark) $('#fade-overlay').addClass('invert');
 
 let timeSinceLastMove = 0;
 setInterval(() => {

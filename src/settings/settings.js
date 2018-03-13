@@ -18,25 +18,21 @@ $(window).on('beforeunload', () => {
   if (window.changesMade) return true;
 });
 
-function stringifyAllData() {
-  return JSON.stringify({buttons, currentThemeIdx, themes, plugins});
-}
-
 storageLoad.then(() => {
-  plugins.forEach(plugin => runViewContent(plugin, 'global'));
+  stored.plugins.forEach(plugin => runViewContent(plugin, 'global'));
   initPluginSettingsUI();
-  plugins.forEach((plugin, idx) => {
+  stored.plugins.forEach((plugin, idx) => {
     runViewContent(plugin, 'settings');
     appendPluginUI(plugin, idx);
   });
 
-  themes.forEach(addThemeSettingsUI);
+  stored.themes.forEach(addThemeSettingsUI);
   initialThemeUISetup();
 
   addButtonCards();
   updateButtonPreview();
 
-  $('#backup-content').text(stringifyAllData());
+  $('#backup-content').text(JSON.stringify(stored));
   $('#backup-modal').modal();
   $('#restore-modal').modal();
   $('#defaults-modal').modal();
@@ -61,7 +57,7 @@ $('#version-string').text(`version ${chrome.runtime.getManifest().version}`);
 $('#show-backup-content').click(() => $('#backup-content').removeClass('hidden'));
 
 $('#copy-backup').click(() => {
-  $('#backup-copy-helper').text(Base64.encode(stringifyAllData()));
+  $('#backup-copy-helper').text(Base64.encode(JSON.stringify(stored)));
   $('#backup-copy-helper').focus();
   $('#backup-copy-helper').select();
   document.execCommand('copy');
@@ -72,7 +68,7 @@ $('#download-backup').click(() => {
   const anchor = document.createElement('a');
   anchor.download = 'newtab-settings.bck.zip';
   const zip = new JSZip();
-  zip.file('backup.txt', stringifyAllData(), {compression: 'DEFLATE'});
+  zip.file('backup.txt', JSON.stringify(stored), {compression: 'DEFLATE'});
   zip.generateAsync({type: 'base64'}).then(data => {
     anchor.href = `data:application/zip;base64,${data}`;
     anchor.click();
@@ -81,7 +77,7 @@ $('#download-backup').click(() => {
 
 function restore(fromText) {
   try {
-    ({buttons, currentThemeIdx, themes, plugins} = JSON.parse(fromText));
+    stored = JSON.parse(fromText);
   } catch (err) {
     Materialize.toast($('<span>Failed to restore data (parse error, check data)</span>'), SHORT_DURATION_MS);
     console.error(err);
@@ -143,9 +139,9 @@ $('#theme-file-add').change(event => {
 });
 
 $('#floating-save-button').click(event => {
-  buttons = buttons.filter(button => !button.deleted);
-  themes = themes.filter(theme => !theme.deleted);
-  plugins = plugins.filter(plugin => !plugin.deleted);
+  stored.buttons = stored.buttons.filter(button => !button.deleted);
+  stored.themes = stored.themes.filter(theme => !theme.deleted);
+  stored.plugins = stored.plugins.filter(plugin => !plugin.deleted);
 
   const shouldReload = initNewPlugins();
 

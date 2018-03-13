@@ -56,13 +56,13 @@ let buttonsLoaded = false;
 storage.loadCached(storage.cacheable.buttons).then(buttonsText => {
   if (buttonsText === null) return;
   buttonsLoaded = true;
-  window.buttons = JSON.parse(buttonsText);
-  buttons.forEach(button => insertButton(button, $('#buttons')[0]));
+  stored.buttons = JSON.parse(buttonsText);
+  stored.buttons.forEach(button => insertButton(button, $('#buttons')[0]));
 });
 
 storageLoad.then(() => {
-  plugins.forEach(plugin => runViewContent(plugin, 'global'));
-  plugins.forEach(plugin => runViewContent(plugin, 'main'));
+  stored.plugins.forEach(plugin => runViewContent(plugin, 'global'));
+  stored.plugins.forEach(plugin => runViewContent(plugin, 'main'));
   if (!buttonsLoaded) {
     const sorted = sortedButtons();
     sorted.forEach(button => insertButton(button, $('#buttons')[0]));
@@ -72,6 +72,6 @@ storageLoad.then(() => {
 
 $(document).on('keydown', e => {
   if (e.altKey) location.replace(
-    buttons.find(button => button.hotkey && button.hotkey.toUpperCase().charCodeAt() === e.keyCode).href
+    stored.buttons.find(button => button.hotkey && button.hotkey.toUpperCase().charCodeAt() === e.keyCode).href
   );
 });

@@ -3,9 +3,9 @@ const userUrl = `https://www.reddit.com/user/${api.setting('Reddit username')}`;
 
 const html = $.parseHTML(
   `<h5>
-    <a id="comment-karma" href="${userUrl}" style="color: ${themes[currentThemeIdx].accent}">?</a> comment karma
+    <a id="comment-karma" href="${userUrl}" style="color: ${stored.themes[stored.currentThemeIdx].accent}">?</a> comment karma
     <br>
-    <a id="link-karma" href="${userUrl}" style="color: ${themes[currentThemeIdx].accent}">?</a> link karma
+    <a id="link-karma" href="${userUrl}" style="color: ${stored.themes[stored.currentThemeIdx].accent}">?</a> link karma
   </h5>`
 );
 

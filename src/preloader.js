@@ -12,7 +12,7 @@ storage.loadCached(storage.cacheable.precompiledStyles).then(styleText => {
 
 window.storageLoad = storage.loadAll().then(items => {
   if (themeLoaded) return items;
-  const theme = themes[currentThemeIdx] || require('json-loader!default-theme');
+  const theme = stored.themes[stored.currentThemeIdx] || require('json-loader!default-theme');
   switchTheme(theme, true);
   return items;
 });
