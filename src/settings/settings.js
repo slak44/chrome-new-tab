@@ -159,6 +159,8 @@ $('#floating-save-button').click(event => {
   Materialize.updateTextFields();
   updateButtonPreview();
 
+  $('i.warning').addClass('hidden');
+
   window.changesMade = false;
   Materialize.Toast.removeAll();
   storage.clearAllCached();
