@@ -91,9 +91,12 @@ nav {
     width: 100%;
   }
   &.fixed.clipped {
-    padding-top: @nav-height + 8px;
+    margin-top: @nav-height;
+    padding-top: 8px;
+    height: calc(~"100% -" @nav-height);
     &.with-tabs {
-      padding-top: @nav-with-tabs-height + 8px;
+      margin-top: @nav-with-tabs-height;
+      height: calc(~"100% -" @nav-with-tabs-height);
     }
   }
   li {
