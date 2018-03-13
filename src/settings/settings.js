@@ -19,6 +19,15 @@ $(window).on('beforeunload', () => {
 });
 
 storageLoad.then(() => {
+  if (!stored.hasSeenSaveButton) {
+    $('.tap-target').tapTarget('open');
+    $(document).on('click.feature-discovery', () => {
+      $('.tap-target').tapTarget('close');
+      stored.hasSeenSaveButton = true;
+      storage.store('hasSeenSaveButton');
+      $(document).off('click.feature-discovery');
+    });
+  }
   stored.plugins.forEach(plugin => runViewContent(plugin, 'global'));
   initPluginSettingsUI();
   stored.plugins.forEach((plugin, idx) => {
