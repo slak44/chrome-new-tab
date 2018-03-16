@@ -16,7 +16,21 @@
     {
       "name": "Alignment",
       "desc": "Which section to use: left, center, or right",
-      "type": "text",
+      "type": "enum",
+      "valid": [
+        {
+          "name": "Left",
+          "value": "left"
+        },
+        {
+          "name": "Center",
+          "value": "center"
+        },
+        {
+          "name": "Right",
+          "value": "right"
+        }
+      ],
       "default": "left",
       "value": "",
       "isVisible": true

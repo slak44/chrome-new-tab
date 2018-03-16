@@ -161,8 +161,15 @@ nav {
   i.prefix, i.postfix {
     align-self: center;
   }
-  i.postfix + input {
+  i.postfix + input,
+  i.postfix + div.select-wrapper {
     margin-right: 3rem;
+  }
+  div.select-wrapper:not(.inline-select) {
+    width: 100%;
+    &.no-caret > span.caret {
+      display: none;
+    }
   }
 }
 
