@@ -2,7 +2,7 @@
   "manifest_version": 2,
 
   "name": "Custom New Tab",
-  "version": "7.1.5",
+  "version": "7.1.6",
   "chrome_url_overrides": {
     "newtab": "/main.html"
   },
