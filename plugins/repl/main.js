@@ -32,6 +32,8 @@ function addResultToHistory(resText) {
     window.ans = results[res.data('result-idx')];
   });
   historyAnswers.append(res);
+  res.focus();
+  res[0].scrollIntoView(false);
 }
 
 promptWrite.on('keydown', event => {
