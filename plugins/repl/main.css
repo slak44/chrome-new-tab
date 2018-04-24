@@ -12,7 +12,8 @@ div.console {
   word-break: break-all;
 }
 
-div.console > .card-content {
+div.console > .card-content,
+div.history > .card-content {
   flex-grow: 1;
   display: flex;
   flex-direction: column;
@@ -24,10 +25,6 @@ div.history {
   height: 90%;
   display: flex;
   flex-direction: column;
-}
-
-div.history > .card-content {
-  flex-grow: 1;
 }
 
 ol.answers {
