@@ -92,6 +92,7 @@ function restore(fromText) {
     console.error(err);
     return;
   }
+  storage.clearAllCached();
   storage.storeAll().then(() => location.reload());
 }
 
