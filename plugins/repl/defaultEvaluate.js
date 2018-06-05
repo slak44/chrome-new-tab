@@ -41,12 +41,34 @@ new Command('convert', 'cv', stringArgs => {
 });
 
 new Command('winrate', 'wr', stringArgs => {
-  /* eslint-disable no-magic-numbers */
-  const args = stringArgs.split(' ');
-  const [wins, losses] = args.map(arg => parseInt(arg, 10));
-  const winrate = wins * 100 / (losses + wins);
+  const args = stringArgs.split(' ').filter(arg => !/^\s+$/.test(arg));
+  if (args.length !== 2) throw Error('Too many or too few arguments; need 2');
+  let wins = null;
+  let losses = null;
+  let total = null;
+  const others = [];
+  args.forEach(arg => {
+    const testNr = Number(arg.slice(0, -1));
+    if (isNaN(testNr)) throw Error(`Bad format for "${arg}" (only the last char can specify type)`);
+    const kind = arg[arg.length - 1].toLowerCase();
+    let nr;
+    if (/^\d$/.test(kind)) nr = Number(arg);
+    else nr = testNr;
+    if (isNaN(nr) || arg === '') throw Error(`Bad format for "${arg}"`);
+    if (kind === 'w') wins = nr;
+    else if (kind === 'l') losses = nr;
+    else if (kind === 't') total = nr;
+    else others.push(nr);
+  });
+  let winrate;
+  if (others.length === 1) throw Error('Can\'t mix typed and untyped values');
+  if (others.length === 2) [wins, losses] = others;
+  if (wins === null) winrate = 100 - (losses * 100 / total);
+  else if (losses === null) winrate = wins * 100 / total;
+  else if (total === null) winrate = wins * 100 / (losses + wins);
+  else throw Error('Illegal state, enough args but not enough data to calculate winrate');
+  console.log(wins, losses, total, others, winrate);
   return `${winrate.toFixed(2)}%`;
-  /* eslint-enable no-magic-numbers */
 });
 
 function openInNewTab(url) {
