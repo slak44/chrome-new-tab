@@ -1,6 +1,6 @@
 {
   "pluginName": "REPL",
-  "version": "4.1.3",
+  "version": "5.0.0",
   "description": "Read-Eval-Print-Loop: a pretty JS console",
   "author": "Slak44",
   "webpackConfig": "webpack.config.js",
@@ -25,5 +25,14 @@
   "js": {
     "main": "main.js",
     "global": "registerAction.js"
-  }
+  },
+  "settings": [
+    {
+      "name": "openexchangerates.org App ID",
+      "desc": "The !convert command can also convert between currencies if this is set",
+      "type": "text",
+      "default": "",
+      "isVisible": true
+    }
+  ]
 }

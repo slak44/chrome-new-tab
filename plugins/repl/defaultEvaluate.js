@@ -4,8 +4,11 @@ const fx = require('money');
 const Qty = require('js-quantities');
 
 // Get current exchange rates
-$.get('https://api.fixer.io/latest', data => fx.rates = data.rates, 'json');
-fx.base = 'EUR';
+const appId = api.setting('openexchangerates.org App ID');
+$.get(`https://openexchangerates.org/api/latest.json?app_id=${appId}`, data => {
+  fx.rates = data.rates;
+  fx.base = data.base;
+}, 'json');
 
 const commands = [];
 // Command syntax: `!COMMAND_NAME ARGS`
