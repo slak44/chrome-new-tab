@@ -32,9 +32,9 @@
 }
 
 body {
-  margin: 0px;
-  padding: 0px;
-  border: 0px;
+  margin: 0;
+  padding: 0;
+  border: 0;
   overflow: hidden;
   cursor: default;
   -webkit-user-select: none;
@@ -61,7 +61,7 @@ img {
 
 nav {
   &.row {
-    margin-bottom: 0px;
+    margin-bottom: 0;
   }
   &.nav-wrapper {
     z-index: 1000;
@@ -71,7 +71,7 @@ nav {
     height: @nav-with-tabs-height;
     & > .tabs {
       background-color: inherit;
-      margin-bottom: 0px;
+      margin-bottom: 0;
     }
   }
   .menu.overflow {
@@ -103,8 +103,8 @@ nav {
     @item-height: @material-icon-height;
     @material-icon-right-padding: 32px;
     a > i.material-icons.right {
-      margin: 0px;
-      margin-right: -@material-icon-right-padding; /* we are aligned to the right, negate padding */
+      // We are aligned to the right, negate padding
+      margin: 0 -@material-icon-right-padding 0 0;
     }
     a > i.material-icons.waves-effect {
       text-align: center;
@@ -113,7 +113,7 @@ nav {
     a > img.button-image {
       // This image emulates a material icon
       @img-vertical-margin: 4px;
-      margin: @img-vertical-margin @material-icon-right-padding @img-vertical-margin 0px;
+      margin: @img-vertical-margin @material-icon-right-padding @img-vertical-margin 0;
       height: @material-icon-height - 2 * @img-vertical-margin;
       width: @material-icon-size;
       object-fit: contain;
@@ -140,13 +140,13 @@ nav {
 .input-field {
   display: flex;
   &.col:first-child {
-    padding-left: 0px;
+    padding-left: 0;
     label {
       left: 0;
     }
   }
   &.col:last-child {
-    padding-right: 0px;
+    padding-right: 0;
   }
   i.postfix {
     top: 6px; /* arbitrary */
@@ -205,7 +205,7 @@ input[type="color"] {
   -webkit-appearance: unset;
   outline: none;
   border: none;
-  padding: 0px;
+  padding: 0;
   cursor: pointer;
   width: 150px; /* arbitrary */
   height: 75px; /* arbitrary */
