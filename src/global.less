@@ -86,7 +86,10 @@ nav {
 }
 
 @side-nav-width: 300px; // from materialize
-.side-nav {
+.side-nav.fixed {
+  @media only screen and (max-width: 992px) {
+    transform: unset;
+  }
   &.fixed > li {
     width: 100%;
   }
