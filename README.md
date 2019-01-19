@@ -2,6 +2,9 @@
 
 A chrome extension that replaces the new tab.
 
+Example configuration:
+![Example Image](new-tab-example.png)
+
 ## Installation
 
 Download `ext.crx` and `plugins.zip` from [here](https://github.com/slak44/ChromeNewTab/releases/latest).
