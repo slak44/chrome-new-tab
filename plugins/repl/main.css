@@ -17,6 +17,7 @@ div.history > .card-content {
   flex-grow: 1;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
 }
 
 div.history {
@@ -42,7 +43,7 @@ div.console-text {
   flex-grow: 1;
   display: flex;
   flex-direction: column;
-  overflow-y: auto;
+  overflow-y: scroll;
   font-family: monospace;
 }
 
