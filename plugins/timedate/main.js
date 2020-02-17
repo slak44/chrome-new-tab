@@ -12,10 +12,12 @@ const html = $.parseHTML(
 );
 api.insertView(html[0], api.setting('Order in section'), api.setting('Alignment'));
 
-setTimeout(function setTime() {
+function setTime() {
   const d = new Date();
   $('#time').text(d.toLocaleTimeString(api.setting('Time Locale'), {hour: '2-digit', minute: '2-digit', hour12: false}));
   $('#weekday').text(d.toLocaleDateString(api.setting('Weekday Locale'), {weekday: 'long'}));
   $('#date').text(d.toLocaleDateString(api.setting('Date Locale'), {month: 'long', day: '2-digit', year: 'numeric'}));
-  setTimeout(setTime, timeUpdateInterval);
-}, 0);
+}
+
+setTime();
+setInterval(setTime, timeUpdateInterval);
