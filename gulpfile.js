@@ -66,7 +66,7 @@ gulp.task('watch', () => {
 });
 
 gulp.task('default', sequence(['build-css', 'copy-src', 'copy-deps'], 'watch'));
-gulp.task('build', ['build-js', 'build-css', 'copy-src', 'copy-deps']);
+gulp.task('build', gulp.parallel(['build-js', 'build-css', 'copy-src', 'copy-deps']));
 gulp.task('pack', sequence(['build', 'extension', 'plugins', 'pack-plugins']));
 
 function versionTask(bumpType) {
