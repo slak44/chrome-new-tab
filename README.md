@@ -4,6 +4,8 @@ A chrome extension that replaces the new tab.
 
 Example configuration:
 ![Example Image](new-tab-example.png)
+![Example Button Settings](button-settings-example.png)
+![Example Theme Settings](theme-settings-example.png)
 
 ## Installation
 
