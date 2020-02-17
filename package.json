@@ -16,7 +16,7 @@
     "gulp-less": "^3.4.0",
     "gulp-sequence": "^0.4.6",
     "gulp-zip": "^3.2.0",
-    "jquery": "^3.2.1",
+    "jquery": "^3.4.0",
     "js-base64": "^2.4.3",
     "json-loader": "^0.5.7",
     "jszip": "^3.1.5",
