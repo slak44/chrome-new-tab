@@ -1,18 +1,21 @@
 'use strict';
 
-const webpack = require('webpack');
-const path = require('path');
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 
 module.exports = {
   module: {
-    loaders: [{
+    rules: [{
       test: /.js$/,
       loader: 'babel-loader',
       exclude: /node_modules/,
-      query: {presets: ['latest']}
+      options: {presets: ['@babel/preset-env']}
     }]
   },
-  plugins: [
-    new webpack.optimize.UglifyJsPlugin()
-  ]
+  optimization: {
+    minimizer: [
+      new UglifyJsPlugin({
+        include: [/src\//]
+      })
+    ]
+  }
 };

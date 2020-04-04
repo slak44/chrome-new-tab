@@ -1,7 +1,6 @@
 'use strict';
 
 const gulp = require('gulp');
-const sequence = require('gulp-sequence');
 const less = require('gulp-less');
 const webpack = require('webpack-stream');
 const zip = require('gulp-zip');
@@ -9,7 +8,6 @@ const packCrx = require('gulp-crx-pack');
 const gulpBump = require('gulp-bump');
 const path = require('path');
 const bluebird = require('bluebird');
-const cp = bluebird.promisifyAll(require('child_process'), {multiArgs: true});
 const fs = bluebird.promisifyAll(require('fs'));
 const bundlePlugin = require('./bundler.js');
 
@@ -21,7 +19,7 @@ gulp.task('build-css', () => gulp.src(lessFiles).pipe(less()).pipe(gulp.dest('./
 const copySrcGlob = ['src/main/main.html', 'src/settings/settings.html', 'src/manifest.json'];
 gulp.task('copy-src', () => gulp.src(copySrcGlob).pipe(gulp.dest('./build/src')));
 
-gulp.task('copy-deps', () => {
+gulp.task('copy-deps', done => {
   gulp.src('node_modules/materialize-css/dist/fonts/roboto/*').pipe(gulp.dest('./build/src/fonts/roboto'));
   gulp.src('node_modules/material-design-icons/iconfont/*').pipe(gulp.dest('./build/src/fonts/material-design-icons'));
   gulp.src('node_modules/material-design-icons/action/svg/production/ic_settings_48px.svg')
@@ -30,6 +28,7 @@ gulp.task('copy-deps', () => {
     .pipe(gulp.dest('./build/src/settings-favicons'));
   gulp.src('node_modules/material-design-icons/action/2x_web/ic_tab_black_*.png')
     .pipe(gulp.dest('./build/src/extension-icons'));
+  done();
 });
 
 gulp.task('extension', async () => {
@@ -65,9 +64,9 @@ gulp.task('watch', () => {
   });
 });
 
-gulp.task('default', sequence(['build-css', 'copy-src', 'copy-deps'], 'watch'));
+gulp.task('default', gulp.series(['build-css', 'copy-src', 'copy-deps'], 'watch'));
 gulp.task('build', gulp.parallel(['build-js', 'build-css', 'copy-src', 'copy-deps']));
-gulp.task('pack', sequence(['build', 'extension', 'plugins', 'pack-plugins']));
+gulp.task('pack', gulp.series(['build', 'extension', 'plugins', 'pack-plugins']));
 
 function versionTask(bumpType) {
   return () => gulp.src(['package.json', 'src/manifest.json'], {base: './'}).pipe(gulpBump({type: bumpType})).pipe(gulp.dest('./'));

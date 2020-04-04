@@ -1,6 +1,7 @@
 'use strict';
 
 import 'storage';
+import defaultTheme from 'default-theme';
 import {switchTheme} from 'theme-loader';
 
 let themeLoaded = false;
@@ -12,7 +13,7 @@ storage.loadCached(storage.cacheable.precompiledStyles).then(styleText => {
 
 window.storageLoad = storage.loadAll().then(items => {
   if (themeLoaded) return items;
-  const theme = stored.themes[stored.currentThemeIdx] || require('json-loader!default-theme');
+  const theme = stored.themes[stored.currentThemeIdx] || defaultTheme;
   switchTheme(theme, true);
   return items;
 });

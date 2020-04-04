@@ -1,6 +1,6 @@
 'use strict';
 
-const webpack = require('webpack');
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const path = require('path');
 
 module.exports = {
@@ -16,16 +16,18 @@ module.exports = {
     filename: '[name].min.js'
   },
   module: {
-    loaders: [{
+    rules: [{
       test: /.js$/,
       loader: 'babel-loader',
       include: path.resolve(__dirname, 'src'),
-      query: {presets: ['latest']}
+      options: {presets: ['@babel/preset-env']}
     }]
   },
-  plugins: [
-    new webpack.optimize.UglifyJsPlugin({
-      include: [/src\//]
-    })
-  ]
+  optimization: {
+    minimizer: [
+      new UglifyJsPlugin({
+        include: [/src\//]
+      })
+    ]
+  }
 };
