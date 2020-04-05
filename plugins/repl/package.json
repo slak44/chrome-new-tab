@@ -1,6 +1,6 @@
 {
   "pluginName": "REPL",
-  "version": "5.0.2",
+  "version": "5.0.3",
   "description": "Read-Eval-Print-Loop: a pretty JS console",
   "author": "Slak44",
   "webpackConfig": "webpack.config.js",

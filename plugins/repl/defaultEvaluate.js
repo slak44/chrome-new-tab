@@ -5,10 +5,24 @@ const Qty = require('js-quantities');
 
 // Get current exchange rates
 const appId = api.setting('openexchangerates.org App ID');
-$.get(`https://openexchangerates.org/api/latest.json?app_id=${appId}`, data => {
-  fx.rates = data.rates;
-  fx.base = data.base;
-}, 'json');
+const dataKey = 'replExchangeRatesCacheKey';
+const oneDay = 24 * 60 * 60 * 1000;
+
+const cached = JSON.parse(localStorage.getItem(dataKey));
+const isCacheInvalid = !cached || !cached.expiryDate || Date.now() > cached.expiryDate;
+if (!isCacheInvalid) {
+  fx.rates = cached.rates;
+  fx.base = cached.base;
+} else {
+  $.get(`https://openexchangerates.org/api/latest.json?app_id=${appId}`, data => {
+    localStorage.setItem(dataKey, JSON.stringify({
+      ...data,
+      expiryDate: Date.now() + oneDay
+    }));
+    fx.rates = data.rates;
+    fx.base = data.base;
+  }, 'json');
+}
 
 const commands = [];
 // Command syntax: `!COMMAND_NAME ARGS`
