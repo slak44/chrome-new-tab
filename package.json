@@ -15,7 +15,7 @@
     "gulp-crx-pack": "^1.0.2",
     "gulp-less": "^3.5.0",
     "gulp-zip": "^3.2.0",
-    "jquery": "^3.4.1",
+    "jquery": "^3.5.0",
     "js-base64": "^2.5.2",
     "json-loader": "^0.5.7",
     "jszip": "^3.3.0",
