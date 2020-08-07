@@ -20,7 +20,7 @@ module.exports = {
       test: /.js$/,
       loader: 'babel-loader',
       include: path.resolve(__dirname, 'src'),
-      options: {presets: ['@babel/preset-env']}
+      options: {presets: ['@babel/preset-env', 'minify']}
     }]
   },
   optimization: {

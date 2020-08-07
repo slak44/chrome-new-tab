@@ -1,0 +1,73 @@
+{
+  "pluginName": "Reddit Overview",
+  "version": "1.0.0",
+  "description": "Displays recent comments and posts for a given user",
+  "author": "Slak44",
+  "webpackConfig": "../plugin.webpack.config.js",
+  "settings": [
+    {
+      "name": "Reddit username",
+      "desc": "Show overview for this user",
+      "type": "text",
+      "default": "",
+      "value": "",
+      "isVisible": true
+    },
+    {
+      "name": "Data update period",
+      "desc": "Time between data updates, in milliseconds. Updating too quickly may cause reddit to block your access",
+      "type": "number",
+      "default": 60000,
+      "value": "",
+      "isVisible": true
+    },
+    {
+      "name": "Item count",
+      "desc": "How many comments/posts to show",
+      "type": "number",
+      "default": 3,
+      "value": "3",
+      "isVisible": true
+    },
+    {
+      "name": "Alignment",
+      "desc": "Which section to use: left, center, or right",
+      "type": "enum",
+      "valid": [
+        {
+          "name": "Left",
+          "value": "left"
+        },
+        {
+          "name": "Center",
+          "value": "center"
+        },
+        {
+          "name": "Right",
+          "value": "right"
+        }
+      ],
+      "default": "left",
+      "value": "",
+      "isVisible": true
+    },
+    {
+      "name": "Order in section",
+      "desc": "The elements in a section are ordered based on this value (small values come first)",
+      "type": "number",
+      "default": 0,
+      "value": "",
+      "isVisible": true
+    }
+  ],
+  "dependencies": {},
+  "html": {},
+  "css": {
+    "main": [
+      "main.css"
+    ]
+  },
+  "js": {
+    "main": "main.js"
+  }
+}

@@ -44,7 +44,7 @@ function runBundler(pluginName) {
   return bundlePlugin(pkg, pluginDirPath, outputPath);
 }
 
-const pluginArray = ['fade', 'reddit', 'repl', 'timedate', 'title'];
+const pluginArray = ['fade', 'reddit', 'reddit-comments', 'repl', 'timedate', 'title'];
 
 gulp.task('plugins', async done => {
   await fs.mkdirAsync(path.resolve(__dirname, 'build/plugins')).catch(err => {if (err.code !== 'EEXIST') throw err;});
@@ -56,9 +56,9 @@ gulp.task('pack-plugins', () => gulp.src('build/plugins/*').pipe(zip('plugins.zi
 
 gulp.task('watch', () => {
   webpack(Object.assign({watch: true}, require('./webpack.config.js'))).pipe(gulp.dest('./build/src'));
-  gulp.watch(copySrcGlob, ['copy-src']);
-  gulp.watch(lessFiles.concat('src/global.less'), ['build-css']);
-  gulp.watch(['bundler.js'], ['plugins']);
+  gulp.watch(copySrcGlob, gulp.series('copy-src'));
+  gulp.watch(lessFiles.concat('src/global.less'), gulp.series('build-css'));
+  gulp.watch(['bundler.js'], gulp.series('plugins'));
   pluginArray.map(name => `${path.resolve(__dirname, 'plugins', name)}/**/*`).forEach((glob, idx) => {
     gulp.watch(glob, async () => await runBundler(pluginArray[idx]).catch(e => e));
   });

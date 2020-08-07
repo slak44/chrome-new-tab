@@ -1,0 +1,56 @@
+#overview-root {
+  margin-top: auto;
+}
+
+#overview-list {
+  max-width: 40vw;
+  padding-left: 0;
+}
+
+#overview-list span {
+  white-space: nowrap;
+}
+
+#overview-list > li {
+  list-style: none;
+  width: 100%;
+  padding: 16px;
+  background-color: var(--collection-background);
+  border: var(--divider) 1px solid;
+  border-top: 0;
+}
+
+#overview-list > li:first-of-type {
+  border-top: var(--divider) 1px solid;
+}
+
+#overview-list .ellipsize {
+  display: inline-block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+#overview-list .body-text {
+  width: 40vw;
+}
+
+#overview-list i.material-icons {
+  font-size: 16px;
+  margin-left: 8px;
+}
+
+#overview-list .text-divider {
+  margin: 0 8px;
+}
+
+#overview-list .text-divider::before {
+  content: "—";
+}
+
+#overview-list .line {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: center;
+}
