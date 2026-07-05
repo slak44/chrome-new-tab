@@ -5,6 +5,7 @@ import {addThemeSettingsUI, initialUISetup as initialThemeUISetup, newTheme} fro
 import {addSettingCard as addButtonSettingCard, newSettingCard as newButtonSettingCard,
   sorted as sortedButtons, insertButton} from 'buttons';
 import {initPluginSettingsUI, appendPluginUI, initNewPlugins} from 'plugins';
+import PluginHost from 'plugin-host';
 import JSZip from 'jszip';
 import {Base64} from 'js-base64';
 
@@ -28,23 +29,25 @@ storageLoad.then(() => {
       $(document).off('click.feature-discovery');
     });
   }
-  stored.plugins.forEach(plugin => runViewContent(plugin, 'global'));
-  initPluginSettingsUI();
-  stored.plugins.forEach((plugin, idx) => {
-    runViewContent(plugin, 'settings');
-    appendPluginUI(plugin, idx);
+  // Run each plugin's global + settings hooks in the sandbox. The rest of the UI
+  // is gated on this so any actions the plugins register are present before the
+  // button-action dropdown renders.
+  PluginHost.init({frameHost: $('#plugin-frame-host')[0]});
+  PluginHost.run(stored.plugins, ['global', 'settings']).then(() => {
+    initPluginSettingsUI();
+    stored.plugins.forEach((plugin, idx) => appendPluginUI(plugin, idx));
+
+    stored.themes.forEach(addThemeSettingsUI);
+    initialThemeUISetup();
+
+    addButtonCards();
+    updateButtonPreview();
+
+    $('#backup-content').text(JSON.stringify(stored));
+    $('#backup-modal').modal();
+    $('#restore-modal').modal();
+    $('#defaults-modal').modal();
   });
-
-  stored.themes.forEach(addThemeSettingsUI);
-  initialThemeUISetup();
-
-  addButtonCards();
-  updateButtonPreview();
-
-  $('#backup-content').text(JSON.stringify(stored));
-  $('#backup-modal').modal();
-  $('#restore-modal').modal();
-  $('#defaults-modal').modal();
 });
 
 function addButtonCards() {
@@ -153,19 +156,19 @@ $('#floating-save-button').click(event => {
   stored.themes = stored.themes.filter(theme => !theme.deleted);
   stored.plugins = stored.plugins.filter(plugin => !plugin.deleted);
 
-  const shouldReload = initNewPlugins();
+  initNewPlugins().then(shouldReload => {
+    $('#buttons-container').empty();
+    addButtonCards();
+    Materialize.updateTextFields();
+    updateButtonPreview();
 
-  $('#buttons-container').empty();
-  addButtonCards();
-  Materialize.updateTextFields();
-  updateButtonPreview();
+    $('i.warning').addClass('hidden');
 
-  $('i.warning').addClass('hidden');
-
-  window.changesMade = false;
-  Materialize.Toast.removeAll();
-  storage.clearAllCached();
-  storage.storeAll().then(() => {
-    if (shouldReload) location.reload();
+    window.changesMade = false;
+    Materialize.Toast.removeAll();
+    storage.clearAllCached();
+    storage.storeAll().then(() => {
+      if (shouldReload) location.reload();
+    });
   });
 });

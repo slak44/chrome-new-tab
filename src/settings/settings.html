@@ -2,7 +2,6 @@
   <head>
     <title>New Tab Settings</title>
 		<style id="dynamic-colors"></style>
-    <style id="plugin-css"></style>
     <script src="/preloader.min.js"></script>
     <link rel="icon" href="/settings-favicons/ic_settings_black_18dp.png" sizes="18x18" type="image/png"/>
     <link rel="icon" href="/settings-favicons/ic_settings_black_24dp.png" sizes="24x24" type="image/png"/>
@@ -127,6 +126,9 @@
         <a id="restore-defaults" href="#!" class="modal-action modal-close waves-effect btn-flat">Restore defaults</a>
       </div>
     </div>
+    <!-- Off-screen sandbox iframe host: runs plugins' global/settings hooks (e.g.
+         registering actions). Kept 0x0 rather than display:none so it reliably loads. -->
+    <div id="plugin-frame-host" style="position:absolute;width:0;height:0;border:0;overflow:hidden"></div>
     <script src="/settings.min.js"></script>
   </body>
 </html>

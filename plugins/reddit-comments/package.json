@@ -1,6 +1,6 @@
 {
   "pluginName": "Reddit Overview",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "Displays recent comments and posts for a given user",
   "author": "Slak44",
   "webpackConfig": "../plugin.webpack.config.js",

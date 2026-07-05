@@ -13,9 +13,14 @@ function moveCursorToEndOf(input) {
 class CommandHistory {
   constructor(historyId) {
     this.storageKey = `REPL-history-${historyId}`;
-    this.prompts = JSON.parse(localStorage.getItem(this.storageKey)) || [];
+    this.prompts = [];
     this.pendingText = '';
-    this.currentPromptDelta = this.prompts.length;
+    this.currentPromptDelta = 0;
+    // Cache is bridged to the host, so history loads asynchronously.
+    api.cacheGet(this.storageKey).then(raw => {
+      this.prompts = JSON.parse(raw) || [];
+      this.currentPromptDelta = this.prompts.length;
+    });
   }
   goUp() {
     if (this.currentPromptDelta === 0) return null;
@@ -36,7 +41,7 @@ class CommandHistory {
     if (oldCommand.trim() !== '') {
       this.prompts.push(oldCommand);
       this.currentPromptDelta = this.prompts.length;
-      localStorage.setItem(this.storageKey, JSON.stringify(this.prompts));
+      api.cacheSet(this.storageKey, JSON.stringify(this.prompts));
     }
   }
   clearCurrentBuffer() {

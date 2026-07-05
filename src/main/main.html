@@ -2,7 +2,6 @@
   <head>
     <title class="activity-title">New Tab</title>
 		<style id="dynamic-colors"></style>
-    <style id="plugin-css"></style>
     <script src="/preloader.min.js"></script>
     <link rel="stylesheet" type="text/css" href="/main.css">
   </head>
@@ -23,11 +22,9 @@
       <li><a href="/settings.html" class="waves-effect text-primary">Settings</a></li>
     </ul>
     <ul id="buttons" class="side-nav fixed clipped"></ul>
-    <main class="activity">
-      <section id="left"></section>
-      <section id="center"></section>
-      <section id="right"></section>
-    </main>
+    <!-- Plugins render inside this sandboxed iframe (see src/sandbox); it fills
+         the content area and hosts the #left/#center/#right sections internally. -->
+    <main class="activity"></main>
     <script src="/main.min.js"></script>
   </body>
 </html>

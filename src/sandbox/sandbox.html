@@ -1,0 +1,25 @@
+<html>
+  <head>
+    <!-- Compiled page CSS: Materialize, fonts, base styles, .hidden, section layout -->
+    <link rel="stylesheet" type="text/css" href="/main.css">
+    <!-- Per-page theme colors (seeded by the host) and plugin-injected CSS -->
+    <style id="dynamic-colors"></style>
+    <style id="plugin-css"></style>
+    <style>
+      /* The host iframe already occupies the content area to the right of the
+         side-nav and below the top nav, so drop the page-chrome offset that
+         main.css's .with-side-nav adds and let every activity (the base sections
+         and full-screen plugin activities like the REPL) fill its box. */
+      html, body { height: 100%; margin: 0; background: transparent !important; }
+      .activity { margin-left: 0 !important; height: 100% !important; }
+    </style>
+  </head>
+  <body>
+    <main class="activity">
+      <section id="left"></section>
+      <section id="center"></section>
+      <section id="right"></section>
+    </main>
+    <script src="/sandbox.min.js"></script>
+  </body>
+</html>

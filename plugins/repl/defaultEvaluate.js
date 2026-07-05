@@ -3,26 +3,33 @@
 const fx = require('money');
 const Qty = require('js-quantities');
 
-// Get current exchange rates
+// Get current exchange rates. Network + cache are bridged to the host (the
+// sandbox has a null origin and no localStorage), so rates load asynchronously;
+// currency !convert will report "rates not loaded" until they arrive.
 const appId = api.setting('openexchangerates.org App ID');
 const dataKey = 'replExchangeRatesCacheKey';
 const oneDay = 24 * 60 * 60 * 1000;
 
-const cached = JSON.parse(localStorage.getItem(dataKey));
-const isCacheInvalid = !cached || !cached.expiryDate || Date.now() > cached.expiryDate;
-if (!isCacheInvalid) {
-  fx.rates = cached.rates;
-  fx.base = cached.base;
-} else {
-  $.get(`https://openexchangerates.org/api/latest.json?app_id=${appId}`, data => {
-    localStorage.setItem(dataKey, JSON.stringify({
-      ...data,
-      expiryDate: Date.now() + oneDay
-    }));
-    fx.rates = data.rates;
-    fx.base = data.base;
-  }, 'json');
-}
+(async () => {
+  const cached = JSON.parse(await api.cacheGet(dataKey));
+  const isCacheInvalid = !cached || !cached.expiryDate || Date.now() > cached.expiryDate;
+  if (!isCacheInvalid) {
+    fx.rates = cached.rates;
+    fx.base = cached.base;
+  } else {
+    try {
+      const data = await api.get(`https://openexchangerates.org/api/latest.json?app_id=${appId}`);
+      api.cacheSet(dataKey, JSON.stringify({
+        ...data,
+        expiryDate: Date.now() + oneDay
+      }));
+      fx.rates = data.rates;
+      fx.base = data.base;
+    } catch (err) {
+      console.error(`Could not fetch exchange rates: ${err}`);
+    }
+  }
+})();
 
 const commands = [];
 // Command syntax: `!COMMAND_NAME ARGS`
@@ -48,7 +55,7 @@ new Command('convert', 'cv', stringArgs => {
   if (args[2].toLowerCase() === 'to') args.splice(2, 1);
   let [number, fromUnit, toUnit] = args;
   // If the unit is currency, use the currency script
-  if (Object.keys(fx.rates).includes(toUnit.toUpperCase())) {
+  if (fx.rates && Object.keys(fx.rates).includes(toUnit.toUpperCase())) {
     fromUnit = fromUnit.toUpperCase();
     toUnit = toUnit.toUpperCase();
     const result = fx.convert(Number(number), {from: fromUnit, to: toUnit}).toFixed(2);
@@ -89,11 +96,9 @@ new Command('winrate', 'wr', stringArgs => {
 });
 
 function openInNewTab(url) {
-  const anchor = document.createElement('a');
-  anchor.href = url;
-  anchor.target = '_blank';
-  anchor.click();
-  return anchor.href;
+  // chrome.* isn't available in the sandbox; the host opens the tab.
+  api.openTab(url);
+  return url;
 }
 new Command('query', 'q', data => openInNewTab(`https://www.google.com/search?q=${encodeURIComponent(data)}`));
 new Command('wolfram', 'w', data => openInNewTab(`http://www.wolframalpha.com/input/?i=${encodeURIComponent(data)}`));

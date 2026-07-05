@@ -16,7 +16,7 @@ gulp.task('build-js', () => webpack(require('./webpack.config.js')).pipe(gulp.de
 const lessFiles = ['src/main/main.less', 'src/settings/settings.less'];
 gulp.task('build-css', () => gulp.src(lessFiles).pipe(less()).pipe(gulp.dest('./build/src')));
 
-const copySrcGlob = ['src/main/main.html', 'src/settings/settings.html', 'src/manifest.json'];
+const copySrcGlob = ['src/main/main.html', 'src/settings/settings.html', 'src/sandbox/sandbox.html', 'src/manifest.json'];
 gulp.task('copy-src', () => gulp.src(copySrcGlob).pipe(gulp.dest('./build/src')));
 
 gulp.task('copy-deps', done => {

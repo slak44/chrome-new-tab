@@ -5,10 +5,6 @@ const dataKey = 'redditApiLastCommentsKey';
 const updateInterval = parseInt(api.setting('Data update period'), 10);
 const itemCount = parseInt(api.setting('Item count'), 10);
 
-const cached = JSON.parse(localStorage.getItem(dataKey));
-
-const accentColor = stored.themes[stored.currentThemeIdx].accent;
-
 const html = $.parseHTML(
   `<div id="overview-root">
     <h5>Latest from ${userName}</h5>
@@ -61,16 +57,22 @@ function insertItems(data) {
   }
 }
 
-setTimeout(function updateRedditOverview() {
-  const cached = JSON.parse(localStorage.getItem(dataKey));
+// Network + cache are bridged to the host, so fetching is async now.
+async function updateRedditOverview() {
+  const cached = JSON.parse(await api.cacheGet(dataKey));
   if (cached !== null && Date.now() < cached.time + updateInterval) {
     // Cache fast path
     insertItems(cached.data);
     setTimeout(updateRedditOverview, updateInterval);
     return;
   }
-  $.get(`${userUrl}/overview.json`, data => {
+  try {
+    const data = await api.get(`${userUrl}/overview.json`);
     insertItems(data);
-    localStorage.setItem(dataKey, JSON.stringify({data, time: Date.now()}));
-  }).done(() => setTimeout(updateRedditOverview, updateInterval));
-}, 0);
+    api.cacheSet(dataKey, JSON.stringify({data, time: Date.now()}));
+  } catch (err) {
+    console.error(`Error getting overview: ${err}`);
+  }
+  setTimeout(updateRedditOverview, updateInterval);
+}
+updateRedditOverview();

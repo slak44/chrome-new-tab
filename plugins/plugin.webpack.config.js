@@ -8,7 +8,9 @@ module.exports = {
       test: /.js$/,
       loader: 'babel-loader',
       exclude: /node_modules/,
-      options: {presets: ['@babel/preset-env']}
+      // Target modern Chrome so plugin async/await runs natively inside the
+      // sandbox (no regeneratorRuntime, which the sandbox doesn't provide).
+      options: {presets: [['@babel/preset-env', {targets: {chrome: '90'}}]]}
     }]
   },
   optimization: {
